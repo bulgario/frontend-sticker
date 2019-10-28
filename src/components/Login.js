@@ -60,6 +60,7 @@ class Login extends React.Component {
   }
 
   handleSignIn = (eve) => {
+    eve.preventDefault()
     const { username, password } = this.state
 
     if(username && password) {
@@ -191,7 +192,7 @@ const mapStateToProps = (state) => ({
   loading: state.auth.loading,
   error: state.auth.error,
   recoverySuccess: state.auth.recovery,
-  authToken: state.auth.authToken,
+  authToken: state.auth.token,
 })
 
 const mapDispatchToProps = dispatch => ({
