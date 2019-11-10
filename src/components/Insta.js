@@ -32,7 +32,8 @@ const styles = theme => ({
     // paddingTop: '56.25%', // 16:9
   },
   dateText: {
-    textAlign:'center'
+    textAlign:'center',
+    fontWeight:'bold'
   }
 });
 
@@ -68,7 +69,7 @@ class Insta extends React.Component {
 
   renderProductsByDate({ produtos, date }) {
     const { classes } = this.props
-    return <Grid container direction="row" justify="center">
+    return <Grid container direction="row" justify="center" wrap="wrap">
               {produtos.map(produto => {    return                <Card className={classes.margin}>
                     <CardMedia
                       className={classes.media}
