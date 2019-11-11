@@ -102,6 +102,62 @@ export const programacoes = [
         desc_produto: " produto 1 data 2 "
       },
       {
+        id_produto_estilo: 222,
+        fotos: [
+          {
+            link:
+              "http://soma-images.somalabs.com.br/image/6000-produto_estilo-6000_1.jpg/300/500"
+          },
+          {
+            link:
+              "http://soma-images.somalabs.com.br/image/6000-produto_estilo-6000_1.jpg/300/500"
+          }
+        ],
+        desc_produto: " produto 1 data 2 "
+      },
+      {
+        id_produto_estilo: 222,
+        fotos: [
+          {
+            link:
+              "http://soma-images.somalabs.com.br/image/6000-produto_estilo-6000_1.jpg/300/500"
+          },
+          {
+            link:
+              "http://soma-images.somalabs.com.br/image/6000-produto_estilo-6000_1.jpg/300/500"
+          }
+        ],
+        desc_produto: " produto 1 data 2 "
+      },
+      {
+        id_produto_estilo: 222,
+        fotos: [
+          {
+            link:
+              "http://soma-images.somalabs.com.br/image/6000-produto_estilo-6000_1.jpg/300/500"
+          },
+          {
+            link:
+              "http://soma-images.somalabs.com.br/image/6000-produto_estilo-6000_1.jpg/300/500"
+          }
+        ],
+        desc_produto: " produto 1 data 2 "
+      },
+      {
+        id_produto_estilo: 222,
+        fotos: [
+          {
+            link:
+              "http://soma-images.somalabs.com.br/image/6000-produto_estilo-6000_1.jpg/300/500"
+          },
+          {
+            link:
+              "http://soma-images.somalabs.com.br/image/6000-produto_estilo-6000_1.jpg/300/500"
+          }
+        ],
+        desc_produto: " produto 1 data 2 "
+      },
+      {
         id_produto_estilo: 3333,
         fotos: [
           {
