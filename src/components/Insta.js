@@ -5,6 +5,8 @@ import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Drawer from "@material-ui/core/Drawer";
 
+import TextField from "@material-ui/core/TextField";
+
 import BoxCompany from "./recursableComponents/BoxCompany";
 import CardActions from "@material-ui/core/CardActions";
 
@@ -15,7 +17,6 @@ import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
 
 import Typography from "@material-ui/core/Typography";
-import { red } from "@material-ui/core/colors";
 
 import Fab from "@material-ui/core/Fab";
 
@@ -24,35 +25,47 @@ import { programacoes } from "../consts";
 import AddIcon from "@material-ui/icons/Add";
 import Divider from "@material-ui/core/Divider";
 
-import ExpansionPanel from "@material-ui/core/ExpansionPanel";
-import Collapse from "@material-ui/core/Collapse";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
 
 const styles = theme => ({
   margin: {
     margin: theme.spacing(1)
-    // maxWidth: 345,
   },
   media: {
     height: 400,
     width: 280
   },
   card: {
-    maxWidth:400,
-    height: 420,
-    minWidth: 300,
+    height: 270,
+    maxWidth: 620,
+    maxHeight: 300,
+    minWidth: 620,
     margin: theme.spacing(1),
-    padding:0,
-    backgroundColor:'#fafafa'
-    // marginLeft:0
+    padding: 0,
+    backgroundColor: "white"
   },
   mediaCard: {
-    height: 420,
-    width: 180,
-    contain:'size'
+    height: 220,
+    width: 200,
+    objectFit: "scale-down",
+    marginLeft: theme.spacing(1),
+    marginTop: theme.spacing(2),
+
+    borderWidth: 2,
+    borderColor: "#FFE600"
   },
-  
+  productInfo: {
+    width: 300,
+    borderWidth: 1.5,
+    borderColor: "black",
+    marginTop: theme.spacing(2),
+
+    marginRight: theme.spacing(1),
+
+    marginLeft: theme.spacing(2)
+  },
+
   dateText: {
     textAlign: "center",
     fontWeight: "bold"
@@ -71,6 +84,25 @@ const styles = theme => ({
     marginLeft: "25%",
     marginRight: "25%",
     height: 1.5
+  },
+  cardHeader: {
+    textAlign: "center"
+    // paddingVertical:theme.spacing(-2)
+  },
+  textField: {
+    width: 190,
+    margin:theme.spacing(1),
+
+  },
+  textFieldFull: {
+    width: 385,
+    margin:theme.spacing(1),
+  },
+  row: {
+    display:'flex',
+    flexDirection: 'row',
+    justifyContent:'space-between',
+    width: 400
   }
 });
 
@@ -87,7 +119,7 @@ class Insta extends React.Component {
       recoverySubmitted: false,
       recoveryShow: false,
       programacoes,
-      expanded: false
+      expanded: true
     };
   }
   renderProgramacoes() {
@@ -102,7 +134,9 @@ class Insta extends React.Component {
           <Divider variant="middle" className={classes.divider}></Divider>
 
           {/* {this.renderProductsInstaView(data)} */}
-          {this.state.expanded?this.renderProductsCardsViewWithOutInfo(data):this.renderProductsCardsView(data)}
+          {this.state.expanded
+            ? this.renderProductsCardsView(data)
+            : this.renderProductsInstaView(data)}
         </Grid>
       );
     });
@@ -115,60 +149,56 @@ class Insta extends React.Component {
   renderProductsCardsView({ produtos, date }) {
     const { classes } = this.props;
     return (
-      <Grid className={classes.horizontalScroll}>
+      <Grid container justify="center">
         {produtos.map(produto => {
           return (
             <Card className={classes.card}>
               <Grid container direction="row" justify="flex-start">
-                <Grid>
+                <Grid alignItems="center">
                   <CardMedia
                     className={classes.mediaCard}
                     image={produto.fotos[0].link}
                     title="Produto"
                   />
-                                <CardActions disableSpacing>
-                                <Typography>opa</Typography>
-
-              </CardActions>
-                  
                 </Grid>
-                <Grid
-                  direction="column"
-                >
- 
-
-               <Typography>opa</Typography>
-                </Grid>
-              </Grid>
-              <Grid></Grid>
-            </Card>
-          );
-        })}
-      </Grid>
-    );
-  }
-  renderProductsCardsViewWithOutInfo({ produtos, date }) {
-    const { classes } = this.props;
-    return (
-      <Grid className={classes.horizontalScroll}>
-        {produtos.map(produto => {
-          return (
-            <Card className={classes.margin}>
-              <Grid container direction="row" justify="flex-start">
-                <Grid>
-                  <CardMedia
-                    className={classes.media}
-                    image={produto.fotos[0].link}
-                    title="Produto"
+                <Grid className={classes.productInfo}>
+                  <TextField
+                    label="Grupo"
+                    defaultValue="Seda"
+                    className={classes.textFieldFull}
+                    
+                    InputProps={{
+                      readOnly: true
+                    }}
+                    variant="outlined"
                   />
-                                <CardActions disableSpacing>
-                                <Typography>opa</Typography>
-
-              </CardActions>
-                  
+                  <Grid className={classes.row} >
+                  <TextField
+                    label="Estilista"
+                    defaultValue="Amanda Carneiro"
+                    className={classes.textField}
+                    
+                    InputProps={{
+                      readOnly: true
+                    }}
+                    variant="outlined"
+                  />
+                                    <TextField
+                    label="Linha"
+                    defaultValue="Seda"
+                    className={classes.textField}
+                    
+                    InputProps={{
+                      readOnly: true
+                    }}
+                    variant="outlined"
+                  />
+                  </Grid>
+                  {/* <Typography>Estilista: AMANDA.CARNEIRO</Typography>
+                  <Typography>Grupo: Seda</Typography>
+                  <Typography>Produto Estiloso</Typography> */}
                 </Grid>
               </Grid>
-              <Grid></Grid>
             </Card>
           );
         })}
@@ -256,7 +286,4 @@ const mapDispatchToProps = dispatch => ({
   signIn: (username, password) => dispatch(signIn(username, password))
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(wrappedInsta);
+export default connect(mapStateToProps, mapDispatchToProps)(wrappedInsta);
