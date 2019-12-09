@@ -20,8 +20,8 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
     padding: theme.spacing(2)
   },
-  spacing:{
-	  marginHorizontal:theme.spacing(2)
+  spacing: {
+    marginHorizontal: theme.spacing(2)
   }
 }));
 
@@ -34,7 +34,7 @@ const BoxCompany = (props) => {
   ];
 
   const [user] = useState(userData);
-  const {insta} = props
+  const { insta } = props
   if (insta) {
     return (
       <div className={classes.header}>
@@ -49,11 +49,10 @@ const BoxCompany = (props) => {
           <Typography variant="h4"> {user[0].companyName} </Typography>
 
           {/* <Grid item container direction="row" aligmItems="start"> */}
-          <Grid   item  direction="row" spacing={1}>
-            <Menu />
-            <Share ></Share>
+          <Grid item direction="row" spacing={1}>
+            <Share/>
+            <Menu/>
           </Grid>
-
           {/* <Grid item></Grid> */}
           {/* </Grid> */}
         </Grid>
