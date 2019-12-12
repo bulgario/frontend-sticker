@@ -1,89 +1,130 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment } from 'react'
 import BoxCompany from './recursableComponents/BoxCompany'
 import DatePicker from './recursableComponents/DatePicker'
-import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import MenuList from './recursableComponents/MenuList'
+import { withStyles } from '@material-ui/core/styles'
 
-const location = [
-	{id: 0, label: "New York", selected: false, key: 'location', checked: true},
-	{id: 1, label: "New York", selected: false, key: 'location', checked: true},
-	{id: 2, label: "New York", selected: false, key: 'location', checked: true},
-]
+const axios = require('axios')
 
-const useStyles = makeStyles(theme => ({
-	margin: {
-	  margin: theme.spacing(1),
+const styles = theme => ({
+	root: {
+		margin: theme.spacing(1),
+		height: 100,
+		width: '100%',
+		position: 'relative'
 	},
-}))
-	
-const handleMenuBrandClose = value => {}
-
-const Login = (props) => {
-	const [date, handleDate] = useState({
-		dateBegin: [],
-		dateEnd: [],
-		dateLimit: [],
-	})
-
-	const getDateValue = (data) => {
-		handleDate(data)
+	button: {
+		margin: theme.spacing(1),
+		display:'flex',
+    flexDirection: 'row',
+    justifyContent:'space-between',
+    width: 100
 	}
+})
 
-console.log("aaaa",date)
+const handleMenuBrandClose = value => { }
 
-	const classes = useStyles()
-	return(
-		<Fragment>
-			<Grid>
-			<BoxCompany/>
-			</Grid>
-			<DatePicker
-				getDateValue={getDateValue} 
-				titleDate={"Data de Programação"}
-				label={"inicio"}
-			/>
-			<DatePicker
-				getDateValue={getDateValue} 
-				label={"fim"}
-			/>		
-			<DatePicker 
-				titleDate={"Limite de recebimento"}
-			/>
-			<Grid>
-			<MenuList
-				title={'Coleção'} 
-				list={location} 
-				onClose={handleMenuBrandClose}
-			/>
-			</Grid>
-			<Grid>
-			<MenuList
-				title={'Categoria'} 
-				list={location} 
-				onClose={handleMenuBrandClose}
-				
-			/>
-			</Grid>
-			<Grid>
-			<MenuList 
-				title={'Subcategoria'} 
-				list={location} 
-				onClose={handleMenuBrandClose}
-			/>
-			</Grid>
-			<Grid>
-			<Button 
-				variant="contained"
-				color="primary" 
-				className={classes.margin}
-			>
-			Buscar
-			</Button>
-			</Grid>	
-		</Fragment>
-	)
+const getData = async (dataInicio, dataFim, dataUltimo) => {
+	await axios.post('http://localhost:8000/produto/data', {
+		dataInicio: dataInicio,
+		dataFim: dataFim,
+		dataUltimoAgendamento: dataUltimo
+	})
 }
 
-export default Login
+
+class Search extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+			category: [],
+			subcategory: [],
+    }
+	} 
+
+	componentDidMount() {
+		const getCategories = async () => {
+			const categories = []
+				await axios.get('http://localhost:8000/produto/category/categoria').then(data => {
+					data.data.data.forEach(elem => {
+						categories.push(elem._source.categoria)
+					});
+				})
+				const data = await filterData(categories)		
+				this.setState({ category: data })
+		}
+
+		const getSubcategories = async () => {
+			const subcategories = []
+				await axios.get('http://localhost:8000/produto/category/subcategoria').then(data => {
+					data.data.data.forEach(elem => {
+						subcategories.push(elem._source.subcategoria)
+					});
+				})
+				const data = await filterData(subcategories)		
+				this.setState({ subcategory: data })
+		}
+		
+		const filterData = (array) => {
+			let data = array.filter((item, index) => array.indexOf(item) === index)
+			return data
+		}
+
+		getCategories()
+		getSubcategories()
+	}
+
+  render(props) {
+		const { classes } = this.props;
+		const location = [
+			{id: 0, label: "New York", selected: false, key: 'location', checked: true},
+			{id: 1, label: "New York", selected: false, key: 'location', checked: true},
+			{id: 2, label: "New York", selected: false, key: 'location', checked: true},
+		]
+		
+    return (
+      <Fragment>
+			<Grid>
+			<BoxCompany insta={true} />
+			</Grid>
+			<Grid container justify="center">
+				<DatePicker
+					choosedData={getData}
+				/>
+			</Grid>
+			<Grid container justify="center">
+				<MenuList
+					title={'Coleção'}
+					list={this.state.category}
+					onClose={handleMenuBrandClose}
+					
+				/>
+				{/* <MenuList
+					title={'Categoria'}
+					list={this.state.category}
+					onClose={this.handleMenuBrandClose}
+				/>
+				<MenuList
+					title={'Subcategoria'}
+					list={this.state.location}
+					onClose={this.handleMenuBrandClose}
+				/> */}
+				<Grid container justify="center">
+					<Button
+						className={classes.button}
+						variant="contained"
+						color="primary"
+					// className={classes.margin}
+					>
+						Buscar
+			</Button>
+				</Grid>
+			</Grid>
+		</Fragment>
+    )
+  }
+}
+
+export default withStyles(styles)(Search)

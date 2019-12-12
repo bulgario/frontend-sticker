@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import {BrowserRouter as Router, Route} from 'react-router-dom';
 import { Grid, Typography } from "@material-ui/core";
 import Menu from "@material-ui/icons/Menu";
 import ArrowBack from "@material-ui/icons/ArrowBack";
 import Share from "@material-ui/icons/Share";
+
+import Login from '../Login'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -28,6 +31,10 @@ const useStyles = makeStyles(theme => ({
 const BoxCompany = (props) => {
   const classes = useStyles();
 
+  const handleClick = (eve) => {
+    return(<Route path="/login" component={Login} />)
+  }
+
   const userData = [
     { id: 1, companyName: "Animale" },
     { id: 2, companyName: "Farm" }
@@ -45,7 +52,9 @@ const BoxCompany = (props) => {
           alignItems="center"
         >
           {/* <Grid item></Grid> */}
-          <ArrowBack> </ArrowBack>
+          <ArrowBack
+            onClick={handleClick}
+          ></ArrowBack>
           <Typography variant="h4"> {user[0].companyName} </Typography>
 
           {/* <Grid item container direction="row" aligmItems="start"> */}

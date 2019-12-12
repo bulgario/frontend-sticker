@@ -1,59 +1,80 @@
-import React, { useState, Fragment } from 'react'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux';
-
-import { date } from '../../actions'
-
-import 'date-fns'
-import Grid from '@material-ui/core/Grid'
-import DateFnsUtils from '@date-io/date-fns'
+import 'date-fns';
+import React from 'react';
+import Grid from '@material-ui/core/Grid';
+import DateFnsUtils from '@date-io/date-fns';
 import {
   MuiPickersUtilsProvider,
+  KeyboardTimePicker,
   KeyboardDatePicker,
-} from '@material-ui/pickers'
+} from '@material-ui/pickers';
+const axios = require('axios')
 
-const DatePicker = (props) => {
-  const [selectedDate, setSelectedDate] = useState(new Date('2019-08-18T21:11:54'))
+export default function MaterialUIPickers(props) {
+  const [selectedDateInicio, setSelectedDateInicio] = React.useState(new Date('2019-08-18'));
+  const [selectedDateFim, setSelectedDateFim] = React.useState(new Date('2019-08-18'));
+  const [selectedDateUltimo, setSelectedDateUltimo] = React.useState(new Date('2019-08-18'));
 
-  const handleDateChange = data => {
-    setSelectedDate({
-      ...data
-
-    })
-    console.log("vvvv",data)
+  const handleDataInicioChange = (date) => {
+    setSelectedDateInicio(date)
   }
 
-  console.log(selectedDate)
+  const handleDataFimChange = (date) => {
+    setSelectedDateFim(date)
+  }
+
+  const handleDateUltimoAgendamento = (date) => {
+    setSelectedDateUltimo(date)
+  }
+
+  props.choosedData(selectedDateInicio, selectedDateFim, selectedDateUltimo)
 
   return (
-    <Fragment>
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <Grid container justify="space-around">
-      <h2 container justify="space-around">{props.titleDate}</h2>
         <KeyboardDatePicker
+          disableToolbar  
+          variant="inline"
+          format="dd-MM-yyyy"
           margin="normal"
-          id="date-picker-dialog"
-          label={props.label}
-          format="MM/dd/yyyy"
-          value={selectedDate}
-          onChange={handleDateChange}
+          id="date-picker-inline"
+          label={"inicio"}
+          value={selectedDateInicio}
+          onChange={handleDataInicioChange}
+          KeyboardButtonProps={{
+            'aria-label': 'change date',
+          }}
+        />
+      </Grid>
+      <Grid container justify="space-around">
+        <KeyboardDatePicker
+          disableToolbar  
+          variant="inline"
+          format="dd-MM-yyyy"
+          margin="normal"
+          id="date-picker-inline"
+          label={"fim"}
+          value={selectedDateInicio}
+          onChange={handleDataFimChange}
+          KeyboardButtonProps={{
+            'aria-label': 'change date',
+          }}
+        />
+      </Grid>
+      <Grid container justify="space-around">
+        <KeyboardDatePicker
+          disableToolbar  
+          variant="inline"
+          format="dd-MM-yyyy"
+          margin="normal"
+          id="date-picker-inline"
+          label={"Ultima data Agendamento"}
+          value={selectedDateInicio}
+          onChange={handleDateUltimoAgendamento}
           KeyboardButtonProps={{
             'aria-label': 'change date',
           }}
         />
       </Grid>
     </MuiPickersUtilsProvider>
-    </Fragment>
-  )
+  );
 }
-
-const mapStateToProps = (state) => ({
-  date: state.date.selectedDate
-})
-
-const mapDispatchToProps = dispatch => {
-
-}
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(DatePicker)

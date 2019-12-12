@@ -8,7 +8,17 @@ import Typography from '@material-ui/core/Typography';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 
-const styles = theme => ({});
+const axios = require('axios')
+
+const styles = theme => ({
+	margin: {
+		margin: theme.spacing(1)
+	},
+	media: {
+		height: 400,
+		width: 280
+	}
+});
 
 function Checker(props) {
 	const { checked, value, onChange, label } = props;
@@ -84,43 +94,49 @@ class SelectNormalAction {
 }
 
 class MenuList extends Component {
-	state = {
-		anchorEl: null,
-		items: Array.from(this.props.list),
-	};
-
-	componentDidMount() {
-		const { items } = this.state;
-		if (items[0].label !== SELECT_ALL) {
-			items.unshift({ label: SELECT_ALL, checked: true });
-			this.setState({ items });
+	constructor(props) {
+		super(props)
+		this.state = {
+			category: [],
+			anchorEl: null,
+			items: [],
 		}
 	}
 
-	handleMenuClose = (e, el) => {
-		this.setState({ anchorEl: null });
-		if (el === 'backdropClick') {
-			this.props.onClose(this.state.items.slice(1));
-		}
-	};
+componentDiMount() {
+	// this.setState({ items: this.props.list })
+	const { items } = this.state;
+	if (items[0].label !== SELECT_ALL) {
+		items.unshift({ label: SELECT_ALL, checked: true });
+		this.setState({ items });
+	}
+}
 
-	handleCheckBox = (item, index) => {
-		let stateCopy = Object.assign({}, this.state);
-		const actionMenu = new ActionMenu();
-		actionMenu.setStrategy(ActionsMenuFactory.create(item));
-		stateCopy.items = actionMenu.act(item, index, stateCopy.items);
-		this.setState(stateCopy);
-	};
+handleMenuClose = (e, el) => {
+	this.setState({ anchorEl: null });
+	if (el === 'backdropClick') {
+		this.props.onClose(this.state.items.slice(1));
+	}
+};
 
-	handleMenuOpen = event => {
-		this.setState({ anchorEl: event.currentTarget });
-	};
+handleCheckBox = (item, index) => {
+	let stateCopy = Object.assign({}, this.state);
+	const actionMenu = new ActionMenu();
+	actionMenu.setStrategy(ActionsMenuFactory.create(item));
+	stateCopy.items = actionMenu.act(item, index, stateCopy.items);
+	this.setState(stateCopy);
+};
 
-	render(props) {
+handleMenuOpen = event => {
+	this.setState({ anchorEl: event.currentTarget });
+};
+
+
+render(props) {
 		const { title, icon } = this.props;
 		const { anchorEl, items } = this.state;
-
-		return (
+		
+return (
 			<Fragment>
 				<Button
 					onClick={this.handleMenuOpen}
@@ -145,30 +161,29 @@ class MenuList extends Component {
 						<MenuItem
 							key={index}
 						>
-							<Grid container alignItems={'center'}>
-								<Grid item xs={6}>
-									<Checker
-										value={el.label}
-										onChange={label => this.handleCheckBox(label, index)}
-										label={el.label} checked={el.checked}
-									/>
-								</Grid>
-								{index === 0 ? null : (
-									<Grid item container justify={'flex-end'} xs={6}>
-										<Typography
-											variant="caption"
-											onClick={e =>
-												this.handleCheckBox({ label: el.label, checked: true, type: SELECT_ONLY }, index)}
-											color={'textSecondary'}
-										>
-										</Typography>
-									</Grid>
-								)}
+						<Grid container alignItems={'center'}>
+							<Grid item xs={6}>
+								<Checker
+									value={el.label}
+									onChange={label => this.handleCheckBox(label, index)}
+									label={el.label} checked={el.checked}
+								/>
+							</Grid>
+							{index === 0 ? null : (
+							<Grid item container justify={'flex-end'} xs={6}>
+								<Typography
+									variant="caption"
+									onClick={e =>
+										this.handleCheckBox({ label: el.label, checked: true, type: SELECT_ONLY }, index)}
+										color={'textSecondary'}
+								>
+								</Typography>
+							</Grid>
+							)}
 							</Grid>
 						</MenuItem>)}
-
 				</Menu>
-			</Fragment>
+			</Fragment>	
 		)
 	}
 }
