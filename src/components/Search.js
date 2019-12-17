@@ -4,7 +4,9 @@ import DatePicker from './recursableComponents/DatePicker'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import MenuList from './recursableComponents/MenuList'
+import MenuItem from './recursableComponents/MenuItem'
 import { withStyles } from '@material-ui/core/styles'
+import { withRouter } from "react-router-dom";
 
 const axios = require('axios')
 
@@ -26,14 +28,13 @@ const styles = theme => ({
 
 const handleMenuBrandClose = value => { }
 
-const getData = async (dataInicio, dataFim, dataUltimo) => {
-	await axios.post('http://localhost:8000/produto/data', {
+const getData = (dataInicio, dataFim, dataUltimo) => {
+	return axios.get('http://localhost:8000/products/', { params: { 
 		dataInicio: dataInicio,
 		dataFim: dataFim,
-		dataUltimoAgendamento: dataUltimo
-	})
+		dataUltimoAgendamento: dataUltimo 
+	}});
 }
-
 
 class Search extends React.Component {
   constructor(props) {
@@ -41,49 +42,41 @@ class Search extends React.Component {
     this.state = {
 			category: [],
 			subcategory: [],
+			nome_collection: [],
     }
-	} 
-
-	componentDidMount() {
-		const getCategories = async () => {
-			const categories = []
-				await axios.get('http://localhost:8000/produto/category/categoria').then(data => {
-					data.data.data.forEach(elem => {
-						categories.push(elem._source.categoria)
-					});
-				})
-				const data = await filterData(categories)		
-				this.setState({ category: data })
-		}
-
-		const getSubcategories = async () => {
-			const subcategories = []
-				await axios.get('http://localhost:8000/produto/category/subcategoria').then(data => {
-					data.data.data.forEach(elem => {
-						subcategories.push(elem._source.subcategoria)
-					});
-				})
-				const data = await filterData(subcategories)		
-				this.setState({ subcategory: data })
-		}
-		
-		const filterData = (array) => {
-			let data = array.filter((item, index) => array.indexOf(item) === index)
-			return data
-		}
-
-		getCategories()
-		getSubcategories()
 	}
 
+	componentDidMount() {
+		const filterData = (array) => {
+			return array.filter((item, index) => array.indexOf(item) == index)
+		}
+
+		const categories = []
+		const subcategories = []
+		const nome_colecao = []
+			axios.get('http://localhost:8000/allproducts').then(elem => {
+				let data = elem.data.body.hits.hits
+				data.map((data) => {
+					categories.push(data._source.categoria)
+					subcategories.push(data._source.subcategoria)
+					nome_colecao.push(data._source.nome_colecao)
+				})
+			}).then(async () => {
+				let newCategories = await filterData(categories)
+				let newSubcategorie = await filterData(subcategories)
+				this.setState({ category: newCategories })
+				this.setState({ subcategories: newSubcategorie })
+				this.setState({ nome_colecao: nome_colecao })
+			})
+	}
+
+	handleClick = () => {
+		return(this.props.history.push("/insta"))
+	}
+	
   render(props) {
 		const { classes } = this.props;
-		const location = [
-			{id: 0, label: "New York", selected: false, key: 'location', checked: true},
-			{id: 1, label: "New York", selected: false, key: 'location', checked: true},
-			{id: 2, label: "New York", selected: false, key: 'location', checked: true},
-		]
-		
+		console.log('aaa', this.state)
     return (
       <Fragment>
 			<Grid>
@@ -95,28 +88,19 @@ class Search extends React.Component {
 				/>
 			</Grid>
 			<Grid container justify="center">
-				<MenuList
+				<MenuItem/>
+				{/* <MenuList
 					title={'Coleção'}
 					list={this.state.category}
 					onClose={handleMenuBrandClose}
 					
-				/>
-				{/* <MenuList
-					title={'Categoria'}
-					list={this.state.category}
-					onClose={this.handleMenuBrandClose}
-				/>
-				<MenuList
-					title={'Subcategoria'}
-					list={this.state.location}
-					onClose={this.handleMenuBrandClose}
-				/> */}
+			/> */}
 				<Grid container justify="center">
 					<Button
 						className={classes.button}
 						variant="contained"
 						color="primary"
-					// className={classes.margin}
+						onClick={this.handleClick}
 					>
 						Buscar
 			</Button>
