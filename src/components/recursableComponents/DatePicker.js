@@ -7,7 +7,6 @@ import {
   KeyboardTimePicker,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
-const axios = require('axios')
 
 export default function MaterialUIPickers(props) {
   const [selectedDateInicio, setSelectedDateInicio] = React.useState(new Date('2019-08-18'));
@@ -16,25 +15,26 @@ export default function MaterialUIPickers(props) {
 
   const handleDataInicioChange = (date) => {
     setSelectedDateInicio(date)
+    props.choosedData(selectedDateInicio, selectedDateFim, selectedDateUltimo)
   }
 
   const handleDataFimChange = (date) => {
     setSelectedDateFim(date)
+    props.choosedData(selectedDateInicio, selectedDateFim, selectedDateUltimo)
   }
 
   const handleDateUltimoAgendamento = (date) => {
     setSelectedDateUltimo(date)
+    props.choosedData(selectedDateInicio, selectedDateFim, selectedDateUltimo)
   }
-
-  props.choosedData(selectedDateInicio, selectedDateFim, selectedDateUltimo)
-
+  
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <Grid container justify="space-around">
         <KeyboardDatePicker
           disableToolbar  
           variant="inline"
-          format="dd-MM-yyyy"
+          format="yyyy-MM-dd"
           margin="normal"
           id="date-picker-inline"
           label={"inicio"}
@@ -49,7 +49,7 @@ export default function MaterialUIPickers(props) {
         <KeyboardDatePicker
           disableToolbar  
           variant="inline"
-          format="dd-MM-yyyy"
+          format="yyyy-MM-dd"
           margin="normal"
           id="date-picker-inline"
           label={"fim"}
@@ -64,7 +64,7 @@ export default function MaterialUIPickers(props) {
         <KeyboardDatePicker
           disableToolbar  
           variant="inline"
-          format="dd-MM-yyyy"
+          format="yyyy-MM-dd"
           margin="normal"
           id="date-picker-inline"
           label={"Ultima data Agendamento"}

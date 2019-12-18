@@ -8,8 +8,6 @@ import Typography from '@material-ui/core/Typography';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 
-const axios = require('axios')
-
 const styles = theme => ({
 	margin: {
 		margin: theme.spacing(1)
@@ -97,20 +95,18 @@ class MenuList extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			category: [],
 			anchorEl: null,
 			items: [],
 		}
 	}
 
-componentDiMount() {
-	// this.setState({ items: this.props.list })
-	const { items } = this.state;
-	if (items[0].label !== SELECT_ALL) {
-		items.unshift({ label: SELECT_ALL, checked: true });
-		this.setState({ items });
+	componentDidMount() {
+		const { items } = this.state;
+    if (items[0].label !== SELECT_ALL) {
+      items.unshift({label: SELECT_ALL, checked: true});
+      this.setState({items});
+    }
 	}
-}
 
 handleMenuClose = (e, el) => {
 	this.setState({ anchorEl: null });
@@ -131,12 +127,11 @@ handleMenuOpen = event => {
 	this.setState({ anchorEl: event.currentTarget });
 };
 
-
 render(props) {
-		const { title, icon } = this.props;
+		const { title, icon, category } = this.props;
 		const { anchorEl, items } = this.state;
-		
-return (
+		console.log("as props", this.props)
+		return (
 			<Fragment>
 				<Button
 					onClick={this.handleMenuOpen}
@@ -181,7 +176,8 @@ return (
 							</Grid>
 							)}
 							</Grid>
-						</MenuItem>)}
+						</MenuItem>
+						)}
 				</Menu>
 			</Fragment>	
 		)

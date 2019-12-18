@@ -28,6 +28,8 @@ import Divider from "@material-ui/core/Divider";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
 
+const axios = require('axios')
+
 const styles = theme => ({
   margin: {
     margin: theme.spacing(1)
@@ -110,6 +112,7 @@ class Insta extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      produto: [],
       username: "",
       password: "",
       showPassword: false,
@@ -119,24 +122,39 @@ class Insta extends React.Component {
       recoverySubmitted: false,
       recoveryShow: false,
       programacoes,
-      expanded: true
+      expanded: true,
     };
   }
+
+  componentDidMount() {
+    const products = []
+		return axios.get('http://localhost:8000/products/').then((resp) => {
+      resp.data.map((data) => {
+        products.push(data)
+      })
+    }).then(() => {
+      this.setState({ produto: products })
+    })
+		// 	const productsArray = Object.values(data)
+		// 	products.push(productsArray[0])
+		// 	this.setState({ products: products[0].body.hits.hits })	
+  }
+
   renderProgramacoes() {
-    const { programacoes } = this.state;
+    const { programacoes, produto } = this.state;
     const { classes } = this.props;
-    return programacoes.map(data => {
+    return produto.map(produtos => {
       return (
         <Grid item direction="column">
-          <Typography variant="h5" className={classes.dateText}>
-            {data.date}
+          <Typography variant="h5" className={produtos._source.data_prog}>
+            {produtos._source.data_prog}
           </Typography>
           <Divider variant="middle" className={classes.divider}></Divider>
 
           {/* {this.renderProductsInstaView(data)} */}
           {this.state.expanded
-            ? this.renderProductsCardsView(data)
-            : this.renderProductsInstaView(data)}
+            ? this.renderProductsCardsView(produtos)
+            : this.renderProductsInstaView(produtos)}
         </Grid>
       );
     });
@@ -148,16 +166,17 @@ class Insta extends React.Component {
 
   renderProductsCardsView({ produtos, date }) {
     const { classes } = this.props;
+    const { produto } = this.state;
     return (
       <Grid container justify="center">
-        {produtos.map(produto => {
+        {produto.map(produto => {
           return (
             <Card className={classes.card}>
               <Grid container direction="row" justify="flex-start">
                 <Grid alignItems="center">
                   <CardMedia
                     className={classes.mediaCard}
-                    image={produto.fotos[0].link}
+                    image={produto._source.nome_arquivo[0]}
                     title="Produto"
                   />
                 </Grid>
@@ -208,14 +227,15 @@ class Insta extends React.Component {
 
   renderProductsInstaView({ produtos, date }) {
     const { classes } = this.props;
+    const { produto } = this.state
     return (
       <Grid className={classes.horizontalScroll}>
-        {produtos.map(produto => {
+        {produto.map(produto => {
           return (
             <Card className={classes.margin}>
               <CardMedia
                 className={classes.media}
-                image={produto.fotos[0].link}
+                image={produto._source.nome_arquivo[0]}
                 title="Produto"
               />
 
@@ -233,7 +253,6 @@ class Insta extends React.Component {
 
   render() {
     const { classes, authToken } = this.props;
-
     // if (authToken) {
     //   return (
     //     <Redirect to={'/Login'} />

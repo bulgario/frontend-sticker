@@ -6,7 +6,6 @@ import Grid from '@material-ui/core/Grid'
 import MenuList from './recursableComponents/MenuList'
 import MenuItem from './recursableComponents/MenuItem'
 import { withStyles } from '@material-ui/core/styles'
-import { withRouter } from "react-router-dom";
 
 const axios = require('axios')
 
@@ -28,14 +27,6 @@ const styles = theme => ({
 
 const handleMenuBrandClose = value => { }
 
-const getData = (dataInicio, dataFim, dataUltimo) => {
-	return axios.get('http://localhost:8000/products/', { params: { 
-		dataInicio: dataInicio,
-		dataFim: dataFim,
-		dataUltimoAgendamento: dataUltimo 
-	}});
-}
-
 class Search extends React.Component {
   constructor(props) {
     super(props)
@@ -43,12 +34,15 @@ class Search extends React.Component {
 			category: [],
 			subcategory: [],
 			nome_collection: [],
+			data_inicio: '',
+			data_fim: '',
+			data_ultimo: '',
     }
 	}
 
 	componentDidMount() {
 		const filterData = (array) => {
-			return array.filter((item, index) => array.indexOf(item) == index)
+			return array.filter((item, index) => array.indexOf(item) === index)
 		}
 
 		const categories = []
@@ -70,13 +64,26 @@ class Search extends React.Component {
 			})
 	}
 
-	handleClick = () => {
-		return(this.props.history.push("/insta"))
+	getData = (dataInicio, dataFim, dataUltimo) => {
+		this.setState({ data_inicio: dataInicio })
+		this.setState({ data_fim: dataFim })
+		this.setState({ data_ultimo: dataUltimo })
 	}
-	
+
+	handleData = async () => {
+		this.handleNomeColecao()
+		await axios.get('http://localhost:8000/products', { params: { 
+			dataInicio: this.state.data_inicio,
+			dataFim: this.state.data_fim,
+			dataUltimoAgendamento: this.state.data_ultimo,
+			category: this.state.category,
+			subcategory: this.state.subcategory,
+			collection_name: 'V18FYI',
+		}})
+	}
+
   render(props) {
 		const { classes } = this.props;
-		console.log('aaa', this.state)
     return (
       <Fragment>
 			<Grid>
@@ -84,11 +91,13 @@ class Search extends React.Component {
 			</Grid>
 			<Grid container justify="center">
 				<DatePicker
-					choosedData={getData}
+					choosedData={this.getData}
 				/>
 			</Grid>
 			<Grid container justify="center">
-				<MenuItem/>
+			<MenuItem
+				categoria={this.state.category}
+			/>
 				{/* <MenuList
 					title={'Coleção'}
 					list={this.state.category}
@@ -100,7 +109,7 @@ class Search extends React.Component {
 						className={classes.button}
 						variant="contained"
 						color="primary"
-						onClick={this.handleClick}
+						onClick={this.handleData}
 					>
 						Buscar
 			</Button>

@@ -112,7 +112,7 @@ class Login extends React.Component {
   }
 
   render() {
-    const { classes, authToken } = this.props
+    const { authToken } = this.props
 
     if (authToken) {
       return (

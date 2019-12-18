@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import {BrowserRouter as Router, Route} from 'react-router-dom';
+import {BrowserRouter as Route} from 'react-router-dom';
 import { Grid, Typography } from "@material-ui/core";
 import Menu from "@material-ui/icons/Menu";
 import ArrowBack from "@material-ui/icons/ArrowBack";
