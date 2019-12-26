@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { useEffect, Fragment } from 'react';
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -47,7 +47,7 @@ export default function SimpleMenu(props) {
       })}
       </Menu>
     </div>
-    <div>
+    {/* <div>
      <Button aria-controls="subcategory-menu" aria-haspopup="true" onClick={handleClick}>
         Subcategoria
      </Button>
@@ -78,7 +78,7 @@ export default function SimpleMenu(props) {
           return <MenuItem value={nomeCollection} onClick={() => handleSubcategoria(nomeCollection)}>{nomeCollection}</MenuItem>
         })}
      </Menu>
-   </div>
+   </div> */}
   </Fragment>
   );
 }
