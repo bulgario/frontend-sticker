@@ -24,15 +24,12 @@ const styles = theme => ({
     width: 100
 	}
 })
-
-const handleMenuBrandClose = value => { }
-
 class Search extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
 			category: [],
-			subcategory: [],
+			subcategories: [],
 			nome_collection: [],
 			data_inicio: '',
 			data_fim: '',
@@ -49,18 +46,18 @@ class Search extends React.Component {
 		const subcategories = []
 		const nome_colecao = []
 			axios.get('http://localhost:8000/allproducts').then(elem => {
-				let data = elem.data.body.hits.hits
+				let data = elem.data
 				data.map((data) => {
-					categories.push(data._source.categoria)
-					subcategories.push(data._source.subcategoria)
-					nome_colecao.push(data._source.nome_colecao)
+					categories.push(data.value.categoria)
+					subcategories.push(data.value.subcategoria)
+					nome_colecao.push(data.value.nome_colecao)
 				})
 			}).then(async () => {
 				let newCategories = await filterData(categories)
 				let newSubcategorie = await filterData(subcategories)
 				this.setState({ category: newCategories })
 				this.setState({ subcategories: newSubcategorie })
-				this.setState({ nome_colecao: nome_colecao })
+				this.setState({ nome_collection: nome_colecao })
 			})
 	}
 
@@ -70,8 +67,19 @@ class Search extends React.Component {
 		this.setState({ data_ultimo: dataUltimo })
 	}
 
+	getCategories = (categ) => {
+		console.log(categ)
+	}
+
+	getSubcategories = (subcateg) => {
+		console.log(subcateg)
+	}
+
+	getNameCollection = (nameCollec) => {
+		console.log(nameCollec)
+	}
+
 	handleData = async () => {
-		this.handleNomeColecao()
 		await axios.get('http://localhost:8000/products', { params: { 
 			dataInicio: this.state.data_inicio,
 			dataFim: this.state.data_fim,
@@ -97,21 +105,20 @@ class Search extends React.Component {
 			<Grid container justify="center">
 			<MenuItem
 				categoria={this.state.category}
+				subcategoria={this.state.subcategories}
+				nome_collection={this.state.nome_collection}
+				getCategories={this.getCategories}
+				getSubcategories={this.getSubcategories}
+				getNameCollection={this.getNameCollection}
 			/>
-				{/* <MenuList
-					title={'Coleção'}
-					list={this.state.category}
-					onClose={handleMenuBrandClose}
-					
-			/> */}
-				<Grid container justify="center">
-					<Button
-						className={classes.button}
-						variant="contained"
-						color="primary"
-						onClick={this.handleData}
-					>
-						Buscar
+			<Grid container justify="center">
+				<Button
+					className={classes.button}
+					variant="contained"
+					color="primary"
+					onClick={this.handleData}
+				>
+					Buscar
 			</Button>
 				</Grid>
 			</Grid>
