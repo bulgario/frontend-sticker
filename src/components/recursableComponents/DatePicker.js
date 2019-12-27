@@ -15,17 +15,17 @@ export default function MaterialUIPickers(props) {
 
   const handleDataInicioChange = (date) => {
     setSelectedDateInicio(date)
-    props.choosedData(selectedDateInicio, selectedDateFim, selectedDateUltimo)
+    props.choosedData(date, selectedDateFim, selectedDateUltimo)
   }
 
   const handleDataFimChange = (date) => {
     setSelectedDateFim(date)
-    props.choosedData(selectedDateInicio, selectedDateFim, selectedDateUltimo)
+    props.choosedData(selectedDateInicio, date, selectedDateUltimo)
   }
 
   const handleDateUltimoAgendamento = (date) => {
     setSelectedDateUltimo(date)
-    props.choosedData(selectedDateInicio, selectedDateFim, selectedDateUltimo)
+    props.choosedData(selectedDateInicio, selectedDateFim, date)
   }
   
   return (
@@ -53,7 +53,7 @@ export default function MaterialUIPickers(props) {
           margin="normal"
           id="date-picker-inline"
           label={"fim"}
-          value={selectedDateInicio}
+          value={selectedDateFim}
           onChange={handleDataFimChange}
           KeyboardButtonProps={{
             'aria-label': 'change date',
@@ -68,7 +68,7 @@ export default function MaterialUIPickers(props) {
           margin="normal"
           id="date-picker-inline"
           label={"Ultima data Agendamento"}
-          value={selectedDateInicio}
+          value={selectedDateUltimo}
           onChange={handleDateUltimoAgendamento}
           KeyboardButtonProps={{
             'aria-label': 'change date',

@@ -83,10 +83,18 @@ class Search extends React.Component {
 	}
 
 	handleClose = (event) => {
-    this.setState({ anchorEl: null });
+	this.setState({ anchorEl: null });
+	this.setState({showCategoryList: false, showSubCategoryList: false})
 	};
 	
 	handleClick = event => {
+		console.log(event.currentTarget)
+		if (event.currentTarget.id == 1) {
+			this.setState({ showCategoryList:true})
+		}
+		if (event.currentTarget.id == 2) {
+			this.setState({ showSubCategoryList:true})
+		}
 		this.setState({ anchorEl: event.currentTarget });
 	};
 	
@@ -97,6 +105,7 @@ class Search extends React.Component {
 		if(id === 'subcategoria') {
 			this.setState({ choosedSubcategory: data })
 		}
+		this.handleClose()
 	}
 
   render(props) {
@@ -113,15 +122,15 @@ class Search extends React.Component {
 			</Grid>
 			<Grid container justify="center">
 			<div>
-				<Button aria-controls="category-menu" aria-haspopup="true" onClick={this.handleClick}>
+				<Button aria-controls="category-menu" aria-haspopup="true" onClick={this.handleClick} id='1'>
 					Categoria
 				</Button>
 				<Menu
 					id="category-menu"
 					anchorEl={this.state.anchorEl}
 					keepMounted
-					open={Boolean(this.state.anchorEl)}
-					onClose={this.handleClose}
+					open={this.state.showCategoryList}
+					onClose={() => this.setState({showCategoryList : false})}
 				>
 				{this.state.category.map((categorias) => {
 					const id = 'categoria'
@@ -130,15 +139,15 @@ class Search extends React.Component {
 				</Menu>
 			</div>
 		<div>
-      <Button aria-controls="category-menu" aria-haspopup="true" onClick={this.handleClick}>
+      <Button aria-controls="subcategory-menu" aria-haspopup="true" onClick={this.handleClick}  id='2'>
         Subcategoria
       </Button>
       <Menu
         id="subcategory-menu"
         anchorEl={this.state.anchorEl}
         keepMounted
-        open={Boolean(this.state.anchorEl)}
-        onClose={this.handleClose}
+		open={this.state.showSubCategoryList}
+        onClose={() => this.setState({showSubCategoryList : false})}
       >
       {this.state.subcategories.map((subcategoria) => {
 				const id = 'subcategoria'
