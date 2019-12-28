@@ -46,7 +46,8 @@ class Search extends React.Component {
       data_ultimo: "",
       anchorEl: null,
       choosedCategory: "",
-      choosedSubCategory: ""
+      choosedSubCategory: "",
+      choosedNameCollection: ""
     };
   }
 
@@ -54,6 +55,11 @@ class Search extends React.Component {
     const filterData = array => {
       return array.filter((item, index) => array.indexOf(item) === index);
     };
+
+    const filterCollection = collection => {
+      let allCollections = [].concat(...collection)
+      return allCollections.filter((item, index) => allCollections.indexOf(item) === index);
+    }
 
     const categories = [];
     const subcategories = [];
@@ -69,11 +75,12 @@ class Search extends React.Component {
         });
       })
       .then(async () => {
+        let newNameCollection = await filterCollection(nome_colecao)
         let newCategories = await filterData(categories);
-		let newSubcategorie = await filterData(subcategories);
+	    	let newSubcategorie = await filterData(subcategories);
         this.setState({ category: newCategories });
         this.setState({ subcategories: newSubcategorie });
-        this.setState({ nome_collection: nome_colecao });
+        this.setState({ nome_collection: newNameCollection });
       });
   }
 
@@ -109,7 +116,6 @@ class Search extends React.Component {
 
   handleData = async () => {
     // adicionar validações
-
     try {
       if (this.validateRequest()) {
         const response = await axios.get("http://localhost:8000/products", {
@@ -118,12 +124,10 @@ class Search extends React.Component {
             dataFim: this.state.data_fim,
             dataUltimoAgendamento: this.state.data_ultimo,
             category: this.state.choosedCategory,
-            subcategory: this.state.choosedSubcategory,
-            collection_name: "V18FYI"
+            subcategory: this.state.choosedSubCategory,
+            collection_name: this.state.nome_collection
           }
         });
-
-        console.log(response);
 
         if (response.data.length < 1) {
           return this.props.enqueueSnackbar(
@@ -155,7 +159,6 @@ class Search extends React.Component {
   handleClick = event => {
     this.setState({ anchorEl: event.currentTarget });
   };
-
 
   render(props) {
     const { classes } = this.props;
@@ -221,6 +224,35 @@ class Search extends React.Component {
                     value={subcategoria}
                   >
                     {subcategoria}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+            {/* </Menu> */}
+          </div>
+          <div>
+            <InputLabel id="label-subcategory">Colecao</InputLabel>
+            <Select
+              labelId="label-subcategory"
+              id="demo-simple-select-outlined"
+              value={this.state.choosedNameCollection}
+              onChange={e => {
+				console.log(e.target.value)
+
+                this.setState({ choosedNameCollection: e.target.value });
+              }}
+              labelWidth={100}
+              label="choosedNameCollection"
+              variant="outlined"
+              className={this.props.classes.select}
+            >
+              {this.state.nome_collection.map(collection => {
+                return (
+                  <MenuItem
+				  key={collection}
+                    value={collection}
+                  >
+                    {collection}
                   </MenuItem>
                 );
               })}
