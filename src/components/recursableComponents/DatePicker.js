@@ -9,9 +9,9 @@ import {
 } from '@material-ui/pickers';
 
 export default function MaterialUIPickers(props) {
-  const [selectedDateInicio, setSelectedDateInicio] = React.useState(new Date('2019-08-18'));
-  const [selectedDateFim, setSelectedDateFim] = React.useState(new Date('2019-08-18'));
-  const [selectedDateUltimo, setSelectedDateUltimo] = React.useState(new Date('2019-08-18'));
+  const [selectedDateInicio, setSelectedDateInicio] = React.useState(null);
+  const [selectedDateFim, setSelectedDateFim] = React.useState(null);
+  const [selectedDateUltimo, setSelectedDateUltimo] = React.useState(null);
 
   const handleDataInicioChange = (date) => {
     setSelectedDateInicio(date)
