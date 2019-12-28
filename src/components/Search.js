@@ -1,123 +1,246 @@
-import React, { Fragment } from 'react'
-import BoxCompany from './recursableComponents/BoxCompany'
-import DatePicker from './recursableComponents/DatePicker'
-import Button from '@material-ui/core/Button'
-import Grid from '@material-ui/core/Grid'
-import MenuList from './recursableComponents/MenuList'
-import MenuItem from './recursableComponents/MenuItem'
-import { withStyles } from '@material-ui/core/styles'
+import React, { Fragment } from "react";
+import BoxCompany from "./recursableComponents/BoxCompany";
+import DatePicker from "./recursableComponents/DatePicker";
+import Button from "@material-ui/core/Button";
+import Grid from "@material-ui/core/Grid";
+import { withStyles } from "@material-ui/core/styles";
+import MenuItem from "@material-ui/core/MenuItem";
+import Select from "@material-ui/core/Select";
 
-const axios = require('axios')
+import InputLabel from "@material-ui/core/InputLabel";
+
+import { withSnackbar } from "notistack";
+
+const axios = require("axios");
 
 const styles = theme => ({
-	root: {
-		margin: theme.spacing(1),
-		height: 100,
-		width: '100%',
-		position: 'relative'
-	},
-	button: {
-		margin: theme.spacing(1),
-		display:'flex',
-    flexDirection: 'row',
-    justifyContent:'space-between',
+  root: {
+    margin: theme.spacing(1),
+    height: 100,
+    width: "100%",
+    position: "relative"
+  },
+  button: {
+    margin: theme.spacing(1),
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
     width: 100
-	}
-})
+  },
+  select: {
+	width: 160,
+	marginLeft: theme.spacing(0.6),
+	marginRight: theme.spacing(0.6)
 
-const handleMenuBrandClose = value => { }
-
+  }
+});
 class Search extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-			category: [],
-			subcategory: [],
-			nome_collection: [],
-			data_inicio: '',
-			data_fim: '',
-			data_ultimo: '',
+      category: [],
+      subcategories: [],
+      nome_collection: [],
+      data_inicio: "",
+      data_fim: "",
+      data_ultimo: "",
+      anchorEl: null,
+      choosedCategory: "",
+      choosedSubCategory: ""
+    };
+  }
+
+  componentDidMount() {
+    const filterData = array => {
+      return array.filter((item, index) => array.indexOf(item) === index);
+    };
+
+    const categories = [];
+    const subcategories = [];
+    const nome_colecao = [];
+    axios
+      .get("http://localhost:8000/allproducts")
+      .then(elem => {
+        let data = elem.data;
+        data.map(data => {
+          categories.push(data.value.categoria);
+          subcategories.push(data.value.subcategoria);
+          nome_colecao.push(data.value.nome_colecao);
+        });
+      })
+      .then(async () => {
+        let newCategories = await filterData(categories);
+		let newSubcategorie = await filterData(subcategories);
+        this.setState({ category: newCategories });
+        this.setState({ subcategories: newSubcategorie });
+        this.setState({ nome_collection: nome_colecao });
+      });
+  }
+
+  getData = (dataInicio, dataFim, dataUltimo) => {
+    this.setState({ data_inicio: dataInicio });
+    this.setState({ data_fim: dataFim });
+    this.setState({ data_ultimo: dataUltimo });
+  };
+
+  validateRequest = () => {
+    const { data_inicio, data_fim, data_ultimo } = this.state;
+    if (!data_inicio) {
+      //   this.props.enqueueSnackbar("Selecione uma data início", {
+      //     variant: "error"
+      //   });
+      return false;
     }
-	}
+    if (!data_fim) {
+      //   this.props.enqueueSnackbar("Selecione uma data fim", {
+      //     variant: "error"
+      //   });
+      return false;
+    }
+    if (!data_ultimo) {
+      //   this.props.enqueueSnackbar("Selecione a data do último agendamento", {
+      //     variant: "error"
+      //   });
+      return false;
+    }
 
-	componentDidMount() {
-		const filterData = (array) => {
-			return array.filter((item, index) => array.indexOf(item) === index)
-		}
+    return true;
+  };
 
-		const categories = []
-		const subcategories = []
-		const nome_colecao = []
-			axios.get('http://localhost:8000/allproducts').then(elem => {
-				let data = elem.data.body.hits.hits
-				data.map((data) => {
-					categories.push(data._source.categoria)
-					subcategories.push(data._source.subcategoria)
-					nome_colecao.push(data._source.nome_colecao)
-				})
-			}).then(async () => {
-				let newCategories = await filterData(categories)
-				let newSubcategorie = await filterData(subcategories)
-				this.setState({ category: newCategories })
-				this.setState({ subcategories: newSubcategorie })
-				this.setState({ nome_colecao: nome_colecao })
-			})
-	}
+  handleData = async () => {
+    // adicionar validações
 
-	getData = (dataInicio, dataFim, dataUltimo) => {
-		this.setState({ data_inicio: dataInicio })
-		this.setState({ data_fim: dataFim })
-		this.setState({ data_ultimo: dataUltimo })
-	}
+    try {
+      if (this.validateRequest()) {
+        const response = await axios.get("http://localhost:8000/products", {
+          params: {
+            dataInicio: this.state.data_inicio,
+            dataFim: this.state.data_fim,
+            dataUltimoAgendamento: this.state.data_ultimo,
+            category: this.state.choosedCategory,
+            subcategory: this.state.choosedSubcategory,
+            collection_name: "V18FYI"
+          }
+        });
 
-	handleData = async () => {
-		this.handleNomeColecao()
-		await axios.get('http://localhost:8000/products', { params: { 
-			dataInicio: this.state.data_inicio,
-			dataFim: this.state.data_fim,
-			dataUltimoAgendamento: this.state.data_ultimo,
-			category: this.state.category,
-			subcategory: this.state.subcategory,
-			collection_name: 'V18FYI',
-		}})
+        console.log(response);
+
+        if (response.data.length < 1) {
+          return this.props.enqueueSnackbar(
+            "Não há produtos programados para essas datas ",
+            { variant: "warning" }
+          );
+        } 
+	  } 
+	  else {	
+		this.props.enqueueSnackbar("Todos os campos precisam estar preenchidos", {
+			variant: "error"
+		  });
+
 	}
+    } catch (err) {
+	  console.log(err.data);
+	  this.props.enqueueSnackbar("Problemas no backend", {
+        variant: "error"
+      });
+
+    }
+  };
+
+  handleClose = event => {
+    this.setState({ anchorEl: null });
+    this.setState({ showCategoryList: false, showSubCategoryList: false });
+  };
+
+  handleClick = event => {
+    this.setState({ anchorEl: event.currentTarget });
+  };
+
 
   render(props) {
-		const { classes } = this.props;
+    const { classes } = this.props;
     return (
       <Fragment>
-			<Grid>
-			<BoxCompany insta={true} />
-			</Grid>
-			<Grid container justify="center">
-				<DatePicker
-					choosedData={this.getData}
-				/>
-			</Grid>
-			<Grid container justify="center">
-			<MenuItem
-				categoria={this.state.category}
-			/>
-				{/* <MenuList
-					title={'Coleção'}
-					list={this.state.category}
-					onClose={handleMenuBrandClose}
-					
-			/> */}
-				<Grid container justify="center">
-					<Button
-						className={classes.button}
-						variant="contained"
-						color="primary"
-						onClick={this.handleData}
-					>
-						Buscar
-			</Button>
-				</Grid>
-			</Grid>
-		</Fragment>
-    )
+        <Grid>
+          <BoxCompany insta={true} />
+        </Grid>
+        <Grid container justify="center">
+          <DatePicker choosedData={this.getData} />
+        </Grid>
+        <Grid container justify="center">
+          <div>
+
+            <InputLabel id="label-category">Categoria</InputLabel>
+
+            <Select
+              labelId="label-category"
+              id="demo-simple-select-outlined"
+              value={this.state.choosedCategory}
+              onChange={e => {
+				  console.log(e.target.value)
+                this.setState({ choosedCategory: e.target.value });
+              }}
+              labelWidth={100}
+              label="Categoria"
+              variant="outlined"
+              className={this.props.classes.select}
+            >
+              {this.state.category.map(categorias => {
+                return (
+                  <MenuItem
+				  key={categorias}
+                    value={categorias}
+                  >
+                    {categorias}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+
+          </div>
+          <div>
+            <InputLabel id="label-subcategory">Subcategoria</InputLabel>
+            <Select
+              labelId="label-subcategory"
+              id="demo-simple-select-outlined"
+              value={this.state.choosedSubCategory}
+              onChange={e => {
+				console.log(e.target.value)
+
+                this.setState({ choosedSubCategory: e.target.value });
+              }}
+              labelWidth={100}
+              label="Subcategoria"
+              variant="outlined"
+              className={this.props.classes.select}
+            >
+              {this.state.subcategories.map(subcategoria => {
+                return (
+                  <MenuItem
+				  key={subcategoria}
+                    value={subcategoria}
+                  >
+                    {subcategoria}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+            {/* </Menu> */}
+          </div>
+          <Grid container justify="center">
+            <Button
+              className={classes.button}
+              variant="contained"
+              color="primary"
+              onClick={this.handleData}
+            >
+              Buscar
+            </Button>
+          </Grid>
+        </Grid>
+      </Fragment>
+    );
   }
 }
-
-export default withStyles(styles)(Search)
+const wrapperComponent = withStyles(styles)(withSnackbar(Search));
+export default wrapperComponent;

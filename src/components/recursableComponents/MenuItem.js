@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Fragment } from 'react';
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -7,61 +7,79 @@ const axios = require('axios')
 
 export default function SimpleMenu(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [category, setCategory] = React.useState([]);
-  const [subcategory, setSubcategory] = React.useState([]);
-  const [nameCollection, setNameCollection] = React.useState([]);
 
   const handleClick = event => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
+  const handleClose = (event) => {
     setAnchorEl(null);
   };
 
-  useEffect(() => {
-    const filterData = (array) => {
-			return array.filter((item, index) => array.indexOf(item) === index)
-		}
+  const handleCategoria = (categoria) => {
+    props.getCategories(categoria)
+  }
 
-    const categories = []
-		const subcategories = []
-		const nome_colecao = []
-    axios.get('http://localhost:8000/allproducts').then(elem => {
-				let data = elem.data.body.hits.hits
-				data.map((data) => {
-					categories.push(data._source.categoria)
-					subcategories.push(data._source.subcategoria)
-					nome_colecao.push(data._source.nome_colecao)
-				})
-      }).then(async () => {
-				let newCategories = await filterData(categories)
-        let newSubcategorie = await filterData(subcategories)
-				// setCategory(newCategories)
-				// setSubcategory(newSubcategorie)
-        // setNameCollection(nome_colecao)
-			})
-  },[])
+  const handleSubcategoria = (subcategoria) => {
+    props.getSubcategories(subcategoria)
+  }
 
+  const handleNameCollection = (nomeCollection) => {
+    props.getNameCollection(nomeCollection)
+  }
 
-
+  const { categoria, subcategoria, nome_collection } = props
   return (
+    <Fragment>
     <div>
-      <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+      <Button aria-controls="category-menu" aria-haspopup="true" onClick={handleClick}>
         Categoria
       </Button>
       <Menu
-        id="simple-menu"
+        id="category-menu"
         anchorEl={anchorEl}
         keepMounted
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-      <MenuItem onClick={handleClose}>Profile</MenuItem>
-      <MenuItem onClick={handleClose}>My account</MenuItem>
-      <MenuItem onClick={handleClose}>Logout</MenuItem>
+      {categoria.map((categorias) => {
+        return <MenuItem value={categorias} onClick={() => handleCategoria(categorias)}>{categorias}</MenuItem>
+      })}
       </Menu>
     </div>
+    {/* <div>
+     <Button aria-controls="subcategory-menu" aria-haspopup="true" onClick={handleClick}>
+        Subcategoria
+     </Button>
+     <Menu
+       id="subcategory-menu"
+       anchorEl={anchorEl}
+       keepMounted
+      //  open={Boolean(anchorEl)}
+      //  onClose={handleClose}
+     >
+       {subcategoria.map((subcategorias) => {
+          return <MenuItem value={subcategorias} onClick={() => handleSubcategoria(subcategorias)}>{subcategorias}</MenuItem>
+        })}
+     </Menu>
+   </div>
+   <div>
+     <Button aria-controls="subcategory-menu" aria-haspopup="true" onClick={handleClick}>
+        Colecao
+     </Button>
+     <Menu
+       id="nameCollection-menu"
+       anchorEl={anchorEl}
+       keepMounted
+      //  open={Boolean(anchorEl)}
+      //  onClose={handleClose}
+     >
+       {nome_collection.map((nomeCollection) => {
+          return <MenuItem value={nomeCollection} onClick={() => handleSubcategoria(nomeCollection)}>{nomeCollection}</MenuItem>
+        })}
+     </Menu>
+   </div> */}
+  </Fragment>
   );
 }
 

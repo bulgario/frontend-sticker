@@ -11,6 +11,7 @@
     "connected-react-router": "^6.5.2",
     "date-fns": "^2.5.0",
     "material-ui-popup-state": "^1.5.1",
+    "notistack": "^0.9.7",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
     "react-fontawesome": "^1.6.1",
