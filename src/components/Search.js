@@ -125,7 +125,7 @@ class Search extends React.Component {
             dataUltimoAgendamento: this.state.data_ultimo,
             category: this.state.choosedCategory,
             subcategory: this.state.choosedSubCategory,
-            collection_name: this.state.nome_collection
+            collection_name: this.state.choosedNameCollection
           }
         });
 
