@@ -116,25 +116,9 @@ class Search extends React.Component {
 
   handleData = async () => {
     // adicionar validações
-    try {
       if (this.validateRequest()) {
-        const response = await axios.get("http://localhost:8000/products", {
-          params: {
-            dataInicio: this.state.data_inicio,
-            dataFim: this.state.data_fim,
-            dataUltimoAgendamento: this.state.data_ultimo,
-            category: this.state.choosedCategory,
-            subcategory: this.state.choosedSubCategory,
-            collection_name: this.state.choosedNameCollection
-          }
-        });
 
-        if (response.data.length < 1) {
-          return this.props.enqueueSnackbar(
-            "Não há produtos programados para essas datas ",
-            { variant: "warning" }
-          );
-        } 
+        return this.props.history.push(`/insta?dataInicio=${new Date(this.state.data_inicio).toISOString()}&dataFim=${new Date(this.state.data_fim).toISOString()}&dataUltimoAgendamento=${new Date(this.state.data_ultimo).toISOString()}&categoria=${this.state.choosedCategory}&subcategoria=${this.state.choosedSubCategory}&colecao=${this.state.choosedNameCollection}`)
 	  } 
 	  else {	
 		this.props.enqueueSnackbar("Todos os campos precisam estar preenchidos", {
@@ -142,13 +126,7 @@ class Search extends React.Component {
 		  });
 
 	}
-    } catch (err) {
-	  console.log(err.data);
-	  this.props.enqueueSnackbar("Problemas no backend", {
-        variant: "error"
-      });
 
-    }
   };
 
   handleClose = event => {
