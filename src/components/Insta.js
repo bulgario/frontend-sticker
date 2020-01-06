@@ -27,6 +27,7 @@ import Divider from "@material-ui/core/Divider";
 
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
+import { withSnackbar } from "notistack";
 
 const axios = require('axios')
 
@@ -126,18 +127,64 @@ class Insta extends React.Component {
     };
   }
 
-  componentDidMount() {
-    const products = []
-		return axios.get('http://localhost:8000/products/').then((resp) => {
-      resp.data.map((data) => {
-        products.push(data)
-      })
-    }).then(() => {
-      this.setState({ produto: products })
-    })
+ async  componentDidMount() {
+    // const products = []
+		// return axios.get('http://localhost:8000/products/').then((resp) => {
+    //   resp.data.map((data) => {
+    //     products.push(data)
+    //   })
+    // }).then(() => {
+    //   this.setState({ produto: products })
+    // })
 		// 	const productsArray = Object.values(data)
 		// 	products.push(productsArray[0])
-		// 	this.setState({ products: products[0].body.hits.hits })	
+    // 	this.setState({ products: products[0].body.hits.hits })	
+      this.getProducts()
+  }
+  async getProducts() {
+    try {
+
+      const response = await axios.get("http://localhost:8000/products", {
+        params: this.getAllParamsFromUrl()
+      });
+      console.log(response)
+
+      if (response.data.length < 1) {
+        return this.props.enqueueSnackbar(
+          "Não há produtos programados para essas datas ",
+          { variant: "warning" }
+        );
+      } 
+
+    } catch(err) {
+      console.log(err)
+      return this.props.enqueueSnackbar("Problemas no backend", {
+        variant: "error"
+      });
+    }
+  }
+
+  getAllParamsFromUrl() {
+    const dataInicio = this.getParamFromUrl("dataInicio");
+    const dataFim = this.getParamFromUrl("dataFim");
+    const dataUltimoAgendamento = this.getParamFromUrl("dataUltimoAgendamento");
+    const category = this.getParamFromUrl("categoria");
+    const subcategory = this.getParamFromUrl("subcategoria");
+    const collection_name = this.getParamFromUrl("colecao");
+
+    return { dataInicio, dataFim, dataUltimoAgendamento, category, subcategory,collection_name };
+  }
+
+  getJsonFromUrl(param) {
+    return JSON.parse(this.getParamFromUrl(param));
+  }
+
+  getParamFromUrl(param) {
+    console.log(this.props.location.search)
+    const urlSearch = new URLSearchParams(this.props.location.search);
+    console.log(urlSearch, 'url searck')
+    console.log(urlSearch.get(param))
+    return urlSearch.get(param);
   }
 
   renderProgramacoes() {
@@ -292,7 +339,7 @@ class Insta extends React.Component {
   }
 }
 
-const wrappedInsta = withStyles(styles)(Insta);
+const wrappedInsta = withStyles(styles)(withSnackbar(Insta));
 
 const mapStateToProps = state => ({
   loading: state.auth.loading,
