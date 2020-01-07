@@ -29,7 +29,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
 import { withSnackbar } from "notistack";
 
-const axios = require('axios')
+const axios = require("axios");
 
 const styles = theme => ({
   margin: {
@@ -94,17 +94,16 @@ const styles = theme => ({
   },
   textField: {
     width: 190,
-    margin:theme.spacing(1),
-
+    margin: theme.spacing(1)
   },
   textFieldFull: {
     width: 385,
-    margin:theme.spacing(1),
+    margin: theme.spacing(1)
   },
   row: {
-    display:'flex',
-    flexDirection: 'row',
-    justifyContent:'space-between',
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
     width: 400
   }
 });
@@ -123,41 +122,35 @@ class Insta extends React.Component {
       recoverySubmitted: false,
       recoveryShow: false,
       programacoes,
-      expanded: true,
+      expanded: false
     };
   }
 
- async  componentDidMount() {
-    // const products = []
-		// return axios.get('http://localhost:8000/products/').then((resp) => {
-    //   resp.data.map((data) => {
-    //     products.push(data)
-    //   })
-    // }).then(() => {
-    //   this.setState({ produto: products })
-    // })
-		// 	const productsArray = Object.values(data)
-		// 	products.push(productsArray[0])
-    // 	this.setState({ products: products[0].body.hits.hits })	
-      this.getProducts()
+  componentDidMount() {
+
+    this.getProducts();
   }
   async getProducts() {
     try {
-
       const response = await axios.get("http://localhost:8000/products", {
         params: this.getAllParamsFromUrl()
       });
-      console.log(response)
+      console.log(response);
 
       if (response.data.length < 1) {
         return this.props.enqueueSnackbar(
           "Não há produtos programados para essas datas ",
           { variant: "warning" }
         );
-      } 
+      }
 
-    } catch(err) {
-      console.log(err)
+      const arrayProducts = response.data;
+      const formatedProducts = arrayProducts.map((produto, index) => {
+        return produto._source;
+      });
+      this.setState({ produto: formatedProducts });
+    } catch (err) {
+      console.log(err);
       return this.props.enqueueSnackbar("Problemas no backend", {
         variant: "error"
       });
@@ -172,7 +165,14 @@ class Insta extends React.Component {
     const subcategory = this.getParamFromUrl("subcategoria");
     const collection_name = this.getParamFromUrl("colecao");
 
-    return { dataInicio, dataFim, dataUltimoAgendamento, category, subcategory,collection_name };
+    return {
+      dataInicio,
+      dataFim,
+      dataUltimoAgendamento,
+      category,
+      subcategory,
+      collection_name
+    };
   }
 
   getJsonFromUrl(param) {
@@ -180,36 +180,28 @@ class Insta extends React.Component {
   }
 
   getParamFromUrl(param) {
-    console.log(this.props.location.search)
     const urlSearch = new URLSearchParams(this.props.location.search);
-    console.log(urlSearch, 'url searck')
-    console.log(urlSearch.get(param))
     return urlSearch.get(param);
   }
 
   renderProgramacoes() {
     const { programacoes, produto } = this.state;
+    console.log(programacoes)
     const { classes } = this.props;
-    return produto.map(produtos => {
+    return programacoes.map(programacao => {
       return (
-        <Grid item direction="column">
-          <Typography variant="h5" className={produtos._source.data_prog}>
-            {produtos._source.data_prog}
-          </Typography>
+        <Grid item direction="row"  justify="center">
+          <Grid item align="center">
+          <Typography variant="h5">{programacao.date}</Typography>
+          </Grid>
           <Divider variant="middle" className={classes.divider}></Divider>
-
-          {/* {this.renderProductsInstaView(data)} */}
           {this.state.expanded
-            ? this.renderProductsCardsView(produtos)
-            : this.renderProductsInstaView(produtos)}
+            ? this.renderProductsCardsView(programacao.produtos)
+            : this.renderProductsInstaView(programacao.produtos)}
         </Grid>
       );
     });
   }
-
-  // handleChange() {
-  //   this.setState({expanded:!this.state.expanded})
-  // };
 
   renderProductsCardsView({ produtos, date }) {
     const { classes } = this.props;
@@ -223,46 +215,42 @@ class Insta extends React.Component {
                 <Grid alignItems="center">
                   <CardMedia
                     className={classes.mediaCard}
-                    image={produto._source.nome_arquivo[0]}
+                    image={
+                      produto.nome_arquivo ? produto.nome_arquivo[0] : "noPhoto"
+                    }
                     title="Produto"
                   />
                 </Grid>
                 <Grid className={classes.productInfo}>
                   <TextField
-                    label="Grupo"
-                    defaultValue="Seda"
+                    label="Coleção"
                     className={classes.textFieldFull}
-                    
+                    value={produto.nome_colecao[0]}
                     InputProps={{
                       readOnly: true
                     }}
                     variant="outlined"
                   />
-                  <Grid className={classes.row} >
-                  <TextField
-                    label="Estilista"
-                    defaultValue="Amanda Carneiro"
-                    className={classes.textField}
-                    
-                    InputProps={{
-                      readOnly: true
-                    }}
-                    variant="outlined"
-                  />
-                                    <TextField
-                    label="Linha"
-                    defaultValue="Seda"
-                    className={classes.textField}
-                    
-                    InputProps={{
-                      readOnly: true
-                    }}
-                    variant="outlined"
-                  />
+                  <Grid className={classes.row}>
+                    <TextField
+                      label="Categoria"
+                      className={classes.textField}
+                      value={produto.categoria}
+                      InputProps={{
+                        readOnly: true
+                      }}
+                      variant="outlined"
+                    />
+                    <TextField
+                      label="Subcategoria"
+                      className={classes.textField}
+                      value={produto.subcategoria}
+                      InputProps={{
+                        readOnly: true
+                      }}
+                      variant="outlined"
+                    />
                   </Grid>
-                  {/* <Typography>Estilista: AMANDA.CARNEIRO</Typography>
-                  <Typography>Grupo: Seda</Typography>
-                  <Typography>Produto Estiloso</Typography> */}
                 </Grid>
               </Grid>
             </Card>
@@ -274,7 +262,7 @@ class Insta extends React.Component {
 
   renderProductsInstaView({ produtos, date }) {
     const { classes } = this.props;
-    const { produto } = this.state
+    const { produto } = this.state;
     return (
       <Grid className={classes.horizontalScroll}>
         {produto.map(produto => {
@@ -282,15 +270,15 @@ class Insta extends React.Component {
             <Card className={classes.margin}>
               <CardMedia
                 className={classes.media}
-                image={produto._source.nome_arquivo[0]}
+                image={produto.nome_arquivo[0]}
                 title="Produto"
               />
 
-              <CardActions disableSpacing>
+              {/* <CardActions disableSpacing>
                 <IconButton aria-label="add to favorites">
                   <FavoriteIcon />
                 </IconButton>
-              </CardActions>
+              </CardActions> */}
             </Card>
           );
         })}
@@ -314,13 +302,14 @@ class Insta extends React.Component {
           <FormControlLabel
             control={
               <Switch
+                color="primary"
                 checked={this.state.expanded}
                 onChange={() =>
                   this.setState({ expanded: !this.state.expanded })
                 }
               />
             }
-            label="Show"
+            label="Detalhes"
           />
 
           <div className={classes.margin}>

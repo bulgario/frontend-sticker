@@ -22,10 +22,7 @@ const styles = theme => ({
   },
   button: {
     margin: theme.spacing(1),
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: 100
+    padding: theme.spacing(1.5)
   },
   select: {
 	width: 160,
@@ -113,7 +110,7 @@ class Search extends React.Component {
 
     return true;
   };
-
+  
   handleData = async () => {
     // adicionar validações
       if (this.validateRequest()) {
@@ -137,7 +134,115 @@ class Search extends React.Component {
   handleClick = event => {
     this.setState({ anchorEl: event.currentTarget });
   };
+  renderInputs() {
+    const { classes } = this.props
+    const { data_inicio, data_ultimo, data_fim} = this.state
+    if (data_fim && data_inicio && data_ultimo) {
+      return (        <Grid container justify="center">
+      <div>
+  
+        <InputLabel id="label-category">Categoria</InputLabel>
+  
+        <Select
+          labelId="label-category"
+          id="demo-simple-select-outlined"
+          value={this.state.choosedCategory}
+          onChange={e => {
+      console.log(e.target.value)
+            this.setState({ choosedCategory: e.target.value });
+          }}
+          labelWidth={100}
+          label="Categoria"
+          variant="outlined"
+          className={this.props.classes.select}
+        >
+          {this.state.category.map(categorias => {
+            return (
+              <MenuItem
+      key={categorias}
+                value={categorias}
+              >
+                {categorias}
+              </MenuItem>
+            );
+          })}
+        </Select>
+  
+      </div>
+      <div>
+        <InputLabel id="label-subcategory">Subcategoria</InputLabel>
+        <Select
+          labelId="label-subcategory"
+          id="demo-simple-select-outlined"
+          value={this.state.choosedSubCategory}
+          onChange={e => {
+    console.log(e.target.value)
+  
+            this.setState({ choosedSubCategory: e.target.value });
+          }}
+          labelWidth={100}
+          label="Subcategoria"
+          variant="outlined"
+          className={this.props.classes.select}
+        >
+          {this.state.subcategories.map(subcategoria => {
+            return (
+              <MenuItem
+      key={subcategoria}
+                value={subcategoria}
+              >
+                {subcategoria}
+              </MenuItem>
+            );
+          })}
+        </Select>
+        {/* </Menu> */}
+      </div>
+      <div>
+        <InputLabel id="label-subcategory">Colecao</InputLabel>
+        <Select
+          labelId="label-subcategory"
+          id="demo-simple-select-outlined"
+          value={this.state.choosedNameCollection}
+          onChange={e => {
+    console.log(e.target.value)
+  
+            this.setState({ choosedNameCollection: e.target.value });
+          }}
+          labelWidth={100}
+          label="choosedNameCollection"
+          variant="outlined"
+          className={this.props.classes.select}
+        >
+          {this.state.nome_collection.map(collection => {
+            return (
+              <MenuItem
+      key={collection}
+                value={collection}
+              >
+                {collection}
+              </MenuItem>
+            );
+          })}
+        </Select>
+        {/* </Menu> */}
+      </div>
+      <Grid container justify="center">
+        <Button
+          className={classes.button}
+          variant="contained"
+          color="primary"
+          onClick={this.handleData}
+        >
+          Buscar
+        </Button>
+      </Grid>
+    </Grid>)
+    }
 
+    return null
+   
+  }
   render(props) {
     const { classes } = this.props;
     return (
@@ -148,106 +253,7 @@ class Search extends React.Component {
         <Grid container justify="center">
           <DatePicker choosedData={this.getData} />
         </Grid>
-        <Grid container justify="center">
-          <div>
-
-            <InputLabel id="label-category">Categoria</InputLabel>
-
-            <Select
-              labelId="label-category"
-              id="demo-simple-select-outlined"
-              value={this.state.choosedCategory}
-              onChange={e => {
-				  console.log(e.target.value)
-                this.setState({ choosedCategory: e.target.value });
-              }}
-              labelWidth={100}
-              label="Categoria"
-              variant="outlined"
-              className={this.props.classes.select}
-            >
-              {this.state.category.map(categorias => {
-                return (
-                  <MenuItem
-				  key={categorias}
-                    value={categorias}
-                  >
-                    {categorias}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-
-          </div>
-          <div>
-            <InputLabel id="label-subcategory">Subcategoria</InputLabel>
-            <Select
-              labelId="label-subcategory"
-              id="demo-simple-select-outlined"
-              value={this.state.choosedSubCategory}
-              onChange={e => {
-				console.log(e.target.value)
-
-                this.setState({ choosedSubCategory: e.target.value });
-              }}
-              labelWidth={100}
-              label="Subcategoria"
-              variant="outlined"
-              className={this.props.classes.select}
-            >
-              {this.state.subcategories.map(subcategoria => {
-                return (
-                  <MenuItem
-				  key={subcategoria}
-                    value={subcategoria}
-                  >
-                    {subcategoria}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-            {/* </Menu> */}
-          </div>
-          <div>
-            <InputLabel id="label-subcategory">Colecao</InputLabel>
-            <Select
-              labelId="label-subcategory"
-              id="demo-simple-select-outlined"
-              value={this.state.choosedNameCollection}
-              onChange={e => {
-				console.log(e.target.value)
-
-                this.setState({ choosedNameCollection: e.target.value });
-              }}
-              labelWidth={100}
-              label="choosedNameCollection"
-              variant="outlined"
-              className={this.props.classes.select}
-            >
-              {this.state.nome_collection.map(collection => {
-                return (
-                  <MenuItem
-				  key={collection}
-                    value={collection}
-                  >
-                    {collection}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-            {/* </Menu> */}
-          </div>
-          <Grid container justify="center">
-            <Button
-              className={classes.button}
-              variant="contained"
-              color="primary"
-              onClick={this.handleData}
-            >
-              Buscar
-            </Button>
-          </Grid>
-        </Grid>
+          {this.renderInputs()}
       </Fragment>
     );
   }

@@ -2,9 +2,7 @@ import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {BrowserRouter as Route} from 'react-router-dom';
 import { Grid, Typography } from "@material-ui/core";
-import Menu from "@material-ui/icons/Menu";
 import ArrowBack from "@material-ui/icons/ArrowBack";
-import Share from "@material-ui/icons/Share";
 
 import Login from '../Login'
 
@@ -25,6 +23,9 @@ const useStyles = makeStyles(theme => ({
   },
   spacing: {
     marginHorizontal: theme.spacing(2)
+  },
+  centerItem: {
+    marginRight: '48%'
   }
 }));
 
@@ -51,17 +52,21 @@ const BoxCompany = (props) => {
           justify="space-between"
           alignItems="center"
         >
-          {/* <Grid item></Grid> */}
+          <Grid item>
           <ArrowBack
             onClick={handleClick}
           ></ArrowBack>
+          </Grid>
+          <Grid item className={classes.centerItem} >
           <Typography variant="h4"> {user[0].companyName} </Typography>
 
+          </Grid>
+
           {/* <Grid item container direction="row" aligmItems="start"> */}
-          <Grid item direction="row" spacing={1}>
+          {/* <Grid item direction="row" spacing={1}>
             <Share/>
             <Menu/>
-          </Grid>
+          </Grid> */}
           {/* <Grid item></Grid> */}
           {/* </Grid> */}
         </Grid>
