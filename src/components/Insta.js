@@ -122,7 +122,7 @@ class Insta extends React.Component {
       recoverySubmitted: false,
       recoveryShow: false,
       programacoes,
-      expanded: true
+      expanded: false
     };
   }
 
