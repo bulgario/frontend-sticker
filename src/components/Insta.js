@@ -189,8 +189,10 @@ class Insta extends React.Component {
     const { classes } = this.props;
     return produto.map(produtos => {
       return (
-        <Grid item direction="row" align="center" justify="center">
+        <Grid item direction="row"  justify="center">
+          <Grid item align="center">
           <Typography variant="h5">{produtos.data_prog}</Typography>
+          </Grid>
           <Divider variant="middle" className={classes.divider}></Divider>
           {this.state.expanded
             ? this.renderProductsCardsView(produtos)
