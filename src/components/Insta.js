@@ -3,17 +3,12 @@ import { connect } from "react-redux";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
-import Drawer from "@material-ui/core/Drawer";
 import { withRouter } from "react-router-dom";
 
 
 import TextField from "@material-ui/core/TextField";
 
 import Header from "./recursableComponents/Header";
-import CardActions from "@material-ui/core/CardActions";
-
-import IconButton from "@material-ui/core/IconButton";
-import FavoriteIcon from "@material-ui/icons/Favorite";
 
 import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
@@ -186,7 +181,7 @@ class Insta extends React.Component {
   }
 
   renderProgramacoes() {
-    const { programacoes, produto, allProducts } = this.state;
+    const { allProducts } = this.state;
     const { classes } = this.props;
     return Object.entries(allProducts).map(produtos => {
       return (
@@ -267,7 +262,7 @@ class Insta extends React.Component {
 
   renderProductsInstaView() {
     const { classes } = this.props;
-    const { produto, allProducts } = this.state;
+    const { allProducts } = this.state;
     return (
       <Grid className={classes.horizontalScroll}>
         {Object.values(allProducts).map(data => {
@@ -312,7 +307,7 @@ class Insta extends React.Component {
   // })
 
   render() {
-    const { classes, authToken } = this.props;
+    const { classes } = this.props;
     // if (authToken) {
     //   return (
     //     <Redirect to={'/Login'} />

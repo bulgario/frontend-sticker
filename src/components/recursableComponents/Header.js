@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { BrowserRouter as Route } from "react-router-dom";
 import { Grid, Typography } from "@material-ui/core";
 import ArrowBack from "@material-ui/icons/ArrowBack";
 import { withRouter } from "react-router-dom";
 
 
-import Login from "../Login";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -47,11 +45,6 @@ const Header = props => {
 
     return props.history.goBack()
   };
-
-  const userData = [
-    { id: 1, companyName: "Animale" },
-    { id: 2, companyName: "Farm" }
-  ];
 
   let user = ""
   if(localStorage.getItem("user")) {

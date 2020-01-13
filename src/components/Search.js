@@ -241,7 +241,6 @@ class Search extends React.Component {
     return null;
   }
   render(props) {
-    const { classes } = this.props;
     return (
       <Fragment>
         <Grid>
