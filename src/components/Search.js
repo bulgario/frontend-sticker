@@ -64,7 +64,7 @@ class Search extends React.Component {
     const categories = [];
     const subcategories = [];
     const nome_colecao = [];
-    const response = await axios.get("http://localhost:8000/allproducts");
+    const response = await axios.get("http://localhost:8000/products/listAllProducts");
     let { data } = response;
     data.map(data => {
       categories.push(data.value.categoria);

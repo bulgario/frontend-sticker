@@ -136,7 +136,7 @@ class Insta extends React.Component {
   }
   async getProducts() {
     try {
-      const response = await axios.get("http://localhost:8000/products", {
+      const response = await axios.get("http://localhost:8000/products/selectedProducts", {
         params: this.getAllParamsFromUrl()
       });
       let products = response.data;
