@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import {BrowserRouter as Route} from 'react-router-dom';
+import { BrowserRouter as Route } from "react-router-dom";
 import { Grid, Typography } from "@material-ui/core";
 import ArrowBack from "@material-ui/icons/ArrowBack";
+import { withRouter } from "react-router-dom";
 
-import Login from '../Login'
+
+import Login from "../Login";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -24,25 +26,43 @@ const useStyles = makeStyles(theme => ({
   spacing: {
     marginHorizontal: theme.spacing(2)
   },
-  centerItem: {
-    marginRight: '48%'
+  loginName: {
+    maxWidth: "20%",
+    fontSize: 16,
+    fontWeight: "bold"
   }
 }));
 
-const BoxCompany = (props) => {
+
+const Header = props => {
   const classes = useStyles();
 
-  const handleClick = (eve) => {
-    return(<Route path="/login" component={Login} />)
-  }
+  const handleClick = eve => {
+
+    if(props.history.location.pathname ==='/search') {
+      console.log('entrei')
+      localStorage.removeItem("user")
+     return  props.history.push('/login')
+    }
+
+    return props.history.goBack()
+  };
 
   const userData = [
     { id: 1, companyName: "Animale" },
     { id: 2, companyName: "Farm" }
   ];
 
-  const [user] = useState(userData);
-  const { insta } = props
+  let user = ""
+  if(localStorage.getItem("user")) {
+    user = JSON.parse(localStorage.getItem("user"))
+    console.log(user)
+
+
+  }
+
+
+  const { insta } = props;
   if (insta) {
     return (
       <div className={classes.header}>
@@ -53,14 +73,16 @@ const BoxCompany = (props) => {
           alignItems="center"
         >
           <Grid item>
-          <ArrowBack
-            onClick={handleClick}
-          ></ArrowBack>
+            <ArrowBack onClick={handleClick}></ArrowBack>
           </Grid>
-          <Grid item className={classes.centerItem} >
-          <Typography variant="h4"> {user[0].companyName} </Typography>
+          <Grid item>
+            <Typography variant="h4"> Animale  </Typography>
+          </Grid>
 
-          </Grid>
+          <Typography className={classes.loginName}>
+            
+          {user.usuario?user.usuario.login: null}
+          </Typography>
 
           {/* <Grid item container direction="row" aligmItems="start"> */}
           {/* <Grid item direction="row" spacing={1}>
@@ -76,9 +98,9 @@ const BoxCompany = (props) => {
 
   return (
     <div>
-      <h2 className={classes.root}>{user[0].companyName}</h2>
+      <h2 className={classes.root}>Animale</h2>
     </div>
   );
 };
 
-export default BoxCompany;
+export default withRouter(Header);

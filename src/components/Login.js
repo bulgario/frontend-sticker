@@ -113,6 +113,7 @@ class Login extends React.Component {
 
   render() {
     const { authToken } = this.props
+    console.log(authToken)
 
     if (authToken) {
       return (
