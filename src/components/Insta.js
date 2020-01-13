@@ -205,7 +205,7 @@ class Insta extends React.Component {
     return (
       <Grid container justify="center">
         {Object.values(allProducts).map(data => {
-          data.map(produtos => {
+          return data.map(produtos => {
             return (
               <Card className={classes.card}>
                 <Grid container direction="row" justify="flex-start">
@@ -266,7 +266,7 @@ class Insta extends React.Component {
     return (
       <Grid className={classes.horizontalScroll}>
         {Object.values(allProducts).map(data => {
-          data.map(produto => {
+         return  data.map(produto => {
             console.log(produto);
             return (
               <Card className={classes.margin}>
