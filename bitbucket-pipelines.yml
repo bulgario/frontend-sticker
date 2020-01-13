@@ -16,7 +16,6 @@ pipelines:
           script:
             # Modify the commands below to build your repository.
             # Set $DOCKER_HUB_USERNAME and $DOCKER_HUB_PASSWORD as environment variables in repository settings
-            - cd omni
             - yarn install
             - yarn build
             - pipe: atlassian/google-cloud-storage-deploy:0.3.6
