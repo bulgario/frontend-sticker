@@ -37,7 +37,7 @@ export default function MaterialUIPickers(props) {
           format="yyyy-MM-dd"
           margin="normal"
           id="date-picker-inline"
-          label={"inicio"}
+          label={"Início"}
           value={selectedDateInicio}
           onChange={handleDataInicioChange}
           KeyboardButtonProps={{
@@ -52,7 +52,7 @@ export default function MaterialUIPickers(props) {
           format="yyyy-MM-dd"
           margin="normal"
           id="date-picker-inline"
-          label={"fim"}
+          label={"Fim"}
           value={selectedDateFim}
           onChange={handleDataFimChange}
           KeyboardButtonProps={{
@@ -67,7 +67,7 @@ export default function MaterialUIPickers(props) {
           format="yyyy-MM-dd"
           margin="normal"
           id="date-picker-inline"
-          label={"Ultima data Agendamento"}
+          label={"Última data agendamento"}
           value={selectedDateUltimo}
           onChange={handleDateUltimoAgendamento}
           KeyboardButtonProps={{
