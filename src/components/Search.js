@@ -1,11 +1,13 @@
 import React, { Fragment } from "react";
-import BoxCompany from "./recursableComponents/BoxCompany";
+import Header from "./recursableComponents/Header";
 import DatePicker from "./recursableComponents/DatePicker";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
+import { withRouter } from "react-router-dom";
+
 
 import InputLabel from "@material-ui/core/InputLabel";
 
@@ -243,7 +245,7 @@ class Search extends React.Component {
     return (
       <Fragment>
         <Grid>
-          <BoxCompany insta={true} />
+          <Header insta={true} />
         </Grid>
         <Grid container justify="center">
           <DatePicker choosedData={this.getData} />
@@ -253,5 +255,5 @@ class Search extends React.Component {
     );
   }
 }
-const wrapperComponent = withStyles(styles)(withSnackbar(Search));
+const wrapperComponent = withStyles(styles)(withSnackbar(withRouter(Search)));
 export default wrapperComponent;

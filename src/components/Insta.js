@@ -4,10 +4,12 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Drawer from "@material-ui/core/Drawer";
+import { withRouter } from "react-router-dom";
+
 
 import TextField from "@material-ui/core/TextField";
 
-import BoxCompany from "./recursableComponents/BoxCompany";
+import Header from "./recursableComponents/Header";
 import CardActions from "@material-ui/core/CardActions";
 
 import IconButton from "@material-ui/core/IconButton";
@@ -28,6 +30,7 @@ import Divider from "@material-ui/core/Divider";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
 import { withSnackbar } from "notistack";
+
 
 const axios = require("axios");
 const _ = require("lodash");
@@ -318,7 +321,7 @@ class Insta extends React.Component {
 
     return (
       <Fragment>
-        <BoxCompany insta={true} />
+        <Header insta={true} />
 
         <Container>
           <FormControlLabel
@@ -350,7 +353,7 @@ class Insta extends React.Component {
   }
 }
 
-const wrappedInsta = withStyles(styles)(withSnackbar(Insta));
+const wrapperComponent = withStyles(styles)(withSnackbar(withRouter(Insta)));
 
 const mapStateToProps = state => ({
   loading: state.auth.loading,
@@ -363,4 +366,4 @@ const mapDispatchToProps = dispatch => ({
   signIn: (username, password) => dispatch(signIn(username, password))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(wrappedInsta);
+export default connect(mapStateToProps, mapDispatchToProps)(wrapperComponent);
