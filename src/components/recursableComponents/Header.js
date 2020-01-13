@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { BrowserRouter as Route } from "react-router-dom";
-import { Grid, Typography } from "@material-ui/core";
+import { Grid, Typography,Fab } from "@material-ui/core";
 import ArrowBack from "@material-ui/icons/ArrowBack";
 import { withRouter } from "react-router-dom";
 
@@ -14,11 +14,11 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(2),
     textAlign: "center",
     color: theme.palette.text.primary,
-    backgroundColor: "#FFE600",
+    backgroundColor: "#ffeb3b",
     boxShadow: "1px 1px 1px 1px"
   },
   header: {
-    backgroundColor: "#FFE600",
+    backgroundColor: "#ffeb3b",
     color: theme.palette.text.primary,
     flexGrow: 1,
     padding: theme.spacing(2)
@@ -73,7 +73,9 @@ const Header = props => {
           alignItems="center"
         >
           <Grid item>
-            <ArrowBack onClick={handleClick}></ArrowBack>
+            <Fab color="primary" onClick={handleClick}>
+            <ArrowBack ></ArrowBack>
+            </Fab>
           </Grid>
           <Grid item>
             <Typography variant="h4"> Animale  </Typography>
