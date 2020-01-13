@@ -124,42 +124,31 @@ class Insta extends React.Component {
       recoveryShow: false,
       programacoes,
       allProducts: [],
-      expanded: false,
+      expanded: false
     };
   }
 
   componentDidMount() {
-
     this.getProducts();
   }
   async getProducts() {
     try {
       const response = await axios.get("http://localhost:8000/products", {
         params: this.getAllParamsFromUrl()
-      }).then(data => {
-        try {
-          let products = data.data
-          this.setState({ allProducts: products })
-
-          if(_.isEmpty(products)) {
-            return this.props.enqueueSnackbar(
-              "Não há produtos programados para essas datas ",
-              { variant: "warning" }
-            );
-          }
-
-          if (products.length < 1) {
-            return this.props.enqueueSnackbar(
-              "Não há produtos programados para essas datas ",
-              { variant: "warning" }
-            );
-          } 
-        } catch (error) {
-          return error
-        }
       });
-    } catch(err) {
-      console.log(err)
+      let products = response.data;
+
+      if (products.length < 1 || _.isEmpty(products) ) {
+        return this.props.enqueueSnackbar(
+          "Não há produtos programados para essas datas ",
+          { variant: "warning" }
+        );
+      }
+
+      this.setState({ allProducts: products });
+
+    } catch (err) {
+      console.log(err);
       return this.props.enqueueSnackbar("Problemas no backend", {
         variant: "error"
       });
@@ -198,9 +187,9 @@ class Insta extends React.Component {
     const { classes } = this.props;
     return Object.entries(allProducts).map(produtos => {
       return (
-        <Grid item direction="row"  justify="center">
+        <Grid item direction="row" justify="center">
           <Grid item align="center">
-          <Typography variant="h5">{produtos[0]}</Typography>
+            <Typography variant="h5">{produtos[0]}</Typography>
           </Grid>
           <Divider variant="middle" className={classes.divider}></Divider>
           {this.state.expanded
@@ -208,98 +197,98 @@ class Insta extends React.Component {
             : this.renderProductsInstaView()}
         </Grid>
       );
-    })
+    });
   }
 
   renderProductsCardsView() {
     const { classes } = this.props;
     const { produto, allProducts } = this.state;
-    
+
     return (
       <Grid container justify="center">
-      {Object.values(allProducts).map((data) => {
-        data.map((produtos) => {
-          return (
-            <Card className={classes.card}>
-            <Grid container direction="row" justify="flex-start">
-              <Grid alignItems="center">
-                <CardMedia
-                  className={classes.mediaCard}
-                  image={
-                    produto.nome_arquivo[0] ? produto.nome_arquivo[0] : "noPhoto"
-                  }
-                  title="Produto"
-                />
-              </Grid>
-              <Grid className={classes.productInfo}>
-                <TextField
-                  label="Coleção"
-                  className={classes.textFieldFull}
-                  value={produto.nome_colecao[0]}
-                  InputProps={{
-                    readOnly: true
-                  }}
-                  variant="outlined"
-                />
-                <Grid className={classes.row}>
-                  <TextField
-                    label="Categoria"
-                    className={classes.textField}
-                    value={produto.categoria}
-                    InputProps={{
-                      readOnly: true
-                    }}
-                    variant="outlined"
-                  />
-                  <TextField
-                    label="Subcategoria"
-                    className={classes.textField}
-                    value={produto.subcategoria}
-                    InputProps={{
-                      readOnly: true
-                    }}
-                    variant="outlined"
-                  />
+        {Object.values(allProducts).map(data => {
+          data.map(produtos => {
+            return (
+              <Card className={classes.card}>
+                <Grid container direction="row" justify="flex-start">
+                  <Grid alignItems="center">
+                    <CardMedia
+                      className={classes.mediaCard}
+                      image={
+                        produto.nome_arquivo[0]
+                          ? produto.nome_arquivo[0]
+                          : "noPhoto"
+                      }
+                      title="Produto"
+                    />
+                  </Grid>
+                  <Grid className={classes.productInfo}>
+                    <TextField
+                      label="Coleção"
+                      className={classes.textFieldFull}
+                      value={produto.nome_colecao[0]}
+                      InputProps={{
+                        readOnly: true
+                      }}
+                      variant="outlined"
+                    />
+                    <Grid className={classes.row}>
+                      <TextField
+                        label="Categoria"
+                        className={classes.textField}
+                        value={produto.categoria}
+                        InputProps={{
+                          readOnly: true
+                        }}
+                        variant="outlined"
+                      />
+                      <TextField
+                        label="Subcategoria"
+                        className={classes.textField}
+                        value={produto.subcategoria}
+                        InputProps={{
+                          readOnly: true
+                        }}
+                        variant="outlined"
+                      />
+                    </Grid>
+                  </Grid>
                 </Grid>
-              </Grid>
-            </Grid>
-          </Card>
-          )
-        })
-      })}
-    </Grid>
+              </Card>
+            );
+          });
+        })}
+      </Grid>
     );
   }
- 
 
   renderProductsInstaView() {
     const { classes } = this.props;
     const { produto, allProducts } = this.state;
     return (
       <Grid className={classes.horizontalScroll}>
-        {Object.values(allProducts).map((data) => {
-          data.map((produto) => {
-            console.log(produto)
+        {Object.values(allProducts).map(data => {
+          data.map(produto => {
+            console.log(produto);
             return (
-            <Card className={classes.margin}>
-              <CardMedia
-                className={classes.media}
-                image={produto.nome_arquivo[0]}
-                title="Produto"
-              />
-              {/* <CardActions disableSpacing>
+              <Card className={classes.margin}>
+                <CardMedia
+                  className={classes.media}
+                  image={produto.nome_arquivo[0]}
+                  title="Produto"
+                />
+                {/* <CardActions disableSpacing>
                 <IconButton aria-label="add to favorites">
                   <FavoriteIcon />
                 </IconButton>
               </CardActions> */}
-            </Card>
+              </Card>
             );
-          })
+          });
         })}
       </Grid>
     );
   }
-
 
   // produto.map(produto => {
   //   return (
