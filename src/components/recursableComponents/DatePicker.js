@@ -7,6 +7,7 @@ import {
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 
+import {BASE_URL} from '../../consts';
 const axios = require("axios");
 
 export default function MaterialUIPickers(props) {
@@ -35,7 +36,7 @@ export default function MaterialUIPickers(props) {
   const getCollection = async () => {
     if(selectedDateInicio !== null && selectedDateFim !== null && selectedDateUltimo !== null) {
       try {
-        const response = await axios.get("http://localhost:8000/products/getCollectionBasedInData", {
+        const response = await axios.get(`${BASE_URL}/products/getCollectionBasedInData`, {
           params: getDatasForCollection()
         }); 
         const collection = response.data
