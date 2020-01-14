@@ -54,7 +54,7 @@ import {
   
     isAdmin() {
       const user = this.getUser();
-      return user.admin == 1;
+      return user.admin == 1; //eslint-disable-line
     }
 
 

@@ -19,7 +19,6 @@ import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
 
 import logoSoma from '../img/logo_grupo_soma_PRETO.png'
-import altLogoSoma from '../img/logo_grupo_soma_final_BRANCO.png'
 
 import { signIn } from '../actions'
 import User from "../services/User";
@@ -29,11 +28,6 @@ const USER_EMPTY = 'Usuário não preenchido!'
 const PASS_EMPTY = 'Senha não preenchida!'
 const CREDENTIALS_ERROR = 'Usuário ou senha incorretos!'
 
-const addDefault = eve => {
-  let srcSoma = logoSoma
-  let src = eve.target.src
-  src !== true ? src = srcSoma : eve.target.alt = src
-}
 const styles = theme => ({
   root: {
     flexGrow: 1,
