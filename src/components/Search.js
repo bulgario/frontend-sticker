@@ -243,7 +243,10 @@ class Search extends React.Component {
           <Header insta={true} />
         </Grid>
         <Grid container justify="center">
-          <DatePicker choosedData={this.getData} choosedCollection={this.getCollections} />
+          <DatePicker 
+            choosedData={this.getData}
+            choosedCollection={this.getCollections}
+          />
         </Grid>
         {this.renderInputs()}
       </Fragment>
