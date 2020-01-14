@@ -152,7 +152,6 @@ class Search extends React.Component {
               id="demo-simple-select-outlined"
               value={this.state.choosedCategory}
               onChange={e => {
-                console.log(e.target.value);
                 this.setState({ choosedCategory: e.target.value });
               }}
               labelWidth={100}
@@ -176,8 +175,6 @@ class Search extends React.Component {
               id="demo-simple-select-outlined"
               value={this.state.choosedSubCategory}
               onChange={e => {
-                console.log(e.target.value);
-
                 this.setState({ choosedSubCategory: e.target.value });
               }}
               labelWidth={100}
@@ -202,8 +199,6 @@ class Search extends React.Component {
               id="demo-simple-select-outlined"
               value={this.state.choosedNameCollection}
               onChange={e => {
-                console.log(e.target.value);
-
                 this.setState({ choosedNameCollection: e.target.value });
               }}
               labelWidth={100}

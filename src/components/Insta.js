@@ -268,7 +268,6 @@ class Insta extends React.Component {
       <Grid className={classes.horizontalScroll}>
         {Object.values(allProducts).map(data => {
          return  data.map(produto => {
-            console.log(produto);
             return (
               <Card className={classes.margin}>
                 <CardMedia
