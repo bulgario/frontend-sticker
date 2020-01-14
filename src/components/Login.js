@@ -18,7 +18,6 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
 
-import logoSoma from '../img/logo_grupo_soma_PRETO.png'
 
 import { signIn } from '../actions'
 import User from "../services/User";
