@@ -39,6 +39,7 @@ class Search extends React.Component {
       category: [],
       subcategories: [],
       nome_collection: [],
+      collections: [],
       data_inicio: "",
       data_fim: "",
       data_ultimo: "",
@@ -54,13 +55,6 @@ class Search extends React.Component {
       return array.filter((item, index) => array.indexOf(item) === index);
     };
 
-    const filterCollection = collection => {
-      let allCollections = [].concat(...collection);
-      return allCollections.filter(
-        (item, index) => allCollections.indexOf(item) === index
-      );
-    };
-
     const categories = [];
     const subcategories = [];
     const nome_colecao = [];
@@ -72,13 +66,11 @@ class Search extends React.Component {
       nome_colecao.push(data.value.nome_colecao);
     });
 
-    let newNameCollection = filterCollection(nome_colecao);
     let newCategories = filterData(categories);
     let newSubcategories = filterData(subcategories);
     this.setState({
       category: newCategories,
       subcategories: newSubcategories,
-      nome_collection: newNameCollection
     });
   }
 
@@ -87,6 +79,10 @@ class Search extends React.Component {
     this.setState({ data_fim: dataFim });
     this.setState({ data_ultimo: dataUltimo });
   };
+
+  getCollections = (collection) => {
+    this.setState({ nome_collection: collection })
+  }
 
   validateRequest = () => {
     const { data_inicio, data_fim, data_ultimo } = this.state;
@@ -248,7 +244,7 @@ class Search extends React.Component {
           <Header insta={true} />
         </Grid>
         <Grid container justify="center">
-          <DatePicker choosedData={this.getData} />
+          <DatePicker choosedData={this.getData} choosedCollection={this.getCollections} />
         </Grid>
         {this.renderInputs()}
       </Fragment>

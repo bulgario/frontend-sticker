@@ -8,6 +8,8 @@ import {
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 
+const axios = require("axios");
+
 export default function MaterialUIPickers(props) {
   const [selectedDateInicio, setSelectedDateInicio] = React.useState(null);
   const [selectedDateFim, setSelectedDateFim] = React.useState(null);
@@ -16,18 +18,35 @@ export default function MaterialUIPickers(props) {
   const handleDataInicioChange = (date) => {
     setSelectedDateInicio(date)
     props.choosedData(date, selectedDateFim, selectedDateUltimo)
+    getCollection()
   }
 
   const handleDataFimChange = (date) => {
     setSelectedDateFim(date)
     props.choosedData(selectedDateInicio, date, selectedDateUltimo)
+    getCollection()
   }
 
   const handleDateUltimoAgendamento = (date) => {
     setSelectedDateUltimo(date)
     props.choosedData(selectedDateInicio, selectedDateFim, date)
+    getCollection()
   }
-  
+
+  const getCollection = async () => {
+    if(selectedDateInicio !== null && selectedDateFim !== null && selectedDateUltimo !== null) {
+      try {
+        const response = await axios.get("http://localhost:8000/products/getCollectionBasedInData"); 
+        const collection = response.data
+        props.choosedCollection(collection)
+        
+      } catch (error) {
+        console.log(error)
+        return error
+      }
+    }
+  }
+
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <Grid container justify="space-around">
