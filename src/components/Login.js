@@ -115,7 +115,7 @@ class Login extends React.Component {
     const { authToken } = this.props
     console.log(authToken)
 
-    if (authToken) {
+    if (localStorage.getItem("user")) {
       return (
         <Redirect from={'/login'} to={'/search'} />
       );
