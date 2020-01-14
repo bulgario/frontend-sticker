@@ -8,7 +8,7 @@ const App = () => {
     <SnackbarProvider
     maxSnack={3}
     anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-    autoHideDuration={2500}
+    autoHideDuration={2400}
   >
     <Routes/>
     </SnackbarProvider>

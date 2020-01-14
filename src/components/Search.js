@@ -60,7 +60,7 @@ class Search extends React.Component {
     const nome_colecao = [];
     const response = await axios.get("http://localhost:8000/products/listAllProducts");
     let { data } = response;
-    data.map(data => {
+    data.map(data => { //eslint-disable-line
       categories.push(data.value.categoria);
       subcategories.push(data.value.subcategoria);
       nome_colecao.push(data.value.nome_colecao);
@@ -237,7 +237,6 @@ class Search extends React.Component {
     return null;
   }
   render(props) {
-    const { classes } = this.props;
     return (
       <Fragment>
         <Grid>
