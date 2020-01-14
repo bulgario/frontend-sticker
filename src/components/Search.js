@@ -12,6 +12,7 @@ import { withRouter } from "react-router-dom";
 import InputLabel from "@material-ui/core/InputLabel";
 
 import { withSnackbar } from "notistack";
+import { BASE_URL } from "../consts";
 
 const axios = require("axios");
 
@@ -64,7 +65,7 @@ class Search extends React.Component {
     const categories = [];
     const subcategories = [];
     const nome_colecao = [];
-    const response = await axios.get("http://localhost:8000/products/listAllProducts");
+    const response = await axios.get(`${BASE_URL}/products/listAllProducts`);
     let { data } = response;
     data.map(data => { //eslint-disable-line
       categories.push(data.value.categoria);

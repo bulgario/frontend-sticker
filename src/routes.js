@@ -1,19 +1,54 @@
 import React from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom'
+import { Route, Switch, Redirect } from 'react-router-dom'
 
 import Login from './components/Login'
 import Search from './components/Search'
 import Insta from './components/Insta'
 
+import User from "./services/User";
 
-export default props => (
-	<BrowserRouter>
-		<Switch>
-			<Route path="/" exact={true} component={Login} />
-			<Route path="/login" component={Login} />
-			<Route path="/search" component={Search} />
-			<Route path="/insta" component={Insta} />
+import {
+    ROUTES,
+  } from './consts'
+  export default props => (
+	<Switch>
+	  <Route exact path={ROUTES.LOGIN} component={Login} />
+	  <PrivateRoutes props={props} />
+	</Switch>
+  );
 
-		</Switch>
-	</BrowserRouter>
-)
+function PrivateRoutes(props) {
+	const location = props.location;
+	if (User.isAuthenticated()) {
+	  const user = new User();
+	  if (!user.canAcessThisRoute(location.pathname)) {
+		return (
+		  <Redirect
+			to={{
+			  pathname: user.getUserInitialRoute(),
+			  state: { from: location }
+			}}
+		  />
+		);
+	  }
+	  return (
+		<>
+		  <Switch>
+		  <Route path="/" exact={true} component={Login} />
+			<Route path={ROUTES.LOGIN} component={Login} />
+			<Route path={ROUTES.SEARCH} component={Search} />
+			<Route path={ROUTES.INSTA} component={Insta} />
+  
+		  </Switch>
+		</>
+	  );
+	}
+	return (
+	  <Redirect
+		to={{
+		  pathname: ROUTES.LOGIN,
+		  state: { from: location }
+		}}
+	  />
+	);
+  }

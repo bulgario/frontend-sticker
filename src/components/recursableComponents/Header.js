@@ -4,6 +4,7 @@ import { BrowserRouter as Route } from "react-router-dom";
 import { Grid, Typography,Fab } from "@material-ui/core";
 import ArrowBack from "@material-ui/icons/ArrowBack";
 import { withRouter } from "react-router-dom";
+import User from "../../services/User";
 
 
 
@@ -35,25 +36,19 @@ const useStyles = makeStyles(theme => ({
 
 const Header = props => {
   const classes = useStyles();
+  const user  = new User()
+  const usuario = user.getUser()
 
   const handleClick = eve => {
-
     if(props.history.location.pathname ==='/search') {
-      console.log('entrei')
-      localStorage.removeItem("user")
-     return  props.history.push('/login')
+      User.logout()
+      return  props.history.push('/login')
     }
 
     return props.history.goBack()
   };
 
-  let user = ""
-  if(localStorage.getItem("user")) {
-    user = JSON.parse(localStorage.getItem("user"))
-    console.log(user)
 
-
-  }
 
 
   const { insta } = props;
@@ -77,7 +72,7 @@ const Header = props => {
 
           <Typography className={classes.loginName}>
             
-          {user.usuario?user.usuario.login: null}
+          {usuario.login}
           </Typography>
 
           {/* <Grid item container direction="row" aligmItems="start"> */}
