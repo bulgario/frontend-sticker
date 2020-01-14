@@ -37,7 +37,6 @@ const addDefault = eve => {
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    backgroundColor: theme.palette.grey['100'],
     height: 'auto',
   },
   grid: {
