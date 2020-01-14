@@ -5,21 +5,25 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import Error from '@material-ui/icons/Error'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Checkbox from '@material-ui/core/Checkbox'
-import Link from '@material-ui/core/Link'
 import Grid from '@material-ui/core/Grid'
-import Box from '@material-ui/core/Box'
 import withStyles from '@material-ui/core/styles/withStyles'
-import Container from '@material-ui/core/Container'
 import { Redirect } from 'react-router-dom'
+import RecoveryCheck from '@material-ui/icons/CheckCircleOutline';
+import CardMedia from '@material-ui/core/CardMedia';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import IconButton from '@material-ui/core/IconButton';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import Paper from '@material-ui/core/Paper';
+import Divider from '@material-ui/core/Divider';
 
 import logoSoma from '../img/logo_grupo_soma_PRETO.png'
 import altLogoSoma from '../img/logo_grupo_soma_final_BRANCO.png'
 
 import { signIn } from '../actions'
+import User from "../services/User";
 
-const styles = theme => ({})
 
 const USER_EMPTY = 'Usuário não preenchido!'
 const PASS_EMPTY = 'Senha não preenchida!'
@@ -30,6 +34,37 @@ const addDefault = eve => {
   let src = eve.target.src
   src !== true ? src = srcSoma : eve.target.alt = src
 }
+const styles = theme => ({
+  root: {
+    flexGrow: 1,
+    backgroundColor: theme.palette.grey['100'],
+    height: 'auto',
+  },
+  grid: {
+    marginTop: theme.spacing(2),
+  },
+  loadingCircle: {
+    padding: theme.spacing(3),
+    textAlign: 'center',
+  },
+  main: {
+    marginTop: theme.spacing(6),
+  },
+  button: {
+    margin: theme.spacing(2),
+  },
+  pointer: {
+    cursor: 'pointer',
+  },
+  logo: {
+    width: 180,
+    margin: theme.spacing(2),
+  },
+  margin:{
+    margin: theme.spacing(2)
+  }
+});
+
 class Login extends React.Component {
   constructor(props) {
     super(props)
@@ -58,6 +93,9 @@ class Login extends React.Component {
     this.setState({ [prop]: eve.target.value })
     this.resetErrors()
   }
+  handleClickShowPassword = () => {
+    this.setState(state => ({ showPassword: !state.showPassword }));
+  };
 
   handleSignIn = (eve) => {
     eve.preventDefault()
@@ -82,14 +120,6 @@ class Login extends React.Component {
     return this.setState({ passwordError: PASS_EMPTY })
   }
 
-  componentDidUpdate() {
-    if (!this.state.usernameError && this.props.error && this.state.recoverySubmitted) {
-      this.setState(() => ({
-        usernameError: this.props.error,
-        recoverySubmitted: false,
-      }))
-    }
-  }
 
   handleKeyPress = (eve) => {
     if (eve.key === 'Enter') {
@@ -97,7 +127,7 @@ class Login extends React.Component {
     }
   }
 
-  getErrorMessage = () => {
+  getErrorMessage() {
     if (this.state.loginSubmitted) {
       return (
         <Fragment>
@@ -106,87 +136,176 @@ class Login extends React.Component {
             {CREDENTIALS_ERROR}
           </Typography>
         </Fragment>
-      )
+      );
     }
-    return null
+    return null;
+  }
+
+  getRecovery() {
+    const { classes } = this.props;
+
+    return (
+      <Fragment>
+        <Grid item xs={1}>
+          <RecoveryCheck color={'primary'} fontSize={'large'} />
+        </Grid>
+        <Grid item xs={9}>
+          <Typography>
+            Enviamos um e-mail com instruções para acessar sua conta.
+          </Typography>
+        </Grid>
+        <Grid item xs={8}>
+          <Button
+            variant="contained"
+            color="primary"
+            className={classes.button}
+            fullWidth
+            onClick={this.handleGoBack}
+          >
+            Voltar
+          </Button>
+        </Grid>
+      </Fragment>
+    );
+  }
+
+  getLoginForm() {
+    if (this.props.recoverySuccess) {
+      return this.getRecovery();
+    }
+
+    const { classes, loading } = this.props;
+    const { usernameError, passwordError, showPassword, username, password } = this.state;
+
+    if (loading) {
+      return (
+        <Grid item xs={10} className={classes.loadingCircle}>
+          <CircularProgress />
+        </Grid>
+      );
+    }
+
+    return (
+      <Fragment>
+        {this.getErrorMessage()}
+        <Grid item xs={10}>
+          <TextField
+            id={'username'}
+            error={!!usernameError}
+            className={classes.margin}
+            variant={'outlined'}
+            fullWidth
+            autoFocus
+            label={'Usuário'}
+            value={username}
+            onChange={this.handleChange('username')}
+            helperText={usernameError}
+          />
+        </Grid>
+        <Grid item xs={10}>
+          <TextField
+            id={'password'}
+            error={!!passwordError}
+            className={classes.margin}
+            variant={'outlined'}
+            fullWidth
+            label={'Senha'}
+            type={showPassword ? 'text' : 'password'}
+            value={password}
+            onChange={this.handleChange('password')}
+            onKeyUp={e => this.handleKeyPress(e)}
+            helperText={passwordError}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="Mostrar senha"
+                    onClick={this.handleClickShowPassword}
+                    color={'primary'}
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+        </Grid>
+        <Grid item xs={8}>
+          <Button
+            variant="contained"
+            color="primary"
+            className={classes.button}
+            fullWidth
+            onClick={this.handleSignIn}
+          >
+            Login
+          </Button>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography
+            align="center"
+            gutterBottom
+            onClick={this.handleForgotPassword}
+          >
+            <span className={classes.pointer}>
+              Esqueceu sua senha?
+            </span>
+          </Typography>
+        </Grid>
+      </Fragment>
+    );
+  }
+
+  getContent() {
+    const { classes } = this.props;
+
+    return (
+      <Grid item xs={12} sm={4} className={classes.grid}>
+        <Paper className={classes.main}>
+          <Grid container item justify={'center'}>
+            <CardMedia
+              component={'img'}
+              src={'http://desenvolvimento.somagrupo.com.br/img/soma_trans.png'}
+              title="Grupo Soma"
+              height={'45'}
+              className={classes.logo}
+            />
+          </Grid>
+
+          <Grid container justify={'center'} spacing={24}>
+            <Grid item xs={12}>
+              <Divider variant="middle" />
+            </Grid>
+            {this.getLoginForm()}
+          </Grid>
+        </Paper>
+      </Grid>
+    );
   }
 
   render() {
-    const { authToken } = this.props
-    console.log(authToken)
+    const { classes } = this.props;
+    const user = new User()
+    console.log(user.getUser())
 
-    if (localStorage.getItem("user")) {
+    if (user.getUser()) {
       return (
-        <Redirect from={'/login'} to={'/search'} />
+        <Redirect from={'/login'} to={'/'} />
       );
     }
-    
-   return (
+
+    return (
       <Fragment>
-        {this.getErrorMessage()}
-      <Container component="main" maxWidth="xs">
         <CssBaseline />
-        <div >
-          <img
-            onError={addDefault}
-            src={logoSoma}
-            alt={altLogoSoma}
-          >
-          </img>
-          <form noValidate>
-            <TextField
-              id={'username'}
-              variant={'outlined'}
-              margin="normal"
-              required
-              fullWidth
-              autoComplete="user"
-              autoFocus
-              label={'Usuário'}
-              onChange={this.handleChange('username')}
-            />
-            <TextField
-              id={'password'}
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              autoComplete="current-password"
-              autoFocus
-              label={'Senha'}
-              onChange={this.handleChange('password')}
-              onKeyUp={this.handleKeyPress}
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              onClick={this.handleSignIn}
-            >
-              Entrar
-          </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Esqueceu sua senha?
-              </Link>''
-            </Grid>
-            </Grid>
-          </form>
+        <div className={classes.root}>
+          <Grid container justify={'center'} alignItems={'center'} className={classes.grid}>
+            {this.getContent()}
+          </Grid>
         </div>
-        <Box mt={8}>
-        </Box>
-      </Container>
       </Fragment>
-    )
+    );
   }
 }
-
 const wrappedLogin = withStyles(styles)(Login)
 
 const mapStateToProps = (state) => ({

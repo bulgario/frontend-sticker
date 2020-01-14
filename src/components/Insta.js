@@ -18,13 +18,15 @@ import Typography from "@material-ui/core/Typography";
 import Fab from "@material-ui/core/Fab";
 
 import { signIn } from "../actions";
-import { programacoes } from "../consts";
 import AddIcon from "@material-ui/icons/Add";
 import Divider from "@material-ui/core/Divider";
 
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
 import { withSnackbar } from "notistack";
+import {
+  BASE_URL,
+} from '../consts'
 
 
 const axios = require("axios");
@@ -120,7 +122,6 @@ class Insta extends React.Component {
       recoveryError: false,
       recoverySubmitted: false,
       recoveryShow: false,
-      programacoes,
       allProducts: [],
       expanded: false
     };
@@ -131,7 +132,7 @@ class Insta extends React.Component {
   }
   async getProducts() {
     try {
-      const response = await axios.get("http://localhost:8000/products/selectedProducts", {
+      const response = await axios.get(`${BASE_URL}/products/selectedProducts`, {
         params: this.getAllParamsFromUrl()
       });
       let products = response.data;
