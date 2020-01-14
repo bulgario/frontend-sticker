@@ -130,7 +130,6 @@ handleMenuOpen = event => {
 render(props) {
 		const { title, icon, category } = this.props;
 		const { anchorEl, items } = this.state;
-		console.log("as props", this.props)
 		return (
 			<Fragment>
 				<Button

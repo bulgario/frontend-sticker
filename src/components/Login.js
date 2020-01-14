@@ -97,7 +97,7 @@ class Login extends React.Component {
   };
 
   handleSignIn = (eve) => {
-    eve.preventDefault()
+    // eve.preventDefault()
     const { username, password } = this.state
 
     if(username && password) {
@@ -285,7 +285,6 @@ class Login extends React.Component {
   render() {
     const { classes } = this.props;
     const user = new User()
-    console.log(user.getUser())
 
     if (user.getUser()) {
       return (
