@@ -218,8 +218,8 @@ class Insta extends React.Component {
                     <CardMedia
                       className={classes.mediaCard}
                       image={
-                        produto.nome_arquivo[0]
-                          ? produto.nome_arquivo[0]
+                        produtos.nome_arquivo[0]
+                          ? produtos.nome_arquivo[0]
                           : "noPhoto"
                       }
                       title="Produto"
@@ -229,7 +229,7 @@ class Insta extends React.Component {
                     <TextField
                       label="Coleção"
                       className={classes.textFieldFull}
-                      value={produto.nome_colecao[0]}
+                      value={produtos.nome_colecao[0]}
                       InputProps={{
                         readOnly: true
                       }}
@@ -239,7 +239,7 @@ class Insta extends React.Component {
                       <TextField
                         label="Categoria"
                         className={classes.textField}
-                        value={produto.categoria}
+                        value={produtos.categoria}
                         InputProps={{
                           readOnly: true
                         }}
@@ -248,7 +248,7 @@ class Insta extends React.Component {
                       <TextField
                         label="Subcategoria"
                         className={classes.textField}
-                        value={produto.subcategoria}
+                        value={produtos.subcategoria}
                         InputProps={{
                           readOnly: true
                         }}
@@ -279,11 +279,6 @@ class Insta extends React.Component {
                   image={produto.nome_arquivo[0]}
                   title="Produto"
                 />
-                {/* <CardActions disableSpacing>
-                <IconButton aria-label="add to favorites">
-                  <FavoriteIcon />
-                </IconButton>
-              </CardActions> */}
               </Card>
             );
           });
@@ -292,32 +287,8 @@ class Insta extends React.Component {
     );
   }
 
-  // produto.map(produto => {
-  //   return (
-  //     <Card className={classes.margin}>
-  //       <CardMedia
-  //         className={classes.media}
-  //         image={produto.nome_arquivo[0]}
-  //         title="Produto"
-  //       />
-
-  //       {/* <CardActions disableSpacing>
-  //         <IconButton aria-label="add to favorites">
-  //           <FavoriteIcon />
-  //         </IconButton>
-  //       </CardActions> */}
-  //     </Card>
-  //   );
-  // })
-
   render() {
     const { classes } = this.props;
-    // if (authToken) {
-    //   return (
-    //     <Redirect to={'/Login'} />
-    //   );
-    // }
-
     return (
       <Fragment>
         <Header insta={true} />
