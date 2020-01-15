@@ -35,8 +35,12 @@ const useStyles = makeStyles(theme => ({
 const Header = props => {
   const classes = useStyles();
   const user  = new User()
-  const usuario = user.getUser()
-  const idMarcaEstilo = user.getIdMarcaEstilo()
+  const { login, id_marca_estilo } = user.getUser()
+  const { id_marca, marca } = props
+
+  const verifyUserbrand = (id_marca, marca, id_marca_estilo) => {
+    return id_marca == id_marca_estilo ? marca : "SomaLabs"
+  }
 
   const handleClick = eve => {
     if(props.history.location.pathname ==='/search') {
@@ -46,9 +50,6 @@ const Header = props => {
 
     return props.history.goBack()
   };
-
-
-
 
   const { insta } = props;
   if (insta) {
@@ -66,12 +67,12 @@ const Header = props => {
             </Fab>
           </Grid>
           <Grid item>
-            <Typography variant="h4"> Animale  </Typography>
+            <Typography variant="h4">{verifyUserbrand(id_marca, marca, id_marca_estilo)}</Typography>
           </Grid>
 
           <Typography className={classes.loginName}>
             
-          {usuario.login}
+          {login}
           </Typography>
 
           {/* <Grid item container direction="row" aligmItems="start"> */}

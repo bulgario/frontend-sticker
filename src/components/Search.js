@@ -47,7 +47,9 @@ class Search extends React.Component {
       anchorEl: null,
       choosedCategory: "",
       choosedSubCategory: "",
-      choosedNameCollection: ""
+      choosedNameCollection: "",
+      id_marca_user: "",
+      marca_user: ""
     };
   }
 
@@ -60,7 +62,9 @@ class Search extends React.Component {
     const subcategories = [];
     const nome_colecao = [];
     const response = await axios.get(`${BASE_URL}/products/listAllProducts`);
-    let { data } = response;
+    const { data } = response;
+    const { id_marca, marca } = data[1].value;
+
     data.map(data => { //eslint-disable-line
       categories.push(data.value.categoria);
       subcategories.push(data.value.subcategoria);
@@ -73,6 +77,8 @@ class Search extends React.Component {
       category: newCategories,
       subcategories: newSubcategories,
     });
+    this.setState({ id_marca_user: id_marca });
+    this.setState({ marca_user: marca });
   }
 
   getData = (dataInicio, dataFim, dataUltimo) => {
@@ -236,7 +242,10 @@ class Search extends React.Component {
     return (
       <Fragment>
         <Grid>
-          <Header insta={true} />
+          <Header insta={true} 
+                  id_marca={this.state.id_marca_user}
+                  marca={this.state.marca_user} 
+          />
         </Grid>
         <Grid container justify="center">
           <DatePicker 
