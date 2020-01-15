@@ -27,6 +27,7 @@ import { withSnackbar } from "notistack";
 import {
   BASE_URL,
 } from '../consts'
+import User from '../services/User'
 
 
 const axios = require("axios");
@@ -155,12 +156,14 @@ class Insta extends React.Component {
   }
 
   getAllParamsFromUrl() {
+    const user  = new User()
     const dataInicio = this.getParamFromUrl("dataInicio");
     const dataFim = this.getParamFromUrl("dataFim");
     const dataUltimoAgendamento = this.getParamFromUrl("dataUltimoAgendamento");
     const category = this.getParamFromUrl("categoria");
     const subcategory = this.getParamFromUrl("subcategoria");
     const collection_name = this.getParamFromUrl("colecao");
+    const id_marca_estilo = user.getIdMarcaEstilo()
 
     return {
       dataInicio,
@@ -168,7 +171,8 @@ class Insta extends React.Component {
       dataUltimoAgendamento,
       category,
       subcategory,
-      collection_name
+      collection_name,
+      id_marca_estilo
     };
   }
 

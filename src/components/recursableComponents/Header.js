@@ -37,6 +37,7 @@ const Header = props => {
   const classes = useStyles();
   const user  = new User()
   const usuario = user.getUser()
+  const idMarcaEstilo = user.getIdMarcaEstilo()
 
   const handleClick = eve => {
     if(props.history.location.pathname ==='/search') {

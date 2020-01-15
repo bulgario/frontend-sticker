@@ -39,6 +39,11 @@ import {
     getUser() {
       return this.user;
     }
+
+    getIdMarcaEstilo() {
+      const user = this.getUser()
+      return user.id_marca_estilo
+    }
   
     getAreas() {
       const user = this.getUser();
