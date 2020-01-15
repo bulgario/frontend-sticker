@@ -39,7 +39,7 @@ const Header = props => {
   const { id_marca, marca } = props
 
   const verifyUserbrand = (id_marca, marca, id_marca_estilo) => {
-    return id_marca == id_marca_estilo ? marca : "SomaLabs"
+    return id_marca == id_marca_estilo ? marca : "SomaLabs" //eslint-disable-line
   }
 
   const handleClick = eve => {
