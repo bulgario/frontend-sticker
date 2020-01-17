@@ -6,7 +6,7 @@ import Grid from "@material-ui/core/Grid";
 import { withRouter } from "react-router-dom";
 
 import Header from "../components/recursableComponents/Header";
-import Badge from '@material-ui/core/Badge';
+import Badge from "@material-ui/core/Badge";
 import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
 
@@ -21,11 +21,8 @@ import Divider from "@material-ui/core/Divider";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
 import { withSnackbar } from "notistack";
-import {
-  BASE_URL,
-} from '../consts'
-import User from '../services/User'
-
+import { BASE_URL } from "../consts";
+import User from "../services/User";
 
 const axios = require("axios");
 const _ = require("lodash");
@@ -39,33 +36,28 @@ const styles = theme => ({
     width: 280
   },
   card: {
-    height: 500,
+    minHeight: 400,
     maxWidth: 620,
     maxHeight: 800,
-    minWidth: 620,
+    minWidth: 320,
     margin: theme.spacing(2),
-    padding: 0,
+    padding: theme.spacing(1),
     backgroundColor: "white"
   },
   mediaCard: {
-    height: 220,
+    height: 320,
     width: 200,
     objectFit: "scale-down",
     marginLeft: theme.spacing(1),
-    marginTop: theme.spacing(2),
+    marginRight: theme.spacing(-1),
+    marginTop: theme.spacing(-0.5),
 
-    borderWidth: 2,
     borderColor: "#FFE600"
   },
   productInfo: {
-    width: 300,
+    width: 250,
     borderWidth: 1.5,
-    borderColor: "black",
-    marginTop: theme.spacing(2),
-
-    marginRight: theme.spacing(1),
-
-    marginLeft: theme.spacing(2)
+    borderColor: "black"
   },
 
   dateText: {
@@ -99,15 +91,6 @@ const styles = theme => ({
     width: 385,
     margin: theme.spacing(1)
   },
-  row: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: 400
-  },
-  balls: {
-    left: 0
-  }
 });
 
 class Insta extends React.Component {
@@ -133,12 +116,15 @@ class Insta extends React.Component {
   }
   async getProducts() {
     try {
-      const response = await axios.get(`${BASE_URL}/products/selectedProducts`, {
-        params: this.getAllParamsFromUrl()
-      });
+      const response = await axios.get(
+        `${BASE_URL}/products/selectedProducts`,
+        {
+          params: this.getAllParamsFromUrl()
+        }
+      );
       let products = response.data;
 
-      if (products.length < 1 || _.isEmpty(products) ) {
+      if (products.length < 1 || _.isEmpty(products)) {
         return this.props.enqueueSnackbar(
           "Não há produtos programados para essas datas ",
           { variant: "warning" }
@@ -146,7 +132,6 @@ class Insta extends React.Component {
       }
 
       this.setState({ allProducts: products });
-
     } catch (err) {
       console.log(err);
       return this.props.enqueueSnackbar("Problemas no backend", {
@@ -156,14 +141,14 @@ class Insta extends React.Component {
   }
 
   getAllParamsFromUrl() {
-    const user  = new User()
+    const user = new User();
     const dataInicio = this.getParamFromUrl("dataInicio");
     const dataFim = this.getParamFromUrl("dataFim");
     const dataUltimoAgendamento = this.getParamFromUrl("dataUltimoAgendamento");
     const category = this.getParamFromUrl("categoria");
     const subcategory = this.getParamFromUrl("subcategoria");
     const collection_name = this.getParamFromUrl("colecao");
-    const id_marca_estilo = user.getIdMarcaEstilo()
+    const id_marca_estilo = user.getIdMarcaEstilo();
 
     return {
       dataInicio,
@@ -185,7 +170,7 @@ class Insta extends React.Component {
     return urlSearch.get(param);
   }
 
-  onDragEnd = result => {}
+  onDragEnd = result => {};
 
   renderProgramacoes() {
     const { allProducts } = this.state;
@@ -205,73 +190,72 @@ class Insta extends React.Component {
     });
   }
 
-
-  renderBalls(distribuicao, validBasedinSchedule) {
-    if(distribuicao === true) {
-      return (
-        <Badge badgeContent={4} color="primary"></Badge>
-      )
-    } else if(distribuicao === validBasedinSchedule) {
-      return (
-        <Badge badgeContent={4} color="secondary"></Badge>
-      )
+  chooseBalls({distribuicao, validBasedinSchedule}) {
+    if (distribuicao === true) {
+      return "primary"
+    } else if (distribuicao === validBasedinSchedule) {
+      return "secondary"
     } else {
-      return (
-        <Badge badgeContent={4} color="error"></Badge>
-      )
-    } 
+      return "error"
+    }
   }
 
   renderProductsCardsView() {
     const { classes } = this.props;
-    const { produto, allProducts } = this.state;
-
+    const {  allProducts } = this.state;
     return (
-      <Grid
-      container
-      direction="row"
-      justify="center"
-      alignItems="center"
-      >
+      <Grid container direction="row" justify="center" alignItems="center">
         {Object.values(allProducts).map(data => {
-            return data.map(produtos => {
-              const { distribuicao, ultima_data_agendamento_entrega, produto, desc_produto, cor_produto, qtde_programada, validBasedinSchedule } = produtos
-              return(
+          return data.map(produtos => {
+            const {
+              produto,
+              desc_produto,
+              cor_produto,
+              qtde_programada,
+            } = produtos;
+            return (
+              <Grid  item  align="center">
               <Card className={classes.card}>
-              <Typography gutterBottom variant="h8" component="h2">{produto}</Typography>
-              <Typography variant="body2" color="textSecondary" component="p">{desc_produto}</Typography>
-              <Typography variant="body2" color="textSecondary" component="p">{cor_produto}</Typography>
-              {/* <Typography variant="body2" color="textSecondary" component="p">{produtos.desc_cor_produto}</Typography> */}
-              <Typography gutterBottom variant="h8" component="h2">{qtde_programada}</Typography>
-              <Typography gutterBottom variant="h8" component="h2">{ultima_data_agendamento_entrega}</Typography>
-            <Grid className={classes.productInfo}>
-              {this.renderBalls(distribuicao, validBasedinSchedule)}
-            </Grid>
-              <CardMedia
-              className={classes.mediaCard}
-                image={
-                  produtos.nome_arquivo[0]
-                    ? produtos.nome_arquivo[0]
-                    : "noPhoto"
-                }
-                title="Produto"
-                />
-               </Card>
-              )
-            })
+                <Typography gutterBottom variant="h8" component="h2">
+                  {produto}
+                </Typography>
+                <Typography variant="body2" color="textSecondary" component="p">
+                  {desc_produto}
+                </Typography>
+                <Typography variant="body2" color="textSecondary" component="h3">
+                  {cor_produto}
+                </Typography>
+                {/* <Typography variant="body2" color="textSecondary" component="p">{produtos.desc_cor_produto}</Typography> */}
+                <Typography gutterBottom variant="h8" component="h2">
+                  {qtde_programada}
+                </Typography>
+                <Badge badgeContent={""} color={this.chooseBalls(produtos)} className={classes.badge}>
+                  <CardMedia
+                    className={classes.mediaCard}
+                    image={
+                      produtos.nome_arquivo[0]
+                        ? produtos.nome_arquivo[0]
+                        : "noPhoto"
+                    }
+                    title="Produto"
+                  />
+                </Badge>
+              </Card>
+              </Grid>
+            );
+          });
         })}
       </Grid>
     );
   }
 
- 
   renderProductsInstaView() {
     const { classes } = this.props;
     const { allProducts } = this.state;
     return (
       <Grid className={classes.horizontalScroll}>
         {Object.values(allProducts).map(data => {
-         return data.map(produto => {
+          return data.map(produto => {
             return (
               <Card className={classes.margin}>
                 <CardMedia
