@@ -8,9 +8,12 @@ import {
 } from '@material-ui/pickers';
 
 import {BASE_URL} from '../../consts';
+
+import { withSnackbar } from "notistack";
+
 const axios = require("axios");
 
-export default function MaterialUIPickers(props) {
+const MaterialUIPickers = props =>  {
   const [selectedDateInicio, setSelectedDateInicio] = React.useState(null);
   const [selectedDateFim, setSelectedDateFim] = React.useState(null);
   const [selectedDateUltimo, setSelectedDateUltimo] = React.useState(null);
@@ -18,38 +21,49 @@ export default function MaterialUIPickers(props) {
   const handleDataInicioChange = (date) => {
     setSelectedDateInicio(date)
     props.choosedData(date, selectedDateFim, selectedDateUltimo)
-    getCollection()
+    getCollection(date, selectedDateFim, selectedDateUltimo)
   }
 
   const handleDataFimChange = (date) => {
     setSelectedDateFim(date)
     props.choosedData(selectedDateInicio, date, selectedDateUltimo)
-    getCollection()
+    getCollection(selectedDateInicio, date, selectedDateUltimo)
   }
 
   const handleDateUltimoAgendamento = (date) => {
     setSelectedDateUltimo(date)
     props.choosedData(selectedDateInicio, selectedDateFim, date)
-    getCollection()
+    getCollection(selectedDateInicio, selectedDateFim, date)
   }
 
-  const getCollection = async () => {
-    if(selectedDateInicio !== null && selectedDateFim !== null && selectedDateUltimo !== null) {
+  const getCollection = async (selectedDateInicio,selectedDateFim) => {
+    if(selectedDateInicio !== null && selectedDateFim !== null) {
       try {
         const response = await axios.get(`${BASE_URL}/collections/getCollectionBasedInData`, {
-          params: getDatasForCollection()
+          params: getDatasForCollection(selectedDateInicio,selectedDateFim)
         }); 
         const collection = response.data
+        if(collection.length < 1) {
+          return props.enqueueSnackbar(
+            "Não há produtos programados para essas datas ",
+            { variant: "warning" }
+          );
+        }
+        console.log(collection)
         props.choosedCollection(collection)
 
       } catch (error) {
+        return props.enqueueSnackbar(
+          "Problemas para buscar coleções",
+          { variant: "warning" }
+        );
         console.log(error)
-        return error
+
       }
     }
   }
 
-  const getDatasForCollection = () => {
+  const getDatasForCollection = (selectedDateInicio,selectedDateFim) => {
     const dataInicio = selectedDateInicio
     const dataFim = selectedDateFim
     return {
@@ -108,3 +122,5 @@ export default function MaterialUIPickers(props) {
     </MuiPickersUtilsProvider>
   );
 }
+
+export default withSnackbar(MaterialUIPickers);

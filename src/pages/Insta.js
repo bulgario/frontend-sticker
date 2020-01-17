@@ -5,11 +5,8 @@ import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import { withRouter } from "react-router-dom";
 
-
-import TextField from "@material-ui/core/TextField";
-
-import Header from "./recursableComponents/Header";
-
+import Header from "../components/recursableComponents/Header";
+import Badge from '@material-ui/core/Badge';
 import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
 
@@ -42,11 +39,11 @@ const styles = theme => ({
     width: 280
   },
   card: {
-    height: 270,
+    height: 500,
     maxWidth: 620,
-    maxHeight: 300,
+    maxHeight: 800,
     minWidth: 620,
-    margin: theme.spacing(1),
+    margin: theme.spacing(2),
     padding: 0,
     backgroundColor: "white"
   },
@@ -107,6 +104,9 @@ const styles = theme => ({
     flexDirection: "row",
     justifyContent: "space-between",
     width: 400
+  },
+  balls: {
+    left: 0
   }
 });
 
@@ -185,6 +185,8 @@ class Insta extends React.Component {
     return urlSearch.get(param);
   }
 
+  onDragEnd = result => {}
+
   renderProgramacoes() {
     const { allProducts } = this.state;
     const { classes } = this.props;
@@ -203,75 +205,73 @@ class Insta extends React.Component {
     });
   }
 
+
+  renderBalls(distribuicao, validBasedinSchedule) {
+    if(distribuicao === true) {
+      return (
+        <Badge badgeContent={4} color="primary"></Badge>
+      )
+    } else if(distribuicao === validBasedinSchedule) {
+      return (
+        <Badge badgeContent={4} color="secondary"></Badge>
+      )
+    } else {
+      return (
+        <Badge badgeContent={4} color="error"></Badge>
+      )
+    } 
+  }
+
   renderProductsCardsView() {
     const { classes } = this.props;
     const { produto, allProducts } = this.state;
 
     return (
-      <Grid container justify="center">
+      <Grid
+      container
+      direction="row"
+      justify="center"
+      alignItems="center"
+      >
         {Object.values(allProducts).map(data => {
-          return data.map(produtos => {
-            return (
+            return data.map(produtos => {
+              const { distribuicao, ultima_data_agendamento_entrega, produto, desc_produto, cor_produto, qtde_programada, validBasedinSchedule } = produtos
+              return(
               <Card className={classes.card}>
-                <Grid container direction="row" justify="flex-start">
-                  <Grid alignItems="center">
-                    <CardMedia
-                      className={classes.mediaCard}
-                      image={
-                        produto.nome_arquivo[0]
-                          ? produto.nome_arquivo[0]
-                          : "noPhoto"
-                      }
-                      title="Produto"
-                    />
-                  </Grid>
-                  <Grid className={classes.productInfo}>
-                    <TextField
-                      label="Coleção"
-                      className={classes.textFieldFull}
-                      value={produto.nome_colecao[0]}
-                      InputProps={{
-                        readOnly: true
-                      }}
-                      variant="outlined"
-                    />
-                    <Grid className={classes.row}>
-                      <TextField
-                        label="Categoria"
-                        className={classes.textField}
-                        value={produto.categoria}
-                        InputProps={{
-                          readOnly: true
-                        }}
-                        variant="outlined"
-                      />
-                      <TextField
-                        label="Subcategoria"
-                        className={classes.textField}
-                        value={produto.subcategoria}
-                        InputProps={{
-                          readOnly: true
-                        }}
-                        variant="outlined"
-                      />
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </Card>
-            );
-          });
+              <Typography gutterBottom variant="h8" component="h2">{produto}</Typography>
+              <Typography variant="body2" color="textSecondary" component="p">{desc_produto}</Typography>
+              <Typography variant="body2" color="textSecondary" component="p">{cor_produto}</Typography>
+              {/* <Typography variant="body2" color="textSecondary" component="p">{produtos.desc_cor_produto}</Typography> */}
+              <Typography gutterBottom variant="h8" component="h2">{qtde_programada}</Typography>
+              <Typography gutterBottom variant="h8" component="h2">{ultima_data_agendamento_entrega}</Typography>
+            <Grid className={classes.productInfo}>
+              {this.renderBalls(distribuicao, validBasedinSchedule)}
+            </Grid>
+              <CardMedia
+              className={classes.mediaCard}
+                image={
+                  produtos.nome_arquivo[0]
+                    ? produtos.nome_arquivo[0]
+                    : "noPhoto"
+                }
+                title="Produto"
+                />
+               </Card>
+              )
+            })
         })}
       </Grid>
     );
   }
 
+ 
   renderProductsInstaView() {
     const { classes } = this.props;
     const { allProducts } = this.state;
     return (
       <Grid className={classes.horizontalScroll}>
         {Object.values(allProducts).map(data => {
-         return  data.map(produto => {
+         return data.map(produto => {
             return (
               <Card className={classes.margin}>
                 <CardMedia
@@ -279,11 +279,6 @@ class Insta extends React.Component {
                   image={produto.nome_arquivo[0]}
                   title="Produto"
                 />
-                {/* <CardActions disableSpacing>
-                <IconButton aria-label="add to favorites">
-                  <FavoriteIcon />
-                </IconButton>
-              </CardActions> */}
               </Card>
             );
           });
@@ -292,32 +287,8 @@ class Insta extends React.Component {
     );
   }
 
-  // produto.map(produto => {
-  //   return (
-  //     <Card className={classes.margin}>
-  //       <CardMedia
-  //         className={classes.media}
-  //         image={produto.nome_arquivo[0]}
-  //         title="Produto"
-  //       />
-
-  //       {/* <CardActions disableSpacing>
-  //         <IconButton aria-label="add to favorites">
-  //           <FavoriteIcon />
-  //         </IconButton>
-  //       </CardActions> */}
-  //     </Card>
-  //   );
-  // })
-
   render() {
     const { classes } = this.props;
-    // if (authToken) {
-    //   return (
-    //     <Redirect to={'/Login'} />
-    //   );
-    // }
-
     return (
       <Fragment>
         <Header insta={true} />

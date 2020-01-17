@@ -1,9 +1,9 @@
 import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom'
 
-import Login from './components/Login'
-import Search from './components/Search'
-import Insta from './components/Insta'
+import Login from './pages/Login'
+import Search from './pages/Search'
+import Insta from './pages/Insta'
 
 import User from "./services/User";
 
