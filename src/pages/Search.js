@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
-import Header from "./recursableComponents/Header";
-import DatePicker from "./recursableComponents/DatePicker";
+import Header from "../components/recursableComponents/Header";
+import DatePicker from "../components/recursableComponents/DatePicker";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
