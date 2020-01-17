@@ -57,7 +57,6 @@ const MaterialUIPickers = props =>  {
           "Problemas para buscar coleções",
           { variant: "warning" }
         );
-        console.log(error)
 
       }
     }
