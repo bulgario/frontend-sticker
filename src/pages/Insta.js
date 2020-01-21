@@ -24,6 +24,7 @@ import { withSnackbar } from "notistack";
 import { BASE_URL } from "../consts";
 import User from "../services/User";
 
+
 const axios = require("axios");
 const _ = require("lodash");
 
@@ -191,12 +192,14 @@ class Insta extends React.Component {
   }
 
   chooseBalls({distribuicao, validBasedinSchedule}) {
-    if (distribuicao === true) {
-      return "primary"
+    if (distribuicao === true) { 
+      console.log("entrei aqui")
+      return (<Badge badgeContent={""} color={"primary"} />)
     } else if (distribuicao === validBasedinSchedule) {
-      return "secondary"
+      return (<Badge badgeContent={""} color={"secondary"} />)
     } else {
-      return "error"
+
+      return (<Badge badgeContent={""} color={"error"} />)
     }
   }
 
@@ -229,7 +232,7 @@ class Insta extends React.Component {
                 <Typography gutterBottom variant="h8" component="h2">
                   {qtde_programada}
                 </Typography>
-                <Badge badgeContent={""} color={this.chooseBalls(produtos)} className={classes.badge}>
+                  {this.chooseBalls(produtos)}
                   <CardMedia
                     className={classes.mediaCard}
                     image={
@@ -239,7 +242,6 @@ class Insta extends React.Component {
                     }
                     title="Produto"
                   />
-                </Badge>
               </Card>
               </Grid>
             );
@@ -271,6 +273,7 @@ class Insta extends React.Component {
     );
   }
 
+
   render() {
     const { classes } = this.props;
     return (
@@ -290,7 +293,7 @@ class Insta extends React.Component {
             }
             label="Detalhes"
           />
-
+      
           <div className={classes.margin}>
             <Grid container direction="column" spacing={2}>
               {this.renderProgramacoes()}
