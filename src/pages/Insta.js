@@ -284,7 +284,6 @@ class Insta extends React.Component {
 
   renderProductsInstaView(data) {
     const { classes } = this.props;
-    const { allProducts } = this.state;
     return (
       <Grid className={classes.horizontalScroll}>
         {data.map((produto,index )=> {
