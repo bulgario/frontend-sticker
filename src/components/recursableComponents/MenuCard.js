@@ -21,7 +21,11 @@ const useStyles = makeStyles(theme => ({
   },
   content: {
     flex: '1 0 auto',
-    maxWidth:250
+    maxWidth:250,
+    [theme.breakpoints.down("sm")]: {
+      width: "90vw",
+      // height: "90vh"
+    },
   },
   cover: {
     width: 151,
@@ -32,10 +36,7 @@ const useStyles = makeStyles(theme => ({
     paddingLeft: theme.spacing(1),
     paddingBottom: theme.spacing(1),
   },
-  playIcon: {
-    height: 38,
-    width: 38,
-  },
+
 }));
 
 function MenuCard(props) {

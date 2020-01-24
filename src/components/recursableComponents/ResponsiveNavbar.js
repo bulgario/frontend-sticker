@@ -54,22 +54,22 @@ function ResponsiveNavbar(props) {
     {
       name: "check",
       text: "Recebimento",
-      action: () => redirect(ROUTES.SEARCH),
-      show: user.canAcessThisRoute(ROUTES.SEARCH),
+      action: () => redirect(ROUTES.HOME),
+      show: user.canAcessThisRoute(ROUTES.HOME),
       route: ROUTES.HOME
     },
     {
       name: "shopping-cart",
       text: "Venda",
-      action: () => redirect(ROUTES.INSTA),
-      show: user.canAcessThisRoute(ROUTES.INSTA),
+      action: () => redirect(ROUTES.HOME),
+      show: user.canAcessThisRoute(ROUTES.HOME),
       route: ROUTES.INSTA
     },
     {
       name: "note",
       text: "Meus relatórios",
-      action: () => redirect(ROUTES.INSTA),
-      show: user.canAcessThisRoute(ROUTES.INSTA),
+      action: () => redirect(ROUTES.HOME),
+      show: user.canAcessThisRoute(ROUTES.HOME),
       route: ROUTES.SEARCH
     },
     {
