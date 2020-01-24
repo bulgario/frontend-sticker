@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 
 import Button from '@material-ui/core/Button';
 import { withRouter } from "react-router-dom";
+import Box from '@material-ui/core/Box';
 
 
 
@@ -21,14 +22,14 @@ const useStyles = makeStyles(theme => ({
   },
   content: {
     flex: '1 0 auto',
-    maxWidth:250,
-    [theme.breakpoints.down("sm")]: {
-      width: "90vw",
-      // height: "90vh"
-    },
+    maxWidth:300,
+    // [theme.breakpoints.down("sm")]: {
+    //   width: "90vw",
+    //   // height: "90vh"
+    // },
   },
   cover: {
-    width: 151,
+    width: 111,
   },
   controls: {
     display: 'flex',
@@ -43,10 +44,11 @@ function MenuCard(props) {
   const classes = useStyles();
 
   return (
+    <Box clone pt={2} pr={1} pb={1} pl={2}>
     <Card className={classes.card}>
       <div className={classes.details}>
         <CardContent className={classes.content}>
-          <Typography component="h5" variant="h5">
+          <Typography component="h6" variant="h6">
           {props.title}
           </Typography>
           <Typography variant="subtitle1" color="textSecondary">
@@ -66,6 +68,7 @@ function MenuCard(props) {
         title="Live from space album cover"
       />
     </Card>
+    </Box>
   );
 }
 

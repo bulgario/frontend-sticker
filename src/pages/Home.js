@@ -51,6 +51,9 @@ const styles = theme => ({
   },
   margin:{
     margin: theme.spacing(2)
+  },
+  gridItem:{
+    maxWidth:500
   }
 });
 
@@ -98,11 +101,11 @@ class Menu extends React.Component {
         />
       <Container className={classes.root}>
             <Grid container justify="center" direction="column" alignItems="center" spacing={4} >
-                <Grid item>
+                <Grid item className={classes.gridItem}>
                 <MenuCard title="Programação" body="Acompanhe todo o fluxo de pedidos e faça análises" redirectTo="/search"></MenuCard>
 
                 </Grid>
-                <Grid item>
+                <Grid item className={classes.gridItem}>
                 <MenuCard title="Venda" body="Confira em tempo real os números de pedidos e vendas"></MenuCard>
 
                 </Grid>
