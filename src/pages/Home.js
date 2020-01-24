@@ -7,7 +7,8 @@ import { Redirect } from 'react-router-dom'
 import User from "../services/User";
 import Header from "../components/recursableComponents/Header";
 import Container from "@material-ui/core/Container";
-import Navbar from "../components/recursableComponents/Navbar";
+import ResponsiveNavbar from "../components/recursableComponents/ResponsiveNavbar";
+
 import MenuCard from "../components/recursableComponents/MenuCard";
 
 
@@ -88,8 +89,7 @@ class Menu extends React.Component {
 
     return (
         <Fragment>
-            		<Navbar  openMenu={this.openMenu} open={this.state.open}></Navbar>
-
+                <ResponsiveNavbar  openMenu={this.openMenu} open={this.state.open}></ResponsiveNavbar>
 
         <Header insta={false} 
         openMenu={this.openMenu}
