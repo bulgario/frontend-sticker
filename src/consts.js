@@ -1,7 +1,8 @@
 export const ROUTES = {
   LOGIN: "/login",
   SEARCH: "/search",
-  INSTA: "/insta"
+  INSTA: "/insta",
+  HOME: "/home"
 };
 
 export const OMNI_URL =

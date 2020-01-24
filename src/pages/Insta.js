@@ -173,42 +173,42 @@ class Insta extends React.Component {
   }
 
   onDragEnd = result => {
-    const {destination,source, draggableId} = result
-    if (!destination) return 
+    // const {destination,source, draggableId} = result
+    // if (!destination) return 
 
-    if (destination.droppableId === source.droppableId && destination.index === source.index) {
-      return 
-    }
-    // console.log(result)
-    // console.log(this.state.allProducts,'velha programacao')
-    const produtosPerProgramation = this.state.allProducts[source.droppableId]
-    // console.log(produtosPerProgramation)
-    const newArray = Array.from(produtosPerProgramation)
-    // console.log(source.droppableId)
-    const productToReplace = produtosPerProgramation.find((item,index) => index === source.index)
-    // console.log(productToReplace,'produto achado')
-    // console.log(newArray[source.index],'produto original')
-    newArray.splice(source.index,1)
-    newArray.splice(destination.index,0,productToReplace)
-    // console.log(newArray,'novo array')
+    // if (destination.droppableId === source.droppableId && destination.index === source.index) {
+    //   return 
+    // }
+    // // console.log(result)
+    // // console.log(this.state.allProducts,'velha programacao')
+    // const produtosPerProgramation = this.state.allProducts[source.droppableId]
+    // // console.log(produtosPerProgramation)
+    // const newArray = Array.from(produtosPerProgramation)
+    // // console.log(source.droppableId)
+    // const productToReplace = produtosPerProgramation.find((item,index) => index === source.index)
+    // // console.log(productToReplace,'produto achado')
+    // // console.log(newArray[source.index],'produto original')
+    // newArray.splice(source.index,1)
+    // newArray.splice(destination.index,0,productToReplace)
+    // // console.log(newArray,'novo array')
 
-    const newProgramation = {
-      ...this.state.allProducts,
-      [source.droppableId] : newArray
-    }
-    // console.log(newProgramation,' nova programacao')
+    // const newProgramation = {
+    //   ...this.state.allProducts,
+    //   [source.droppableId] : newArray
+    // }
+    // // console.log(newProgramation,' nova programacao')
 
-    const newState = { 
-      ...this.state,
-      allProducts: newProgramation
-      //  {
-      //   ...this.state.allProducts,
-      //   [source.droppableId] : newArray
-      // }
-    }
-    // console.log(newState) 
-    return 
-    // this.setState(newState)
+    // const newState = { 
+    //   ...this.state,
+    //   allProducts: newProgramation
+    //   //  {
+    //   //   ...this.state.allProducts,
+    //   //   [source.droppableId] : newArray
+    //   // }
+    // }
+    // // console.log(newState) 
+    // return 
+    // // this.setState(newState)
 
 
   };

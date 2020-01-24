@@ -7,14 +7,16 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core'
 import { ConnectedRouter } from 'connected-react-router'
 import { Provider } from 'react-redux'
 import store, { history } from './store'
-import yellow from '@material-ui/core/colors/yellow'
+// import yellow from '@material-ui/core/colors/yellow'
+import amber from '@material-ui/core/colors/amber'
+
 
 const theme = createMuiTheme({
 	palette: {
-		primary: yellow
+		primary: amber
 	},
 	secondary: {
-		main: yellow
+		main:amber
 	}
 })
 
