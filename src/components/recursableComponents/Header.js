@@ -36,6 +36,15 @@ const useStyles = makeStyles(theme => ({
   whiteButton: {
     color:"white",
     sizeSmall: "100px"
+  },
+  title: {
+    fontSize: '1.5rem',
+    [theme.breakpoints.down('xs')]: {
+      fontSize: '1.3rem',
+    },
+    [theme.breakpoints.up('md')]: {
+      fontSize: '2.4rem',
+    },
   }
 }));
 
@@ -132,7 +141,7 @@ const Header = props => {
       >
         <Grid item>{getLeftIconByRoute()}</Grid>
         <Grid item>
-          <Typography variant="h4">{getTitleByRoute()}</Typography>
+  <Typography variant="h4" className={classes.title}>{getTitleByRoute()} </Typography>
         </Grid>
 
         <Grid item>{getRightIconByRoute()}</Grid>
