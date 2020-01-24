@@ -224,6 +224,7 @@ class Login extends React.Component {
         </Grid>
         <Grid item xs={8}>
           <Button
+            id="submit"
             variant="contained"
             color="primary"
             className={classes.button}

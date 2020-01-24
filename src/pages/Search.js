@@ -7,7 +7,7 @@ import { withStyles } from "@material-ui/core/styles";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import { withRouter } from "react-router-dom";
-
+import { Typography } from '@material-ui/core';
 
 import InputLabel from "@material-ui/core/InputLabel";
 
@@ -24,13 +24,17 @@ const styles = theme => ({
     position: "relative"
   },
   button: {
-    margin: theme.spacing(1),
-    padding: theme.spacing(1.5)
+    margin: theme.spacing(2),
+    padding: theme.spacing(1.5),
+    boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
   },
   select: {
     width: 160,
     marginLeft: theme.spacing(0.6),
     marginRight: theme.spacing(0.6)
+  },
+  title: {
+     margin: theme.spacing(2),
   }
 });
 class Search extends React.Component {
@@ -45,8 +49,6 @@ class Search extends React.Component {
       data_fim: "",
       data_ultimo: "",
       anchorEl: null,
-      choosedCategory: "",
-      choosedSubCategory: "",
       choosedNameCollection: "",
       id_marca_user: "",
       marca_user: ""
@@ -151,54 +153,9 @@ class Search extends React.Component {
       return (
         <Grid container justify="center">
           <div>
-            <InputLabel id="label-category">Categoria</InputLabel>
-
-            <Select
-              labelId="label-category"
-              id="demo-simple-select-outlined"
-              value={this.state.choosedCategory}
-              onChange={e => {
-                this.setState({ choosedCategory: e.target.value });
-              }}
-              labelWidth={100}
-              label="Categoria"
-              variant="outlined"
-              className={this.props.classes.select}
-            >
-              {this.state.category.map(categorias => {
-                return (
-                  <MenuItem key={categorias} value={categorias}>
-                    {categorias}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </div>
-          <div>
-            <InputLabel id="label-subcategory">Subcategoria</InputLabel>
-            <Select
-              labelId="label-subcategory"
-              id="demo-simple-select-outlined"
-              value={this.state.choosedSubCategory}
-              onChange={e => {
-                this.setState({ choosedSubCategory: e.target.value });
-              }}
-              labelWidth={100}
-              label="Subcategoria"
-              variant="outlined"
-              className={this.props.classes.select}
-            >
-              {this.state.subcategories.map(subcategoria => {
-                return (
-                  <MenuItem key={subcategoria} value={subcategoria}>
-                    {subcategoria}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-            {/* </Menu> */}
-          </div>
-          <div>
+          <Grid container direction="row" justify="center" alignItems="center">
+            <Typography className={classes.title} variant="h5" component="h4">Colecao</Typography>
+          </Grid>
             <InputLabel id="label-subcategory">Colecao</InputLabel>
             <Select
               labelId="label-subcategory"

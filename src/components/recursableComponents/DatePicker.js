@@ -6,7 +6,7 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
-
+import { Typography } from '@material-ui/core';
 import {BASE_URL} from '../../consts';
 
 import { withSnackbar } from "notistack";
@@ -73,6 +73,9 @@ const MaterialUIPickers = props =>  {
 
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
+      <Grid container direction="row" justify="center" alignItems="center">
+      <Typography variant="h5" component="h4">Data de Programação</Typography>
+      </Grid>
       <Grid container justify="space-around">
         <KeyboardDatePicker
           disableToolbar  
@@ -104,6 +107,9 @@ const MaterialUIPickers = props =>  {
         />
       </Grid>
       <Grid container justify="space-around">
+      <Grid container direction="row" justify="center" alignItems="center">
+      <Typography variant="h5" component="h4">Limite de Recebimento</Typography>
+      </Grid>
         <KeyboardDatePicker
           disableToolbar  
           variant="inline"

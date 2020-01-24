@@ -25,6 +25,7 @@ import { withSnackbar } from "notistack";
 import { BASE_URL } from "../consts";
 import User from "../services/User";
 import { DragDropContext, Draggable } from "react-beautiful-dnd";
+import { saveAs } from 'file-saver'
 
 
 const axios = require("axios");
@@ -235,17 +236,6 @@ class Insta extends React.Component {
     });
   }
 
-<<<<<<< HEAD
-  chooseBalls({distribuicao, validBasedinSchedule}) {
-    if (distribuicao === true) { 
-      console.log("entrei aqui")
-      return (<Badge badgeContent={""} color={"primary"} />)
-    } else if (distribuicao === validBasedinSchedule) {
-      return (<Badge badgeContent={""} color={"secondary"} />)
-    } else {
-
-      return (<Badge badgeContent={""} color={"error"} />)
-=======
   chooseBalls({ distribuicao, validBasedinSchedule }) {
     if (distribuicao === true) {
       return "primary";
@@ -253,15 +243,60 @@ class Insta extends React.Component {
       return "secondary";
     } else {
       return "error";
->>>>>>> origin/master
     }
   }
+
+  savePDF = () => {
+    this.openModal('Loading…') // open modal
+    return this.getPDF() // API call
+     .then((response) => {
+       const blob = new Blob([response.data], {type: 'application/pdf'})
+       const link = document.createElement('a')
+       link.href = window.URL.createObjectURL(blob)
+       link.download = `colecoes.pdf`
+       link.click()
+       this.closeModal() // close modal
+     })
+   .catch(err =>  console.log("Error saving PDF", err))
+ }
+
+ getPdf = () => {
+  return axios.get(`${BASE_URL}/foo`, {
+    responseType: 'arraybuffer',
+    headers: {
+      'Accept': 'application/pdf'
+    }
+  });
+ }
+
+  createAndDownloadPdf = async () => {
+    const { allProducts } = this.state
+    // await axios.get(`${BASE_URL}/foo`,  {
+    //   params: this.getAllParamsFromUrl()
+    // })
+
+    await axios.post(`${BASE_URL}/generatePdf`,  {
+      produtos: allProducts
+    })
+    // .then(() => {
+    //   this.getPdf()
+    // }).then(() => {
+    //   this.savePDF()
+    // })
+    // axios.post(`${BASE_URL}/create-pdf`, allProducts).then(() => {
+    //   axios.get(`${BASE_URL}/fetch-pdf`, { responseType: "blob" }).then(res => {
+    //     const pdfBlob = new Blob([res.data], { type: "application/pdf" });
+    //     saveAs(pdfBlob, "newPdf.pdf");
+    //   });
+    // });
+  };
 
   renderProductsCardsView(data) {
     const { classes } = this.props;
     return (
       <Grid container direction="row" justify="center" alignItems="center" 
       >
+        <button onClick={this.createAndDownloadPdf}>Download Pdf</button>
         {data.map((produtos,index) => {
             const {
               produto,
@@ -272,38 +307,6 @@ class Insta extends React.Component {
             } = produtos;
             const color =this.chooseBalls(produtos)
             return (
-<<<<<<< HEAD
-              <Grid  item  align="center">
-              <Card className={classes.card}>
-                <Typography gutterBottom variant="h8" component="h2">
-                  {produto}
-                </Typography>
-                <Typography variant="body2" color="textSecondary" component="p">
-                  {desc_produto}
-                </Typography>
-                <Typography variant="body2" color="textSecondary" component="h3">
-                  {cor_produto}
-                </Typography>
-                {/* <Typography variant="body2" color="textSecondary" component="p">{produtos.desc_cor_produto}</Typography> */}
-                <Typography gutterBottom variant="h8" component="h2">
-                  {qtde_programada}
-                </Typography>
-                  {this.chooseBalls(produtos)}
-                  <CardMedia
-                    className={classes.mediaCard}
-                    image={
-                      produtos.nome_arquivo[0]
-                        ? produtos.nome_arquivo[0]
-                        : "noPhoto"
-                    }
-                    title="Produto"
-                  />
-              </Card>
-              </Grid>
-            );
-          });
-        })}
-=======
               // <Fragment>
                 <Grid item align="center">
                   <Draggable
@@ -363,7 +366,6 @@ class Insta extends React.Component {
             )
           })
         })
->>>>>>> origin/master
       </Grid>
     );
   }
@@ -405,6 +407,7 @@ class Insta extends React.Component {
 
   render() {
     const { classes } = this.props;
+    console.log("as props do insta", this.props)
     return (<Fragment>
         <Header insta={true} />
         <DragDropContext onDragEnd={this.onDragEnd}>
