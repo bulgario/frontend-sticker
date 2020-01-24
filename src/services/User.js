@@ -44,6 +44,14 @@ import {
       const user = this.getUser()
       return user.id_marca_estilo
     }
+    getLogin() {
+      const user = this.getUser()
+      return user.login
+    }
+    getEmail() {
+      const user = this.getUser()
+      return user.email
+    }
   
     getAreas() {
       const user = this.getUser();
@@ -52,7 +60,7 @@ import {
   
     getUserInitialRoute() {
       if (true) {
-        return ROUTES.SEARCH;
+        return ROUTES.HOME;
       }
   
     }
@@ -65,13 +73,20 @@ import {
 
   
     canAcessThisRoute(route) {
-      if(this.isAdmin() || this.matchRoute(route,ROUTES.SEARCH)) {
+      // if(this.isAdmin() || this.matchRoute(route,ROUTES.SEARCH)) {
+      //   return true;
+      // }
+      if(this.matchRoute(route,ROUTES.SEARCH)) {
         return true;
       }
       if (this.matchRoute(route, ROUTES.LOGIN)) {
         return true;
       }
       if (this.matchRoute(route, ROUTES.INSTA)) {
+        return true;
+      }
+
+      if (this.matchRoute(route, ROUTES.HOME)) {
         return true;
       }
   

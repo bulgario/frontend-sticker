@@ -4,6 +4,7 @@ import { Route, Switch, Redirect } from 'react-router-dom'
 import Login from './pages/Login'
 import Search from './pages/Search'
 import Insta from './pages/Insta'
+import Home from './pages/Home'
 
 import User from "./services/User";
 
@@ -36,9 +37,10 @@ function PrivateRoutes(props) {
 		  <Switch>
 		  <Route path="/" exact={true} component={Login} />
 			<Route path={ROUTES.LOGIN} component={Login} />
+			<Route path={ROUTES.HOME} component={Home} />
 			<Route path={ROUTES.SEARCH} component={Search} />
 			<Route path={ROUTES.INSTA} component={Insta} />
-  
+
 		  </Switch>
 		</>
 	  );
