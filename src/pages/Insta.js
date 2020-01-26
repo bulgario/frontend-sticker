@@ -26,6 +26,10 @@ import { BASE_URL } from "../consts";
 import User from "../services/User";
 import { DragDropContext, Draggable } from "react-beautiful-dnd";
 
+// import IconButton from '@material-ui/core/IconButton';
+import ArrowBack from "@material-ui/icons/ArrowBack";
+import { IconButton } from "@material-ui/core";
+
 const axios = require("axios");
 const _ = require("lodash");
 
@@ -92,6 +96,10 @@ const styles = theme => ({
   textFieldFull: {
     width: 385,
     margin: theme.spacing(1)
+  },
+  whiteButton: {
+    color: "white",
+    sizeSmall: "100px"
   }
 });
 
@@ -174,10 +182,9 @@ class Insta extends React.Component {
 
   onDragEnd = result => {
     // const {destination,source, draggableId} = result
-    // if (!destination) return 
-
+    // if (!destination) return
     // if (destination.droppableId === source.droppableId && destination.index === source.index) {
-    //   return 
+    //   return
     // }
     // // console.log(result)
     // // console.log(this.state.allProducts,'velha programacao')
@@ -191,14 +198,12 @@ class Insta extends React.Component {
     // newArray.splice(source.index,1)
     // newArray.splice(destination.index,0,productToReplace)
     // // console.log(newArray,'novo array')
-
     // const newProgramation = {
     //   ...this.state.allProducts,
     //   [source.droppableId] : newArray
     // }
     // // console.log(newProgramation,' nova programacao')
-
-    // const newState = { 
+    // const newState = {
     //   ...this.state,
     //   allProducts: newProgramation
     //   //  {
@@ -206,25 +211,27 @@ class Insta extends React.Component {
     //   //   [source.droppableId] : newArray
     //   // }
     // }
-    // // console.log(newState) 
-    // return 
+    // // console.log(newState)
+    // return
     // // this.setState(newState)
-
-
   };
 
   renderProgramacoes() {
     const { allProducts } = this.state;
     const { classes } = this.props;
     // console.log(Object.entries(allProducts),'teste')
-    return Object.entries(allProducts).map((produtos,index) => {
+    return Object.entries(allProducts).map((produtos, index) => {
       return (
         <Grid item direction="row" justify="center">
           <Grid item align="center">
             <Typography variant="h5">{produtos[0]}</Typography>
           </Grid>
           <Divider variant="middle" className={classes.divider}></Divider>
-          <DroppableWrapper droppableId={produtos[0]} direction='horizontal' isCombineEnabled={true}>
+          <DroppableWrapper
+            droppableId={produtos[0]}
+            direction="horizontal"
+            isCombineEnabled={true}
+          >
             {this.state.expanded
               ? this.renderProductsCardsView(produtos[1])
               : this.renderProductsInstaView(produtos[1])}
@@ -247,77 +254,76 @@ class Insta extends React.Component {
   renderProductsCardsView(data) {
     const { classes } = this.props;
     return (
-      <Grid container direction="row" justify="center" alignItems="center" 
-      >
-        {data.map((produtos,index) => {
-            const {
-              produto,
-              desc_produto,
-              cor_produto,
-              qtde_programada,
-              id_produto
-            } = produtos;
-            const color =this.chooseBalls(produtos)
-            return (
-              // <Fragment>
-                <Grid item align="center">
-                  <Draggable
-                    draggableId={id_produto.toString()}
-                    index={index}
-                    key={index}
+      <Grid container direction="row" justify="center" alignItems="center">
+        {data.map((produtos, index) => {
+          const {
+            produto,
+            desc_produto,
+            cor_produto,
+            qtde_programada,
+            id_produto
+          } = produtos;
+          const color = this.chooseBalls(produtos);
+          return (
+            // <Fragment>
+            <Grid item align="center">
+              <Draggable
+                draggableId={id_produto.toString()}
+                index={index}
+                key={index}
+              >
+                {provided => (
+                  <div
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                    ref={provided.innerRef}
                   >
-                    {provided => (
-                      <div
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        ref={provided.innerRef}
+                    <Card className={classes.card}>
+                      <Typography gutterBottom variant="h6" component="h2">
+                        {produto}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        color="textSecondary"
+                        component="p"
                       >
-                        <Card className={classes.card}>
-                          <Typography gutterBottom variant="h6" component="h2">
-                            {produto}
-                          </Typography>
-                          <Typography
-                            variant="body2"
-                            color="textSecondary"
-                            component="p"
-                          >
-                            {desc_produto}
-                          </Typography>
-                          <Typography
-                            variant="body2"
-                            color="textSecondary"
-                            component="h3"
-                          >
-                            {cor_produto}
-                          </Typography>
-                          {/* <Typography variant="body2" color="textSecondary" component="p">{produtos.desc_cor_produto}</Typography> */}
-                          <Typography gutterBottom variant="h8" component="h2">
-                            {qtde_programada}
-                          </Typography>
-                          <Badge
-                            badgeContent={""}
-                            color={color}
-                            className={classes.badge}
-                          >
-                            <CardMedia
-                              className={classes.mediaCard}
-                              image={
-                                produtos.nome_arquivo[0]
-                                  ? produtos.nome_arquivo[0]
-                                  : "noPhoto"
-                              }
-                              title="Produto"
-                            />
-                          </Badge>
-                        </Card>
-                      </div>
-                    )}
-                  </Draggable>
-                </Grid>
-              // </Fragment>
-            )
-          })
-        })
+                        {desc_produto}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        color="textSecondary"
+                        component="h3"
+                      >
+                        {cor_produto}
+                      </Typography>
+                      {/* <Typography variant="body2" color="textSecondary" component="p">{produtos.desc_cor_produto}</Typography> */}
+                      <Typography gutterBottom variant="h8" component="h2">
+                        {qtde_programada}
+                      </Typography>
+                      <Badge
+                        badgeContent={""}
+                        color={color}
+                        className={classes.badge}
+                      >
+                        <CardMedia
+                          className={classes.mediaCard}
+                          image={
+                            produtos.nome_arquivo[0]
+                              ? produtos.nome_arquivo[0]
+                              : "noPhoto"
+                          }
+                          title="Produto"
+                        />
+                      </Badge>
+                    </Card>
+                  </div>
+                )}
+              </Draggable>
+            </Grid>
+            // </Fragment>
+          );
+        })}
+        )
       </Grid>
     );
   }
@@ -326,9 +332,9 @@ class Insta extends React.Component {
     const { classes } = this.props;
     return (
       <Grid className={classes.horizontalScroll}>
-        {data.map((produto,index )=> {
-            return (
-              <Draggable
+        {data.map((produto, index) => {
+          return (
+            <Draggable
               draggableId={produto.id_produto.toString()}
               index={index}
               key={index}
@@ -339,50 +345,59 @@ class Insta extends React.Component {
                   {...provided.dragHandleProps}
                   ref={provided.innerRef}
                 >
-              <Card className={classes.margin}>
-                <CardMedia
-                  className={classes.media}
-                  image={produto.nome_arquivo[0]}
-                  title="Produto"
-                />
-              </Card>
-              </div>
-                    )}
-                  </Draggable>
-            );
-          })
-        }
+                  <Card className={classes.margin}>
+                    <CardMedia
+                      className={classes.media}
+                      image={produto.nome_arquivo[0]}
+                      title="Produto"
+                    />
+                  </Card>
+                </div>
+              )}
+            </Draggable>
+          );
+        })}
       </Grid>
     );
   }
 
   render() {
     const { classes } = this.props;
-    return (<Fragment>
-        <Header insta={true} />
+    return (
+      <Fragment>
+        <Header
+          title="Resultados da programação"
+          rightIcon={null}
+          leftIcon={
+            <IconButton               aria-label="upload picture"
+            component="span"
+            className={classes.whiteButton}
+            onClick={() => this.props.history.goBack()}>
+              <ArrowBack></ArrowBack>
+            </IconButton>
+          }
+        />
         <DragDropContext onDragEnd={this.onDragEnd}>
+          <Container>
+            <FormControlLabel
+              control={
+                <Switch
+                  color="primary"
+                  checked={this.state.expanded}
+                  onChange={() =>
+                    this.setState({ expanded: !this.state.expanded })
+                  }
+                />
+              }
+              label="Detalhes"
+            />
 
-        <Container>
-
-          <FormControlLabel
-            control={
-              <Switch
-                color="primary"
-                checked={this.state.expanded}
-                onChange={() =>
-                  this.setState({ expanded: !this.state.expanded })
-                }
-              />
-            }
-            label="Detalhes"
-          />
-
-          <div className={classes.margin}>
-            <Grid container direction="column" spacing={2}>
-              {this.renderProgramacoes()}
-            </Grid>
-          </div>
-        </Container>
+            <div className={classes.margin}>
+              <Grid container direction="column" spacing={2}>
+                {this.renderProgramacoes()}
+              </Grid>
+            </div>
+          </Container>
         </DragDropContext>
 
         <Grid container justify="center">
@@ -390,7 +405,7 @@ class Insta extends React.Component {
             <AddIcon />
           </Fab>
         </Grid>
-        </Fragment>
+      </Fragment>
     );
   }
 }
