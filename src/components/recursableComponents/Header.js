@@ -31,10 +31,10 @@ const useStyles = makeStyles(theme => ({
     color:"white",
     fontSize: '1.5rem',
     [theme.breakpoints.down('xs')]: {
-      fontSize: '1.1rem',
+      fontSize: '1.18rem',
     },
     [theme.breakpoints.up('md')]: {
-      fontSize: '2.4rem',
+      fontSize: '2rem',
     },
   }
 }));
@@ -52,7 +52,7 @@ const Header = props => {
       >
         <Grid item>{props.leftIcon}</Grid>
         <Grid item>
-          <Typography variant="h4" className={classes.title}>{props.title}</Typography>
+          <Typography variant="h5" component="p" className={classes.title}>{props.title}</Typography>
         </Grid>
 
         <Grid item>{props.rightIcon}</Grid>

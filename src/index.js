@@ -27,8 +27,8 @@ ReactDOM.render(
 		<ConnectedRouter history={history}>
 			<MuiThemeProvider theme={theme}>
 				<App />
-			</MuiThemeProvider>,
-		</ConnectedRouter>,
+			</MuiThemeProvider>
+		</ConnectedRouter>
 		</Provider>,
 	target)
 
