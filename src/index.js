@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import './index.css'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core'
+import { MuiThemeProvider, createMuiTheme,responsiveFontSizes } from '@material-ui/core'
 import { ConnectedRouter } from 'connected-react-router'
 import { Provider } from 'react-redux'
 import store, { history } from './store'
@@ -11,7 +11,7 @@ import store, { history } from './store'
 import amber from '@material-ui/core/colors/amber'
 
 
-const theme = createMuiTheme({
+let theme = createMuiTheme({
 	palette: {
 		primary: amber
 	},
@@ -20,14 +20,15 @@ const theme = createMuiTheme({
 	}
 })
 
+theme = responsiveFontSizes(theme);
 const target = document.getElementById('root')
 ReactDOM.render(
 	<Provider store={store}>
 		<ConnectedRouter history={history}>
 			<MuiThemeProvider theme={theme}>
 				<App />
-			</MuiThemeProvider>,
-		</ConnectedRouter>,
+			</MuiThemeProvider>
+		</ConnectedRouter>
 		</Provider>,
 	target)
 

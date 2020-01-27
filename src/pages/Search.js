@@ -13,6 +13,8 @@ import InputLabel from "@material-ui/core/InputLabel";
 
 import { withSnackbar } from "notistack";
 import { BASE_URL } from "../consts";
+import ArrowBack from "@material-ui/icons/ArrowBack";
+import { IconButton } from "@material-ui/core";
 
 const axios = require("axios");
 
@@ -31,6 +33,10 @@ const styles = theme => ({
     width: 160,
     marginLeft: theme.spacing(0.6),
     marginRight: theme.spacing(0.6)
+  },
+  whiteButton: {
+    color: "white",
+    sizeSmall: "100px"
   }
 });
 class Search extends React.Component {
@@ -239,13 +245,22 @@ class Search extends React.Component {
     return null;
   }
   render(props) {
+    const { classes } = this.props
     return (
       <Fragment>
         <Grid>
-          <Header insta={true} 
-                  id_marca={this.state.id_marca_user}
-                  marca={this.state.marca_user} 
-          />
+        <Header
+          title="Programação"
+          rightIcon={null}
+          leftIcon={
+            <IconButton               aria-label="upload picture"
+            component="span"
+            className={classes.whiteButton}
+            onClick={() => this.props.history.goBack()}>
+              <ArrowBack></ArrowBack>
+            </IconButton>
+          }
+        />
         </Grid>
         <Grid container justify="center">
           <DatePicker 
