@@ -17,9 +17,14 @@ import Fab from "@material-ui/core/Fab";
 
 import { signIn } from "../actions";
 import AddIcon from "@material-ui/icons/Add";
+import FilterList from "@material-ui/icons/FilterList";
+
+
 import Divider from "@material-ui/core/Divider";
 
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Box from "@material-ui/core/Box";
+
 import Switch from "@material-ui/core/Switch";
 import { withSnackbar } from "notistack";
 import { BASE_URL } from "../consts";
@@ -28,12 +33,18 @@ import { DragDropContext, Draggable } from "react-beautiful-dnd";
 
 // import IconButton from '@material-ui/core/IconButton';
 import ArrowBack from "@material-ui/icons/ArrowBack";
+import Toc from "@material-ui/icons/Toc";
+
 import { IconButton } from "@material-ui/core";
 
 const axios = require("axios");
 const _ = require("lodash");
 
 const styles = theme => ({
+  main: {
+    flexGrow: 1,
+    height:'auto'
+  },
   margin: {
     margin: theme.spacing(1)
   },
@@ -100,6 +111,12 @@ const styles = theme => ({
   whiteButton: {
     color: "white",
     sizeSmall: "100px"
+  },
+  subHeader: { 
+    // backgroundColor: 'red',
+    display:'flex',
+    width: '100%',
+    flexDirection:"row"
   }
 });
 
@@ -369,36 +386,61 @@ class Insta extends React.Component {
           title="Resultados da programação"
           rightIcon={null}
           leftIcon={
-            <IconButton               aria-label="upload picture"
-            component="span"
-            className={classes.whiteButton}
-            onClick={() => this.props.history.goBack()}>
+            <IconButton
+              aria-label="upload picture"
+              component="span"
+              className={classes.whiteButton}
+              onClick={() => this.props.history.goBack()}
+            >
               <ArrowBack></ArrowBack>
             </IconButton>
           }
         />
-        <DragDropContext onDragEnd={this.onDragEnd}>
-          <Container>
-            <FormControlLabel
-              control={
-                <Switch
-                  color="primary"
-                  checked={this.state.expanded}
-                  onChange={() =>
-                    this.setState({ expanded: !this.state.expanded })
-                  }
-                />
-              }
-              label="Detalhes"
-            />
+          <DragDropContext onDragEnd={this.onDragEnd}>
+            <Container className={classes.main}>
+              {/* <FormControlLabel
+                control={
+                  <Switch
+                    color="primary"
+                    checked={this.state.expanded}
+                    onChange={() =>
+                      this.setState({ expanded: !this.state.expanded })
+                    }
+                  />
+                }
+                label="Detalhes"
+              /> */}
+                  <Box clone pt={2} pr={1} pb={1} pl={2}>
 
-            <div className={classes.margin}>
-              <Grid container direction="column" spacing={2}>
-                {this.renderProgramacoes()}
+              <Grid item container direction="row" justify="center" alignItems="center" className={classes.subHeader}sm={12}>
+                {/* <Grid item container  direction="row" aligmItems="center"> */}
+                <Grid container  xs={6} item sm={6} alignItems="center">
+                  <IconButton>
+                    <FilterList></FilterList>
+                  </IconButton>
+                  <Typography>Filtrar</Typography>
+                  </Grid>
+
+                {/* </Grid> */}
+                {/* <Grid item container direction="row" alignItems="center"> */}
+                <Grid container  xs={6} item sm={6} alignItems="center" justify="flex-end">
+
+                  <IconButton> <Toc></Toc>                  </IconButton>
+                  <Typography>Ordenar</Typography>
+                  </Grid>
+
+                {/* </Grid> */}
               </Grid>
-            </div>
-          </Container>
-        </DragDropContext>
+              </Box>
+              <Divider></Divider>
+
+              <div className={classes.margin}>
+                <Grid container direction="column" spacing={2}>
+                  {this.renderProgramacoes()}
+                </Grid>
+              </div>
+            </Container>
+          </DragDropContext>
 
         <Grid container justify="center">
           <Fab aria-label={"Add"} className={classes.fab} color={"primary"}>
