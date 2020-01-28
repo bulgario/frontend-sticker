@@ -157,54 +157,6 @@ class Search extends React.Component {
       return (
         <Grid container justify="center">
           <div>
-            <InputLabel id="label-category">Categoria</InputLabel>
-
-            <Select
-              labelId="label-category"
-              id="demo-simple-select-outlined"
-              value={this.state.choosedCategory}
-              onChange={e => {
-                this.setState({ choosedCategory: e.target.value });
-              }}
-              labelWidth={100}
-              label="Categoria"
-              variant="outlined"
-              className={this.props.classes.select}
-            >
-              {this.state.category.map(categorias => {
-                return (
-                  <MenuItem key={categorias} value={categorias}>
-                    {categorias}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </div>
-          <div>
-            <InputLabel id="label-subcategory">Subcategoria</InputLabel>
-            <Select
-              labelId="label-subcategory"
-              id="demo-simple-select-outlined"
-              value={this.state.choosedSubCategory}
-              onChange={e => {
-                this.setState({ choosedSubCategory: e.target.value });
-              }}
-              labelWidth={100}
-              label="Subcategoria"
-              variant="outlined"
-              className={this.props.classes.select}
-            >
-              {this.state.subcategories.map(subcategoria => {
-                return (
-                  <MenuItem key={subcategoria} value={subcategoria}>
-                    {subcategoria}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-            {/* </Menu> */}
-          </div>
-          <div>
             <InputLabel id="label-subcategory">Colecao</InputLabel>
             <Select
               labelId="label-subcategory"
