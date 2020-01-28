@@ -21,7 +21,7 @@ const styles = theme => ({
     leftBarLabel: { 
     backgroundColor: "#FCB92C",
     width:5,
-    height:'100%',
+    // height:'100%',
     marginRight:theme.spacing(4),
     position: 'absolute',
     height: '62px',

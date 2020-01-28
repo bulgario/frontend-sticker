@@ -6,7 +6,7 @@ import Grid from "@material-ui/core/Grid";
 import { withRouter } from "react-router-dom";
 
 import Header from "../components/recursableComponents/Header";
-import DroppableWrapper from "../components/recursableComponents/DroppableWrapper";
+// import DroppableWrapper from "../components/recursableComponents/DroppableWrapper";
 import Badge from "@material-ui/core/Badge";
 import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
@@ -24,7 +24,7 @@ import Switch from "@material-ui/core/Switch";
 import { withSnackbar } from "notistack";
 import { BASE_URL } from "../consts";
 import User from "../services/User";
-import { DragDropContext, Draggable } from "react-beautiful-dnd";
+// import { DragDropContext, Draggable } from "react-beautiful-dnd";
 
 // import IconButton from '@material-ui/core/IconButton';
 import ArrowBack from "@material-ui/icons/ArrowBack";
@@ -227,15 +227,15 @@ class Insta extends React.Component {
             <Typography variant="h5">{produtos[0]}</Typography>
           </Grid>
           <Divider variant="middle" className={classes.divider}></Divider>
-          <DroppableWrapper
+          {/* <DroppableWrapper
             droppableId={produtos[0]}
             direction="horizontal"
             isCombineEnabled={true}
-          >
+          > */}
             {this.state.expanded
               ? this.renderProductsCardsView(produtos[1])
               : this.renderProductsInstaView(produtos[1])}
-          </DroppableWrapper>
+          {/* </DroppableWrapper> */}
         </Grid>
       );
     });
@@ -261,13 +261,13 @@ class Insta extends React.Component {
             desc_produto,
             cor_produto,
             qtde_programada,
-            id_produto
+            // id_produto
           } = produtos;
           const color = this.chooseBalls(produtos);
           return (
             // <Fragment>
             <Grid item align="center">
-              <Draggable
+              {/* <Draggable
                 draggableId={id_produto.toString()}
                 index={index}
                 key={index}
@@ -277,7 +277,7 @@ class Insta extends React.Component {
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                     ref={provided.innerRef}
-                  >
+                  > */}
                     <Card className={classes.card}>
                       <Typography gutterBottom variant="h6" component="h2">
                         {produto}
@@ -316,9 +316,9 @@ class Insta extends React.Component {
                         />
                       </Badge>
                     </Card>
-                  </div>
+                  {/* </div>
                 )}
-              </Draggable>
+              </Draggable> */}
             </Grid>
             // </Fragment>
           );
@@ -334,17 +334,17 @@ class Insta extends React.Component {
       <Grid className={classes.horizontalScroll}>
         {data.map((produto, index) => {
           return (
-            <Draggable
-              draggableId={produto.id_produto.toString()}
-              index={index}
-              key={index}
-            >
-              {provided => (
-                <div
-                  {...provided.draggableProps}
-                  {...provided.dragHandleProps}
-                  ref={provided.innerRef}
-                >
+            // <Draggable
+            //   draggableId={produto.id_produto.toString()}
+            //   index={index}
+            //   key={index}
+            // >
+            //   {provided => (
+            //     <div
+            //       {...provided.draggableProps}
+            //       {...provided.dragHandleProps}
+            //       ref={provided.innerRef}
+            //     >
                   <Card className={classes.margin}>
                     <CardMedia
                       className={classes.media}
@@ -352,9 +352,9 @@ class Insta extends React.Component {
                       title="Produto"
                     />
                   </Card>
-                </div>
-              )}
-            </Draggable>
+            //     </div>
+            //   )}
+            // </Draggable>
           );
         })}
       </Grid>
@@ -377,7 +377,7 @@ class Insta extends React.Component {
             </IconButton>
           }
         />
-        <DragDropContext onDragEnd={this.onDragEnd}>
+        {/* <DragDropContext onDragEnd={this.onDragEnd}> */}
           <Container>
             <FormControlLabel
               control={
@@ -398,7 +398,7 @@ class Insta extends React.Component {
               </Grid>
             </div>
           </Container>
-        </DragDropContext>
+        {/* </DragDropContext> */}
 
         <Grid container justify="center">
           <Fab aria-label={"Add"} className={classes.fab} color={"primary"}>
