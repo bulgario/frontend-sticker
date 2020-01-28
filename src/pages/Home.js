@@ -9,6 +9,7 @@ import Container from "@material-ui/core/Container";
 import ResponsiveNavbar from "../components/recursableComponents/ResponsiveNavbar";
 
 import MenuCard from "../components/recursableComponents/MenuCard";
+import AutoComplete from "../components/recursableComponents/SearchAutoComplete"
 
 import IconButton from "@material-ui/core/IconButton";
 import Menu from "@material-ui/icons/Menu";
@@ -66,13 +67,20 @@ class Home extends React.Component {
       recoveryError: false,
       recoverySubmitted: false,
       recoveryShow: false,
-      open: false
+      open: false,
+      renderAutoComplete: false
     };
   }
 
   openMenu = () => {
     this.setState({ open: !this.state.open });
   };
+
+  handleAutoComplete = () => {
+    this.state.renderAutoComplete === true ?
+      this.setState({ renderAutoComplete: false }) :
+        this.setState({ renderAutoComplete: true }) 
+  }
 
   render() {
     const { classes } = this.props;
@@ -97,7 +105,10 @@ class Home extends React.Component {
               component="span"
               className={classes.whiteButton}
             >
-              <Search />
+              <Search onClick={this.handleAutoComplete} />
+              <div>
+              {this.state.renderAutoComplete && <AutoComplete />}
+              </div>
             </IconButton>
           }
           leftIcon={
