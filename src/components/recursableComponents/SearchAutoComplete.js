@@ -6,28 +6,22 @@ import { Redirect } from "react-router-dom";
 import imagesFromProducts from "../../imageUrl";
 import Grid from "@material-ui/core/Grid";
 
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import SkipNextIcon from '@material-ui/icons/SkipNext';
-
 
 import './styles.css';
 
 const axios = require("axios");
 
 export default class AutoComplete extends React.Component {
-  state = {
-    value: "",
-    suggestions: [],
-  };
-
-  componentWillMount() {
+  constructor(props) {
+    super(props)
+    this.state = {
+      value: "",
+      suggestions: [],
+      redirect: false
+    };
+  }
+  
+  componentDidMount() {
     this.onSuggestionsFetchRequested = debounce(
       500,
       this.onSuggestionsFetchRequested
@@ -39,6 +33,7 @@ export default class AutoComplete extends React.Component {
       if(value === products.produto) {
         //  ESTADO SO ESTA SENDO SELECIONADO APOS A SEGUNDA CHAMADA DO ITEM, NA PRIMEIRA, ELE NAO SALVA O ESTADO, PORQUE????
         this.setState({ selectedOption: products })
+        this.setState({ redirect: true })
       }
     })
   }
@@ -87,19 +82,19 @@ export default class AutoComplete extends React.Component {
   }
 
   render() {
-    const { value, suggestions } = this.state;
-
+    const { value, suggestions, redirect } = this.state;
     const inputProps = {
       placeholder: "Buscar Produtos",
       value,
       onChange: this.onChange
     };
 
-    // if(this.state.suggestions.length > 0) {
-    //   return (
-    //     <Redirect from={"/home"} to={"/produto"} />
-    //   )
-    // }
+    if(redirect) {
+      console.log("entro")
+      return (
+        <Redirect to={'/produto'} />
+      )
+    }
     
     return (
       <div className="App">
