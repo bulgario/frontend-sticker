@@ -19,7 +19,6 @@ import { signIn } from "../actions";
 import AddIcon from "@material-ui/icons/Add";
 import FilterList from "@material-ui/icons/FilterList";
 
-
 import Divider from "@material-ui/core/Divider";
 
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -36,14 +35,13 @@ import ArrowBack from "@material-ui/icons/ArrowBack";
 import Toc from "@material-ui/icons/Toc";
 
 import { IconButton } from "@material-ui/core";
-
 const axios = require("axios");
 const _ = require("lodash");
 
 const styles = theme => ({
   main: {
     flexGrow: 1,
-    height:'auto'
+    height: "auto"
   },
   margin: {
     margin: theme.spacing(1)
@@ -111,7 +109,7 @@ const styles = theme => ({
   whiteButton: {
     color: "white",
     sizeSmall: "100px"
-  },
+  }
 });
 
 class Insta extends React.Component {
@@ -243,9 +241,9 @@ class Insta extends React.Component {
             direction="horizontal"
             isCombineEnabled={true}
           > */}
-            {this.state.expanded
-              ? this.renderProductsCardsView(produtos[1])
-              : this.renderProductsInstaView(produtos[1])}
+          {this.state.expanded
+            ? this.renderProductsCardsView(produtos[1])
+            : this.renderProductsInstaView(produtos[1])}
           {/* </DroppableWrapper> */}
         </Grid>
       );
@@ -271,7 +269,7 @@ class Insta extends React.Component {
             produto,
             desc_produto,
             cor_produto,
-            qtde_programada,
+            qtde_programada
             // id_produto
           } = produtos;
           const color = this.chooseBalls(produtos);
@@ -289,45 +287,41 @@ class Insta extends React.Component {
                     {...provided.dragHandleProps}
                     ref={provided.innerRef}
                   > */}
-                    <Card className={classes.card}>
-                      <Typography gutterBottom variant="h6" component="h2">
-                        {produto}
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        color="textSecondary"
-                        component="p"
-                      >
-                        {desc_produto}
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        color="textSecondary"
-                        component="h3"
-                      >
-                        {cor_produto}
-                      </Typography>
-                      {/* <Typography variant="body2" color="textSecondary" component="p">{produtos.desc_cor_produto}</Typography> */}
-                      <Typography gutterBottom variant="h8" component="h2">
-                        {qtde_programada}
-                      </Typography>
-                      <Badge
-                        badgeContent={""}
-                        color={color}
-                        className={classes.badge}
-                      >
-                        <CardMedia
-                          className={classes.mediaCard}
-                          image={
-                            produtos.nome_arquivo[0]
-                              ? produtos.nome_arquivo[0]
-                              : "noPhoto"
-                          }
-                          title="Produto"
-                        />
-                      </Badge>
-                    </Card>
-                  {/* </div>
+              <Card className={classes.card}>
+                <Typography gutterBottom variant="h6" component="h2">
+                  {produto}
+                </Typography>
+                <Typography variant="body2" color="textSecondary" component="p">
+                  {desc_produto}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="textSecondary"
+                  component="h3"
+                >
+                  {cor_produto}
+                </Typography>
+                {/* <Typography variant="body2" color="textSecondary" component="p">{produtos.desc_cor_produto}</Typography> */}
+                <Typography gutterBottom variant="h8" component="h2">
+                  {qtde_programada}
+                </Typography>
+                <Badge
+                  badgeContent={""}
+                  color={color}
+                  className={classes.badge}
+                >
+                  <CardMedia
+                    className={classes.mediaCard}
+                    image={
+                      produtos.nome_arquivo[0]
+                        ? produtos.nome_arquivo[0]
+                        : "noPhoto"
+                    }
+                    title="Produto"
+                  />
+                </Badge>
+              </Card>
+              {/* </div>
                 )}
               </Draggable> */}
             </Grid>
@@ -356,13 +350,13 @@ class Insta extends React.Component {
             //       {...provided.dragHandleProps}
             //       ref={provided.innerRef}
             //     >
-                  <Card className={classes.margin}>
-                    <CardMedia
-                      className={classes.media}
-                      image={produto.nome_arquivo[0]}
-                      title="Produto"
-                    />
-                  </Card>
+            <Card className={classes.margin}>
+              <CardMedia
+                className={classes.media}
+                image={produto.nome_arquivo[0]}
+                title="Produto"
+              />
+            </Card>
             //     </div>
             //   )}
             // </Draggable>
@@ -390,33 +384,76 @@ class Insta extends React.Component {
             </IconButton>
           }
         />
+                  <FormControlLabel
+            control={
+              <Switch
+                color="primary"
+                checked={this.state.expanded}
+                onChange={() =>
+                  this.setState({ expanded: !this.state.expanded })
+                }
+              />
+            }
+            label="Detalhes"
+          />
         {/* <DragDropContext onDragEnd={this.onDragEnd}> */}
-          <Container>
-            <FormControlLabel
-              control={
-                <Switch
-                  color="primary"
-                  checked={this.state.expanded}
-                  onChange={() =>
-                    this.setState({ expanded: !this.state.expanded })
-                  }
-                />
-              }
-              label="Detalhes"
-            />
-
-            <div className={classes.margin}>
-              <Grid container direction="column" spacing={2}>
-                {this.renderProgramacoes()}
+        <Container>
+          <Box clone pt={2} pr={1} pb={1} pl={2}>
+            <Grid
+              item
+              container
+              direction="row"
+              justify="space-between"
+              alignItems="center"
+              sm={12}
+              xs={12}
+            >
+              <Grid
+                container
+                xs={6}
+                item
+                sm={6}
+                alignItems="center"
+                justify="flex-start"
+              >
+                <IconButton>
+                  <FilterList></FilterList>
+                </IconButton>
+                <Typography component="p">Filtrar</Typography>
               </Grid>
-            </div>
-          </Container>
+              <Grid
+                container
+                xs={6}
+                item
+                sm={6}
+                alignItems="center"
+                justify="flex-end"
+              >
+                <IconButton>
+                  
+                  <Toc></Toc>
+                </IconButton>
+                <Typography component="p">Ordenar</Typography>
+              </Grid>
+
+              {/* </Grid> */}
+            </Grid>
+          </Box>
+          <Divider></Divider>
+
+
+          <div className={classes.margin}>
+            <Grid container direction="column" spacing={2}>
+              {this.renderProgramacoes()}
+            </Grid>
+          </div>
+        </Container>
         {/* </DragDropContext> */}
 
         <Grid container justify="center">
-          <Fab aria-label={"Add"} className={classes.fab} color={"primary"}>
+          {/* <Fab aria-label={"Add"} className={classes.fab} color={"primary"}>
             <AddIcon />
-          </Fab>
+          </Fab> */}
         </Grid>
       </Fragment>
     );
