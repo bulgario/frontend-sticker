@@ -9,7 +9,7 @@ import Container from "@material-ui/core/Container";
 import ResponsiveNavbar from "../components/recursableComponents/ResponsiveNavbar";
 
 import MenuCard from "../components/recursableComponents/MenuCard";
-import AutoComplete from "../components/recursableComponents/SearchAutoComplete"
+import TopDrawer from "../components/recursableComponents/TopDrawer"
 
 import IconButton from "@material-ui/core/IconButton";
 import Menu from "@material-ui/icons/Menu";
@@ -68,6 +68,7 @@ class Home extends React.Component {
       recoverySubmitted: false,
       recoveryShow: false,
       open: false,
+      open2: false,
       renderAutoComplete: false
     };
   }
@@ -76,11 +77,9 @@ class Home extends React.Component {
     this.setState({ open: !this.state.open });
   };
 
-  handleAutoComplete = () => {
-    this.state.renderAutoComplete === true ?
-      this.setState({ renderAutoComplete: false }) :
-        this.setState({ renderAutoComplete: true }) 
-  }
+  openMenu2 = () => {
+    this.setState({ open2: !this.state.open2 });
+  };
 
   render() {
     const { classes } = this.props;
@@ -96,6 +95,9 @@ class Home extends React.Component {
           openMenu={this.openMenu}
           open={this.state.open}
         ></ResponsiveNavbar>
+        <TopDrawer      
+          openMenu={this.openMenu2}
+          open={this.state.open2}></TopDrawer>
 
         <Header
           title="Central de produto"
@@ -104,11 +106,9 @@ class Home extends React.Component {
               aria-label="upload picture"
               component="span"
               className={classes.whiteButton}
+              onClick={this.openMenu2}
             >
-              <Search onClick={this.handleAutoComplete} />
-              <div>
-              {this.state.renderAutoComplete && <AutoComplete />}
-              </div>
+              <Search  />
             </IconButton>
           }
           leftIcon={

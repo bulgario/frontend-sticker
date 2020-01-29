@@ -31,7 +31,7 @@ class AutoComplete extends React.Component {
     this.state.suggestions.map(products => {
       if(value === products.produto) {
         this.setState({ selectedOption: products })
-        this.setState({ redirect: true })
+       return  this.setState({ redirect: true })
       }
     })
   }
@@ -40,7 +40,7 @@ class AutoComplete extends React.Component {
     return (
       <Grid item xs={12}>
         <Grid container direction="column" justify="center" alignItems="center">  
-            <img src={suggestion.previewImage}></img>
+            {/* <img src={suggestion.previewImage}></img> */}
           <div className="product">{suggestion.produto}</div>
           <div className="shortCode" onClick={() => this.getProduct(suggestion.produto)}>{suggestion.desc_produto}</div>
         </Grid>
@@ -60,11 +60,11 @@ class AutoComplete extends React.Component {
         })
         .then(resp => {
           resp.data.map(product => {
-            const previewImage = imagesFromProducts(60, 60, product.produto, product.cor_produto)
+            const previewImage = imagesFromProducts(30, 30, product.produto, product.cor_produto)
             product.previewImage = previewImage
           })
           const results = resp.data
-     			this.setState({ suggestions: results })
+     			return this.setState({ suggestions: results })
         });
     } catch (error) {
       return error;
