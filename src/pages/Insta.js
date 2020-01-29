@@ -255,7 +255,7 @@ class Insta extends React.Component {
   chooseBalls({ distribuicao, validBasedinSchedule }) {
     if (distribuicao === true) {
       return "primary";
-    } else if (distribuicao === validBasedinSchedule) {
+    } else if (validBasedinSchedule === false) {
       return "secondary";
     } else {
       return "error";
