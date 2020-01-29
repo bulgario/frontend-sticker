@@ -17,9 +17,14 @@ import Fab from "@material-ui/core/Fab";
 
 import { signIn } from "../actions";
 import AddIcon from "@material-ui/icons/Add";
+import FilterList from "@material-ui/icons/FilterList";
+
+
 import Divider from "@material-ui/core/Divider";
 
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Box from "@material-ui/core/Box";
+
 import Switch from "@material-ui/core/Switch";
 import { withSnackbar } from "notistack";
 import { BASE_URL } from "../consts";
@@ -28,12 +33,18 @@ import User from "../services/User";
 
 // import IconButton from '@material-ui/core/IconButton';
 import ArrowBack from "@material-ui/icons/ArrowBack";
+import Toc from "@material-ui/icons/Toc";
+
 import { IconButton } from "@material-ui/core";
 
 const axios = require("axios");
 const _ = require("lodash");
 
 const styles = theme => ({
+  main: {
+    flexGrow: 1,
+    height:'auto'
+  },
   margin: {
     margin: theme.spacing(1)
   },
@@ -100,7 +111,7 @@ const styles = theme => ({
   whiteButton: {
     color: "white",
     sizeSmall: "100px"
-  }
+  },
 });
 
 class Insta extends React.Component {
@@ -369,10 +380,12 @@ class Insta extends React.Component {
           title="Resultados da programação"
           rightIcon={null}
           leftIcon={
-            <IconButton               aria-label="upload picture"
-            component="span"
-            className={classes.whiteButton}
-            onClick={() => this.props.history.goBack()}>
+            <IconButton
+              aria-label="upload picture"
+              component="span"
+              className={classes.whiteButton}
+              onClick={() => this.props.history.goBack()}
+            >
               <ArrowBack></ArrowBack>
             </IconButton>
           }
