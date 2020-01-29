@@ -2,7 +2,8 @@ export const ROUTES = {
   LOGIN: "/login",
   SEARCH: "/search",
   INSTA: "/insta",
-  HOME: "/home"
+  HOME: "/home",
+  SELECTEDPRODUCT: "/produto"
 };
 
 export const OMNI_URL =
