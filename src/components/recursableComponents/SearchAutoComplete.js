@@ -2,16 +2,15 @@ import React from "react";
 import Autosuggest from "react-autosuggest";
 import { debounce } from "throttle-debounce";
 import { BASE_URL } from "../../consts";
-import { Redirect } from "react-router-dom";
 import imagesFromProducts from "../../imageUrl";
 import Grid from "@material-ui/core/Grid";
-
+import { withRouter } from "react-router-dom";
 
 import './styles.css';
 
 const axios = require("axios");
 
-export default class AutoComplete extends React.Component {
+class AutoComplete extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -31,7 +30,6 @@ export default class AutoComplete extends React.Component {
   getProduct = (value) => {
     this.state.suggestions.map(products => {
       if(value === products.produto) {
-        //  ESTADO SO ESTA SENDO SELECIONADO APOS A SEGUNDA CHAMADA DO ITEM, NA PRIMEIRA, ELE NAO SALVA O ESTADO, PORQUE????
         this.setState({ selectedOption: products })
         this.setState({ redirect: true })
       }
@@ -81,8 +79,12 @@ export default class AutoComplete extends React.Component {
     return value.trim().length > 2;
   }
 
+  handleData = async (selectedOption) => {
+    return (this.props.history.push(`/produto?produto=${selectedOption.id}`))
+  }
+
   render() {
-    const { value, suggestions, redirect } = this.state;
+    const { value, suggestions, redirect, selectedOption } = this.state;
     const inputProps = {
       placeholder: "Buscar Produtos",
       value,
@@ -90,13 +92,9 @@ export default class AutoComplete extends React.Component {
     };
 
     if(redirect) {
-      console.log("entro")
-      return (
-        <Redirect to={'/produto'} />
-      )
+      this.handleData(selectedOption)
     }
-    
-    return (
+    return (  
       <div className="App">
         <Autosuggest
           suggestions={suggestions}
@@ -112,3 +110,5 @@ export default class AutoComplete extends React.Component {
     );
   }
 }
+
+export default withRouter(AutoComplete);

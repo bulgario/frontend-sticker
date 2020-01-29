@@ -42,7 +42,6 @@ function PrivateRoutes(props) {
 			<Route path={ROUTES.SEARCH} component={Search} />
 			<Route path={ROUTES.INSTA} component={Insta} />
 			<Route path={ROUTES.SELECTEDPRODUCT} component={Produto} />
-
 		  </Switch>
 		</>
 	  );
