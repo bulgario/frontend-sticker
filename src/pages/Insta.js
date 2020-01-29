@@ -112,12 +112,6 @@ const styles = theme => ({
     color: "white",
     sizeSmall: "100px"
   },
-  subHeader: { 
-    // backgroundColor: 'red',
-    display:'flex',
-    width: '100%',
-    flexDirection:"row"
-  }
 });
 
 class Insta extends React.Component {
@@ -412,13 +406,13 @@ class Insta extends React.Component {
               /> */}
                   <Box clone pt={2} pr={1} pb={1} pl={2}>
 
-              <Grid item container direction="row" justify="center" alignItems="center" className={classes.subHeader}sm={12}>
+              <Grid item container direction="row" justify="space-between" alignItems="center" sm={12} xs={12}>
                 {/* <Grid item container  direction="row" aligmItems="center"> */}
-                <Grid container  xs={6} item sm={6} alignItems="center">
+                <Grid container  xs={6} item sm={6} alignItems="center" justify="flex-start">
                   <IconButton>
                     <FilterList></FilterList>
                   </IconButton>
-                  <Typography>Filtrar</Typography>
+                  <Typography component="p">Filtrar</Typography>
                   </Grid>
 
                 {/* </Grid> */}
@@ -426,7 +420,7 @@ class Insta extends React.Component {
                 <Grid container  xs={6} item sm={6} alignItems="center" justify="flex-end">
 
                   <IconButton> <Toc></Toc>                  </IconButton>
-                  <Typography>Ordenar</Typography>
+                  <Typography component="p">Ordenar</Typography>
                   </Grid>
 
                 {/* </Grid> */}
