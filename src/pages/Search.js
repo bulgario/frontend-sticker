@@ -129,7 +129,7 @@ class Search extends React.Component {
           this.state.data_inicio
         ).toISOString()}&dataFim=${new Date(
           this.state.data_fim
-        ).toISOString()}&dataUltimoAgendamento=${new Date(
+        ).toISOString()}&entregaAjustada=${new Date(
           this.state.data_ultimo
         ).toISOString()}&categoria=${this.state.choosedCategory}&subcategoria=${
           this.state.choosedSubCategory
