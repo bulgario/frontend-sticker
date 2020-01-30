@@ -5,7 +5,6 @@ import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import { withRouter } from "react-router-dom";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-
 import Header from "../components/recursableComponents/Header";
 // import DroppableWrapper from "../components/recursableComponents/DroppableWrapper";
 import Badge from "@material-ui/core/Badge";
@@ -42,6 +41,7 @@ import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import FilterDrawer from "../components/recursableComponents/FilterDrawer";
+import imagesFromProducts from "../imageUrl";
 const axios = require("axios");
 const _ = require("lodash");
 
@@ -73,18 +73,27 @@ const styles = theme => ({
       width: 120
     }
   },
+  greenIcon: {
+    backgroundColor: '#25d64c'
+  },
+  yellowIcon: {
+    backgroundColor: '#ebf918'
+  },
+  redIcon: {
+    backgroundColor: '#ff491b'
+  },
   card: {
-    minHeight: 420,
-    maxWidth: 240,
-    maxHeight: 420,
-    minWidth: 240,
+    minHeight: 450,
+    maxWidth: 300,
+    maxHeight: 500,
+    minWidth: 300,
     margin: theme.spacing(0.3),
     padding: theme.spacing(0.6),
     backgroundColor: "white",
     [theme.breakpoints.down("sm")]: {
-      minHeight: 275,
+      minHeight: 337,
       maxWidth: 160,
-      maxHeight: 275,
+      maxHeight: 350,
       minWidth: 160,
       margin: theme.spacing(0.6),
       // marginLeft:theme.spacing(-3),
@@ -347,12 +356,14 @@ class Insta extends React.Component {
   }
 
   chooseBalls({ distribuicao, validBasedinSchedule }) {
+    const { classes } = this.props;
+
     if (distribuicao === true) {
-      return "primary";
+      return classes.greenIcon;
     } else if (validBasedinSchedule === false) {
-      return "secondary";
+      return classes.yellowIcon;
     } else {
-      return "error";
+      return classes.redIcon;
     }
   }
 
@@ -370,11 +381,20 @@ class Insta extends React.Component {
           const {
             produto,
             desc_produto,
-            // cor_produto,
-            qtde_programada
+            cor_produto,
+            qtde_programada,
+            desc_cor_produto,
             // id_produto
           } = produtos;
           const color = this.chooseBalls(produtos);
+          const image = imagesFromProducts(
+            140,
+            220,
+            produtos.produto,
+            produtos.cor_produto
+          )
+          produtos.image = image
+
           return (
             // <Fragment>
             <Grid item align="center">
@@ -403,27 +423,35 @@ class Insta extends React.Component {
                     ? `${desc_produto.substring(0, 13)}...`
                     : desc_produto}
                 </Typography>
-                {/* <Typography
+                <Typography
                   variant="body2"
                   color="textSecondary"
                   component="h3"
                 >
                   {cor_produto}
-                </Typography> */}
+                </Typography>
                 {/* <Typography variant="body2" color="textSecondary" component="p">{produtos.desc_cor_produto}</Typography> */}
-
+                <Typography
+                  variant="p"
+                  color="textSecondary"
+                  component="p"
+                  className={classes.desc_produto}
+                >
+                  {desc_cor_produto.length > 13
+                    ? `${desc_cor_produto.substring(0, 13)}...`
+                    : desc_cor_produto}
+                </Typography>
                 <Badge
                   badgeContent={""}
-                  color={color}
-                  className={classes.badge}
+                  classes={{ badge: color }}
+                  // color={color}
+                  // className={color}
                   // anchorOrigin="top"
                 >
                   <CardMedia
                     className={classes.mediaCard}
                     image={
-                      produtos.nome_arquivo[0]
-                        ? produtos.nome_arquivo[0]
-                        : "noPhoto"
+                      produtos.image ? produtos.image : "noPhoto"
                     }
                     title="Produto"
                   />
@@ -432,7 +460,6 @@ class Insta extends React.Component {
                   variant="h5"
                   component="p"
                   color="textSecondary"
-                  gutterBottom
                 >
                   {qtde_programada}
                 </Typography>
@@ -468,7 +495,7 @@ class Insta extends React.Component {
             <Card className={classes.margin}>
               <CardMedia
                 className={classes.media}
-                image={produto.nome_arquivo[0]}
+                image={produto.image}
                 title="Produto"
               />
             </Card>
