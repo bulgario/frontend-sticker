@@ -23,7 +23,7 @@ const styles = theme => ({
     flexGrow: 1,
     // backgroundColor: "red",
     height: 300,
-    width: "100%"
+    width: 100
   },
   suggestionItem: {
     height: 50,
@@ -149,7 +149,7 @@ class AutoComplete extends React.Component {
     const inputProps = {
       placeholder: "Buscar Produtos",
       value,
-      onChange: this.onChange
+      onChange: this.onChange,
     };
 
     if (redirect) {

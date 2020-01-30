@@ -10,10 +10,13 @@
     flex-grow: 1;
     height: auto;
     margin-top: -10px;
+    justify-content: center;
+    width :100%;
   }
   
   .react-autosuggest__input {
-    width: 800px;
+    width: auto;
+    
     height: 20px;
     padding: 10px;
     font-weight: 300;
@@ -25,18 +28,21 @@
   }
   
   .react-autosuggest__input::placeholder {
-    width: 800px;
+    width: 300px;
+    
     color: #777;
     opacity: 1;
   }
   
   .react-autosuggest__input--focused {
-    width: 800px;
+    width: 300px;
+    
     outline: none;
   }
   
   .react-autosuggest__input--open {
-    width: 800px;
+    width: 300px;
+    
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
   }
@@ -55,7 +61,8 @@
     cursor: pointer;
     padding: 10px;
     border-bottom: 1px solid #eee;
-    width: 800px;
+    width: 300px;
+    
     white-space: nowrap;
   }
   
