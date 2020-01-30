@@ -235,7 +235,7 @@ class Insta extends React.Component {
     const user = new User();
     const dataInicio = this.getParamFromUrl("dataInicio");
     const dataFim = this.getParamFromUrl("dataFim");
-    const dataUltimoAgendamento = this.getParamFromUrl("dataUltimoAgendamento");
+    const entregaAjustada = this.getParamFromUrl("entregaAjustada");
     const category = this.getParamFromUrl("categoria");
     const subcategory = this.getParamFromUrl("subcategoria");
     const collection_name = this.getParamFromUrl("colecao");
@@ -244,7 +244,7 @@ class Insta extends React.Component {
     return {
       dataInicio,
       dataFim,
-      dataUltimoAgendamento,
+      entregaAjustada,
       category,
       subcategory,
       collection_name,
