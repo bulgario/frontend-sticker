@@ -460,7 +460,6 @@ class Insta extends React.Component {
                   variant="h5"
                   component="p"
                   color="textSecondary"
-                  gutterBottom
                 >
                   {qtde_programada}
                 </Typography>
