@@ -73,6 +73,15 @@ const styles = theme => ({
       width: 120
     }
   },
+  greenIcon: {
+    backgroundColor: '#25d64c'
+  },
+  yellowIcon: {
+    backgroundColor: '#ebf918'
+  },
+  redIcon: {
+    backgroundColor: '#ff491b'
+  },
   card: {
     minHeight: 450,
     maxWidth: 300,
@@ -347,12 +356,14 @@ class Insta extends React.Component {
   }
 
   chooseBalls({ distribuicao, validBasedinSchedule }) {
+    const { classes } = this.props;
+
     if (distribuicao === true) {
-      return "primary";
+      return classes.greenIcon;
     } else if (validBasedinSchedule === false) {
-      return "secondary";
+      return classes.yellowIcon;
     } else {
-      return "error";
+      return classes.redIcon;
     }
   }
 
@@ -432,8 +443,9 @@ class Insta extends React.Component {
                 </Typography>
                 <Badge
                   badgeContent={""}
-                  color={color}
-                  className={classes.badge}
+                  classes={{ badge: color }}
+                  // color={color}
+                  // className={color}
                   // anchorOrigin="top"
                 >
                   <CardMedia
