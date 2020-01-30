@@ -4,28 +4,29 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import { withRouter } from "react-router-dom";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 import Header from "../components/recursableComponents/Header";
 // import DroppableWrapper from "../components/recursableComponents/DroppableWrapper";
 import Badge from "@material-ui/core/Badge";
 import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
+// import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 
 import Typography from "@material-ui/core/Typography";
 
-import Fab from "@material-ui/core/Fab";
+// import Fab from "@material-ui/core/Fab";
 
 import { signIn } from "../actions";
-import AddIcon from "@material-ui/icons/Add";
+// import AddIcon from "@material-ui/icons/Add";
 import FilterList from "@material-ui/icons/FilterList";
-
 
 import Divider from "@material-ui/core/Divider";
 
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Box from "@material-ui/core/Box";
+// import FormControlLabel from "@material-ui/core/FormControlLabel";
+// import Box from "@material-ui/core/Box";
 
-import Switch from "@material-ui/core/Switch";
+// import Switch from "@material-ui/core/Switch";
 import { withSnackbar } from "notistack";
 import { BASE_URL } from "../consts";
 import User from "../services/User";
@@ -37,37 +38,80 @@ import Toc from "@material-ui/icons/Toc";
 
 import { IconButton } from "@material-ui/core";
 
+import ExpansionPanel from "@material-ui/core/ExpansionPanel";
+import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 const axios = require("axios");
 const _ = require("lodash");
 
 const styles = theme => ({
+  root: {
+    maxWidth:"100%",
+    // paddingLeft: theme.spacing(-4),
+    marginLeft: theme.spacing(-4),
+    marginRight: theme.spacing(-6),
+
+    // backgroundColor: "red"
+  },
   main: {
     flexGrow: 1,
-    height:'auto'
+    height: "auto"
   },
   margin: {
     margin: theme.spacing(1)
   },
   media: {
     height: 400,
-    width: 280
+    width: 280,
+    // [theme.breakpoints.down('xs')]: {
+    //   height: 150,
+    //   width: 140,
+    // },
+    [theme.breakpoints.down("sm")]: {
+      height: 210,
+      width: 120
+    }
   },
   card: {
-    minHeight: 400,
-    maxWidth: 620,
-    maxHeight: 800,
-    minWidth: 300,
-    margin: theme.spacing(1.5),
-    padding: theme.spacing(1),
-    backgroundColor: "white"
+    minHeight: 420,
+    maxWidth: 240,
+    maxHeight: 420,
+    minWidth: 240,
+    margin: theme.spacing(0.3),
+    padding: theme.spacing(0.6),
+    backgroundColor: "white",
+    [theme.breakpoints.down("sm")]: {
+      minHeight: 275,
+      maxWidth: 160,
+      maxHeight: 275,
+      minWidth: 160,
+      margin: theme.spacing(0.6),
+      // marginLeft:theme.spacing(-3),
+      marginBottom: theme.spacing(4)
+      // marginLeft:theme.spacing(-2),
+
+      // paddingLeft: theme.spacing(-3),
+
+      // padding: theme.spacing(1),
+    },
+    boxSizing: "border-box"
   },
+  // badge: {
+  //       paddingRight: theme.spacing(-19),
+  //   paddingTop: theme.spacing(-0.5),
+  // },
   mediaCard: {
     height: 320,
-    width: 200,
+    width: 220,
+    boxSizing: "border-box",
     objectFit: "scale-down",
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(-1),
-    marginTop: theme.spacing(-0.5),
+    // marginLeft: theme.spacing(1),
+    // marginRight: theme.spacing(-1),
+    // marginTop: theme.spacing(-0.5),
+    [theme.breakpoints.down("sm")]: {
+      height: 220,
+      width: 140
+    },
 
     borderColor: "#FFE600"
   },
@@ -112,6 +156,31 @@ const styles = theme => ({
     color: "white",
     sizeSmall: "100px"
   },
+  desc_produto: {
+    [theme.breakpoints.down("xs")]: {
+      fontSize: "0.9"
+    }
+  },
+  containerSmall: {
+    [theme.breakpoints.down("xs")]: {
+      paddingRight: theme.spacing(0),
+      paddingLeft: theme.spacing(0)
+    },
+    [theme.breakpoints.down("sm")]: {
+      paddingRight: theme.spacing(0),
+      paddingLeft: theme.spacing(0)
+    }
+  },
+  paddingRightSmall: {
+    [theme.breakpoints.down("xs")]: {
+      paddingRight: theme.spacing(1.5),
+      paddingLeft: theme.spacing(0)
+    },
+    [theme.breakpoints.down("sm")]: {
+      paddingRight: theme.spacing(1.5),
+      paddingLeft: theme.spacing(0)
+    }
+  }
 });
 
 class Insta extends React.Component {
@@ -128,7 +197,7 @@ class Insta extends React.Component {
       recoverySubmitted: false,
       recoveryShow: false,
       allProducts: [],
-      expanded: false
+      expanded: true
     };
   }
 
@@ -234,19 +303,43 @@ class Insta extends React.Component {
     return Object.entries(allProducts).map((produtos, index) => {
       return (
         <Grid item direction="row" justify="center">
-          <Grid item align="center">
-            <Typography variant="h5">{produtos[0]}</Typography>
-          </Grid>
-          <Divider variant="middle" className={classes.divider}></Divider>
-          {/* <DroppableWrapper
-            droppableId={produtos[0]}
-            direction="horizontal"
-            isCombineEnabled={true}
-          > */}
-            {this.state.expanded
-              ? this.renderProductsCardsView(produtos[1])
-              : this.renderProductsInstaView(produtos[1])}
-          {/* </DroppableWrapper> */}
+          {/* <div className={classes.root}> */}
+          <ExpansionPanel>
+            <ExpansionPanelSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <Grid
+                item
+                alignItems="center"
+                direction="row"
+                justify="flex-start"
+                container
+              >
+                <Typography variant="h5" component="p">
+                  {produtos[0]}
+                </Typography>
+
+                {/* <IconButton>
+                  <ArrowDropDownIcon></ArrowDropDownIcon>
+                </IconButton> */}
+              </Grid>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails className={classes.root}>
+              {/* <Divider variant="middle" className={classes.divider}></Divider> */}
+              {/* <DroppableWrapper
+droppableId={produtos[0]}
+direction="horizontal"
+isCombineEnabled={true}
+> */}
+              {this.state.expanded
+                ? this.renderProductsCardsView(produtos[1])
+                : this.renderProductsInstaView(produtos[1])}
+              {/* </DroppableWrapper> */}
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+          {/* </div> */}
         </Grid>
       );
     });
@@ -265,13 +358,19 @@ class Insta extends React.Component {
   renderProductsCardsView(data) {
     const { classes } = this.props;
     return (
-      <Grid container direction="row" justify="center" alignItems="center">
+      <Grid
+        container
+        direction="row"
+        justify="center"
+        alignItems="center"
+        spacing={0}
+      >
         {data.map((produtos, index) => {
           const {
             produto,
             desc_produto,
-            cor_produto,
-            qtde_programada,
+            // cor_produto,
+            qtde_programada
             // id_produto
           } = produtos;
           const color = this.chooseBalls(produtos);
@@ -289,52 +388,61 @@ class Insta extends React.Component {
                     {...provided.dragHandleProps}
                     ref={provided.innerRef}
                   > */}
-                    <Card className={classes.card}>
-                      <Typography gutterBottom variant="h6" component="h2">
-                        {produto}
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        color="textSecondary"
-                        component="p"
-                      >
-                        {desc_produto}
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        color="textSecondary"
-                        component="h3"
-                      >
-                        {cor_produto}
-                      </Typography>
-                      {/* <Typography variant="body2" color="textSecondary" component="p">{produtos.desc_cor_produto}</Typography> */}
-                      <Typography gutterBottom variant="h8" component="h2">
-                        {qtde_programada}
-                      </Typography>
-                      <Badge
-                        badgeContent={""}
-                        color={color}
-                        className={classes.badge}
-                      >
-                        <CardMedia
-                          className={classes.mediaCard}
-                          image={
-                            produtos.nome_arquivo[0]
-                              ? produtos.nome_arquivo[0]
-                              : "noPhoto"
-                          }
-                          title="Produto"
-                        />
-                      </Badge>
-                    </Card>
-                  {/* </div>
+              <div className={classes.card}>
+                <Typography variant="h6" component="p">
+                  {produto}
+                </Typography>
+                <Typography
+                  variant="p"
+                  color="textSecondary"
+                  component="p"
+                  className={classes.desc_produto}
+                >
+                  {desc_produto.length > 13
+                    ? `${desc_produto.substring(0, 13)}...`
+                    : desc_produto}
+                </Typography>
+                {/* <Typography
+                  variant="body2"
+                  color="textSecondary"
+                  component="h3"
+                >
+                  {cor_produto}
+                </Typography> */}
+                {/* <Typography variant="body2" color="textSecondary" component="p">{produtos.desc_cor_produto}</Typography> */}
+
+                <Badge
+                  badgeContent={""}
+                  color={color}
+                  className={classes.badge}
+                  // anchorOrigin="top"
+                >
+                  <CardMedia
+                    className={classes.mediaCard}
+                    image={
+                      produtos.nome_arquivo[0]
+                        ? produtos.nome_arquivo[0]
+                        : "noPhoto"
+                    }
+                    title="Produto"
+                  />
+                </Badge>
+                <Typography
+                  variant="h5"
+                  component="p"
+                  color="textSecondary"
+                  gutterBottom
+                >
+                  {qtde_programada}
+                </Typography>
+              </div>
+              {/* </div>
                 )}
               </Draggable> */}
             </Grid>
             // </Fragment>
           );
         })}
-        )
       </Grid>
     );
   }
@@ -356,13 +464,13 @@ class Insta extends React.Component {
             //       {...provided.dragHandleProps}
             //       ref={provided.innerRef}
             //     >
-                  <Card className={classes.margin}>
-                    <CardMedia
-                      className={classes.media}
-                      image={produto.nome_arquivo[0]}
-                      title="Produto"
-                    />
-                  </Card>
+            <Card className={classes.margin}>
+              <CardMedia
+                className={classes.media}
+                image={produto.nome_arquivo[0]}
+                title="Produto"
+              />
+            </Card>
             //     </div>
             //   )}
             // </Draggable>
@@ -390,33 +498,71 @@ class Insta extends React.Component {
             </IconButton>
           }
         />
+        {/* <FormControlLabel
+            control={
+              <Switch
+                color="primary"
+                checked={this.state.expanded}
+                onChange={() =>
+                  this.setState({ expanded: !this.state.expanded })
+                }
+              />
+            }
+            label="Detalhes"
+          /> */}
         {/* <DragDropContext onDragEnd={this.onDragEnd}> */}
-          <Container>
-            <FormControlLabel
-              control={
-                <Switch
-                  color="primary"
-                  checked={this.state.expanded}
-                  onChange={() =>
-                    this.setState({ expanded: !this.state.expanded })
-                  }
-                />
-              }
-              label="Detalhes"
-            />
+        <Container className={classes.containerSmall}>
+          <Grid
+            item
+            container
+            direction="row"
+            justify="space-between"
+            alignItems="flex-start"
+            sm={12}
+            xs={12}
+          >
+            <Grid
+              container
+              xs={6}
+              item
+              sm={6}
+              alignItems="center"
+              justify="flex-start"
+            >
+              <IconButton>
+                <FilterList></FilterList>
+              </IconButton>
+              <Typography component="p">Filtrar</Typography>
+            </Grid>
+            <Grid
+              container
+              xs={6}
+              item
+              sm={6}
+              alignItems="center"
+              justify="flex-end"
+              className={classes.paddingRightSmall}
+            >
+              <IconButton>
+                <Toc></Toc>
+              </IconButton>
+              <Typography component="p">Ordenar</Typography>
+            </Grid>
+          </Grid>
+          <Divider></Divider>
 
-            <div className={classes.margin}>
-              <Grid container direction="column" spacing={2}>
-                {this.renderProgramacoes()}
-              </Grid>
-            </div>
-          </Container>
+          <div className={classes.margin}>
+            <Grid container direction="column" spacing={2}>
+              {this.renderProgramacoes()}
+            </Grid>
+          </div>
+        </Container>
         {/* </DragDropContext> */}
 
         <Grid container justify="center">
-          <Fab aria-label={"Add"} className={classes.fab} color={"primary"}>
+          {/* <Fab aria-label={"Add"} className={classes.fab} color={"primary"}>
             <AddIcon />
-          </Fab>
+          </Fab> */}
         </Grid>
       </Fragment>
     );
