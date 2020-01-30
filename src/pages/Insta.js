@@ -41,6 +41,7 @@ import { IconButton } from "@material-ui/core";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import FilterDrawer from "../components/recursableComponents/FilterDrawer";
 const axios = require("axios");
 const _ = require("lodash");
 
@@ -329,10 +330,10 @@ class Insta extends React.Component {
             <ExpansionPanelDetails className={classes.root}>
               {/* <Divider variant="middle" className={classes.divider}></Divider> */}
               {/* <DroppableWrapper
-droppableId={produtos[0]}
-direction="horizontal"
-isCombineEnabled={true}
-> */}
+            droppableId={produtos[0]}
+            direction="horizontal"
+            isCombineEnabled={true}
+              > */}
               {this.state.expanded
                 ? this.renderProductsCardsView(produtos[1])
                 : this.renderProductsInstaView(produtos[1])}
@@ -480,6 +481,10 @@ isCombineEnabled={true}
     );
   }
 
+  openFilter = () => {
+    this.setState({ open: !this.state.open });
+  };
+
   render() {
     const { classes } = this.props;
     return (
@@ -498,6 +503,10 @@ isCombineEnabled={true}
             </IconButton>
           }
         />
+        <FilterDrawer  openMenu={this.openFilter}
+          open={this.state.open}>
+
+          </FilterDrawer>
         {/* <FormControlLabel
             control={
               <Switch
@@ -529,7 +538,7 @@ isCombineEnabled={true}
               alignItems="center"
               justify="flex-start"
             >
-              <IconButton>
+              <IconButton onClick={this.openFilter}>
                 <FilterList></FilterList>
               </IconButton>
               <Typography component="p">Filtrar</Typography>
