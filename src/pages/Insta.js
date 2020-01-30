@@ -4,13 +4,14 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import { withRouter } from "react-router-dom";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 import Header from "../components/recursableComponents/Header";
 // import DroppableWrapper from "../components/recursableComponents/DroppableWrapper";
 import Badge from "@material-ui/core/Badge";
 import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 
 import Typography from "@material-ui/core/Typography";
 
@@ -36,10 +37,22 @@ import ArrowBack from "@material-ui/icons/ArrowBack";
 import Toc from "@material-ui/icons/Toc";
 
 import { IconButton } from "@material-ui/core";
+
+import ExpansionPanel from "@material-ui/core/ExpansionPanel";
+import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 const axios = require("axios");
 const _ = require("lodash");
 
 const styles = theme => ({
+  root: {
+    maxWidth:"100%",
+    // paddingLeft: theme.spacing(-4),
+    marginLeft: theme.spacing(-4),
+    marginRight: theme.spacing(-6),
+
+    // backgroundColor: "red"
+  },
   main: {
     flexGrow: 1,
     height: "auto"
@@ -54,10 +67,10 @@ const styles = theme => ({
     //   height: 150,
     //   width: 140,
     // },
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down("sm")]: {
       height: 210,
-      width: 120,
-    },
+      width: 120
+    }
   },
   card: {
     minHeight: 420,
@@ -67,20 +80,21 @@ const styles = theme => ({
     margin: theme.spacing(0.3),
     padding: theme.spacing(0.6),
     backgroundColor: "white",
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down("sm")]: {
       minHeight: 275,
-      maxWidth: 170,
+      maxWidth: 160,
       maxHeight: 275,
-      minWidth: 170,
+      minWidth: 160,
       margin: theme.spacing(0.6),
-      marginBottom: theme.spacing(4),
+      // marginLeft:theme.spacing(-3),
+      marginBottom: theme.spacing(4)
+      // marginLeft:theme.spacing(-2),
 
-      padding: theme.spacing(0),
+      // paddingLeft: theme.spacing(-3),
 
       // padding: theme.spacing(1),
     },
-    boxSizing: 'border-box',
-
+    boxSizing: "border-box"
   },
   // badge: {
   //       paddingRight: theme.spacing(-19),
@@ -89,14 +103,14 @@ const styles = theme => ({
   mediaCard: {
     height: 320,
     width: 220,
-    boxSizing: 'border-box',
+    boxSizing: "border-box",
     objectFit: "scale-down",
     // marginLeft: theme.spacing(1),
     // marginRight: theme.spacing(-1),
     // marginTop: theme.spacing(-0.5),
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down("sm")]: {
       height: 220,
-      width: 165,
+      width: 140
     },
 
     borderColor: "#FFE600"
@@ -142,23 +156,31 @@ const styles = theme => ({
     color: "white",
     sizeSmall: "100px"
   },
-  desc_produto: { 
-      [theme.breakpoints.down('xs')]: {
-        fontSize: '0.9',
-      },
-    },
-    containerSmall: {
-      [theme.breakpoints.down('xs')]: {
-        paddingRight: theme.spacing(0),
-        paddingLeft:theme.spacing(0),
-      },
-    },
-    paddingRightSmall: {
-      [theme.breakpoints.down('xs')]: {
-        paddingRight: theme.spacing(1.5),
-        paddingLeft:theme.spacing(0),
-      },
+  desc_produto: {
+    [theme.breakpoints.down("xs")]: {
+      fontSize: "0.9"
     }
+  },
+  containerSmall: {
+    [theme.breakpoints.down("xs")]: {
+      paddingRight: theme.spacing(0),
+      paddingLeft: theme.spacing(0)
+    },
+    [theme.breakpoints.down("sm")]: {
+      paddingRight: theme.spacing(0),
+      paddingLeft: theme.spacing(0)
+    }
+  },
+  paddingRightSmall: {
+    [theme.breakpoints.down("xs")]: {
+      paddingRight: theme.spacing(1.5),
+      paddingLeft: theme.spacing(0)
+    },
+    [theme.breakpoints.down("sm")]: {
+      paddingRight: theme.spacing(1.5),
+      paddingLeft: theme.spacing(0)
+    }
+  }
 });
 
 class Insta extends React.Component {
@@ -276,28 +298,48 @@ class Insta extends React.Component {
 
   renderProgramacoes() {
     const { allProducts } = this.state;
-    // const { classes } = this.props;
+    const { classes } = this.props;
     // console.log(Object.entries(allProducts),'teste')
     return Object.entries(allProducts).map((produtos, index) => {
       return (
         <Grid item direction="row" justify="center">
-          <Grid item alignItems="center" direction="row" justify="flex-start" container >
-            <Typography variant="h5" component="p" >{produtos[0]}</Typography>
-            <IconButton>
-            <ArrowDropDownIcon></ArrowDropDownIcon>
+          {/* <div className={classes.root}> */}
+          <ExpansionPanel>
+            <ExpansionPanelSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <Grid
+                item
+                alignItems="center"
+                direction="row"
+                justify="flex-start"
+                container
+              >
+                <Typography variant="h5" component="p">
+                  {produtos[0]}
+                </Typography>
 
-            </IconButton>
-          </Grid>
-          {/* <Divider variant="middle" className={classes.divider}></Divider> */}
-          {/* <DroppableWrapper
-            droppableId={produtos[0]}
-            direction="horizontal"
-            isCombineEnabled={true}
-          > */}
-          {this.state.expanded
-            ? this.renderProductsCardsView(produtos[1])
-            : this.renderProductsInstaView(produtos[1])}
-          {/* </DroppableWrapper> */}
+                {/* <IconButton>
+                  <ArrowDropDownIcon></ArrowDropDownIcon>
+                </IconButton> */}
+              </Grid>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails className={classes.root}>
+              {/* <Divider variant="middle" className={classes.divider}></Divider> */}
+              {/* <DroppableWrapper
+droppableId={produtos[0]}
+direction="horizontal"
+isCombineEnabled={true}
+> */}
+              {this.state.expanded
+                ? this.renderProductsCardsView(produtos[1])
+                : this.renderProductsInstaView(produtos[1])}
+              {/* </DroppableWrapper> */}
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+          {/* </div> */}
         </Grid>
       );
     });
@@ -316,7 +358,13 @@ class Insta extends React.Component {
   renderProductsCardsView(data) {
     const { classes } = this.props;
     return (
-      <Grid container direction="row" justify="center" alignItems="center">
+      <Grid
+        container
+        direction="row"
+        justify="center"
+        alignItems="center"
+        spacing={0}
+      >
         {data.map((produtos, index) => {
           const {
             produto,
@@ -341,13 +389,18 @@ class Insta extends React.Component {
                     ref={provided.innerRef}
                   > */}
               <div className={classes.card}>
-                <Typography  variant="h6" component="p" >
+                <Typography variant="h6" component="p">
                   {produto}
                 </Typography>
-                <Typography variant="p" color="textSecondary" component="p" className={classes.desc_produto}>
-                {desc_produto.length > 15
-              ? `${desc_produto.substring(0, 15)}...`
-              : desc_produto}
+                <Typography
+                  variant="p"
+                  color="textSecondary"
+                  component="p"
+                  className={classes.desc_produto}
+                >
+                  {desc_produto.length > 13
+                    ? `${desc_produto.substring(0, 13)}...`
+                    : desc_produto}
                 </Typography>
                 {/* <Typography
                   variant="body2"
@@ -374,7 +427,12 @@ class Insta extends React.Component {
                     title="Produto"
                   />
                 </Badge>
-                <Typography variant="h5" component="p" color="textSecondary" gutterBottom>
+                <Typography
+                  variant="h5"
+                  component="p"
+                  color="textSecondary"
+                  gutterBottom
+                >
                   {qtde_programada}
                 </Typography>
               </div>
@@ -385,7 +443,6 @@ class Insta extends React.Component {
             // </Fragment>
           );
         })}
-        
       </Grid>
     );
   }
@@ -441,7 +498,7 @@ class Insta extends React.Component {
             </IconButton>
           }
         />
-                  {/* <FormControlLabel
+        {/* <FormControlLabel
             control={
               <Switch
                 color="primary"
@@ -455,47 +512,44 @@ class Insta extends React.Component {
           /> */}
         {/* <DragDropContext onDragEnd={this.onDragEnd}> */}
         <Container className={classes.containerSmall}>
+          <Grid
+            item
+            container
+            direction="row"
+            justify="space-between"
+            alignItems="flex-start"
+            sm={12}
+            xs={12}
+          >
             <Grid
-              item
               container
-              direction="row"
-              justify="space-between"
-              alignItems="flex-start"
-              sm={12}
-              xs={12}
+              xs={6}
+              item
+              sm={6}
+              alignItems="center"
+              justify="flex-start"
             >
-              <Grid
-                container
-                xs={6}
-                item
-                sm={6}
-                alignItems="center"
-                justify="flex-start"
-              >
-                <IconButton>
-                  <FilterList></FilterList>
-                </IconButton>
-                <Typography component="p">Filtrar</Typography>
-              </Grid>
-              <Grid
-                container
-                xs={6}
-                item
-                sm={6}
-                alignItems="center"
-                justify="flex-end"
-                className={classes.paddingRightSmall}
-              >
-                <IconButton>
-                  
-                  <Toc></Toc>
-                </IconButton>
-                <Typography component="p">Ordenar</Typography>
-              </Grid>
-
+              <IconButton>
+                <FilterList></FilterList>
+              </IconButton>
+              <Typography component="p">Filtrar</Typography>
             </Grid>
+            <Grid
+              container
+              xs={6}
+              item
+              sm={6}
+              alignItems="center"
+              justify="flex-end"
+              className={classes.paddingRightSmall}
+            >
+              <IconButton>
+                <Toc></Toc>
+              </IconButton>
+              <Typography component="p">Ordenar</Typography>
+            </Grid>
+          </Grid>
           <Divider></Divider>
-
 
           <div className={classes.margin}>
             <Grid container direction="column" spacing={2}>
