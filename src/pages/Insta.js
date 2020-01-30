@@ -10,21 +10,22 @@ import Header from "../components/recursableComponents/Header";
 import Badge from "@material-ui/core/Badge";
 import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 
 import Typography from "@material-ui/core/Typography";
 
-import Fab from "@material-ui/core/Fab";
+// import Fab from "@material-ui/core/Fab";
 
 import { signIn } from "../actions";
-import AddIcon from "@material-ui/icons/Add";
+// import AddIcon from "@material-ui/icons/Add";
 import FilterList from "@material-ui/icons/FilterList";
 
 import Divider from "@material-ui/core/Divider";
 
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Box from "@material-ui/core/Box";
+// import FormControlLabel from "@material-ui/core/FormControlLabel";
+// import Box from "@material-ui/core/Box";
 
-import Switch from "@material-ui/core/Switch";
+// import Switch from "@material-ui/core/Switch";
 import { withSnackbar } from "notistack";
 import { BASE_URL } from "../consts";
 import User from "../services/User";
@@ -48,24 +49,55 @@ const styles = theme => ({
   },
   media: {
     height: 400,
-    width: 280
+    width: 280,
+    // [theme.breakpoints.down('xs')]: {
+    //   height: 150,
+    //   width: 140,
+    // },
+    [theme.breakpoints.down('sm')]: {
+      height: 210,
+      width: 120,
+    },
   },
   card: {
-    minHeight: 400,
-    maxWidth: 620,
-    maxHeight: 800,
-    minWidth: 300,
-    margin: theme.spacing(1.5),
-    padding: theme.spacing(1),
-    backgroundColor: "white"
+    minHeight: 420,
+    maxWidth: 240,
+    maxHeight: 420,
+    minWidth: 240,
+    margin: theme.spacing(0.3),
+    padding: theme.spacing(0.6),
+    backgroundColor: "white",
+    [theme.breakpoints.down('sm')]: {
+      minHeight: 275,
+      maxWidth: 170,
+      maxHeight: 275,
+      minWidth: 170,
+      margin: theme.spacing(0.6),
+      marginBottom: theme.spacing(4),
+
+      padding: theme.spacing(0),
+
+      // padding: theme.spacing(1),
+    },
+    boxSizing: 'border-box',
+
   },
+  // badge: {
+  //       paddingRight: theme.spacing(-19),
+  //   paddingTop: theme.spacing(-0.5),
+  // },
   mediaCard: {
     height: 320,
-    width: 200,
+    width: 220,
+    boxSizing: 'border-box',
     objectFit: "scale-down",
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(-1),
-    marginTop: theme.spacing(-0.5),
+    // marginLeft: theme.spacing(1),
+    // marginRight: theme.spacing(-1),
+    // marginTop: theme.spacing(-0.5),
+    [theme.breakpoints.down('sm')]: {
+      height: 220,
+      width: 165,
+    },
 
     borderColor: "#FFE600"
   },
@@ -109,7 +141,24 @@ const styles = theme => ({
   whiteButton: {
     color: "white",
     sizeSmall: "100px"
-  }
+  },
+  desc_produto: { 
+      [theme.breakpoints.down('xs')]: {
+        fontSize: '0.9',
+      },
+    },
+    containerSmall: {
+      [theme.breakpoints.down('xs')]: {
+        paddingRight: theme.spacing(0),
+        paddingLeft:theme.spacing(0),
+      },
+    },
+    paddingRightSmall: {
+      [theme.breakpoints.down('xs')]: {
+        paddingRight: theme.spacing(1.5),
+        paddingLeft:theme.spacing(0),
+      },
+    }
 });
 
 class Insta extends React.Component {
@@ -126,7 +175,7 @@ class Insta extends React.Component {
       recoverySubmitted: false,
       recoveryShow: false,
       allProducts: [],
-      expanded: false
+      expanded: true
     };
   }
 
@@ -227,15 +276,19 @@ class Insta extends React.Component {
 
   renderProgramacoes() {
     const { allProducts } = this.state;
-    const { classes } = this.props;
+    // const { classes } = this.props;
     // console.log(Object.entries(allProducts),'teste')
     return Object.entries(allProducts).map((produtos, index) => {
       return (
         <Grid item direction="row" justify="center">
-          <Grid item align="center">
-            <Typography variant="h5">{produtos[0]}</Typography>
+          <Grid item alignItems="center" direction="row" justify="flex-start" container >
+            <Typography variant="h5" component="p" >{produtos[0]}</Typography>
+            <IconButton>
+            <ArrowDropDownIcon></ArrowDropDownIcon>
+
+            </IconButton>
           </Grid>
-          <Divider variant="middle" className={classes.divider}></Divider>
+          {/* <Divider variant="middle" className={classes.divider}></Divider> */}
           {/* <DroppableWrapper
             droppableId={produtos[0]}
             direction="horizontal"
@@ -268,7 +321,7 @@ class Insta extends React.Component {
           const {
             produto,
             desc_produto,
-            cor_produto,
+            // cor_produto,
             qtde_programada
             // id_produto
           } = produtos;
@@ -287,28 +340,29 @@ class Insta extends React.Component {
                     {...provided.dragHandleProps}
                     ref={provided.innerRef}
                   > */}
-              <Card className={classes.card}>
-                <Typography gutterBottom variant="h6" component="h2">
+              <div className={classes.card}>
+                <Typography  variant="h6" component="p" >
                   {produto}
                 </Typography>
-                <Typography variant="body2" color="textSecondary" component="p">
-                  {desc_produto}
+                <Typography variant="p" color="textSecondary" component="p" className={classes.desc_produto}>
+                {desc_produto.length > 15
+              ? `${desc_produto.substring(0, 15)}...`
+              : desc_produto}
                 </Typography>
-                <Typography
+                {/* <Typography
                   variant="body2"
                   color="textSecondary"
                   component="h3"
                 >
                   {cor_produto}
-                </Typography>
+                </Typography> */}
                 {/* <Typography variant="body2" color="textSecondary" component="p">{produtos.desc_cor_produto}</Typography> */}
-                <Typography gutterBottom variant="h8" component="h2">
-                  {qtde_programada}
-                </Typography>
+
                 <Badge
                   badgeContent={""}
                   color={color}
                   className={classes.badge}
+                  // anchorOrigin="top"
                 >
                   <CardMedia
                     className={classes.mediaCard}
@@ -320,7 +374,10 @@ class Insta extends React.Component {
                     title="Produto"
                   />
                 </Badge>
-              </Card>
+                <Typography variant="h5" component="p" color="textSecondary" gutterBottom>
+                  {qtde_programada}
+                </Typography>
+              </div>
               {/* </div>
                 )}
               </Draggable> */}
@@ -328,7 +385,7 @@ class Insta extends React.Component {
             // </Fragment>
           );
         })}
-        )
+        
       </Grid>
     );
   }
@@ -384,7 +441,7 @@ class Insta extends React.Component {
             </IconButton>
           }
         />
-                  <FormControlLabel
+                  {/* <FormControlLabel
             control={
               <Switch
                 color="primary"
@@ -395,16 +452,15 @@ class Insta extends React.Component {
               />
             }
             label="Detalhes"
-          />
+          /> */}
         {/* <DragDropContext onDragEnd={this.onDragEnd}> */}
-        <Container>
-          <Box clone pt={2} pr={1} pb={1} pl={2}>
+        <Container className={classes.containerSmall}>
             <Grid
               item
               container
               direction="row"
               justify="space-between"
-              alignItems="center"
+              alignItems="flex-start"
               sm={12}
               xs={12}
             >
@@ -428,6 +484,7 @@ class Insta extends React.Component {
                 sm={6}
                 alignItems="center"
                 justify="flex-end"
+                className={classes.paddingRightSmall}
               >
                 <IconButton>
                   
@@ -436,9 +493,7 @@ class Insta extends React.Component {
                 <Typography component="p">Ordenar</Typography>
               </Grid>
 
-              {/* </Grid> */}
             </Grid>
-          </Box>
           <Divider></Divider>
 
 
