@@ -5,7 +5,6 @@ import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import { withRouter } from "react-router-dom";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-
 import Header from "../components/recursableComponents/Header";
 // import DroppableWrapper from "../components/recursableComponents/DroppableWrapper";
 import Badge from "@material-ui/core/Badge";
@@ -42,6 +41,7 @@ import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import FilterDrawer from "../components/recursableComponents/FilterDrawer";
+import imagesFromProducts from "../imageUrl";
 const axios = require("axios");
 const _ = require("lodash");
 
@@ -375,6 +375,15 @@ class Insta extends React.Component {
             // id_produto
           } = produtos;
           const color = this.chooseBalls(produtos);
+          const image = imagesFromProducts(
+            140,
+            220,
+            produtos.produto,
+            produtos.cor_produto
+          )
+          console.log("fooooo", image)
+          produtos.image = image
+
           return (
             // <Fragment>
             <Grid item align="center">
@@ -421,9 +430,7 @@ class Insta extends React.Component {
                   <CardMedia
                     className={classes.mediaCard}
                     image={
-                      produtos.nome_arquivo[0]
-                        ? produtos.nome_arquivo[0]
-                        : "noPhoto"
+                      produtos.nome_arquivo[0] ? produtos.nome_arquivo[0] : "noPhoto"
                     }
                     title="Produto"
                   />
