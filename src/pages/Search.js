@@ -27,7 +27,8 @@ const styles = theme => ({
   },
   button: {
     margin: theme.spacing(1),
-    padding: theme.spacing(1.5)
+    padding: theme.spacing(1.5),
+    color:'white'
   },
   select: {
     width: 160,

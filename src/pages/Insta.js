@@ -41,6 +41,8 @@ import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import FilterDrawer from "../components/recursableComponents/FilterDrawer";
+import OrderDrawer from "../components/recursableComponents/OrderDrawer";
+
 import imagesFromProducts from "../imageUrl";
 const axios = require("axios");
 const _ = require("lodash");
@@ -512,6 +514,11 @@ class Insta extends React.Component {
     this.setState({ open: !this.state.open });
   };
 
+  openOrder = () => {
+    this.setState({ openOrderDrawer: !this.state.openOrderDrawer });
+  };
+
+
   render() {
     const { classes } = this.props;
     return (
@@ -534,6 +541,10 @@ class Insta extends React.Component {
           open={this.state.open}>
 
           </FilterDrawer>
+          <OrderDrawer  openMenu={this.openOrder}
+          open={this.state.openOrderDrawer}>
+
+          </OrderDrawer>
         {/* <FormControlLabel
             control={
               <Switch
@@ -579,9 +590,9 @@ class Insta extends React.Component {
               justify="flex-end"
               className={classes.paddingRightSmall}
             >
-              <IconButton>
+              <IconButton onClick={this.openOrder}> 
                 <Toc></Toc>
-              </IconButton>
+              </IconButton >
               <Typography component="p">Ordenar</Typography>
             </Grid>
           </Grid>

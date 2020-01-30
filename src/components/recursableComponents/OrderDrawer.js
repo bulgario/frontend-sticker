@@ -7,9 +7,9 @@ import { withRouter } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 
-import ExpansionPanel from "@material-ui/core/ExpansionPanel";
-import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
-import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+// import ExpansionPanel from "@material-ui/core/ExpansionPanel";
+// import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+// import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -18,6 +18,9 @@ import Button from '@material-ui/core/Button';
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import ExpandLessIcon from "@material-ui/icons/ExpandLess";
+import { IconButton } from "@material-ui/core";
+
 
 
 
@@ -29,10 +32,7 @@ const useStyles =  makeStyles(theme =>({
     width: "auto"
   },
   root: {
-    marginTop: theme.spacing(1),
-    maxWidth:240,
-    marginRight: theme.spacing(0.7),
-    marginLeft: theme.spacing(0.7),
+width:250
   },
   itemLabel: {
       width:300
@@ -41,16 +41,17 @@ const useStyles =  makeStyles(theme =>({
       margin: theme.spacing(1),
   },
   button: {
-    color:'white',
+      color:"white",
       marginTop: theme.spacing(2),
-      marginRight: theme.spacing(3),
-      marginLeft: theme.spacing(3),
-      marginBottom:theme.spacing(2)
+    //   marginRight: theme.spacing(5),
+    //   marginLeft: theme.spacing(5),
+      marginBottom:theme.spacing(2),
+      width: 100
 
   }
 }));
 
-function ResponsiveNavbar(props) {
+function OrderDrawer(props) {
   const classes = useStyles();
   const [state, setState] = React.useState({
     top: false,
@@ -60,27 +61,18 @@ function ResponsiveNavbar(props) {
   });
 
   const [checked, setChecked] = React.useState([1]);
+  const [orderAsc, setOrder] = React.useState([1]);
 
-  const handleToggle = value => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
-
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-
-    setChecked(newChecked);
-  };
-  const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
-  const filters = { 
-
-    "Categoria" : [{id:1,name:"Tecido liso"},{id:2,name:"Tecido estampa"},{id:3,name:"Seda"},{id:4,name:"Couro"}],
-    "Subcategoria" : [{id:1,name:"Tecido liso"},{id:2,name:"Tecido estampa"},{id:3,name:"Seda"},{id:4,name:"Couro"}],
-    "Estampa" : [{id:1,name:"Tecido liso"},{id:2,name:"Tecido estampa"},{id:3,name:"Seda"},{id:4,name:"Couro"}]
+  const changeOrder = () =>  {
+      setOrder(!orderAsc)
 
   }
+  const handleToggle = value => () => {
+
+    setChecked(value);
+  };
+  const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
+
   const toggleDrawer = (side, open) => event => {
     if (
       event &&
@@ -95,28 +87,11 @@ function ResponsiveNavbar(props) {
   };
 
   const renderFilterLists = () => { 
-      const filterParams = Object.keys(filters)
-      return filterParams.map(filterParam => {
-
-          return (        <ExpansionPanel className={classes.root}>
-            <ExpansionPanelSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-        <Typography
-          align="justify"
-          gutterBottom
-          variant="h6"
-          component="h5"
-        //   className={classes.login}
-        >
-          {filterParam}
-        </Typography>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
+          return (     
+ 
+     
         <List >
-      {filters[filterParam].map(item => {
+      {[{id:1,name:"Preço"},{id:2,name:"Data programada"},{id:3,name:"Data recebimento"}].map(item => {
         const labelId = `checkbox-list-secondary-label-${item.id}`;
         return (
             <Grid container item direction="row" justify="space-between" alignItems="flex-start">
@@ -128,7 +103,7 @@ function ResponsiveNavbar(props) {
               <Checkbox
                 edge="start"
                 onChange={handleToggle(item.id)}
-                checked={checked.indexOf(item.id) !== -1}
+                checked={checked===item.id}
                 inputProps={{ 'aria-labelledby': labelId }}
                 color="primary"
               />
@@ -139,16 +114,15 @@ function ResponsiveNavbar(props) {
 
         );
       })}
-    </List>
-    </ExpansionPanelDetails>
-    </ExpansionPanel>)
-      })
+    </List>)
+  
 
   }
   const renderUserInfo = () => {
     return (
       <Grid container direction="column" >
-        <Typography
+          <Grid container item direction="row" alignItems="center">
+          <Typography
         onPress={props.openMenu}
         //   align="start"
           gutterBottom
@@ -156,20 +130,27 @@ function ResponsiveNavbar(props) {
           component="h4"
           className={classes.mainLabel}
         >
-          Filtre por
+          Ordenação
         </Typography>
+        <IconButton onClick={changeOrder}>
+            {orderAsc?<ExpandLessIcon></ExpandLessIcon>:<ExpandMoreIcon></ExpandMoreIcon>}
+            </IconButton>
+          </Grid>
+
         <Divider></Divider>
 
             {renderFilterLists()}
-
-            <Button
+        <Grid container item direction="column"  alignItems="center">
+        <Button
             variant="contained"
             color="primary"
             className={classes.button}
             // onClick={props.openMenu}
           >
-            Filtrar
+            ORDENAR
           </Button>
+        </Grid>
+
 
       </Grid>
 
@@ -210,12 +191,13 @@ function ResponsiveNavbar(props) {
         open={props.open}
         onClose={props.openMenu}
         onOpen={toggleDrawer("left", true)}
-        className={props.open? classes.open: classes.close}
+        className={classes.root}
+        anchor="right"
       >
-        {sideList("left")}
+        {sideList("right")}
       </SwipeableDrawer>
     </div>
   );
 }
-export default withRouter(ResponsiveNavbar);
+export default withRouter(OrderDrawer);
 
