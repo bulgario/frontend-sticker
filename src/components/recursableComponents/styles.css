@@ -1,11 +1,14 @@
 .App {
     font-family: sans-serif;
     text-align: center;
+
   }
   
   .react-autosuggest__container {
     position: relative;
     display: inline-block;
+    flex-grow: 1;
+    height: auto;
     margin-top: -10px;
   }
   
