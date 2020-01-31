@@ -209,7 +209,7 @@ class Insta extends React.Component {
       recoverySubmitted: false,
       recoveryShow: false,
       allProducts: [],
-      expanded: true
+      expanded: true,
     };
   }
 
@@ -369,6 +369,10 @@ class Insta extends React.Component {
     }
   }
 
+  handleClickProduct(id) {
+    return this.props.history.push(`/produto?produto=${id}`);
+  }
+
   renderProductsCardsView(data) {
     const { classes } = this.props;
     return (
@@ -386,6 +390,7 @@ class Insta extends React.Component {
             cor_produto,
             qtde_programada,
             desc_cor_produto,
+            _id,
             // id_produto
           } = produtos;
           const color = this.chooseBalls(produtos);
@@ -411,7 +416,10 @@ class Insta extends React.Component {
                     {...provided.dragHandleProps}
                     ref={provided.innerRef}
                   > */}
-              <div className={classes.card}>
+              <div 
+                className={classes.card}
+                onClick={() => this.handleClickProduct(_id)}   
+              >
                 <Typography variant="h6" component="p">
                   {produto}
                 </Typography>
