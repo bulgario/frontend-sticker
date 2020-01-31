@@ -47,7 +47,7 @@ class Produto extends React.Component {
 
   async getProduct() {
     try {
-      const resp = await axios.get(`${BASE_URL}/products/selectedProduct`, {
+      const resp = await axios.get(`${BASE_URL}/products/getProduct`, {
         params: this.getAllParamsFromUrl()
       });
       const product = resp.data[0]
