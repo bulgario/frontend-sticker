@@ -395,8 +395,8 @@ class Insta extends React.Component {
           } = produtos;
           const color = this.chooseBalls(produtos);
           const image = imagesFromProducts(
-            140,
             220,
+            320,
             produtos.produto,
             produtos.cor_produto
           )
