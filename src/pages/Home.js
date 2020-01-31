@@ -101,16 +101,16 @@ class Home extends React.Component {
 
         <Header
           title="+Produtos"
-          rightIcon={
-            <IconButton
-              aria-label="upload picture"
-              component="span"
-              className={classes.whiteButton}
-              onClick={this.openMenu2}
-            >
-              <Search  />
-            </IconButton>
-          }
+          // rightIcon={
+          //   <IconButton
+          //     aria-label="upload picture"
+          //     component="span"
+          //     className={classes.whiteButton}
+          //     onClick={this.openMenu2}
+          //   >
+          //     <Search  />
+          //   </IconButton>
+          // }
           leftIcon={
             <IconButton
               onClick={this.openMenu}
