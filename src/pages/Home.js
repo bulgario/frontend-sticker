@@ -100,7 +100,7 @@ class Home extends React.Component {
           open={this.state.open2}></TopDrawer>
 
         <Header
-          title="Central de produto"
+          title="+Produtos"
           rightIcon={
             <IconButton
               aria-label="upload picture"
@@ -132,7 +132,7 @@ class Home extends React.Component {
           >
             <Grid item className={classes.gridItem}>
               <MenuCard
-                title="Programação"
+                title="Recebimento"
                 body="Acompanhe todo o fluxo de pedidos e faça análises"
                 redirectTo="/search"
               ></MenuCard>

@@ -23,6 +23,11 @@ const styles = theme => ({
     textAlign: 'center',
     color: theme.palette.text.secondary,
   },
+  whiteButton: {
+    color: "white",
+    sizeSmall: "100px"
+  }
+  
 });
 
 const axios = require("axios");

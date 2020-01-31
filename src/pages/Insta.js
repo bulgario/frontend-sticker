@@ -450,13 +450,20 @@ class Insta extends React.Component {
                   // className={color}
                   // anchorOrigin="top"
                 >
-                  <CardMedia
+                  {produtos.images?                  <CardMedia
                     className={classes.mediaCard}
                     image={
                       produtos.image ? produtos.image : "noPhoto"
                     }
                     title="Produto"
-                  />
+                  /> : 
+                  <CardMedia
+                  className={classes.mediaCard}
+                  image={'/no-picture.png'
+                  }
+                  title="Produto sem foto"
+                />}
+
                 </Badge>
                 <Typography
                   variant="h5"
