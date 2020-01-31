@@ -2,7 +2,7 @@ import React from "react";
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 import { withRouter } from "react-router-dom";
 
-import AutoComplete from "./SearchAutoComplete"
+// import AutoComplete from "./SearchAutoComplete"
 import { makeStyles } from "@material-ui/core/styles";
 
 
