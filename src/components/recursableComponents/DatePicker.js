@@ -59,7 +59,7 @@ const MaterialUIPickers = props =>  {
   const getCollection = async (selectedDateInicio,selectedDateFim) => {
     if(selectedDateInicio !== null && selectedDateFim !== null) {
       try {
-        const response = await axios.get(`${BASE_URL}collections/getCollectionBasedInData`, {
+        const response = await axios.get(`${BASE_URL}/collections/getCollectionBasedInData`, {
           params: getDatasForCollection(selectedDateInicio,selectedDateFim)
         }); 
         const collection = response.data

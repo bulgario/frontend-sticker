@@ -11,4 +11,4 @@ export const OMNI_URL =
 export const PLM_API_URL = "http://default.somalabs.com.br/api";
 
 // export const BASE_URL = "http://localhost:8000";
-export const BASE_URL = "https://sticker-album-backend-dot-apt-bonbon-179602.appspot.com/";
+export const BASE_URL = "https://sticker-album-backend-dot-apt-bonbon-179602.appspot.com";
