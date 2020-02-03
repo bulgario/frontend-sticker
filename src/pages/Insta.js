@@ -85,11 +85,12 @@ const styles = theme => ({
     backgroundColor: '#ff491b'
   },
   card: {
+    cursor:'pointer',
     minHeight: 450,
     maxWidth: 300,
     maxHeight: 500,
     minWidth: 300,
-    margin: theme.spacing(0.3),
+    margin: theme.spacing(0.6),
     padding: theme.spacing(0.6),
     backgroundColor: "white",
     [theme.breakpoints.down("sm")]: {
@@ -208,8 +209,12 @@ class Insta extends React.Component {
       recoveryError: false,
       recoverySubmitted: false,
       recoveryShow: false,
-      allProducts: [],
+      allProgramacoes: [],
       expanded: true,
+      filters: {},
+      categoriaFilter: [],
+      subcategoriaFilter: [],
+      estampaFilter: []
     };
   }
 
@@ -232,14 +237,49 @@ class Insta extends React.Component {
           { variant: "warning" }
         );
       }
-
-      this.setState({ allProducts: products });
+      this.setState({ allProgramacoes: products });
     } catch (err) {
       console.log(err);
       return this.props.enqueueSnackbar("Problemas no backend", {
         variant: "error"
       });
     }
+    this.mountFiltersOptions()
+  }
+
+  mountFiltersOptions() {
+    const {allProgramacoes} = this.state
+    const programacoes = Object.keys(allProgramacoes)
+    const categorias = []
+    const subcategorias = []
+    const estampas = []
+
+    programacoes.map(programacao => {
+      return allProgramacoes[programacao].map(produto => { 
+        if (!categorias.some(categoria => categoria.name === produto.categoria) && produto.categoria) {
+          categorias.push({name: produto.categoria, checked: true})
+
+        } 
+        if (!subcategorias.some(subcategoria => subcategoria.name === produto.subcategoria) && produto.subcategoria) {
+          subcategorias.push({name: produto.subcategoria,checked:true})
+
+        } 
+        if (!estampas.some(estampa => estampa.name === produto.estampa) && produto.estampa) {
+          estampas.push({name: produto.estampa,checked: true})
+
+        } 
+        return true
+
+      })
+    })
+
+    const filters = {
+      "Categoria" : categorias,
+      "Subcategoria" : subcategorias,
+      "Estampa" : estampas
+    } 
+    return    this.refreshFilter(filters)
+
   }
 
   getAllParamsFromUrl() {
@@ -279,8 +319,8 @@ class Insta extends React.Component {
     //   return
     // }
     // // console.log(result)
-    // // console.log(this.state.allProducts,'velha programacao')
-    // const produtosPerProgramation = this.state.allProducts[source.droppableId]
+    // // console.log(this.state.allProgramacoes,'velha programacao')
+    // const produtosPerProgramation = this.state.allProgramacoes[source.droppableId]
     // // console.log(produtosPerProgramation)
     // const newArray = Array.from(produtosPerProgramation)
     // // console.log(source.droppableId)
@@ -291,15 +331,15 @@ class Insta extends React.Component {
     // newArray.splice(destination.index,0,productToReplace)
     // // console.log(newArray,'novo array')
     // const newProgramation = {
-    //   ...this.state.allProducts,
+    //   ...this.state.allProgramacoes,
     //   [source.droppableId] : newArray
     // }
     // // console.log(newProgramation,' nova programacao')
     // const newState = {
     //   ...this.state,
-    //   allProducts: newProgramation
+    //   allProgramacoes: newProgramation
     //   //  {
-    //   //   ...this.state.allProducts,
+    //   //   ...this.state.allProgramacoes,
     //   //   [source.droppableId] : newArray
     //   // }
     // }
@@ -309,52 +349,64 @@ class Insta extends React.Component {
   };
 
   renderProgramacoes() {
-    const { allProducts } = this.state;
+    const { allProgramacoes } = this.state;
     const { classes } = this.props;
-    // console.log(Object.entries(allProducts),'teste')
-    return Object.entries(allProducts).map((produtos, index) => {
-      return (
-        <Grid item direction="row" justify="center">
-          {/* <div className={classes.root}> */}
-          <ExpansionPanel>
-            <ExpansionPanelSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Grid
-                item
-                alignItems="center"
-                direction="row"
-                justify="flex-start"
-                container
-              >
-                <Typography variant="h5" component="p">
-                  {produtos[0]}
-                </Typography>
+    // console.log(Object.entries(allProgramacoes),'teste')
+    const programacoes = Object.keys(allProgramacoes)
+    console.log(programacoes)
+    return programacoes.map(programacao => {
 
-                {/* <IconButton>
-                  <ArrowDropDownIcon></ArrowDropDownIcon>
-                </IconButton> */}
-              </Grid>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails className={classes.root}>
-              {/* <Divider variant="middle" className={classes.divider}></Divider> */}
-              {/* <DroppableWrapper
-            droppableId={produtos[0]}
-            direction="horizontal"
-            isCombineEnabled={true}
-              > */}
-              {this.state.expanded
-                ? this.renderProductsCardsView(produtos[1])
-                : this.renderProductsInstaView(produtos[1])}
-              {/* </DroppableWrapper> */}
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
-          {/* </div> */}
-        </Grid>
-      );
+          return (<Grid item direction="row" justify="center">
+            {/* <div className={classes.root}> */}
+            <ExpansionPanel>
+              <ExpansionPanelSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+              >
+                <Grid
+                  item
+                  alignItems="center"
+                  direction="row"
+                  justify="flex-start"
+                  container
+                >
+                  <Typography variant="h5" component="p">
+                    {programacao}
+                  </Typography>
+  
+                  {/* <IconButton>
+                    <ArrowDropDownIcon></ArrowDropDownIcon>
+                  </IconButton> */}
+                </Grid>
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails className={classes.root}>
+                {/* <Divider variant="middle" className={classes.divider}></Divider> */}
+                {/* <DroppableWrapper
+              droppableId={produtos[0]}
+              direction="horizontal"
+              isCombineEnabled={true}
+                > */}
+                {this.state.expanded
+                  ? this.renderProductsCardsView(this.filterProducts(allProgramacoes[programacao]))
+                  : this.renderProductsInstaView(allProgramacoes[programacao])}
+                {/* </DroppableWrapper> */}
+              </ExpansionPanelDetails>
+            </ExpansionPanel>
+            {/* </div> */}
+          </Grid>
+        )
+     
     });
+  }
+
+  filterProducts(produtos) {
+    const { categoriaFilter,subcategoriaFilter} = this.state
+    const produtosFiltrados =  produtos.filter(produto => { 
+      return (categoriaFilter.includes(produto.categoria) && subcategoriaFilter.includes(produto.subcategoria))
+    })
+    console.log(produtosFiltrados)
+    return produtosFiltrados
   }
 
   chooseBalls({ distribuicao, validBasedinSchedule }) {
@@ -527,6 +579,42 @@ class Insta extends React.Component {
     this.setState({ open: !this.state.open });
   };
 
+  refreshFilter = (filterObj) => {
+    this.setState({ filters: filterObj });
+    const filtros = Object.keys(filterObj)
+    const categorias = []
+    const subcategorias = []
+    const estampas = []
+    console.log(filterObj)
+    filtros.map(filtro => {
+      return filterObj[filtro].map(item => { 
+        if (filtro === "Categoria") {
+          if (item.checked) {
+            categorias.push(item.name)
+          }
+
+        } 
+        if (filtro === "Subcategoria") {
+          if (item.checked) {
+            subcategorias.push(item.name)
+          }
+
+        } 
+        if (filtro === "Estampa") {
+          if (item.checked) {
+            estampas.push(item.name)
+          }
+
+        } 
+        return true
+
+      })
+
+    })
+    this.setState({categoriaFilter: categorias,subcategoriaFilter: subcategorias,estampaFilter: estampas})
+
+  };
+
   openOrder = () => {
     this.setState({ openOrderDrawer: !this.state.openOrderDrawer });
   };
@@ -551,7 +639,10 @@ class Insta extends React.Component {
           }
         />
         <FilterDrawer  openMenu={this.openFilter}
-          open={this.state.open}>
+          open={this.state.open}
+          filters={this.state.filters}
+          refreshFilter={this.refreshFilter}
+          >
 
           </FilterDrawer>
           <OrderDrawer  openMenu={this.openOrder}

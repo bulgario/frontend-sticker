@@ -23,19 +23,20 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 const useStyles =  makeStyles(theme =>({
   list: {
-    width: 250
+    width: 280
   },
   fullList: {
     width: "auto"
   },
   root: {
     marginTop: theme.spacing(1),
-    maxWidth:240,
-    marginRight: theme.spacing(0.7),
-    marginLeft: theme.spacing(0.7),
+    maxWidth:270,
+    // marginRight: theme.spacing(0.7),
+    // marginLeft: theme.spacing(0.7),
   },
   itemLabel: {
-      width:300
+    width: 115,
+    marginRight: theme.spacing(3)
   },
   mainLabel: {
       margin: theme.spacing(1),
@@ -59,28 +60,17 @@ function ResponsiveNavbar(props) {
     right: false
   });
 
-  const [checked, setChecked] = React.useState([1]);
 
-  const handleToggle = value => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
 
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
 
-    setChecked(newChecked);
+  const handleToggle = (value,index,filterParam) => () => {
+    const newChecked = [...props.filters[filterParam]];
+      value.checked = !value.checked
+      newChecked.splice(index,value);
+
+    props.refreshFilter({...props.filters, [filterParam]:newChecked})
   };
   const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
-  const filters = { 
-
-    "Categoria" : [{id:1,name:"Tecido liso"},{id:2,name:"Tecido estampa"},{id:3,name:"Seda"},{id:4,name:"Couro"}],
-    "Subcategoria" : [{id:1,name:"Tecido liso"},{id:2,name:"Tecido estampa"},{id:3,name:"Seda"},{id:4,name:"Couro"}],
-    "Estampa" : [{id:1,name:"Tecido liso"},{id:2,name:"Tecido estampa"},{id:3,name:"Seda"},{id:4,name:"Couro"}]
-
-  }
   const toggleDrawer = (side, open) => event => {
     if (
       event &&
@@ -95,7 +85,7 @@ function ResponsiveNavbar(props) {
   };
 
   const renderFilterLists = () => { 
-      const filterParams = Object.keys(filters)
+      const filterParams = Object.keys(props.filters)
       return filterParams.map(filterParam => {
 
           return (        <ExpansionPanel className={classes.root}>
@@ -116,19 +106,19 @@ function ResponsiveNavbar(props) {
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
         <List >
-      {filters[filterParam].map(item => {
-        const labelId = `checkbox-list-secondary-label-${item.id}`;
+      {props.filters[filterParam].map((item,index) => {
+        const labelId = `checkbox-list-secondary-label-${item}`;
         return (
-            <Grid container item direction="row" justify="space-between" alignItems="flex-start">
+            <Grid container item direction="row" justify="space-between">
 
-          <ListItem key={item.id} button onClick={handleToggle(item.id)}>
+          <ListItem key={item.name} button onClick={handleToggle(item,index,filterParam)}>
           {/* <Grid container item direction="row" justify="space-between" alignItems="flex-start"  > */}
             <ListItemText id={labelId} secondary={item.name} className={classes.itemLabel} />
             <ListItem >
               <Checkbox
                 edge="start"
-                onChange={handleToggle(item.id)}
-                checked={checked.indexOf(item.id) !== -1}
+                // onChange={handleToggle(item,index,filterParam)}
+                checked={item.checked}
                 inputProps={{ 'aria-labelledby': labelId }}
                 color="primary"
               />
@@ -149,7 +139,7 @@ function ResponsiveNavbar(props) {
     return (
       <Grid container direction="column" >
         <Typography
-        onPress={props.openMenu}
+        // onPress={props.openMenu}
         //   align="start"
           gutterBottom
           variant="h5"

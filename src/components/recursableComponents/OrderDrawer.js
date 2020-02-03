@@ -46,7 +46,7 @@ width:250
     //   marginRight: theme.spacing(5),
     //   marginLeft: theme.spacing(5),
       marginBottom:theme.spacing(2),
-      width: 100
+      width: 200,
 
   }
 }));
@@ -68,8 +68,10 @@ function OrderDrawer(props) {
 
   }
   const handleToggle = value => () => {
-
-    setChecked(value);
+    if (value === checked) {
+      return setChecked(null)
+    }
+    return setChecked(value);
   };
   const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
 
@@ -103,7 +105,7 @@ function OrderDrawer(props) {
               <Checkbox
                 edge="start"
                 onChange={handleToggle(item.id)}
-                checked={checked===item.id}
+                checked={checked === item.id}
                 inputProps={{ 'aria-labelledby': labelId }}
                 color="primary"
               />
