@@ -93,9 +93,6 @@ const MaterialUIPickers = props =>  {
   const { classes } = props;
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
-      <Grid container direction="row" justify="center" alignItems="center">
-      <Typography variant="h5" component="h4">Data de Programação</Typography>
-      </Grid>
       <Grid container justify="space-around">
       <div className={classes.title}>
       <Grid  className={classes.labelWrapper} container item justify="flex-start" direction="row" alignItems="center">
@@ -144,9 +141,6 @@ const MaterialUIPickers = props =>  {
       </Grid>
       </div>
       <Grid container justify="space-around">
-      <Grid container direction="row" justify="center" alignItems="center">
-      <Typography variant="h5" component="h4">Limite de Recebimento</Typography>
-      </Grid>
         <KeyboardDatePicker
           disableToolbar  
           variant="inline"

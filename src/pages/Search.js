@@ -7,7 +7,6 @@ import { withStyles } from "@material-ui/core/styles";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import { withRouter } from "react-router-dom";
-import { Typography } from '@material-ui/core';
 
 import InputLabel from "@material-ui/core/InputLabel";
 

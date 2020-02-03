@@ -24,3 +24,19 @@ pipelines:
                 PROJECT: 'apt-bonbon-179602'
                 BUCKET: 'maisprodutos.somalabs.com.br'
                 SOURCE: '-r ./build/**'
+    develop:
+      - step:
+          name: 'Install and build'
+          services:
+            - docker
+          script:
+            # Modify the commands below to build your repository.
+            # Set $DOCKER_HUB_USERNAME and $DOCKER_HUB_PASSWORD as environment variables in repository settings
+            - yarn install
+            - yarn build
+            - pipe: atlassian/google-cloud-storage-deploy:0.3.6
+              variables:
+                KEY_FILE: $GCLOUD_API_KEYFILE
+                PROJECT: 'apt-bonbon-179602'
+                BUCKET: 'album-figurinhas.somalabs.com.br'
+                SOURCE: '-r ./build/**'
