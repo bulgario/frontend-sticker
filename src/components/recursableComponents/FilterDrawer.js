@@ -95,7 +95,7 @@ function ResponsiveNavbar(props) {
   };
 
   const renderFilterLists = () => { 
-      const filterParams = Object.keys(filters)
+      const filterParams = Object.keys(props.filters)
       return filterParams.map(filterParam => {
 
           return (        <ExpansionPanel className={classes.root}>
@@ -116,19 +116,19 @@ function ResponsiveNavbar(props) {
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
         <List >
-      {filters[filterParam].map(item => {
-        const labelId = `checkbox-list-secondary-label-${item.id}`;
+      {props.filters[filterParam].map(item => {
+        const labelId = `checkbox-list-secondary-label-${item}`;
         return (
             <Grid container item direction="row" justify="space-between" alignItems="flex-start">
 
-          <ListItem key={item.id} button onClick={handleToggle(item.id)}>
+          <ListItem key={item} button onClick={handleToggle(item)}>
           {/* <Grid container item direction="row" justify="space-between" alignItems="flex-start"  > */}
-            <ListItemText id={labelId} secondary={item.name} className={classes.itemLabel} />
+            <ListItemText id={labelId} secondary={item} className={classes.itemLabel} />
             <ListItem >
               <Checkbox
                 edge="start"
-                onChange={handleToggle(item.id)}
-                checked={checked.indexOf(item.id) !== -1}
+                onChange={handleToggle(item)}
+                checked={checked.indexOf(item) !== -1}
                 inputProps={{ 'aria-labelledby': labelId }}
                 color="primary"
               />

@@ -85,11 +85,12 @@ const styles = theme => ({
     backgroundColor: '#ff491b'
   },
   card: {
+    cursor:'pointer',
     minHeight: 450,
     maxWidth: 300,
     maxHeight: 500,
     minWidth: 300,
-    margin: theme.spacing(0.3),
+    margin: theme.spacing(0.6),
     padding: theme.spacing(0.6),
     backgroundColor: "white",
     [theme.breakpoints.down("sm")]: {
@@ -208,7 +209,7 @@ class Insta extends React.Component {
       recoveryError: false,
       recoverySubmitted: false,
       recoveryShow: false,
-      allProducts: [],
+      allProgramacoes: [],
       expanded: true,
     };
   }
@@ -232,14 +233,49 @@ class Insta extends React.Component {
           { variant: "warning" }
         );
       }
-
-      this.setState({ allProducts: products });
+      this.setState({ allProgramacoes: products });
     } catch (err) {
       console.log(err);
       return this.props.enqueueSnackbar("Problemas no backend", {
         variant: "error"
       });
     }
+  }
+
+  mountFiltersOptions() {
+    const {allProgramacoes} = this.state
+    const programacoes = Object.keys(allProgramacoes)
+    const categorias = []
+    const subcategorias = []
+    const estampas = []
+
+    programacoes.map(programacao => {
+      return allProgramacoes[programacao].map(produto => { 
+        if (!categorias.includes(produto.categoria) && produto.categoria) {
+          categorias.push(produto.categoria)
+
+        } 
+        if (!subcategorias.includes(produto.subcategoria) && produto.subcategoria) {
+          subcategorias.push(produto.subcategoria)
+
+        } 
+        if (!estampas.includes(produto.estampa) && produto.estampa) {
+          estampas.push(produto.estampa)
+
+        } 
+        return true
+
+      })
+    })
+
+    const filters = {
+      "Categoria" : categorias,
+      "Subcategoria" : subcategorias,
+      "Estampa" : estampas
+    } 
+
+    return filters
+
   }
 
   getAllParamsFromUrl() {
@@ -279,8 +315,8 @@ class Insta extends React.Component {
     //   return
     // }
     // // console.log(result)
-    // // console.log(this.state.allProducts,'velha programacao')
-    // const produtosPerProgramation = this.state.allProducts[source.droppableId]
+    // // console.log(this.state.allProgramacoes,'velha programacao')
+    // const produtosPerProgramation = this.state.allProgramacoes[source.droppableId]
     // // console.log(produtosPerProgramation)
     // const newArray = Array.from(produtosPerProgramation)
     // // console.log(source.droppableId)
@@ -291,15 +327,15 @@ class Insta extends React.Component {
     // newArray.splice(destination.index,0,productToReplace)
     // // console.log(newArray,'novo array')
     // const newProgramation = {
-    //   ...this.state.allProducts,
+    //   ...this.state.allProgramacoes,
     //   [source.droppableId] : newArray
     // }
     // // console.log(newProgramation,' nova programacao')
     // const newState = {
     //   ...this.state,
-    //   allProducts: newProgramation
+    //   allProgramacoes: newProgramation
     //   //  {
-    //   //   ...this.state.allProducts,
+    //   //   ...this.state.allProgramacoes,
     //   //   [source.droppableId] : newArray
     //   // }
     // }
@@ -309,10 +345,10 @@ class Insta extends React.Component {
   };
 
   renderProgramacoes() {
-    const { allProducts } = this.state;
+    const { allProgramacoes } = this.state;
     const { classes } = this.props;
-    // console.log(Object.entries(allProducts),'teste')
-    return Object.entries(allProducts).map((produtos, index) => {
+    // console.log(Object.entries(allProgramacoes),'teste')
+    return Object.entries(allProgramacoes).map((produtos, index) => {
       return (
         <Grid item direction="row" justify="center">
           {/* <div className={classes.root}> */}
@@ -551,7 +587,9 @@ class Insta extends React.Component {
           }
         />
         <FilterDrawer  openMenu={this.openFilter}
-          open={this.state.open}>
+          open={this.state.open}
+          filters={this.mountFiltersOptions()}
+          >
 
           </FilterDrawer>
           <OrderDrawer  openMenu={this.openOrder}
