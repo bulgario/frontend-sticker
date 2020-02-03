@@ -23,19 +23,19 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 const useStyles =  makeStyles(theme =>({
   list: {
-    width: 250
+    width: 280
   },
   fullList: {
     width: "auto"
   },
   root: {
     marginTop: theme.spacing(1),
-    maxWidth:240,
-    marginRight: theme.spacing(0.7),
-    marginLeft: theme.spacing(0.7),
+    maxWidth:270,
+    // marginRight: theme.spacing(0.7),
+    // marginLeft: theme.spacing(0.7),
   },
   itemLabel: {
-      width:300
+      width:200,
   },
   mainLabel: {
       margin: theme.spacing(1),
