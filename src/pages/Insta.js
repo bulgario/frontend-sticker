@@ -211,6 +211,7 @@ class Insta extends React.Component {
       recoveryShow: false,
       allProgramacoes: [],
       expanded: true,
+      filters: {}
     };
   }
 
@@ -240,6 +241,7 @@ class Insta extends React.Component {
         variant: "error"
       });
     }
+    this.mountFiltersOptions()
   }
 
   mountFiltersOptions() {
@@ -251,16 +253,16 @@ class Insta extends React.Component {
 
     programacoes.map(programacao => {
       return allProgramacoes[programacao].map(produto => { 
-        if (!categorias.includes(produto.categoria) && produto.categoria) {
-          categorias.push(produto.categoria)
+        if (!categorias.some(categoria => categoria.name === produto.categoria) && produto.categoria) {
+          categorias.push({name: produto.categoria, checked: true})
 
         } 
-        if (!subcategorias.includes(produto.subcategoria) && produto.subcategoria) {
-          subcategorias.push(produto.subcategoria)
+        if (!subcategorias.some(subcategoria => subcategoria.name === produto.subcategoria) && produto.subcategoria) {
+          subcategorias.push({name: produto.subcategoria,checked:true})
 
         } 
-        if (!estampas.includes(produto.estampa) && produto.estampa) {
-          estampas.push(produto.estampa)
+        if (!estampas.some(estampa => estampa.name === produto.estampa) && produto.estampa) {
+          estampas.push({name: produto.estampa,checked: true})
 
         } 
         return true
@@ -273,8 +275,7 @@ class Insta extends React.Component {
       "Subcategoria" : subcategorias,
       "Estampa" : estampas
     } 
-
-    return filters
+    return    this.refreshFilter(filters)
 
   }
 
@@ -563,6 +564,10 @@ class Insta extends React.Component {
     this.setState({ open: !this.state.open });
   };
 
+  refreshFilter = (filterObj) => {
+    this.setState({ filters: filterObj });
+  };
+
   openOrder = () => {
     this.setState({ openOrderDrawer: !this.state.openOrderDrawer });
   };
@@ -588,7 +593,8 @@ class Insta extends React.Component {
         />
         <FilterDrawer  openMenu={this.openFilter}
           open={this.state.open}
-          filters={this.mountFiltersOptions()}
+          filters={this.state.filters}
+          refreshFilter={this.refreshFilter}
           >
 
           </FilterDrawer>

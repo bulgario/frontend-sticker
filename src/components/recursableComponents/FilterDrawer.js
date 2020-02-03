@@ -59,28 +59,17 @@ function ResponsiveNavbar(props) {
     right: false
   });
 
-  const [checked, setChecked] = React.useState([1]);
 
-  const handleToggle = value => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
 
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
 
-    setChecked(newChecked);
+  const handleToggle = (value,index,filterParam) => () => {
+    const newChecked = [...props.filters[filterParam]];
+      value.checked = !value.checked
+      newChecked.splice(index,value);
+
+    props.refreshFilter({...props.filters, [filterParam]:newChecked})
   };
   const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
-  const filters = { 
-
-    "Categoria" : [{id:1,name:"Tecido liso"},{id:2,name:"Tecido estampa"},{id:3,name:"Seda"},{id:4,name:"Couro"}],
-    "Subcategoria" : [{id:1,name:"Tecido liso"},{id:2,name:"Tecido estampa"},{id:3,name:"Seda"},{id:4,name:"Couro"}],
-    "Estampa" : [{id:1,name:"Tecido liso"},{id:2,name:"Tecido estampa"},{id:3,name:"Seda"},{id:4,name:"Couro"}]
-
-  }
   const toggleDrawer = (side, open) => event => {
     if (
       event &&
@@ -116,19 +105,19 @@ function ResponsiveNavbar(props) {
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
         <List >
-      {props.filters[filterParam].map(item => {
+      {props.filters[filterParam].map((item,index) => {
         const labelId = `checkbox-list-secondary-label-${item}`;
         return (
             <Grid container item direction="row" justify="space-between" alignItems="flex-start">
 
-          <ListItem key={item} button onClick={handleToggle(item)}>
+          <ListItem key={item.name} button onClick={handleToggle(item,index,filterParam)}>
           {/* <Grid container item direction="row" justify="space-between" alignItems="flex-start"  > */}
-            <ListItemText id={labelId} secondary={item} className={classes.itemLabel} />
+            <ListItemText id={labelId} secondary={item.name} className={classes.itemLabel} />
             <ListItem >
               <Checkbox
                 edge="start"
-                onChange={handleToggle(item)}
-                checked={checked.indexOf(item) !== -1}
+                // onChange={handleToggle(item,index,filterParam)}
+                checked={item.checked}
                 inputProps={{ 'aria-labelledby': labelId }}
                 color="primary"
               />
@@ -149,7 +138,7 @@ function ResponsiveNavbar(props) {
     return (
       <Grid container direction="column" >
         <Typography
-        onPress={props.openMenu}
+        // onPress={props.openMenu}
         //   align="start"
           gutterBottom
           variant="h5"
