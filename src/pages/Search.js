@@ -13,6 +13,8 @@ import InputLabel from "@material-ui/core/InputLabel";
 
 import { withSnackbar } from "notistack";
 import { BASE_URL } from "../consts";
+import ArrowBack from "@material-ui/icons/ArrowBack";
+import { IconButton } from "@material-ui/core";
 
 const axios = require("axios");
 
@@ -24,17 +26,18 @@ const styles = theme => ({
     position: "relative"
   },
   button: {
-    margin: theme.spacing(2),
+    margin: theme.spacing(1),
     padding: theme.spacing(1.5),
-    boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+    color:'white'
   },
   select: {
     width: 160,
     marginLeft: theme.spacing(0.6),
     marginRight: theme.spacing(0.6)
   },
-  title: {
-     margin: theme.spacing(2),
+  whiteButton: {
+    color: "white",
+    sizeSmall: "100px"
   }
 });
 class Search extends React.Component {
@@ -125,7 +128,7 @@ class Search extends React.Component {
           this.state.data_inicio
         ).toISOString()}&dataFim=${new Date(
           this.state.data_fim
-        ).toISOString()}&dataUltimoAgendamento=${new Date(
+        ).toISOString()}&entregaAjustada=${new Date(
           this.state.data_ultimo
         ).toISOString()}&categoria=${this.state.choosedCategory}&subcategoria=${
           this.state.choosedSubCategory
@@ -153,9 +156,6 @@ class Search extends React.Component {
       return (
         <Grid container justify="center">
           <div>
-          <Grid container direction="row" justify="center" alignItems="center">
-            <Typography className={classes.title} variant="h5" component="h4">Colecao</Typography>
-          </Grid>
             <InputLabel id="label-subcategory">Colecao</InputLabel>
             <Select
               labelId="label-subcategory"
@@ -196,13 +196,22 @@ class Search extends React.Component {
     return null;
   }
   render(props) {
+    const { classes } = this.props
     return (
       <Fragment>
         <Grid>
-          <Header insta={true} 
-                  id_marca={this.state.id_marca_user}
-                  marca={this.state.marca_user} 
-          />
+        <Header
+          title="Programação"
+          rightIcon={null}
+          leftIcon={
+            <IconButton               aria-label="upload picture"
+            component="span"
+            className={classes.whiteButton}
+            onClick={() => this.props.history.goBack()}>
+              <ArrowBack></ArrowBack>
+            </IconButton>
+          }
+        />
         </Grid>
         <Grid container justify="center">
           <DatePicker 

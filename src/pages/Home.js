@@ -1,121 +1,154 @@
-import React, { Fragment } from 'react'
+import React, { Fragment } from "react";
 
-
-import Grid from '@material-ui/core/Grid'
-import withStyles from '@material-ui/core/styles/withStyles'
-import { Redirect } from 'react-router-dom'
+import Grid from "@material-ui/core/Grid";
+import withStyles from "@material-ui/core/styles/withStyles";
+import { Redirect } from "react-router-dom";
 import User from "../services/User";
 import Header from "../components/recursableComponents/Header";
 import Container from "@material-ui/core/Container";
-import Navbar from "../components/recursableComponents/Navbar";
+import ResponsiveNavbar from "../components/recursableComponents/ResponsiveNavbar";
+
 import MenuCard from "../components/recursableComponents/MenuCard";
+import TopDrawer from "../components/recursableComponents/TopDrawer"
 
-
-
-
-
-
-
+import IconButton from "@material-ui/core/IconButton";
+import Menu from "@material-ui/icons/Menu";
+// import Search from "@material-ui/icons/Search";
 
 const styles = theme => ({
-    
-    container: {
-
-    },
+  container: {},
   root: {
     flexGrow: 1,
-    height: 'auto',
+    height: "auto",
     paddingTop: theme.spacing(3),
-    paddingBottom: theme.spacing(3),
+    paddingBottom: theme.spacing(3)
   },
   grid: {
-    marginTop: theme.spacing(2),
+    marginTop: theme.spacing(2)
   },
   loadingCircle: {
     padding: theme.spacing(3),
-    textAlign: 'center',
+    textAlign: "center"
   },
   main: {
-    marginTop: theme.spacing(6),
+    marginTop: theme.spacing(6)
   },
   button: {
-    margin: theme.spacing(2),
+    margin: theme.spacing(2)
   },
   pointer: {
-    cursor: 'pointer',
+    cursor: "pointer"
   },
   logo: {
     width: 180,
-    margin: theme.spacing(2),
-  },
-  margin:{
     margin: theme.spacing(2)
+  },
+  margin: {
+    margin: theme.spacing(2)
+  },
+  gridItem: {
+    maxWidth: 500
+  },
+  whiteButton: {
+    color: "white",
+    sizeSmall: "100px"
   }
 });
 
-class Menu extends React.Component {
+class Home extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      username: '',
-      password: '',
+      username: "",
+      password: "",
       showPassword: false,
       usernameError: false,
       passwordError: false,
       recoveryError: false,
       recoverySubmitted: false,
       recoveryShow: false,
-      open:false
-
-    }
+      open: false,
+      open2: false,
+      renderAutoComplete: false
+    };
   }
 
-  openMenu=() =>   {
-      console.log('fui chamado')
-      this.setState({open: !this.state.open})
-      console.log(this.state.open)
-  }
+  openMenu = () => {
+    this.setState({ open: !this.state.open });
+  };
+
+  openMenu2 = () => {
+    this.setState({ open2: !this.state.open2 });
+  };
 
   render() {
     const { classes } = this.props;
-    const user = new User()
+    const user = new User();
 
     if (!user.getUser()) {
-      return (
-        <Redirect from={'/home'} to={'/login'} />
-      );
+      return <Redirect from={"/home"} to={"/login"} />;
     }
 
     return (
-        <Fragment>
-            		<Navbar  openMenu={this.openMenu} open={this.state.open}></Navbar>
+      <Fragment>
+        <ResponsiveNavbar
+          openMenu={this.openMenu}
+          open={this.state.open}
+        ></ResponsiveNavbar>
+        <TopDrawer      
+          openMenu={this.openMenu2}
+          open={this.state.open2}></TopDrawer>
 
-
-        <Header insta={false} 
-        openMenu={this.openMenu}
-        id_marca={this.state.id_marca_user}
-        marca={this.state.marca_user} 
+        <Header
+          title="+Produtos"
+          // rightIcon={
+          //   <IconButton
+          //     aria-label="upload picture"
+          //     component="span"
+          //     className={classes.whiteButton}
+          //     onClick={this.openMenu2}
+          //   >
+          //     <Search  />
+          //   </IconButton>
+          // }
+          leftIcon={
+            <IconButton
+              onClick={this.openMenu}
+              aria-label="upload picture"
+              component="span"
+              className={classes.whiteButton}
+            >
+              <Menu />
+            </IconButton>
+          }
         />
-      <Container className={classes.root}>
-            <Grid container justify="center" direction="column" alignItems="center" spacing={4} >
-                <Grid item>
-                <MenuCard title="Programação" body="Acompanhe todo o fluxo de pedidos e faça análises" redirectTo="/search"></MenuCard>
-
-                </Grid>
-                <Grid item>
-                <MenuCard title="Venda" body="Confira em tempo real os números de pedidos e vendas"></MenuCard>
-
-                </Grid>
-
-
+        <Container className={classes.root}>
+          <Grid
+            container
+            justify="center"
+            direction="column"
+            alignItems="center"
+            spacing={4}
+          >
+            <Grid item className={classes.gridItem}>
+              <MenuCard
+                title="Recebimento"
+                body="Acompanhe todo o fluxo de pedidos e faça análises"
+                redirectTo="/search"
+              ></MenuCard>
             </Grid>
-      </Container>
+            <Grid item className={classes.gridItem}>
+              <MenuCard
+                title="Venda"
+                body="Confira em tempo real os números de pedidos e vendas"
+              ></MenuCard>
+            </Grid>
+          </Grid>
+        </Container>
       </Fragment>
-
     );
   }
 }
-const wrappedComponent = withStyles(styles)(Menu)
+const wrappedComponent = withStyles(styles)(Home);
 
-
-export default (wrappedComponent)
+export default wrappedComponent;

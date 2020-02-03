@@ -15,12 +15,12 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import Paper from '@material-ui/core/Paper';
-import Divider from '@material-ui/core/Divider';
+import Container from '@material-ui/core/Container';
 
 
 import { signIn } from '../actions'
 import User from "../services/User";
+// import { Container } from '@material-ui/core'
 
 
 const USER_EMPTY = 'Usuário não preenchido!'
@@ -40,20 +40,33 @@ const styles = theme => ({
     textAlign: 'center',
   },
   main: {
-    marginTop: theme.spacing(6),
+    marginTop: theme.spacing(1),
   },
   button: {
-    margin: theme.spacing(2),
+    marginBottom: theme.spacing(2),
+    color:"white"
   },
-  pointer: {
-    cursor: 'pointer',
+  forgotPasswordText: {
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(11)
   },
   logo: {
-    width: 180,
+    width: 210,
+    height: 55,
     margin: theme.spacing(2),
   },
   margin:{
-    margin: theme.spacing(2)
+    marginTop: theme.spacing(2.5),
+  },
+  leftBarLabel: { 
+    backgroundColor: "#FCB92C",
+    width:5,
+    height:'100%',
+    marginRight:theme.spacing(4)
+  },
+  labelWrapper: { 
+    marginLeft: theme.spacing(-8),
+    marginBottom: theme.spacing(3)
   }
 });
 
@@ -180,7 +193,7 @@ class Login extends React.Component {
     return (
       <Fragment>
         {this.getErrorMessage()}
-        <Grid item xs={10}>
+        <Grid item xs={12}>
           <TextField
             id={'username'}
             error={!!usernameError}
@@ -194,7 +207,7 @@ class Login extends React.Component {
             helperText={usernameError}
           />
         </Grid>
-        <Grid item xs={10}>
+        <Grid item xs={12}>
           <TextField
             id={'password'}
             error={!!passwordError}
@@ -223,6 +236,10 @@ class Login extends React.Component {
           />
         </Grid>
         <Grid item xs={8}>
+
+        <Typography align="center" component="p" variant="p" className={classes.forgotPasswordText}>
+              Esqueceu seu login ou senha?
+            </Typography>
           <Button
             id="submit"
             variant="contained"
@@ -231,20 +248,16 @@ class Login extends React.Component {
             fullWidth
             onClick={this.handleSignIn}
           >
-            Login
+            ENTRAR
           </Button>
         </Grid>
-        <Grid item xs={12}>
           <Typography
+          variant="p"
+          component="small"
             align="center"
-            gutterBottom
-            onClick={this.handleForgotPassword}
           >
-            <span className={classes.pointer}>
-              Esqueceu sua senha?
-            </span>
+            Criado e desenvolvido por SomaLabs
           </Typography>
-        </Grid>
       </Fragment>
     );
   }
@@ -253,9 +266,10 @@ class Login extends React.Component {
     const { classes } = this.props;
 
     return (
-      <Grid item xs={12} sm={4} className={classes.grid}>
-        <Paper className={classes.main}>
-          <Grid container item justify={'center'}>
+      <Grid item xs={12} sm={4}  className={classes.grid}>
+        <Container className={classes.main}>
+          <Grid container item justify={'center'} alignItems="center" direction="column">
+            <Typography variant="p"  component="h4" >Central de produto</Typography>
             <CardMedia
               component={'img'}
               src={'http://desenvolvimento.somagrupo.com.br/img/soma_trans.png'}
@@ -266,12 +280,18 @@ class Login extends React.Component {
           </Grid>
 
           <Grid container justify={'center'} spacing={24}>
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
               <Divider variant="middle" />
+            </Grid> */}
+            <Grid  className={classes.labelWrapper} container item justify="flex-start" direction="row" alignItems="center">
+              <div className={classes.leftBarLabel}></div>
+              {/* <Grid item ></Grid> */}
+            <Typography variant="h4"  component="p">Login</Typography>
+            <Grid item ></Grid>
             </Grid>
             {this.getLoginForm()}
           </Grid>
-        </Paper>
+        </Container>
       </Grid>
     );
   }
@@ -289,11 +309,11 @@ class Login extends React.Component {
     return (
       <Fragment>
         <CssBaseline />
-        <div className={classes.root}>
+        <Container className={classes.root}>
           <Grid container justify={'center'} alignItems={'center'} className={classes.grid}>
             {this.getContent()}
           </Grid>
-        </div>
+        </Container>
       </Fragment>
     );
   }

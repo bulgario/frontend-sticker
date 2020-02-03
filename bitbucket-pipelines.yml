@@ -22,5 +22,5 @@ pipelines:
               variables:
                 KEY_FILE: $GCLOUD_API_KEYFILE
                 PROJECT: 'apt-bonbon-179602'
-                BUCKET: 'album-figurinhas.somalabs.com.br'
+                BUCKET: 'maisprodutos.somalabs.com.br'
                 SOURCE: '-r ./build/**'

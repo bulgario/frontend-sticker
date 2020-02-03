@@ -8,10 +8,30 @@ import {
 } from '@material-ui/pickers';
 import { Typography } from '@material-ui/core';
 import {BASE_URL} from '../../consts';
-
 import { withSnackbar } from "notistack";
+import { withStyles } from "@material-ui/core/styles";
 
 const axios = require("axios");
+
+const styles = theme => ({
+  title: {
+    paddingTop: "25px",
+    paddingBottom: "18px",
+  },
+    leftBarLabel: { 
+    backgroundColor: "#FCB92C",
+    width:5,
+    // height:'100%',
+    marginRight:theme.spacing(4),
+    position: 'absolute',
+    height: '62px',
+    left: '0px'
+  },
+  labelWrapper: { 
+    marginLeft: theme.spacing(-8),
+    marginBottom: theme.spacing(3)
+  }
+});
 
 const MaterialUIPickers = props =>  {
   const [selectedDateInicio, setSelectedDateInicio] = React.useState(null);
@@ -70,12 +90,20 @@ const MaterialUIPickers = props =>  {
       dataFim
     }
   }
-
+  const { classes } = props;
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <Grid container direction="row" justify="center" alignItems="center">
       <Typography variant="h5" component="h4">Data de Programação</Typography>
       </Grid>
+      <Grid container justify="space-around">
+      <div className={classes.title}>
+      <Grid  className={classes.labelWrapper} container item justify="flex-start" direction="row" alignItems="center">
+      <div className={classes.leftBarLabel}></div>
+        <Typography variant="h4" component="h5">Data de Programação</Typography>
+        <Grid item ></Grid>
+      </Grid>
+      </div>
       <Grid container justify="space-around">
         <KeyboardDatePicker
           disableToolbar  
@@ -106,6 +134,15 @@ const MaterialUIPickers = props =>  {
           }}
         />
       </Grid>
+      </Grid>
+      <Grid container justify="space-around">
+      <div className={classes.title}>
+      <Grid  className={classes.labelWrapper} container item justify="flex-start" direction="row" alignItems="center">
+      <div className={classes.leftBarLabel}></div>
+        <Typography variant="h4" component="h5">Limite de Recebimento</Typography>
+        <Grid item ></Grid>
+      </Grid>
+      </div>
       <Grid container justify="space-around">
       <Grid container direction="row" justify="center" alignItems="center">
       <Typography variant="h5" component="h4">Limite de Recebimento</Typography>
@@ -116,7 +153,7 @@ const MaterialUIPickers = props =>  {
           format="yyyy-MM-dd"
           margin="normal"
           id="date-picker-inline"
-          label={"Última data agendamento"}
+          label={"Ínicio"}
           value={selectedDateUltimo}
           onChange={handleDateUltimoAgendamento}
           KeyboardButtonProps={{
@@ -124,8 +161,10 @@ const MaterialUIPickers = props =>  {
           }}
         />
       </Grid>
+      </Grid>
     </MuiPickersUtilsProvider>
   );
 }
 
-export default withSnackbar(MaterialUIPickers);
+const wrapperComponent = withStyles(styles)(withSnackbar(MaterialUIPickers));
+export default wrapperComponent;

@@ -89,6 +89,10 @@ import {
       if (this.matchRoute(route, ROUTES.HOME)) {
         return true;
       }
+
+      if (this.matchRoute(route, ROUTES.SELECTEDPRODUCT)) {
+        return true;
+      }
   
       return false;
     };
