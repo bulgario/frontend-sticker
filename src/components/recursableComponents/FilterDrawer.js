@@ -35,7 +35,8 @@ const useStyles =  makeStyles(theme =>({
     // marginLeft: theme.spacing(0.7),
   },
   itemLabel: {
-      width:200,
+    width: 115,
+    marginRight: theme.spacing(3)
   },
   mainLabel: {
       margin: theme.spacing(1),
@@ -108,7 +109,7 @@ function ResponsiveNavbar(props) {
       {props.filters[filterParam].map((item,index) => {
         const labelId = `checkbox-list-secondary-label-${item}`;
         return (
-            <Grid container item direction="row" justify="space-between" alignItems="flex-start">
+            <Grid container item direction="row" justify="space-between">
 
           <ListItem key={item.name} button onClick={handleToggle(item,index,filterParam)}>
           {/* <Grid container item direction="row" justify="space-between" alignItems="flex-start"  > */}
