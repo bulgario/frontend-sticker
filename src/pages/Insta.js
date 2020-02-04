@@ -214,7 +214,9 @@ class Insta extends React.Component {
       filters: {},
       categoriaFilter: [],
       subcategoriaFilter: [],
-      estampaFilter: []
+      estampaFilter: [],
+      orderBy: 'desc_cor_produto',
+      orderAsc: true,
     };
   }
 
@@ -401,12 +403,13 @@ class Insta extends React.Component {
   }
 
   filterProducts(produtos) {
+    console.log('fui chamado')
     const { categoriaFilter,subcategoriaFilter} = this.state
     const produtosFiltrados =  produtos.filter(produto => { 
       return (categoriaFilter.includes(produto.categoria) && subcategoriaFilter.includes(produto.subcategoria))
     })
     console.log(produtosFiltrados)
-    return produtosFiltrados
+    return produtosFiltrados.sort(this.compare)
   }
 
   chooseBalls({ distribuicao, validBasedinSchedule }) {
@@ -619,7 +622,28 @@ class Insta extends React.Component {
     this.setState({ openOrderDrawer: !this.state.openOrderDrawer });
   };
 
+  compare = (a, b) =>  {
+    if (!a[this.state.orderBy] || !b[this.state.orderBy]) return
 
+    if(this.state.orderAsc) {
+
+      if (a[this.state.orderBy] < b[this.state.orderBy]) return -1;
+      if (b[this.state.orderBy] > a[this.state.orderBy]) return 1;
+      return 0;
+
+    } else {
+      if (a[this.state.orderBy] > b[this.state.orderBy]) return -1;
+      if (b[this.state.orderBy] < a[this.state.orderBy]) return 1;
+      return 0;
+
+    }
+
+}
+
+  setOrderBy=(orderAsc,value) => { 
+    console.log(orderAsc,value)
+    this.setState( {orderBy: value,orderAsc})
+  }
   render() {
     const { classes } = this.props;
     return (
@@ -646,7 +670,12 @@ class Insta extends React.Component {
 
           </FilterDrawer>
           <OrderDrawer  openMenu={this.openOrder}
-          open={this.state.openOrderDrawer}>
+          open={this.state.openOrderDrawer}
+          setOrderBy={this.setOrderBy}
+          orderBy={this.state.orderBy}
+          orderAsc={this.state.orderAsc}
+          >
+            
 
           </OrderDrawer>
         {/* <FormControlLabel

@@ -67,7 +67,7 @@ function ResponsiveNavbar(props) {
     const newChecked = [...props.filters[filterParam]];
       value.checked = !value.checked
       newChecked.splice(index,value);
-
+      
     props.refreshFilter({...props.filters, [filterParam]:newChecked})
   };
   const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);

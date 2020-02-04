@@ -60,18 +60,11 @@ function OrderDrawer(props) {
     right: false
   });
 
-  const [checked, setChecked] = React.useState([1]);
-  const [orderAsc, setOrder] = React.useState([1]);
-
   const changeOrder = () =>  {
-      setOrder(!orderAsc)
-
+    return  props.setOrderBy(!props.orderAsc,props.orderBy)
   }
-  const handleToggle = value => () => {
-    if (value === checked) {
-      return setChecked(null)
-    }
-    return setChecked(value);
+  const handleToggle = (value) => () => {
+    return  props.setOrderBy(props.orderAsc,value)
   };
   const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
 
@@ -93,19 +86,19 @@ function OrderDrawer(props) {
  
      
         <List >
-      {[{id:1,name:"Preço"},{id:2,name:"Data programada"},{id:3,name:"Data recebimento"}].map(item => {
-        const labelId = `checkbox-list-secondary-label-${item.id}`;
+      {[{id:4,name:"Cor",value: 'desc_cor_produto'},{id:1,name:"Preço",value: 'preco_varejo'},{id:2,name:"Entrega ajustada",value:'entrega_ajustada'}].map(item => {
+        const labelId = `checkbox-list-secondary-label-${item.value}`;
         return (
             <Grid container item direction="row" justify="space-between" alignItems="flex-start">
 
-          <ListItem key={item.id} button onClick={handleToggle(item.id)}>
+          <ListItem key={item.value} button onClick={handleToggle(item.value)}>
           {/* <Grid container item direction="row" justify="space-between" alignItems="flex-start"  > */}
             <ListItemText id={labelId} secondary={item.name} className={classes.itemLabel} />
             <ListItem >
               <Checkbox
                 edge="start"
-                onChange={handleToggle(item.id)}
-                checked={checked === item.id}
+                onChange={handleToggle(item.value)}
+                checked={props.orderBy === item.value}
                 inputProps={{ 'aria-labelledby': labelId }}
                 color="primary"
               />
@@ -135,7 +128,7 @@ function OrderDrawer(props) {
           Ordenação
         </Typography>
         <IconButton onClick={changeOrder}>
-            {orderAsc?<ExpandLessIcon></ExpandLessIcon>:<ExpandMoreIcon></ExpandMoreIcon>}
+            {props.orderAsc?<ExpandLessIcon></ExpandLessIcon>:<ExpandMoreIcon></ExpandMoreIcon>}
             </IconButton>
           </Grid>
 
