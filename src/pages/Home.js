@@ -130,6 +130,13 @@ class Home extends React.Component {
             alignItems="center"
             spacing={4}
           >
+             <Grid item className={classes.gridItem}>
+              <MenuCard
+                title="Meus Produtos"
+                body="Crie e compartilhe combinações de produtos"
+                redirectTo="/meusprodutos"
+              ></MenuCard>
+            </Grid>
             <Grid item className={classes.gridItem}>
               <MenuCard
                 title="Recebimento"
