@@ -21,6 +21,8 @@ import { signIn } from "../actions";
 import FilterList from "@material-ui/icons/FilterList";
 
 import Divider from "@material-ui/core/Divider";
+import Button  from "@material-ui/core/Button";
+
 
 // import FormControlLabel from "@material-ui/core/FormControlLabel";
 // import Box from "@material-ui/core/Box";
@@ -49,10 +51,10 @@ const _ = require("lodash");
 
 const styles = theme => ({
   root: {
-    maxWidth:"100%",
+    maxWidth: "100%",
     // paddingLeft: theme.spacing(-4),
     marginLeft: theme.spacing(-4),
-    marginRight: theme.spacing(-6),
+    marginRight: theme.spacing(-6)
 
     // backgroundColor: "red"
   },
@@ -76,16 +78,42 @@ const styles = theme => ({
     }
   },
   greenIcon: {
-    backgroundColor: '#25d64c'
+    backgroundColor: "#25d64c"
   },
   yellowIcon: {
-    backgroundColor: '#ebf918'
+    backgroundColor: "#ebf918"
   },
   redIcon: {
-    backgroundColor: '#ff491b'
+    backgroundColor: "#ff491b"
+  },
+  cardToPrint: {
+    cursor: "pointer",
+    backgroundColor:'blue',
+    minHeight: 400,
+    maxWidth: 300,
+    maxHeight: 400,
+    minWidth: 300,
+    margin: theme.spacing(0.2),
+    // padding: theme.spacing(0.6),
+    // backgroundColor: "white",
+    [theme.breakpoints.down("sm")]: {
+      minHeight: 343,
+      maxWidth: 160,
+      maxHeight: 343,
+      minWidth: 160,
+      margin: theme.spacing(0.6),
+      // marginLeft:theme.spacing(-3),
+      marginBottom: theme.spacing(0)
+      // marginLeft:theme.spacing(-2),
+
+      // paddingLeft: theme.spacing(-3),
+
+      // padding: theme.spacing(1),
+    },
+    boxSizing: "border-box"
   },
   card: {
-    cursor:'pointer',
+    cursor: "pointer",
     minHeight: 450,
     maxWidth: 300,
     maxHeight: 500,
@@ -215,8 +243,8 @@ class Insta extends React.Component {
       categoriaFilter: [],
       subcategoriaFilter: [],
       estampaFilter: [],
-      orderBy: 'desc_cor_produto',
-      orderAsc: true,
+      orderBy: "desc_cor_produto",
+      orderAsc: true
     };
   }
 
@@ -246,42 +274,48 @@ class Insta extends React.Component {
         variant: "error"
       });
     }
-    this.mountFiltersOptions()
+    this.mountFiltersOptions();
   }
 
   mountFiltersOptions() {
-    const {allProgramacoes} = this.state
-    const programacoes = Object.keys(allProgramacoes)
-    const categorias = []
-    const subcategorias = []
-    const estampas = []
+    const { allProgramacoes } = this.state;
+    const programacoes = Object.keys(allProgramacoes);
+    const categorias = [];
+    const subcategorias = [];
+    const estampas = [];
 
     programacoes.map(programacao => {
-      return allProgramacoes[programacao].map(produto => { 
-        if (!categorias.some(categoria => categoria.name === produto.categoria) && produto.categoria) {
-          categorias.push({name: produto.categoria, checked: true})
-
-        } 
-        if (!subcategorias.some(subcategoria => subcategoria.name === produto.subcategoria) && produto.subcategoria) {
-          subcategorias.push({name: produto.subcategoria,checked:true})
-
-        } 
-        if (!estampas.some(estampa => estampa.name === produto.estampa) && produto.estampa) {
-          estampas.push({name: produto.estampa,checked: true})
-
-        } 
-        return true
-
-      })
-    })
+      return allProgramacoes[programacao].map(produto => {
+        if (
+          !categorias.some(categoria => categoria.name === produto.categoria) &&
+          produto.categoria
+        ) {
+          categorias.push({ name: produto.categoria, checked: true });
+        }
+        if (
+          !subcategorias.some(
+            subcategoria => subcategoria.name === produto.subcategoria
+          ) &&
+          produto.subcategoria
+        ) {
+          subcategorias.push({ name: produto.subcategoria, checked: true });
+        }
+        if (
+          !estampas.some(estampa => estampa.name === produto.estampa) &&
+          produto.estampa
+        ) {
+          estampas.push({ name: produto.estampa, checked: true });
+        }
+        return true;
+      });
+    });
 
     const filters = {
-      "Categoria" : categorias,
-      "Subcategoria" : subcategorias,
-      "Estampa" : estampas
-    } 
-    return    this.refreshFilter(filters)
-
+      Categoria: categorias,
+      Subcategoria: subcategorias,
+      Estampa: estampas
+    };
+    return this.refreshFilter(filters);
   }
 
   getAllParamsFromUrl() {
@@ -354,62 +388,111 @@ class Insta extends React.Component {
     const { allProgramacoes } = this.state;
     const { classes } = this.props;
     // console.log(Object.entries(allProgramacoes),'teste')
-    const programacoes = Object.keys(allProgramacoes)
-    console.log(programacoes)
+    const programacoes = Object.keys(allProgramacoes);
+    console.log(programacoes);
     return programacoes.map(programacao => {
-
-          return (<Grid item direction="row" justify="center">
-            {/* <div className={classes.root}> */}
-            <ExpansionPanel>
-              <ExpansionPanelSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1a-content"
-                id="panel1a-header"
+      return (
+        <Grid item direction="row" justify="center">
+          {/* <div className={classes.root}> */}
+          <ExpansionPanel>
+            <ExpansionPanelSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <Grid
+                item
+                alignItems="center"
+                direction="row"
+                justify="flex-start"
+                container
               >
-                <Grid
-                  item
-                  alignItems="center"
-                  direction="row"
-                  justify="flex-start"
-                  container
-                >
-                  <Typography variant="h5" component="p">
-                    {programacao}
-                  </Typography>
-  
-                  {/* <IconButton>
+                <Typography variant="h5" component="p">
+                  {programacao}
+                </Typography>
+
+                {/* <IconButton>
                     <ArrowDropDownIcon></ArrowDropDownIcon>
                   </IconButton> */}
-                </Grid>
-              </ExpansionPanelSummary>
-              <ExpansionPanelDetails className={classes.root}>
-                {/* <Divider variant="middle" className={classes.divider}></Divider> */}
-                {/* <DroppableWrapper
+              </Grid>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails className={classes.root}>
+              {/* <Divider variant="middle" className={classes.divider}></Divider> */}
+              {/* <DroppableWrapper
               droppableId={produtos[0]}
               direction="horizontal"
               isCombineEnabled={true}
                 > */}
-                {this.state.expanded
-                  ? this.renderProductsCardsView(this.filterProducts(allProgramacoes[programacao]))
-                  : this.renderProductsInstaView(allProgramacoes[programacao])}
-                {/* </DroppableWrapper> */}
-              </ExpansionPanelDetails>
-            </ExpansionPanel>
-            {/* </div> */}
-          </Grid>
-        )
-     
+              {this.state.expanded
+                ? this.renderProductsCardsView(
+                    this.filterProducts(allProgramacoes[programacao])
+                  )
+                : this.renderProductsInstaView(allProgramacoes[programacao])}
+              {/* </DroppableWrapper> */}
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+          {/* </div> */}
+        </Grid>
+      );
+    });
+  }
+
+  renderProgramacoesToPrint() {
+    const { allProgramacoes } = this.state;
+    const { classes } = this.props;
+    console.log("CHAMEI")
+    // console.log(Object.entries(allProgramacoes),'teste')
+    const programacoes = Object.keys(allProgramacoes);
+    console.log(programacoes);
+    return programacoes.map(programacao => {
+      return (
+        <Grid item direction="row" justify="center">
+          {/* <div className={classes.root}> */}
+              <Grid
+                item
+                alignItems="center"
+                direction="row"
+                justify="flex-start"
+                container
+              >
+                <Typography variant="p" component="p">
+                  {programacao}
+                </Typography>
+
+                {/* <IconButton>
+                    <ArrowDropDownIcon></ArrowDropDownIcon>
+                  </IconButton> */}
+              </Grid>
+
+              {/* <Divider variant="middle" className={classes.divider}></Divider> */}
+              {/* <DroppableWrapper
+              droppableId={produtos[0]}
+              direction="horizontal"
+              isCombineEnabled={true}
+                > */}
+              {this.state.expanded
+                ? this.renderProductsCardsViewPrint(
+                    this.filterProducts(allProgramacoes[programacao])
+                  )
+                : this.renderProductsInstaView(allProgramacoes[programacao])}
+              {/* </DroppableWrapper> */}
+          {/* </div> */}
+        </Grid>
+      );
     });
   }
 
   filterProducts(produtos) {
-    console.log('fui chamado')
-    const { categoriaFilter,subcategoriaFilter} = this.state
-    const produtosFiltrados =  produtos.filter(produto => { 
-      return (categoriaFilter.includes(produto.categoria) && subcategoriaFilter.includes(produto.subcategoria))
-    })
-    console.log(produtosFiltrados)
-    return produtosFiltrados.sort(this.compare)
+    console.log("fui chamado");
+    const { categoriaFilter, subcategoriaFilter } = this.state;
+    const produtosFiltrados = produtos.filter(produto => {
+      return (
+        categoriaFilter.includes(produto.categoria) &&
+        subcategoriaFilter.includes(produto.subcategoria)
+      );
+    });
+    console.log(produtosFiltrados);
+    return produtosFiltrados.sort(this.compare);
   }
 
   chooseBalls({ distribuicao, validBasedinSchedule }) {
@@ -445,7 +528,7 @@ class Insta extends React.Component {
             cor_produto,
             qtde_programada,
             desc_cor_produto,
-            _id,
+            _id
             // id_produto
           } = produtos;
           const color = this.chooseBalls(produtos);
@@ -454,12 +537,12 @@ class Insta extends React.Component {
             320,
             produtos.produto,
             produtos.cor_produto
-          )
-          produtos.image = image
+          );
+          produtos.image = image;
 
           return (
             // <Fragment>
-            <Grid item align="center">
+            <Grid item align="center" className="">
               {/* <Draggable
                 draggableId={id_produto.toString()}
                 index={index}
@@ -471,9 +554,11 @@ class Insta extends React.Component {
                     {...provided.dragHandleProps}
                     ref={provided.innerRef}
                   > */}
-              <div 
+              <div
                 className={classes.card}
-                onClick={() => this.handleClickProduct(_id)}   
+
+
+                onClick={() => this.handleClickProduct(_id)}
               >
                 <Typography variant="h6" component="p">
                   {produto}
@@ -513,24 +598,21 @@ class Insta extends React.Component {
                   // className={color}
                   // anchorOrigin="top"
                 >
-                  {produtos.image?                  <CardMedia
-                    className={classes.mediaCard}
-                    image={produtos.image}
-                    title="Produto"
-                  /> : 
-                  <CardMedia
-                  className={classes.mediaCard}
-                  image={'/no-picture.png'
-                  }
-                  title="Produto sem foto"
-                />}
-
+                  {produtos.image ? (
+                    <CardMedia
+                      className={classes.mediaCard}
+                      image={produtos.image}
+                      title="Produto"
+                    />
+                  ) : (
+                    <CardMedia
+                      className={classes.mediaCard}
+                      image={"/no-picture.png"}
+                      title="Produto sem foto"
+                    />
+                  )}
                 </Badge>
-                <Typography
-                  variant="h5"
-                  component="p"
-                  color="textSecondary"
-                >
+                <Typography variant="h5" component="p" color="textSecondary">
                   {qtde_programada}
                 </Typography>
               </div>
@@ -538,6 +620,134 @@ class Insta extends React.Component {
                 )}
               </Draggable> */}
             </Grid>
+            // </Fragment>
+          );
+        })}
+      </Grid>
+    );
+  }
+
+
+  renderProductsCardsViewPrint(data) {
+    const { classes } = this.props;
+    let maxHeight = 1000
+    let atual = 0
+    return (
+      <Grid
+        container
+        direction="row"
+        justify="center"
+        alignItems="center"
+        spacing={0}
+      >
+        {/* {atual += 20} */}
+        {data.map((produtos, index) => {
+          const {
+            produto,
+            desc_produto,
+            cor_produto,
+            qtde_programada,
+            desc_cor_produto,
+            _id
+            // id_produto
+          } = produtos;
+          const produtoNum = index + 1
+          atual+= 22.222222
+          const color = this.chooseBalls(produtos);
+          const image = imagesFromProducts(
+            220,
+            320,
+            produtos.produto,
+            produtos.cor_produto
+          );
+          produtos.image = image;
+
+          return (
+            // <Fragment>
+            <Grid item align="center" className="">
+              {/* <Draggable
+                draggableId={id_produto.toString()}
+                index={index}
+                key={index}
+              >
+                {provided => (
+                  <div
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                    ref={provided.innerRef}
+                  > */}
+
+              <div
+                className={classes.cardToPrint}
+                id="card"
+
+                onClick={() => this.handleClickProduct(_id)}
+              >
+                <Typography variant="h6" component="p">
+                  {produto}
+                </Typography>
+                <Typography
+                  variant="p"
+                  color="textSecondary"
+                  component="p"
+                  className={classes.desc_produto}
+                >
+                  {desc_produto.length > 13
+                    ? `${desc_produto.substring(0, 13)}...`
+                    : desc_produto}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="textSecondary"
+                  component="h3"
+                >
+                  {cor_produto}
+                </Typography>
+                {/* <Typography variant="body2" color="textSecondary" component="p">{produtos.desc_cor_produto}</Typography> */}
+                <Typography
+                  variant="p"
+                  color="textSecondary"
+                  component="p"
+                  className={classes.desc_produto}
+                >
+                  {desc_cor_produto.length > 13
+                    ? `${desc_cor_produto.substring(0, 13)}...`
+                    : desc_cor_produto}
+                </Typography>
+                <Badge
+                  badgeContent={""}
+                  classes={{ badge: color }}
+                  // color={color}
+                  // className={color}
+                  // anchorOrigin="top"
+                >
+                  {produtos.image ? (
+                    // <CardMedia
+                    //   className={classes.mediaCard}
+                    //   image={produtos.image}
+                    //   title="Produto"
+                    // />
+                    <div className={classes.mediaCard}></div>
+                  ) : (
+                    <CardMedia
+                      className={classes.mediaCard}
+                      image={"/no-picture.png"}
+                      title="Produto sem foto"
+                    />
+                  )}
+                </Badge>
+                <Typography variant="h5" component="p" color="textSecondary">
+                  {qtde_programada}
+                </Typography>
+              </div>
+              
+              {/* </div>
+                )}
+              </Draggable> */}
+              {atual > 1000?() => {atual =0
+              return ( <div style={{background:'red',height:200,width:'100%'}}></div>)}:null}
+            </Grid>
+            
             // </Fragment>
           );
         })}
@@ -582,72 +792,78 @@ class Insta extends React.Component {
     this.setState({ open: !this.state.open });
   };
 
-  refreshFilter = (filterObj) => {
+
+
+  refreshFilter = filterObj => {
     this.setState({ filters: filterObj });
-    const filtros = Object.keys(filterObj)
-    const categorias = []
-    const subcategorias = []
-    const estampas = []
-    console.log(filterObj)
+    const filtros = Object.keys(filterObj);
+    const categorias = [];
+    const subcategorias = [];
+    const estampas = [];
+    console.log(filterObj);
     filtros.map(filtro => {
-      return filterObj[filtro].map(item => { 
+      return filterObj[filtro].map(item => {
         if (filtro === "Categoria") {
           if (item.checked) {
-            categorias.push(item.name)
+            categorias.push(item.name);
           }
-
-        } 
+        }
         if (filtro === "Subcategoria") {
           if (item.checked) {
-            subcategorias.push(item.name)
+            subcategorias.push(item.name);
           }
-
-        } 
+        }
         if (filtro === "Estampa") {
           if (item.checked) {
-            estampas.push(item.name)
+            estampas.push(item.name);
           }
-
-        } 
-        return true
-
-      })
-
-    })
-    this.setState({categoriaFilter: categorias,subcategoriaFilter: subcategorias,estampaFilter: estampas})
-
+        }
+        return true;
+      });
+    });
+    this.setState({
+      categoriaFilter: categorias,
+      subcategoriaFilter: subcategorias,
+      estampaFilter: estampas
+    });
   };
 
   openOrder = () => {
     this.setState({ openOrderDrawer: !this.state.openOrderDrawer });
   };
 
-  compare = (a, b) =>  {
-    if (!a[this.state.orderBy] || !b[this.state.orderBy]) return
 
-    if(this.state.orderAsc) {
 
+  compare = (a, b) => {
+    if (!a[this.state.orderBy] || !b[this.state.orderBy]) return;
+
+    if (this.state.orderAsc) {
       if (a[this.state.orderBy] < b[this.state.orderBy]) return -1;
       if (b[this.state.orderBy] > a[this.state.orderBy]) return 1;
       return 0;
-
     } else {
       if (a[this.state.orderBy] > b[this.state.orderBy]) return -1;
       if (b[this.state.orderBy] < a[this.state.orderBy]) return 1;
       return 0;
-
     }
+  };
 
-}
-
-  setOrderBy=(orderAsc,value) => { 
-    console.log(orderAsc,value)
-    this.setState( {orderBy: value,orderAsc})
-  }
+  setOrderBy = (orderAsc, value) => {
+    console.log(orderAsc, value);
+    this.setState({ orderBy: value, orderAsc });
+  };
   render() {
     const { classes } = this.props;
     return (
       <Fragment>
+        <div className={"myDivToPrint"}>
+        <Grid container direction="column" spacing={2} >
+              {this.renderProgramacoesToPrint()}
+
+        </Grid>
+
+
+        </div>
         <Header
           title="Resultados da programação"
           rightIcon={null}
@@ -662,22 +878,19 @@ class Insta extends React.Component {
             </IconButton>
           }
         />
-        <FilterDrawer  openMenu={this.openFilter}
+        <FilterDrawer
+          openMenu={this.openFilter}
           open={this.state.open}
           filters={this.state.filters}
           refreshFilter={this.refreshFilter}
-          >
-
-          </FilterDrawer>
-          <OrderDrawer  openMenu={this.openOrder}
+        ></FilterDrawer>
+        <OrderDrawer
+          openMenu={this.openOrder}
           open={this.state.openOrderDrawer}
           setOrderBy={this.setOrderBy}
           orderBy={this.state.orderBy}
           orderAsc={this.state.orderAsc}
-          >
-            
-
-          </OrderDrawer>
+        ></OrderDrawer>
         {/* <FormControlLabel
             control={
               <Switch
@@ -691,7 +904,7 @@ class Insta extends React.Component {
             label="Detalhes"
           /> */}
         {/* <DragDropContext onDragEnd={this.onDragEnd}> */}
-        <Container className={classes.containerSmall}>
+        <Container className={classes.containerSmall} id="some">
           <Grid
             item
             container
@@ -723,17 +936,21 @@ class Insta extends React.Component {
               justify="flex-end"
               className={classes.paddingRightSmall}
             >
-              <IconButton onClick={this.openOrder}> 
+              <IconButton onClick={this.openOrder}>
                 <Toc></Toc>
-              </IconButton >
+              </IconButton>
               <Typography component="p">Ordenar</Typography>
             </Grid>
           </Grid>
           <Divider></Divider>
-
+            <Button onClick={() =>{
+              window.print()
+              // this.PrintElem('teste1')
+          
+          }}>aaaa</Button>
           <div className={classes.margin}>
-            <Grid container direction="column" spacing={2}>
-              {this.renderProgramacoes()}
+            <Grid container direction="column" spacing={2} >
+              {/* {this.renderProgramacoes()} */}
             </Grid>
           </div>
         </Container>
