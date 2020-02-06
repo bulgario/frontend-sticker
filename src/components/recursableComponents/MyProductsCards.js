@@ -1,78 +1,137 @@
-import React from 'react';
-import { makeStyles} from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Typography from '@material-ui/core/Typography';
-
-import Button from '@material-ui/core/Button';
+import React from "react";
+import Input from "@material-ui/core/Input";
+import { withStyles } from "@material-ui/core/styles";
+import { withSnackbar } from "notistack";
+import Button from "@material-ui/core/Button";
 import { withRouter } from "react-router-dom";
-import Box from '@material-ui/core/Box';
+import Container from "@material-ui/core/Container";
+import Grid from "@material-ui/core/Grid";
+import Card from "@material-ui/core/Card";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import CardMedia from "@material-ui/core/CardMedia";
 
-const useStyles = makeStyles(theme => ({
+const axios = require("axios");
 
-  card: {
-    display: 'flex',
+const styles = theme => ({
+  container: {
+    display: "flex",
+    flexWrap: "wrap",
+    backgroundColor: "blue"
   },
-  details: {
-    display: 'flex',
-    flexDirection: 'column',
+  input: {
+    margin: theme.spacing.unit
   },
-  content: {
-    flex: '1 0 auto',
-    maxWidth:300,
-    // [theme.breakpoints.down("sm")]: {
-    //   width: "90vw",
-    //   // height: "90vh"
-    // },
+  root: {
+    flexGrow: 1,
+    height: "auto",
+    paddingTop: theme.spacing(3),
+    paddingBottom: theme.spacing(3)
   },
-  cover: {
-    width: 120,
-    display: 'flex',
-    // marginLeft: theme.spacing(25),
+  grid: {
+    marginTop: theme.spacing(2)
   },
-  controls: {
-    display: 'flex',
-    alignItems: 'center',
-    paddingLeft: theme.spacing(1),
-    paddingBottom: theme.spacing(1),
+  loadingCircle: {
+    padding: theme.spacing(3),
+    textAlign: "center"
   },
+  main: {
+    marginTop: theme.spacing(6)
+  },
+  button: {
+    cursor: "pointer"
+  },
+  logo: {
+    width: 180,
+    margin: theme.spacing(2)
+  },
+  margin: {
+    margin: theme.spacing(2)
+  },
+  gridItem: {
+    maxWidth: 700
+    // backgroundColor: "blue"
+  },
+  whiteButton: {
+    color: "white",
+    sizeSmall: "100px"
+  },
+  circleIcon: {
+    display: "flex",
+    color: theme.palette.text.primary,
+    fontSize: 60,
+    position: "flex-start"
+  },
+  circlePosition: {
+    position: "fixed",
+    right: theme.spacing(2)
+  }
+});
 
-}));
+class MyProductsCards extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      renderCard: false
+    };
+  }
 
-function MyProductsCards(props) {
-  const classes = useStyles();
+  render() {
+    const { classes, imagemJanela, nameCardBox } = this.props;
 
-  return (
-    <Box clone pt={2} pr={1} pb={1} pl={2}>
-    <Card className={classes.card}>
-      <div className={classes.details}>
-        <CardContent className={classes.content}>
-          <Typography component="h6" variant="h6">
-          {props.title}
-          </Typography>
-          <Typography variant="subtitle1" color="textSecondary">
-            {props.body}
-          </Typography>
-        </CardContent>
-        <div className={classes.controls}>
-          <Button color="primary" onClick={() => props.history.push(props.redirectTo)}>
-            Acessar
-          </Button>
-          <Button color="primary" onClick={() => props.history.push(props.redirectTo)}>
-            Compartilhar
-          </Button>
+    const handleNameChange = value => {
+      const nameBoxProducts = value.target.value;
+      const { idUser } = this.props;
+      // AQUI TEM O ID DO USUARIO SENDO PASSADO + O NOME QUE SERÁ SALVO
+      // axios.get()
+    };
 
-        </div>
-      </div>
-      <CardMedia
-        className={classes.cover}
-        image={props.image}
-        title="Live from space album cover"
-      />
-    </Card>
-    </Box>
-  );
+    return (
+      <Container className={classes.root}>
+        <Card className={classes.card} variant="outlined">
+          <CardContent>
+            <Grid item className={classes.gridItem}>
+              <Input
+                defaultValue={nameCardBox}
+                onChange={value => handleNameChange(value)}
+                placeholder="Nome Coleção"
+                className={classes.input}
+                inputProps={{
+                  "aria-label": "Description"
+                }}
+              />
+              <CardActions className={classes.controls}>
+                <Button
+                  className={classes.button}
+                  color="primary"
+                  onClick={() => this.props.history.push(this.props.redirectTo)}
+                >
+                  Acessar
+                </Button>
+                <Button
+                  className={classes.button}
+                  color="primary"
+                  onClick={() => this.props.history.push(this.props.redirectTo)}
+                >
+                  Compartilhar
+                </Button>
+              </CardActions>
+              <Grid item>
+                <CardMedia
+                  className={classes.cover}
+                  image={imagemJanela}
+                  title="Vitrine"
+                />
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+      </Container>
+    );
+  }
 }
 
-export default withRouter(MyProductsCards);
+const wrapperComponent = withStyles(styles)(
+  withSnackbar(withRouter(MyProductsCards))
+);
+export default wrapperComponent;

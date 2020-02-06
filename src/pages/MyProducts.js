@@ -1,44 +1,48 @@
 import React, { Fragment } from "react";
 import { withRouter } from "react-router-dom";
 
-import Header from "../components/recursableComponents/Header"
-import MenuCard from "../components/recursableComponents/MenuCard";
-import MyProductsCards from "../components/recursableComponents/MyProductsCards"
-
 import { withStyles } from "@material-ui/core/styles";
 import { withSnackbar } from "notistack";
 import { IconButton } from "@material-ui/core";
 import ArrowBack from "@material-ui/icons/ArrowBack";
-import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
-import AddCircleIcon from '@material-ui/icons/AddCircle';
-import Input from '@material-ui/core/Input';
+import AddCircleIcon from "@material-ui/icons/AddCircle";
 
-const axios = require("axios");
+import Header from "../components/recursableComponents/Header";
+import MyProductsCards from "../components/recursableComponents/MyProductsCards";
 
 const vitrine = [
   {
     nomeColecao: "Vitrine 04/12/19",
     id_usuario: 123,
-    imagemJanela: "https://img.elo7.com.br/product/244x194/1BF6822/adesivos-para-vitrines-liquidacao-vitrine-de-lojas.jpg",
+    imagemJanela:
+      "https://img.elo7.com.br/product/244x194/1BF6822/adesivos-para-vitrines-liquidacao-vitrine-de-lojas.jpg",
     produto_tags: {
-      id_produto_1: [1,2,3],
+      id_produto_1: [1, 2, 3],
       id_produto_2: []
     }
   },
   {
     nomeColecao: "Vitrine 04/12/19",
     id_usuario: 456,
-    imagemJanela: "https://img.elo7.com.br/product/244x194/1BF6822/adesivos-para-vitrines-liquidacao-vitrine-de-lojas.jpg",
+    imagemJanela:
+      "https://img.elo7.com.br/product/244x194/1BF6822/adesivos-para-vitrines-liquidacao-vitrine-de-lojas.jpg",
     produto_tags: {
-      id_produto_1: [1,2,3],
+      id_produto_1: [1, 2, 3],
       id_produto_2: []
     }
   }
-]
+];
 
 const styles = theme => ({
-  container: {},
+  container: {
+    display: "flex",
+    flexWrap: "wrap",
+    backgroundColor: "blue"
+  },
+  input: {
+    margin: theme.spacing.unit
+  },
   root: {
     flexGrow: 1,
     height: "auto",
@@ -76,17 +80,16 @@ const styles = theme => ({
     sizeSmall: "100px"
   },
   circleIcon: {
-    display: 'flex',
+    display: "flex",
     color: theme.palette.text.primary,
     fontSize: 60,
-    position: 'flex-start',
+    position: "flex-start"
   },
   circlePosition: {
-    position: 'fixed',
+    position: "fixed",
     right: theme.spacing(2)
   }
-})
-
+});
 
 class MyProducts extends React.Component {
   constructor(props) {
@@ -97,75 +100,78 @@ class MyProducts extends React.Component {
   }
 
   generateNewCards = () => {
-    const { renderCard } = this.state
-    if(renderCard === false) {
-      this.setState({ renderCard: true })
+    const { renderCard } = this.state;
+    if (renderCard === false) {
+      this.setState({ renderCard: true });
     } else {
-      this.setState({ renderCard: false })
+      this.setState({ renderCard: false });
     }
-  }
+  };
 
   renderNewCard = () => {
     const { classes } = this.props;
-
-    if(this.state.renderCard) {
+    if (this.state.renderCard) {
       return (
         <Grid item className={classes.gridItem}>
           <MyProductsCards
-            title="aaaaa"
-            body="Crie e compartilhe combinações de produtos"
+            idUser={vitrine[0].id_usuario}
+            imagemJanela={vitrine[0].imagemJanela}
             redirectTo="/meusprodutos"
-            image=""
-          ></MyProductsCards>   
+          ></MyProductsCards>
         </Grid>
-      )
+      );
     }
-  }
+  };
 
   render() {
     const { classes } = this.props;
 
     return (
       <Fragment>
-        <Header 
+        <Header
           title="Meus Produtos"
           rightIcon={null}
           leftIcon={
-            <IconButton               aria-label="upload picture"
-            component="span"
-            className={classes.whiteButton}
-            onClick={() => this.props.history.goBack()}>
+            <IconButton
+              aria-label="upload picture"
+              component="span"
+              className={classes.whiteButton}
+              onClick={() => this.props.history.goBack()}
+            >
               <ArrowBack></ArrowBack>
             </IconButton>
           }
         />
-        <Container className={classes.root}>
-          <Grid item className={classes.gridItem}>
-          {vitrine.map(data => {
-            return (
-              <MyProductsCards
-                title={data.nomeColecao}
-                body="Crie e compartilhe combinações de produtos"
-                redirectTo="/meusprodutos"
-                image={data.imagemJanela}
-              ></MyProductsCards>
-            )
-          })}
-          </Grid>
-          <Grid item className={classes.gridItem}>
-            {this.state.renderCard ? this.renderNewCard() : ""}
-          </Grid>
-        </Container>
-        <div 
-          className={classes.circlePosition}
-          onClick={this.generateNewCards}
-        >
-          <AddCircleIcon className={classes.circleIcon} />
+        {vitrine.map(meusProdutos => {
+          return (
+            <MyProductsCards
+              nameCardBox={
+                meusProdutos.nome_relatorio !== ""
+                  ? meusProdutos.nome_relatorio
+                  : ""
+              }
+              idUser={meusProdutos.id_usuario}
+              imagemJanela={meusProdutos.imagemJanela}
+              redirectTo="/meusprodutos"
+            />
+          );
+        })}
+        <Grid item className={classes.gridItem}>
+          {this.state.renderCard ? this.renderNewCard() : ""}
+        </Grid>
+        <div className={classes.circlePosition} onClick={this.generateNewCards}>
+          <AddCircleIcon
+            className={classes.circleIcon}
+            color="primary"
+            onClick={this.generateNewCards}
+          />
         </div>
       </Fragment>
     );
   }
 }
 
-const wrapperComponent = withStyles(styles)(withSnackbar(withRouter(MyProducts)));
-export default wrapperComponent;;
+const wrapperComponent = withStyles(styles)(
+  withSnackbar(withRouter(MyProducts))
+);
+export default wrapperComponent;
