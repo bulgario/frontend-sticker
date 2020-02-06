@@ -54,24 +54,24 @@ function ResponsiveNavbar(props) {
     {
       name: "check",
       text: "Recebimento",
-      action: () => redirect(ROUTES.HOME),
-      show: user.canAcessThisRoute(ROUTES.HOME),
-      route: ROUTES.HOME
-    },
-    {
-      name: "shopping-cart",
-      text: "Venda",
-      action: () => redirect(ROUTES.HOME),
-      show: user.canAcessThisRoute(ROUTES.HOME),
-      route: ROUTES.INSTA
-    },
-    {
-      name: "note",
-      text: "Meus relatórios",
-      action: () => redirect(ROUTES.HOME),
-      show: user.canAcessThisRoute(ROUTES.HOME),
+      action: () => redirect(ROUTES.SEARCH),
+      show: user.canAcessThisRoute(ROUTES.SEARCH),
       route: ROUTES.SEARCH
     },
+    // {
+    //   name: "shopping-cart",
+    //   text: "Venda",
+    //   action: () => redirect(ROUTES.HOME),
+    //   show: user.canAcessThisRoute(ROUTES.HOME),
+    //   route: ROUTES.INSTA
+    // },
+    // {
+    //   name: "note",
+    //   text: "Meus relatórios",
+    //   action: () => redirect(ROUTES.HOME),
+    //   show: user.canAcessThisRoute(ROUTES.HOME),
+    //   route: ROUTES.SEARCH
+    // },
     {
       name: "exit_to_app",
       text: "Logout",

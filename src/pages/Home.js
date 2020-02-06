@@ -137,12 +137,12 @@ class Home extends React.Component {
                 redirectTo="/search"
               ></MenuCard>
             </Grid>
-            <Grid item className={classes.gridItem}>
+            {/* <Grid item className={classes.gridItem}>
               <MenuCard
                 title="Venda"
                 body="Confira em tempo real os números de pedidos e vendas"
               ></MenuCard>
-            </Grid>
+            </Grid> */}
           </Grid>
         </Container>
       </Fragment>
