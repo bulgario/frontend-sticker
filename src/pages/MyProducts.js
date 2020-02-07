@@ -11,29 +11,6 @@ import AddCircleIcon from "@material-ui/icons/AddCircle";
 import Header from "../components/recursableComponents/Header";
 import MyProductsCards from "../components/recursableComponents/MyProductsCards";
 
-const vitrine = [
-  {
-    nomeColecao: "Vitrine 04/12/19",
-    id_usuario: 123,
-    imagemJanela:
-      "https://img.elo7.com.br/product/244x194/1BF6822/adesivos-para-vitrines-liquidacao-vitrine-de-lojas.jpg",
-    produto_tags: {
-      id_produto_1: [1, 2, 3],
-      id_produto_2: []
-    }
-  },
-  {
-    nomeColecao: "Vitrine 04/12/19",
-    id_usuario: 456,
-    imagemJanela:
-      "https://img.elo7.com.br/product/244x194/1BF6822/adesivos-para-vitrines-liquidacao-vitrine-de-lojas.jpg",
-    produto_tags: {
-      id_produto_1: [1, 2, 3],
-      id_produto_2: []
-    }
-  }
-];
-
 const styles = theme => ({
   container: {
     display: "flex",
@@ -80,14 +57,7 @@ const styles = theme => ({
     sizeSmall: "100px"
   },
   circleIcon: {
-    display: "flex",
-    color: theme.palette.text.primary,
-    fontSize: 60,
-    position: "flex-start"
-  },
-  circlePosition: {
-    position: "fixed",
-    right: theme.spacing(2)
+    fontSize: theme.spacing(8)
   }
 });
 
@@ -95,36 +65,40 @@ class MyProducts extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      renderCard: false
+      vitrine: [
+        {
+          nome_relatorio: "Vitrine 04/12/19",
+          id_usuario: 123,
+          imagemJanela:
+            "https://img.elo7.com.br/product/244x194/1BF6822/adesivos-para-vitrines-liquidacao-vitrine-de-lojas.jpg",
+          produto_tags: {
+            id_produto_1: [1, 2, 3],
+            id_produto_2: []
+          }
+        },
+        {
+          nome_relatorio: "Vitrine 04/12/19",
+          id_usuario: 456,
+          imagemJanela:
+            "https://img.elo7.com.br/product/244x194/1BF6822/adesivos-para-vitrines-liquidacao-vitrine-de-lojas.jpg",
+          produto_tags: {
+            id_produto_1: [1, 2, 3],
+            id_produto_2: []
+          }
+        }
+      ]
     };
   }
 
-  generateNewCards = () => {
-    const { renderCard } = this.state;
-    if (renderCard === false) {
-      this.setState({ renderCard: true });
-    } else {
-      this.setState({ renderCard: false });
-    }
-  };
-
-  renderNewCard = () => {
-    const { classes } = this.props;
-    if (this.state.renderCard) {
-      return (
-        <Grid item className={classes.gridItem}>
-          <MyProductsCards
-            idUser={vitrine[0].id_usuario}
-            imagemJanela={vitrine[0].imagemJanela}
-            redirectTo="/meusprodutos"
-          ></MyProductsCards>
-        </Grid>
-      );
-    }
-  };
-
   render() {
     const { classes } = this.props;
+    const { vitrine } = this.state;
+
+    const generateNewCards = () => {
+      this.setState({ vitrine: [...this.state.vitrine, {}] }, () =>
+        console.log(this.state.vitrine)
+      );
+    };
 
     return (
       <Fragment>
@@ -142,7 +116,20 @@ class MyProducts extends React.Component {
             </IconButton>
           }
         />
-        {vitrine.map(meusProdutos => {
+        {vitrine.map((meusProdutos, i) => {
+          const setStateProduct = (obj, cb) =>
+            this.setState(
+              {
+                vitrine: [
+                  ...this.state.vitrine.slice(0, i),
+                  obj,
+                  ...this.state.vitrine.slice(i + 1)
+                ]
+              },
+              () => {
+                console.log(this.state.vitrine);
+              }
+            );
           return (
             <MyProductsCards
               nameCardBox={
@@ -150,22 +137,22 @@ class MyProducts extends React.Component {
                   ? meusProdutos.nome_relatorio
                   : ""
               }
-              idUser={meusProdutos.id_usuario}
-              imagemJanela={meusProdutos.imagemJanela}
               redirectTo="/meusprodutos"
+              getProdutosData={setStateProduct}
+              meusProdutos={meusProdutos}
+              index={i}
             />
           );
         })}
-        <Grid item className={classes.gridItem}>
-          {this.state.renderCard ? this.renderNewCard() : ""}
+        <Grid container item direction="row" alignItems="flex-end" xs={12}>
+          <Grid item direction="row" justify="flex-end" container>
+            <AddCircleIcon
+              className={classes.circleIcon}
+              color="primary"
+              onClick={generateNewCards}
+            />
+          </Grid>
         </Grid>
-        <div className={classes.circlePosition} onClick={this.generateNewCards}>
-          <AddCircleIcon
-            className={classes.circleIcon}
-            color="primary"
-            onClick={this.generateNewCards}
-          />
-        </div>
       </Fragment>
     );
   }

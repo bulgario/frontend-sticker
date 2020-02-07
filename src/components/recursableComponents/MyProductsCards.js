@@ -10,8 +10,8 @@ import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
-
-const axios = require("axios");
+import CreateIcon from "@material-ui/icons/Create";
+import CheckIcon from "@material-ui/icons/Check";
 
 const styles = theme => ({
   container: {
@@ -65,67 +65,117 @@ const styles = theme => ({
   circlePosition: {
     position: "fixed",
     right: theme.spacing(2)
-  }
+  },
+  cover: {
+    width: theme.spacing(12),
+    height: theme.spacing(12)
+  },
+  checkSave: {
+    cursor: "pointer"
+  },
+  iconCheck: {}
 });
 
 class MyProductsCards extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      renderCard: false
+      disabled: true
     };
   }
 
   render() {
-    const { classes, imagemJanela, nameCardBox } = this.props;
+    const { classes, nameCardBox, meusProdutos } = this.props;
 
-    const handleNameChange = value => {
-      const nameBoxProducts = value.target.value;
-      const { idUser } = this.props;
-      // AQUI TEM O ID DO USUARIO SENDO PASSADO + O NOME QUE SERÁ SALVO
-      // axios.get()
+    const handleNameChange = event => {
+      const obj = Object.assign(this.props.meusProdutos, {
+        nome_relatorio: event.target.value
+      });
+
+      this.props.getProdutosData(obj);
+    };
+
+    const handleInputDisable = () => {
+      this.setState({ disabled: !this.state.disabled });
+    };
+
+    const handleSaveData = () => {
+      try {
+        // this.props.meusProdutos  POST PARA ENVIAR O DADO PORRA
+        this.props.enqueueSnackbar("Salvo com Sucesso.", {
+          variant: "success"
+        });
+        this.setState({ disabled: true });
+      } catch (error) {
+        console.log("Error Saving your collection of products:", error);
+        this.props.enqueueSnackbar("Erro ao Salvar Sua Coleção.", {
+          variant: "error"
+        });
+      }
     };
 
     return (
       <Container className={classes.root}>
-        <Card className={classes.card} variant="outlined">
-          <CardContent>
-            <Grid item className={classes.gridItem}>
-              <Input
-                defaultValue={nameCardBox}
-                onChange={value => handleNameChange(value)}
-                placeholder="Nome Coleção"
-                className={classes.input}
-                inputProps={{
-                  "aria-label": "Description"
-                }}
-              />
-              <CardActions className={classes.controls}>
-                <Button
-                  className={classes.button}
-                  color="primary"
-                  onClick={() => this.props.history.push(this.props.redirectTo)}
-                >
-                  Acessar
-                </Button>
-                <Button
-                  className={classes.button}
-                  color="primary"
-                  onClick={() => this.props.history.push(this.props.redirectTo)}
-                >
-                  Compartilhar
-                </Button>
-              </CardActions>
-              <Grid item>
+        <Grid direction="row" container xs={12} sm={12}>
+          <Card className={classes.card} variant="outlined">
+            <CardContent>
+              <Grid container item justify="flex-start" direction="row">
+                <Grid item direction="row" className={classes.gridItem}>
+                  <Input
+                    defaultValue={nameCardBox}
+                    onChange={handleNameChange}
+                    placeholder="Nome Coleção"
+                    className={classes.input}
+                    disabled={this.state.disabled}
+                    inputProps={{
+                      "aria-label": "Description"
+                    }}
+                  />
+                </Grid>
+                <Grid item direction="row" className={classes.iconCheck}>
+                  {this.state.disabled ? (
+                    <CreateIcon onClick={handleInputDisable} />
+                  ) : (
+                    <CheckIcon
+                      color="primary"
+                      className={classes.checkSave}
+                      onClick={handleSaveData}
+                    />
+                  )}
+                </Grid>
+                <Grid item direction="row">
+                  <CardActions className={classes.controls}>
+                    <Button
+                      className={classes.button}
+                      color="primary"
+                      onClick={() =>
+                        this.props.history.push(this.props.redirectTo)
+                      }
+                    >
+                      Acessar
+                    </Button>
+                    <Button
+                      className={classes.button}
+                      color="primary"
+                      onClick={() =>
+                        this.props.history.push(this.props.redirectTo)
+                      }
+                    >
+                      Compartilhar
+                    </Button>
+                  </CardActions>
+                </Grid>
+              </Grid>
+              <Grid item direction="row" justify="flex-end" container>
                 <CardMedia
                   className={classes.cover}
-                  image={imagemJanela}
+                  image={meusProdutos.imagemJanela}
                   title="Vitrine"
                 />
               </Grid>
-            </Grid>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </Grid>
       </Container>
     );
   }
