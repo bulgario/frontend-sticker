@@ -11,6 +11,8 @@ import {BASE_URL} from '../../consts';
 import { withSnackbar } from "notistack";
 import { withStyles } from "@material-ui/core/styles";
 
+import User from "../../services/User"
+
 const axios = require("axios");
 
 const styles = theme => ({
@@ -37,6 +39,8 @@ const MaterialUIPickers = props =>  {
   const [selectedDateInicio, setSelectedDateInicio] = React.useState(null);
   const [selectedDateFim, setSelectedDateFim] = React.useState(null);
   const [selectedDateUltimo, setSelectedDateUltimo] = React.useState(null);
+  const user = new User();
+  const id_marca = user.user.id_marca_estilo
 
   const handleDataInicioChange = (date) => {
     setSelectedDateInicio(date)
@@ -60,7 +64,7 @@ const MaterialUIPickers = props =>  {
     if(selectedDateInicio !== null && selectedDateFim !== null) {
       try {
         const response = await axios.get(`${BASE_URL}/collections/getCollectionBasedInData`, {
-          params: getDatasForCollection(selectedDateInicio,selectedDateFim)
+          params: getDatasForCollection(selectedDateInicio,selectedDateFim, id_marca)
         }); 
         const collection = response.data
         if(collection.length < 1) {
@@ -82,12 +86,14 @@ const MaterialUIPickers = props =>  {
     }
   }
 
-  const getDatasForCollection = (selectedDateInicio,selectedDateFim) => {
+  const getDatasForCollection = (selectedDateInicio,selectedDateFim, id_marca) => {
     const dataInicio = selectedDateInicio
     const dataFim = selectedDateFim
+    const id_marca_estilo = id_marca
     return {
       dataInicio,
-      dataFim
+      dataFim,
+      id_marca_estilo
     }
   }
   const { classes } = props;
