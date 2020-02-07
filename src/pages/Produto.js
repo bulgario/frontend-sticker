@@ -1,33 +1,107 @@
 import React, { Fragment } from "react";
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import { IconButton } from "@material-ui/core";
+import PropTypes from "prop-types";
+import { withStyles } from "@material-ui/core/styles";
+import Grid from "@material-ui/core/Grid";
+import { IconButton, Container } from "@material-ui/core";
 import ArrowBack from "@material-ui/icons/ArrowBack";
-import Badge from "@material-ui/core/Badge";
-import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 
-import Header from '../components/recursableComponents/Header'
+import Header from "../components/recursableComponents/Header";
 
 import { BASE_URL } from "../consts";
-import imagesFromProducts from "../imageUrl"
+import imagesFromProducts from "../imageUrl";
 
 const styles = theme => ({
   root: {
-    flexGrow: 1,
+    paddingLeft: theme.spacing(4),
+    paddingRight: theme.spacing(2),
+    // backgroundColor:'green',
+    [theme.breakpoints.down("xs")]: {
+      paddingRight: theme.spacing(0),
+      paddingLeft: theme.spacing(2)
+    },
   },
-  paper: {
-    padding: theme.spacing.unit * 2,
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
+  labelWrapper: {
+    marginLeft: theme.spacing(-8),
+    marginBottom: theme.spacing(1),
+    [theme.breakpoints.down("xs")]: {
+      marginLeft: theme.spacing(-4),
+      marginBottom: theme.spacing(1),
+    },
   },
+  container: {},
   whiteButton: {
     color: "white",
     sizeSmall: "100px"
+  },
+  minWidth: {
+    fontSize: '1em',
+    marginBottom: theme.spacing(0.6),
+    [theme.breakpoints.down("xs")]: {
+      fontSize: '0.8em',
+
+    },
+  },
+  containerSmall: {
+    marginTop: theme.spacing(2),
+    padding: theme.spacing(0),
+    [theme.breakpoints.down("xs")]: {
+      paddingRight: theme.spacing(0),
+      paddingLeft: theme.spacing(0)
+    },
+    [theme.breakpoints.down("sm")]: {
+      paddingRight: theme.spacing(0),
+      paddingLeft: theme.spacing(0)
+    }
+  },
+  refLabel: {
+    marginLeft: theme.spacing(1.5),
+    [theme.breakpoints.down("xs")]: {
+      fontSize: '0.8em',
+
+    },
+  },
+  mediaCard: {
+    width: 400,
+    height: 300,
+    [theme.breakpoints.down("xs")]: {
+      width: 250,
+      height: 200
+    },
+    [theme.breakpoints.down("sm")]: {
+      width: 300,
+      height: 250
+    }
+  },
+  marginLeft: {
+    marginLeft: theme.spacing(15),
+    marginBottom: theme.spacing(0.5),
+
+    [theme.breakpoints.down("xs")]: {
+      marginLeft: theme.spacing(7)
+    },
+    [theme.breakpoints.down("sm")]: {
+      marginLeft: theme.spacing(7)
+    }
+  },
+  lastRow: {
+    marginBottom: theme.spacing(2)
+  },
+  leftBarLabel: {
+    backgroundColor: "#FCB92C",
+    width: 5,
+    height: 40,
+    marginRight: theme.spacing(4)
+  },
+  title: {
+    [theme.breakpoints.down("xs")]: {
+      marginLeft: theme.spacing(-2.3),
+    },
+  },
+  border: {
+      border: ' 1px solid #fafafa'
   }
-  
 });
 
 const axios = require("axios");
@@ -39,7 +113,6 @@ class Produto extends React.Component {
       photoProduct: ""
     };
   }
-  
 
   componentDidMount() {
     this.getProduct();
@@ -50,10 +123,16 @@ class Produto extends React.Component {
       const resp = await axios.get(`${BASE_URL}/products/getProduct`, {
         params: this.getAllParamsFromUrl()
       });
-      const product = resp.data[0]
-      const previewImage = imagesFromProducts(600, 600, product.produto, product.cor_produto)
-      await this.setState({ photoProduct: previewImage })
-      await this.setState({ product: product })
+      const product = resp.data[0];
+      const previewImage = imagesFromProducts(
+        600,
+        600,
+        product.produto,
+        product.cor_produto
+      );
+      console.log(previewImage);
+      await this.setState({ photoProduct: previewImage });
+      await this.setState({ product: product });
     } catch (err) {
       console.log(err);
       return err;
@@ -70,21 +149,20 @@ class Produto extends React.Component {
     return urlSearch.get(param);
   }
 
-
   render(props) {
     const { classes } = this.props;
-    const { photoProduct } = this.state
-    const { 
+    const { photoProduct } = this.state;
+    const {
       preco_varejo_original,
-      preco_custo,
+      // preco_custo,
       desc_produto,
       produto,
       cor_produto,
       data_prog,
       qtde_programada,
-      qtde_entregue,
+      // qtde_entregue,
       entrega_ajustada
-    } = this.state.product
+    } = this.state.product;
 
     return (
       <Fragment>
@@ -92,115 +170,195 @@ class Produto extends React.Component {
           title="Programação"
           rightIcon={null}
           leftIcon={
-            <IconButton               aria-label="upload picture"
-            component="span"
-            className={classes.whiteButton}
-            onClick={() => this.props.history.goBack()}>
+            <IconButton
+              aria-label="upload picture"
+              component="span"
+              className={classes.whiteButton}
+              onClick={() => this.props.history.goBack()}
+            >
               <ArrowBack></ArrowBack>
             </IconButton>
           }
         />
-        <Badge
-          badgeContent={""}
-          className={classes.badge}
-        >
-          <CardMedia
-            className={classes.mediaCard}
-            image={photoProduct}
-            title="Produto"
-          />
-        </Badge>
-        <div className={classes.root}>
-        <Grid container spacing={24}>
-          <Grid item xs={12}>
-          <Card className={classes.card}>
-          <Typography gutterBottom variant="h2" component="h3">
-                {"Programação"}
-              </Typography>
-              <Typography
-                variant="body2"
-                color="textSecondary"
-                component="p"
+
+        <Container className={classes.containerSmall}>
+          <Grid
+            direction="column"
+            container
+            xs={12}
+            sm={12}
+            justify="center"
+            alignItems="center"
+          >
+            <Grid className={classes.root}>
+              <Grid item container justify="center">
+                <div className={classes.border}>
+                <CardMedia
+                  className={classes.mediaCard}
+                  image={photoProduct}
+                  title="Produto"
+                />
+                </div>
+
+              </Grid>
+              <br></br>
+
+              <Grid
+                item
+                container
+                direction="row"
+                justify="center"
+                alignItems="center"
+                xs={12}
+                sm={12}
               >
-              </Typography>
-          <Typography gutterBottom variant="h6" component="h2">
-                {desc_produto}
-              </Typography>
-              <Typography
-                variant="body2"
-                color="textSecondary"
-                component="p"
+                <Grid
+                  className={classes.labelWrapper}
+                  container
+                  item
+                  justify="flex-start"
+                  direction="row"
+                  alignItems="center"
+                >
+                  <div className={classes.leftBarLabel}></div>
+                  {/* <Grid item ></Grid> */}
+                  <Typography variant="h5" component="p" className={classes.title}>
+                    Programação
+                  </Typography>
+                  <Grid item></Grid>
+                </Grid>
+                <Grid item xs={6} sm={6}>
+                  <Typography
+                    variant="h6"
+                    component="h4"
+                    className={classes.minWidth}
+                  >
+                    {desc_produto}
+                  </Typography>
+                </Grid>
+                <Grid item xs={6} sm={6} alignSelf="flex-end">
+                  <Typography
+                    color="textSecondary"
+                    variant="p"
+                    component="h3"
+                    className={classes.marginLeft}
+                  >
+                    R${preco_varejo_original}
+                  </Typography>
+                </Grid>
+              </Grid>
+              <Grid
+                item
+                container
+                direction="row"
+                justify="flex-start"
+                alignItems="center"
               >
-              </Typography>
-              <Typography gutterBottom variant="h6" component="h2">
-                {produto}
-              </Typography>
-              <Typography
-                variant="body2"
-                color="textSecondary"
-                component="p"
+                <Typography    variant="h6"
+                    component="h4"
+                    
+                    >
+                  Ref:
+                </Typography>
+                <Typography
+                  variant="h6"
+                  component="h4"
+                  color="textSecondary"
+                  className={classes.refLabel}
+                >
+                  {produto}
+                </Typography>
+              </Grid>
+              <br></br>
+
+              <Grid
+                container
+                item
+                direction="row"
+                alignItems="center"
+                justify="space-between"
+                xs={12}
               >
-              </Typography>
-              <Typography
-                variant="body2"
-                color="textSecondary"
-                component="h3"
+                <Grid container item direction="column" xs={6}>
+                  <Typography variant="h5" component="h4">
+                    Programação
+                  </Typography>
+                  <Typography
+                    color="textSecondary"
+                    variant="p"
+                    component="subtitle2"
+                  >
+                    {data_prog}
+                  </Typography>
+                </Grid>
+
+                <Grid container item direction="column" xs={6}>
+                  <Typography variant="h5" component="h4">
+                    Recebimento
+                  </Typography>
+
+                  <Typography
+                    variant="p"
+                    component="subtitle2"
+                    color="textSecondary"
+                  >
+                    {entrega_ajustada}
+                  </Typography>
+                </Grid>
+              </Grid>
+              <br></br>
+
+              <Grid
+                container
+                item
+                direction="row"
+                alignItems="flex-start"
+                xs={12}
               >
-                {cor_produto}
-              </Typography>
-              {/* <Typography variant="body2" color="textSecondary" component="p">{produtos.desc_cor_produto}</Typography> */}
-              <Typography gutterBottom variant="h5" component="h2">
-                {"Programação"}
-              </Typography>
-              <Typography gutterBottom variant="h5" component="h2">
-                {qtde_programada}
-              </Typography>
-              <Typography
-                variant="body2"
-                color="textSecondary"
-                component="h3"
-              >
-                {preco_varejo_original}
-              </Typography>
-              <Typography
-                variant="body2"
-                color="textSecondary"
-                component="h3"
-              >
-                {preco_custo}
-              </Typography>
-              <Typography
-                variant="body2"
-                color="textSecondary"
-                component="h3"
-              >
-                {data_prog}
-              </Typography>
-              <Typography
-                variant="body2"
-                color="textSecondary"
-                component="h3"
-              >
-                {qtde_entregue}
-              </Typography>
-              <Typography
-                variant="body2"
-                color="textSecondary"
-                component="h3"
-              >
-                {entrega_ajustada}
-              </Typography>
-            </Card>
+                <Grid
+                  container
+                  item
+                  direction="column"
+                  xs={6}
+                  sm={6}
+                  className={classes.lastRow}
+                >
+                  <Typography variant="h5" component="h4">
+                    Cor
+                  </Typography>
+                  <Typography
+                    color="textSecondary"
+                    variant="p"
+                    component="subtitle2"
+                  >
+                    {cor_produto}
+                  </Typography>
+                </Grid>
+
+                <Grid container item direction="column" xs={6}>
+                  <Typography variant="h5" component="h4">
+                    Quantidade
+                  </Typography>
+
+                  <Typography
+                    variant="p"
+                    component="subtitle2"
+                    color="textSecondary"
+                  >
+                    {qtde_programada} pcs
+                  </Typography>
+                </Grid>
+              </Grid>
+            </Grid>
           </Grid>
-        </Grid>
-      </div>
-    </Fragment>
-    )
+        </Container>
+      </Fragment>
+    );
   }
 }
 
 Produto.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(Produto);

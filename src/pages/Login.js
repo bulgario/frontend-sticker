@@ -241,6 +241,7 @@ class Login extends React.Component {
               Esqueceu seu login ou senha?
             </Typography>
           <Button
+            id="submit"
             variant="contained"
             color="primary"
             className={classes.button}
@@ -268,7 +269,7 @@ class Login extends React.Component {
       <Grid item xs={12} sm={4}  className={classes.grid}>
         <Container className={classes.main}>
           <Grid container item justify={'center'} alignItems="center" direction="column">
-            <Typography variant="p"  component="h4" >Central de produto</Typography>
+            <Typography variant="p"  component="h4" >+Produtos</Typography>
             <CardMedia
               component={'img'}
               src={'http://desenvolvimento.somagrupo.com.br/img/soma_trans.png'}

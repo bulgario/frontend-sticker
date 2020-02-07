@@ -8,7 +8,6 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import { withRouter } from "react-router-dom";
 
-
 import InputLabel from "@material-ui/core/InputLabel";
 
 import { withSnackbar } from "notistack";
@@ -52,8 +51,6 @@ class Search extends React.Component {
       data_fim: "",
       data_ultimo: "",
       anchorEl: null,
-      choosedCategory: "",
-      choosedSubCategory: "",
       choosedNameCollection: "",
       id_marca_user: "",
       marca_user: ""
