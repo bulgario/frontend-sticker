@@ -21,8 +21,7 @@ import { signIn } from "../actions";
 import FilterList from "@material-ui/icons/FilterList";
 
 import Divider from "@material-ui/core/Divider";
-import Button  from "@material-ui/core/Button";
-
+import Button from "@material-ui/core/Button";
 
 // import FormControlLabel from "@material-ui/core/FormControlLabel";
 // import Box from "@material-ui/core/Box";
@@ -88,18 +87,20 @@ const styles = theme => ({
   },
   cardToPrint: {
     cursor: "pointer",
-    backgroundColor:'blue',
-    minHeight: 400,
-    maxWidth: 300,
-    maxHeight: 400,
-    minWidth: 300,
-    margin: theme.spacing(0.2),
+    // backgroundColor: "blue",
+    minHeight: 305,
+    maxWidth: 160,
+    maxHeight: 305,
+    minWidth: 160,
+    margin: theme.spacing(0.6),
+    // marginLeft:theme.spacing(-3),
+    marginBottom: theme.spacing(0),
     // padding: theme.spacing(0.6),
     // backgroundColor: "white",
     [theme.breakpoints.down("sm")]: {
-      minHeight: 343,
+      minHeight: 305,
       maxWidth: 160,
-      maxHeight: 343,
+      maxHeight: 305,
       minWidth: 160,
       margin: theme.spacing(0.6),
       // marginLeft:theme.spacing(-3),
@@ -151,6 +152,22 @@ const styles = theme => ({
     // marginTop: theme.spacing(-0.5),
     [theme.breakpoints.down("sm")]: {
       height: 220,
+      width: 140
+    },
+
+    borderColor: "#FFE600"
+  },
+
+  mediaCardPrint: {
+    height:180,
+    width: 140,
+    boxSizing: "border-box",
+    objectFit: "scale-down",
+    // marginLeft: theme.spacing(1),
+    // marginRight: theme.spacing(-1),
+    // marginTop: theme.spacing(-0.5),
+    [theme.breakpoints.down("sm")]: {
+      height:180,
       width: 140
     },
 
@@ -439,43 +456,40 @@ class Insta extends React.Component {
 
   renderProgramacoesToPrint() {
     const { allProgramacoes } = this.state;
-    const { classes } = this.props;
-    console.log("CHAMEI")
-    // console.log(Object.entries(allProgramacoes),'teste')
+
     const programacoes = Object.keys(allProgramacoes);
-    console.log(programacoes);
     return programacoes.map(programacao => {
       return (
         <Grid item direction="row" justify="center">
           {/* <div className={classes.root}> */}
-              <Grid
-                item
-                alignItems="center"
-                direction="row"
-                justify="flex-start"
-                container
-              >
-                <Typography variant="p" component="p">
-                  {programacao}
-                </Typography>
+          <Grid
+            item
+            alignItems="center"
+            direction="row"
+            justify="flex-start"
+            container
+          >
+            <Typography variant="p" component="p">
+              {programacao}
+            </Typography>
 
-                {/* <IconButton>
+            {/* <IconButton>
                     <ArrowDropDownIcon></ArrowDropDownIcon>
                   </IconButton> */}
-              </Grid>
+          </Grid>
 
-              {/* <Divider variant="middle" className={classes.divider}></Divider> */}
-              {/* <DroppableWrapper
+          {/* <Divider variant="middle" className={classes.divider}></Divider> */}
+          {/* <DroppableWrapper
               droppableId={produtos[0]}
               direction="horizontal"
               isCombineEnabled={true}
                 > */}
-              {this.state.expanded
-                ? this.renderProductsCardsViewPrint(
-                    this.filterProducts(allProgramacoes[programacao])
-                  )
-                : this.renderProductsInstaView(allProgramacoes[programacao])}
-              {/* </DroppableWrapper> */}
+          {this.state.expanded
+            ? this.renderProductsCardsViewPrint(
+                this.filterProducts(allProgramacoes[programacao])
+              )
+            : this.renderProductsInstaView(allProgramacoes[programacao])}
+          {/* </DroppableWrapper> */}
           {/* </div> */}
         </Grid>
       );
@@ -483,7 +497,6 @@ class Insta extends React.Component {
   }
 
   filterProducts(produtos) {
-    console.log("fui chamado");
     const { categoriaFilter, subcategoriaFilter } = this.state;
     const produtosFiltrados = produtos.filter(produto => {
       return (
@@ -556,8 +569,6 @@ class Insta extends React.Component {
                   > */}
               <div
                 className={classes.card}
-
-
                 onClick={() => this.handleClickProduct(_id)}
               >
                 <Typography variant="h6" component="p">
@@ -626,12 +637,199 @@ class Insta extends React.Component {
       </Grid>
     );
   }
+  checkLastImg =(image) =>  {
+    const { allProgramacoes } = this.state;
+    const programacoes = Object.keys(allProgramacoes);
+    const produtosFiltrados = this.filterProducts(
+      allProgramacoes[programacoes[programacoes.length -1]]
+    );
+    const ultimo_produto = produtosFiltrados[produtosFiltrados.length-1]
+
+    if(image === ultimo_produto.image) {
+      window.print()
+    }
 
 
+
+  }
+  minhaGambiarra() {
+    const { allProgramacoes } = this.state;
+    const { classes } = this.props;
+    const programacoes = Object.keys(allProgramacoes);
+
+    return (
+      <div className={"myDivToPrint"}>
+        <Grid container direction="column" spacing={2}>
+          {programacoes.map(programacao => {
+            const produtosFiltrados = this.filterProducts(
+              allProgramacoes[programacao]
+            );
+            let produtosPerProgramacao = produtosFiltrados.length
+
+              let resto = produtosPerProgramacao % 12
+              let restoInicio = []
+              let restoMeio =[]
+              let restoFim =[]
+
+              for(let j = 0; j< resto; j++) {
+                if (j<=3 && resto<=4) {
+                  restoInicio.push(produtosPerProgramacao -j)
+                }
+                else if(j> 3 && resto <=8) {
+                  restoMeio.push(produtosPerProgramacao - j + 4)
+
+                } else if(j >7 && resto >8 ){
+                  restoFim.push(produtosPerProgramacao -j + 8 )
+
+                } 
+              }
+              // console.log(restoInicio,'produtos que acabam no meio da pagina')
+              // console.log(restoMeio,'produtos que acabam no meio da pagina')
+              // console.log(restoFim,'produtos que acabam no final da página')
+              let produtosAllowed = []
+              let offSet = 8
+              let whileVerify = produtosPerProgramacao
+              let altura= 90
+              while(whileVerify / 12 >= 1 ) {
+                altura = 127
+                whileVerify -=12
+                for(let i =1; i<= 4; i+=1) {
+                  produtosAllowed.push((offSet + i))
+
+                }
+                offSet +=12
+              }
+            let produtosParaMostrarFiltrados = produtosFiltrados.map((produtos, index) => {
+              const {
+                produto,
+                desc_produto,
+                cor_produto,
+                qtde_programada,
+                desc_cor_produto,
+                _id
+              } = produtos;
+              const color = this.chooseBalls(produtos);
+              const image = imagesFromProducts(
+                220,
+                320,
+                produtos.produto,
+                produtos.cor_produto
+              );
+              produtos.image = image;
+              return (
+                <Grid item align="center" className="">
+                  <div
+                    className={classes.cardToPrint}
+                    id="card"
+                    onClick={() => this.handleClickProduct(_id)}
+                  >
+                    <Typography variant="h6" component="p">
+                      {produto}
+                    </Typography>
+                    <Typography
+                      variant="p"
+                      color="textSecondary"
+                      component="p"
+                      className={classes.desc_produto}
+                    >
+                      {desc_produto.length > 13
+                        ? `${desc_produto.substring(0, 13)}...`
+                        : desc_produto}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="textSecondary"
+                      component="h3"
+                    >
+                      {cor_produto}
+                    </Typography>
+                    {/* <Typography variant="body2" color="textSecondary" component="p">{produtos.desc_cor_produto}</Typography> */}
+                    <Typography
+                      variant="p"
+                      color="textSecondary"
+                      component="p"
+                      className={classes.desc_produto}
+                    >
+                      {desc_cor_produto.length > 13
+                        ? `${desc_cor_produto.substring(0, 13)}...`
+                        : desc_cor_produto}
+                    </Typography>
+                    <Badge
+                      badgeContent={""}
+                      classes={{ badge: color }}
+                      // color={color}
+                      // className={color}
+                      // anchorOrigin="top"
+                    >
+
+                      <img
+                      className={classes.mediaCardPrint}
+                      src={produtos.image}
+                      alt="Produto sem foto"
+                      onLoad={() => this.checkLastImg(produtos.image)}
+                    />     
+                    </Badge>
+                    <Typography
+                      variant="h5"
+                      component="p"
+                      color="textSecondary"
+                      className="prende"
+                    >
+                      {qtde_programada}
+                    </Typography>
+                  </div>
+      {produtosAllowed.includes(index+1)? <div style={{height:altura, backgroundColor:"purple",width:50}}></div>:null}
+            {restoInicio.includes(index+1) && index >=4? <div style={{height:700, backgroundColor:"pink",width:50}}></div>:null}
+            {restoMeio.includes(index+1) && index >=4? <div style={{height:425, backgroundColor:"grey",width:50}}></div>:null}
+            {restoFim.includes(index+1) && index >=4? <div style={{height:105, backgroundColor:"green",width:50}}></div>:null}
+                </Grid>
+              );
+            })
+            if (produtosPerProgramacao <= 4) {
+              produtosParaMostrarFiltrados.push((<Grid item container align="center"><div style={{backgroundColor:'yellow',height:720,width:50}}
+              ></div></Grid>))
+            }
+
+            if (produtosPerProgramacao >= 4 && produtosPerProgramacao <=8 && restoMeio.length <1) {
+              produtosParaMostrarFiltrados.push((<Grid item container align="center"><div style={{backgroundColor:'brow',height:355,width:50}}
+              ></div></Grid>))
+            }
+
+            return (
+              <Grid item direction="row" justify="center">
+                <Grid
+                  item
+                  alignItems="center"
+                  direction="row"
+                  justify="flex-start"
+                  container
+                >
+                  <Typography variant="p" component="p">
+                    {programacao}
+                  </Typography>
+                </Grid>
+                {
+                  <Grid
+                    container
+                    direction="row"
+                    justify="center"
+                    alignItems="center"
+                    spacing={0}
+                  >
+                    {/* {atual += 20} */}
+                    {produtosParaMostrarFiltrados}
+                  </Grid>
+                }
+              </Grid>
+            );
+          })}
+        </Grid>
+      </div>
+    );
+  }
   renderProductsCardsViewPrint(data) {
     const { classes } = this.props;
-    let maxHeight = 1000
-    let atual = 0
+
     return (
       <Grid
         container
@@ -651,8 +849,7 @@ class Insta extends React.Component {
             _id
             // id_produto
           } = produtos;
-          const produtoNum = index + 1
-          atual+= 22.222222
+
           const color = this.chooseBalls(produtos);
           const image = imagesFromProducts(
             220,
@@ -680,7 +877,6 @@ class Insta extends React.Component {
               <div
                 className={classes.cardToPrint}
                 id="card"
-
                 onClick={() => this.handleClickProduct(_id)}
               >
                 <Typography variant="h6" component="p">
@@ -740,14 +936,12 @@ class Insta extends React.Component {
                   {qtde_programada}
                 </Typography>
               </div>
-              
+
               {/* </div>
                 )}
               </Draggable> */}
-              {atual > 1000?() => {atual =0
-              return ( <div style={{background:'red',height:200,width:'100%'}}></div>)}:null}
             </Grid>
-            
+
             // </Fragment>
           );
         })}
@@ -792,8 +986,6 @@ class Insta extends React.Component {
     this.setState({ open: !this.state.open });
   };
 
-
-
   refreshFilter = filterObj => {
     this.setState({ filters: filterObj });
     const filtros = Object.keys(filterObj);
@@ -832,8 +1024,6 @@ class Insta extends React.Component {
     this.setState({ openOrderDrawer: !this.state.openOrderDrawer });
   };
 
-
-
   compare = (a, b) => {
     if (!a[this.state.orderBy] || !b[this.state.orderBy]) return;
 
@@ -856,14 +1046,15 @@ class Insta extends React.Component {
     const { classes } = this.props;
     return (
       <Fragment>
-        <div className={"myDivToPrint"}>
+        {/* <div className={"myDivToPrint"}>
         <Grid container direction="column" spacing={2} >
               {this.renderProgramacoesToPrint()}
 
         </Grid>
 
 
-        </div>
+        </div> */}
+        {this.minhaGambiarra()}
         <Header
           title="Resultados da programação"
           rightIcon={null}
@@ -943,13 +1134,17 @@ class Insta extends React.Component {
             </Grid>
           </Grid>
           <Divider></Divider>
-            <Button onClick={() =>{
-              window.print()
+          <Button
+            onClick={() => {
+              window.print();
+              console.log('testei')
               // this.PrintElem('teste1')
-          
-          }}>aaaa</Button>
+            }}
+          >
+            aaaa
+          </Button>
           <div className={classes.margin}>
-            <Grid container direction="column" spacing={2} >
+            <Grid container direction="column" spacing={2}>
               {/* {this.renderProgramacoes()} */}
             </Grid>
           </div>

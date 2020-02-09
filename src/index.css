@@ -16,20 +16,18 @@ code {
 @media print {
    #some { display:none; }
 
-
-
-
   .myDivToPrint {
-      background-color: white;
+      /* background-color: red; */
       height: 100%;
       width: 100%;
       /* position: fixed; */
       top: 0;
       left: 0;
       margin: 0;
-      padding: 10px;
+      /* padding: 10px; */
       font-size: 14px;
       line-height: 18px;
+      /* border: solid 2px green; */
       display: block;
   }
 }
@@ -51,3 +49,4 @@ code {
   height:0;
   width: 0;
 } */
+
