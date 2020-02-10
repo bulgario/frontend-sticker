@@ -12,7 +12,6 @@ code {
     monospace;
 }
 
-
 @media print {
    #some { display:none; }
 
