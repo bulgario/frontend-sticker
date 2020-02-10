@@ -57,6 +57,7 @@ const styles = theme => ({
     sizeSmall: "100px"
   },
   circleIcon: {
+    cursor: "pointer",
     fontSize: theme.spacing(8)
   }
 });
