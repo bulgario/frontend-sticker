@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import Input from "@material-ui/core/Input";
 import { withStyles } from "@material-ui/core/styles";
 import { withSnackbar } from "notistack";
@@ -12,6 +12,13 @@ import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import CreateIcon from "@material-ui/icons/Create";
 import CheckIcon from "@material-ui/icons/Check";
+
+
+import PropTypes from 'prop-types';
+import Switch from '@material-ui/core/Switch';
+import Paper from '@material-ui/core/Paper';
+import Grow from '@material-ui/core/Grow';
+
 
 const styles = theme => ({
   container: {
@@ -67,8 +74,8 @@ const styles = theme => ({
     right: theme.spacing(2)
   },
   cover: {
-    width: theme.spacing(12),
-    height: theme.spacing(12)
+    width: theme.spacing(20),
+    height: theme.spacing(20)
   },
   checkSave: {
     cursor: "pointer"
@@ -80,12 +87,18 @@ class MyProductsCards extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      disabled: true
+      disabled: true,
+      checked: true,
     };
   }
 
+  handleChange = () => {
+    this.setState(state => ({ checked: !state.checked }));
+  };
+
   render() {
     const { classes, nameCardBox, meusProdutos } = this.props;
+    const { checked } = this.state;
 
     const handleNameChange = event => {
       const obj = Object.assign(this.props.meusProdutos, {
@@ -115,12 +128,17 @@ class MyProductsCards extends React.Component {
     };
 
     return (
+      <Fragment>
+      <Grow
+        in={checked}
+        style={{ transformOrigin: '0 0 0' }}
+        {...(checked ? { timeout: 1300 } : {})}
+      >
       <Container className={classes.root}>
-        <Grid direction="row" container xs={12} sm={12}>
+        <Grid direction="column" container xs={12} sm={12}>
           <Card className={classes.card} variant="outlined">
             <CardContent>
-              <Grid container item justify="flex-start" direction="row">
-                <Grid item direction="row" className={classes.gridItem}>
+                <Grid item direction="column" className={classes.gridItem}>
                   <Input
                     defaultValue={nameCardBox}
                     onChange={handleNameChange}
@@ -132,7 +150,7 @@ class MyProductsCards extends React.Component {
                     }}
                   />
                 </Grid>
-                <Grid item direction="row" className={classes.iconCheck}>
+                <Grid item direction="row"  justify="flex-start" className={classes.iconCheck}>
                   {this.state.disabled ? (
                     <CreateIcon onClick={handleInputDisable} />
                   ) : (
@@ -143,7 +161,7 @@ class MyProductsCards extends React.Component {
                     />
                   )}
                 </Grid>
-                <Grid item direction="row">
+                <Grid item direction="row" justify="flex-start">
                   <CardActions className={classes.controls}>
                     <Button
                       className={classes.button}
@@ -165,7 +183,6 @@ class MyProductsCards extends React.Component {
                     </Button>
                   </CardActions>
                 </Grid>
-              </Grid>
               <Grid item direction="row" justify="flex-end" container>
                 <CardMedia
                   className={classes.cover}
@@ -177,9 +194,16 @@ class MyProductsCards extends React.Component {
           </Card>
         </Grid>
       </Container>
+      </Grow>
+      </Fragment>
     );
   }
 }
+
+
+MyProductsCards.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
 
 const wrapperComponent = withStyles(styles)(
   withSnackbar(withRouter(MyProductsCards))
