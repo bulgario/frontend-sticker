@@ -93,6 +93,10 @@ import {
       if (this.matchRoute(route, ROUTES.SELECTEDPRODUCT)) {
         return true;
       }
+
+      if (this.matchRoute(route, ROUTES.MYPRODUCTS)) {
+        return true;
+      }
   
       return false;
     };

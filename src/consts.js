@@ -3,7 +3,8 @@ export const ROUTES = {
   SEARCH: "/search",
   INSTA: "/insta",
   HOME: "/home",
-  SELECTEDPRODUCT: "/produto"
+  SELECTEDPRODUCT: "/produto",
+  MYPRODUCTS: "/meusprodutos"
 };
 
 export const OMNI_URL =
