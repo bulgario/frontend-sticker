@@ -265,7 +265,9 @@ class Insta extends React.Component {
       estampaFilter: [],
       orderBy: "desc_cor_produto",
       orderAsc: true,
-      print: false
+      print: false,
+      filterSelected: { Categoria: true, Subcategoria: true, Estampa: true },
+      filtersLen: {}
     };
   }
 
@@ -298,7 +300,76 @@ class Insta extends React.Component {
     this.mountFiltersOptions();
   }
 
-  mountFiltersOptions() {
+  unmarkAllFilters = filterParam => {
+    const { allProgramacoes } = this.state;
+    const programacoes = Object.keys(allProgramacoes);
+    const categorias = [];
+    const subcategorias = [];
+    const estampas = [];
+
+    programacoes.map(programacao => {
+      return allProgramacoes[programacao].map(produto => {
+        if (filterParam === "Categoria") {
+          if (
+            !categorias.some(
+              categoria => categoria.name === produto.categoria
+            ) &&
+            produto.categoria
+          ) {
+            categorias.push({
+              name: produto.categoria,
+              checked: this.state.filterSelected["Categoria"]
+            });
+          }
+        }
+
+        if (filterParam === "Subcategoria") {
+          if (
+            !subcategorias.some(
+              subcategoria => subcategoria.name === produto.subcategoria
+            ) &&
+            produto.subcategoria
+          ) {
+            subcategorias.push({
+              name: produto.subcategoria,
+              checked: this.state.filterSelected["Subcategoria"]
+            });
+          }
+        }
+
+        if (filterParam === "Estampa") {
+          if (
+            !estampas.some(estampa => estampa.name === produto.estampa) &&
+            produto.estampa
+          ) {
+            estampas.push({
+              name: produto.estampa,
+              checked: this.state.filterSelected["Estampa"]
+            });
+          }
+        }
+
+        return true;
+      });
+    });
+    categorias.push("");
+    subcategorias.push("");
+    estampas.push("");
+    const filters = {
+      Categoria:
+        filterParam === "Categoria"
+          ? categorias
+          : this.state.filters["Categoria"],
+      Subcategoria:
+        filterParam === "Subcategoria"
+          ? subcategorias
+          : this.state.filters["Subcategoria"],
+      Estampa:
+        filterParam === "Estampa" ? estampas : this.state.filters["Estampa"]
+    };
+    return this.refreshFilter(filters);
+  };
+  mountFiltersOptions = () => {
     const { allProgramacoes } = this.state;
     const programacoes = Object.keys(allProgramacoes);
     const categorias = [];
@@ -336,8 +407,15 @@ class Insta extends React.Component {
       Subcategoria: subcategorias,
       Estampa: estampas
     };
+    this.setState({
+      categoriaInitialLen: categorias.length,
+      subcategoriaInitialLen: subcategorias.length,
+      estampaInitialLen: estampas.length
+    });
+    console.log(categorias.length, this.state.categoriaFilter.length);
+
     return this.refreshFilter(filters);
-  }
+  };
 
   getAllParamsFromUrl() {
     const user = new User();
@@ -410,7 +488,6 @@ class Insta extends React.Component {
     const { classes } = this.props;
     // console.log(Object.entries(allProgramacoes),'teste')
     const programacoes = Object.keys(allProgramacoes);
-    console.log(programacoes);
     return programacoes.map(programacao => {
       return (
         <Grid item direction="row" justify="center">
@@ -459,14 +536,15 @@ class Insta extends React.Component {
   }
 
   filterProducts(produtos) {
-    const { categoriaFilter, subcategoriaFilter } = this.state;
+    const { categoriaFilter, subcategoriaFilter, estampaFilter } = this.state;
     const produtosFiltrados = produtos.filter(produto => {
       return (
         categoriaFilter.includes(produto.categoria) &&
-        subcategoriaFilter.includes(produto.subcategoria)
+        subcategoriaFilter.includes(produto.subcategoria) &&
+        estampaFilter.includes(produto.estampa)
       );
     });
-    // console.log(produtosFiltrados);
+    console.log(produtosFiltrados);
     return produtosFiltrados.sort(this.compare);
   }
 
@@ -920,7 +998,6 @@ class Insta extends React.Component {
     const categorias = [];
     const subcategorias = [];
     const estampas = [];
-    console.log(filterObj);
     filtros.map(filtro => {
       return filterObj[filtro].map(item => {
         if (filtro === "Categoria") {
@@ -940,6 +1017,20 @@ class Insta extends React.Component {
         }
         return true;
       });
+    });
+
+
+
+    categorias.push("");
+    subcategorias.push("");
+    estampas.push("");
+    this.setState({
+      filterSelected: {
+        "Estampa": estampas.length -1 === this.state.estampaInitialLen,
+        "Subcategoria":
+          subcategorias.length-1  === this.state.subcategoriaInitialLen,
+        "Categoria": categorias.length -1  === this.state.categoriaInitialLen
+      }
     });
     this.setState({
       categoriaFilter: categorias,
@@ -967,8 +1058,19 @@ class Insta extends React.Component {
   };
 
   setOrderBy = (orderAsc, value) => {
-    console.log(orderAsc, value);
     this.setState({ orderBy: value, orderAsc });
+  };
+  chooseFilterSelected = (filterParam, forceFalse = false) => {
+    const { filterSelected } = this.state;
+    if (forceFalse) {
+      // return this.setState({filterSelected:{...filterSelected, [filterParam]:false}})
+    } else
+      return this.setState({
+        filterSelected: {
+          ...filterSelected,
+          [filterParam]: !filterSelected[filterParam]
+        }
+      });
   };
   render() {
     const { classes } = this.props;
@@ -1009,6 +1111,11 @@ class Insta extends React.Component {
           open={this.state.open}
           filters={this.state.filters}
           refreshFilter={this.refreshFilter}
+          mountFiltersOptions={this.mountFiltersOptions}
+          unmarkAllFilters={this.unmarkAllFilters}
+          filterSelected={this.state.filterSelected}
+          chooseFilterSelected={this.chooseFilterSelected}
+          filtersLen={this.state.filtersLen}
         ></FilterDrawer>
         <OrderDrawer
           openMenu={this.openOrder}
