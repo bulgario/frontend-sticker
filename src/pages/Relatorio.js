@@ -64,7 +64,7 @@ const styles = theme => ({
   },
 
   mediaCard: {
-    height: "auto",
+    height: 320,
     width: 220,
     boxSizing: "border-box",
     objectFit: "scale-down",
