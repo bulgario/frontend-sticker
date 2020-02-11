@@ -7,6 +7,8 @@ import Insta from './pages/Insta'
 import Home from './pages/Home'
 import Produto from './pages/Produto'
 import MyProducts from './pages/MyProducts'
+import Relatorio from './pages/Relatorio'
+
 
 import User from "./services/User";
 
@@ -44,6 +46,8 @@ function PrivateRoutes(props) {
 			<Route path={ROUTES.INSTA} component={Insta} />
 			<Route path={ROUTES.SELECTEDPRODUCT} component={Produto} />
 			<Route path={ROUTES.MYPRODUCTS} component={MyProducts} />
+			<Route path={ROUTES.RELATORIO} component={Relatorio} />
+
 		  </Switch>
 		</>
 	  );

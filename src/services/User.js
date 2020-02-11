@@ -97,6 +97,10 @@ import {
       if (this.matchRoute(route, ROUTES.MYPRODUCTS)) {
         return true;
       }
+
+      if (this.matchRoute(route, ROUTES.RELATORIO)) {
+        return true;
+      }
   
       return false;
     };
