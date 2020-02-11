@@ -602,8 +602,12 @@ class Insta extends React.Component {
   checkLastImg = async image => {
     const { allProgramacoes } = this.state;
     const programacoes = Object.keys(allProgramacoes);
+    const programacaoWithProducts = programacoes.filter(programacao => this.filterProducts(allProgramacoes[programacao]).length >=1) 
+
+    // console.log(programacaoWithProducts,'programacoes com produtos')
+    // const ultima_programacao = programacaoWithProducts[programacaoWithProducts.length-1]
     const produtosFiltrados = this.filterProducts(
-      allProgramacoes[programacoes[programacoes.length - 1]]
+      allProgramacoes[programacaoWithProducts[programacaoWithProducts.length - 1]]
     );
     const ultimo_produto = produtosFiltrados[produtosFiltrados.length - 1];
 
@@ -614,6 +618,12 @@ class Insta extends React.Component {
       this.setState({ print: false, loadingPrint: false });
     }
   };
+
+  GetFormattedDate() {
+    const  todayTime = new Date().toISOString().split("T")[0];
+    const [year,month,day] = todayTime.split("-")
+    return month + "-" + day + "-" + year;
+}
   programacoesToPrint() {
     const { allProgramacoes } = this.state;
     const { classes } = this.props;
@@ -695,7 +705,7 @@ class Insta extends React.Component {
                             component="subtitle"
                             align="start"
                           >
-                            {`${new Date().toISOString().split("T")[0]}`}
+                           {`${ this.GetFormattedDate()}`}
                           </Typography>
                           <Typography variant="p" component="p" align="center">
                             {`Data da programação:  ${programacao}`}
@@ -840,7 +850,8 @@ class Insta extends React.Component {
                   container
                 >
                   <Typography variant="p" component="subtitle" align="start">
-                    {`${new Date().toISOString().split("T")[0]}`}
+                                   {`${ this.GetFormattedDate()}`}
+
                   </Typography>
                   <Typography variant="p" component="p" align="center">
                     {`Data da programação:  ${programacao}`}
