@@ -110,13 +110,18 @@ const styles = theme => ({
     }
   },
   containerSmall: {
+      marginBottom: theme.spacing(10),
     [theme.breakpoints.down("xs")]: {
       paddingRight: theme.spacing(0),
-      paddingLeft: theme.spacing(0)
+      paddingLeft: theme.spacing(0),
+      marginBottom: theme.spacing(2),
+
     },
     [theme.breakpoints.down("sm")]: {
       paddingRight: theme.spacing(0),
-      paddingLeft: theme.spacing(0)
+      paddingLeft: theme.spacing(0),
+      marginBottom: theme.spacing(2),
+
     }
   },
   paddingRightSmall: {
