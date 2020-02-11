@@ -15,8 +15,8 @@ import CheckIcon from "@material-ui/icons/Check";
 
 
 import PropTypes from 'prop-types';
-import Switch from '@material-ui/core/Switch';
-import Paper from '@material-ui/core/Paper';
+// import Switch from '@material-ui/core/Switch';
+// import Paper from '@material-ui/core/Paper';
 import Grow from '@material-ui/core/Grow';
 
 
