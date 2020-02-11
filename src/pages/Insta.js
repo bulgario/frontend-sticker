@@ -53,7 +53,7 @@ const _ = require("lodash");
 
 const styles = theme => ({
   root: {
-    maxWidth: "100%",
+    maxWidth: "97.5%",
     // paddingLeft: theme.spacing(-4),
     marginLeft: theme.spacing(-4),
     marginRight: theme.spacing(-6)
@@ -892,16 +892,16 @@ class Insta extends React.Component {
             );
             if (produtosPerProgramacao <= 4) {
               produtosParaMostrarFiltrados.push(
-                <Grid item container align="center">
+                <Grid item container >
                   <div
-                    style={{ backgroundColor: "transparent", height: 680, width: 50 }}
+                    style={{ backgroundColor: "transparent", height: 690, width: 50 ,}}
                   ></div>
                 </Grid>
               );
             }
 
             if (
-              produtosPerProgramacao >= 4 &&
+              produtosPerProgramacao > 4 &&
               produtosPerProgramacao <= 8 &&
               restoMeio.length < 1
             ) {

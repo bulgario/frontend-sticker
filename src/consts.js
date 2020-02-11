@@ -4,7 +4,9 @@ export const ROUTES = {
   INSTA: "/insta",
   HOME: "/home",
   SELECTEDPRODUCT: "/produto",
-  MYPRODUCTS: "/meusprodutos"
+  MYPRODUCTS: "/meusprodutos",
+  RELATORIO: "/relatorio"
+
 };
 
 export const OMNI_URL =

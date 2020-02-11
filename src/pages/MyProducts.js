@@ -138,7 +138,7 @@ class MyProducts extends React.Component {
                   ? meusProdutos.nome_relatorio
                   : ""
               }
-              redirectTo="/meusprodutos"
+              redirectTo={`/relatorio?id_relatorio=${123}`}
               getProdutosData={setStateProduct}
               meusProdutos={meusProdutos}
               index={i}
