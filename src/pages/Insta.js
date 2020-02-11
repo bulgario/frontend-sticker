@@ -412,7 +412,6 @@ class Insta extends React.Component {
       subcategoriaInitialLen: subcategorias.length,
       estampaInitialLen: estampas.length
     });
-    console.log(categorias.length, this.state.categoriaFilter.length);
 
     return this.refreshFilter(filters);
   };
@@ -486,7 +485,6 @@ class Insta extends React.Component {
   renderProgramacoes() {
     const { allProgramacoes } = this.state;
     const { classes } = this.props;
-    // console.log(Object.entries(allProgramacoes),'teste')
     const programacoes = Object.keys(allProgramacoes);
     return programacoes.map(programacao => {
       return (
@@ -544,7 +542,6 @@ class Insta extends React.Component {
         estampaFilter.includes(produto.estampa)
       );
     });
-    console.log(produtosFiltrados);
     return produtosFiltrados.sort(this.compare);
   }
 
@@ -763,7 +760,6 @@ class Insta extends React.Component {
                 );
                 produtos.image = image;
                 if (produtosPerProgramacao < 1) {
-                  console.log("programacao sem produtos", programacao);
                   return null;
                 }
                 return (
