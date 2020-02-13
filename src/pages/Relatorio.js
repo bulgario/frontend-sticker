@@ -24,7 +24,6 @@ import Divider from "@material-ui/core/Divider";
 
 import { withSnackbar } from "notistack";
 import { BASE_URL } from "../consts";
-import User from "../services/User";
 
 import ArrowBack from "@material-ui/icons/ArrowBack";
 
@@ -155,202 +154,7 @@ class Relatorio extends React.Component {
       filterSelected: { Categoria: true, Subcategoria: true, Estampa: true },
       filtersLen: {},
       openTopDrawer: false,
-      products: [
-        {
-          cor_produto: "6012",
-          estampa: "",
-          nome_arquivo: [
-            "https://storage.googleapis.com/soma-web/1540055457-produto_cor-52103681_6012_1-T-SHIRT-DE-SEDA-COM-DECOTE-V-DE-ZIPER-METAL-LISA.jpg",
-            "https://storage.googleapis.com/soma-web/1540055457-produto_cor-52103681_6012_10-T-SHIRT-DE-SEDA-COM-DECOTE-V-DE-ZIPER-METAL-LISA.jpg",
-            "https://storage.googleapis.com/soma-web/1540055457-produto_cor-52103681_6012_2-T-SHIRT-DE-SEDA-COM-DECOTE-V-DE-ZIPER-METAL-LISA.jpg",
-            "https://storage.googleapis.com/soma-web/1540055457-produto_cor-52103681_6012_3-T-SHIRT-DE-SEDA-COM-DECOTE-V-DE-ZIPER-METAL-LISA.jpg",
-            "https://storage.googleapis.com/soma-web/1540055457-produto_cor-52103681_6012_4-T-SHIRT-DE-SEDA-COM-DECOTE-V-DE-ZIPER-METAL-LISA.jpg",
-            "https://storage.googleapis.com/soma-web/282977-produto_estilo-52.10.3681.jpg",
-            "https://storage.googleapis.com/soma-web/282977-produto_estilo-52.10.3681B.jpg"
-          ],
-          nome_colecao: ["INV20"],
-          qtde_entregue: 0,
-          categoria: "SEDA",
-          preco_varejo: 598,
-          data_inicial: ["2019-06-11"],
-          id_marca: 6,
-          id_produto: 930362538,
-          entrega_ajustada: "",
-          marca: "ANIMALE",
-          data_fim: ["1981-12-13"],
-          produto: "52.10.3681",
-          subcategoria: "TOP BASICO",
-          desc_cor_produto: "VERMELHO DISCO",
-          id_marca_linx: 1,
-          preco_varejo_original: 598,
-          qtde_programada: 493,
-          desc_produto: "T-SHIRT SEDA DECOTE ZÍPER LISA",
-          data_prog: "2020-02-12",
-          ultima_data_agendamento_entrega: "1981-12-13",
-          distribuicao: true,
-          preco_custo: 128.77,
-          _id: "1540055457",
-          validBasedinSchedule: true
-        },
-        {
-          cor_produto: "6000",
-          estampa: "",
-          nome_arquivo: [
-            "https://storage.googleapis.com/soma-web/1601850436-produto_cor-24011526_6000_1-CAMISA-DE-SEDA-BASICA-COM-BOLSOS-AMARELA.jpg",
-          ],
-          nome_colecao: ["INV20"],
-          qtde_entregue: 59,
-          categoria: "SEDA",
-          preco_varejo: 758,
-          data_inicial: ["2019-06-27"],
-          id_marca: 6,
-          id_produto: 933340142,
-          entrega_ajustada: "2019-12-04",
-          marca: "ANIMALE",
-          data_fim: ["1981-12-13"],
-          produto: "24.01.1526",
-          subcategoria: "CAMISA",
-          desc_cor_produto: "AMARELO YOKO",
-          id_marca_linx: 1,
-          preco_varejo_original: 758,
-          qtde_programada: 59,
-          desc_produto: "CAMISA SEDA GABRIELA",
-          data_prog: "2020-02-12",
-          ultima_data_agendamento_entrega: "2019-12-06",
-          distribuicao: true,
-          preco_custo: 147.71,
-          _id: "1601850436",
-          validBasedinSchedule: true
-        },
-        {
-          cor_produto: "4060",
-          estampa: "ONÇA YUNES PRETO",
-          nome_arquivo: [
-            "https://storage.googleapis.com/soma-web/1560475925-produto_cor-24011499_4060_1-CAMISA-DE-SEDA-BASICA-ESTAMPA-DE-ONCA.jpg",
-            "https://storage.googleapis.com/soma-web/1560475925-produto_cor-24011499_4060_10-CAMISA-DE-SEDA-BASICA-ESTAMPA-DE-ONCA.jpg",
-            "https://storage.googleapis.com/soma-web/1560475925-produto_cor-24011499_4060_2-CAMISA-DE-SEDA-BASICA-ESTAMPA-DE-ONCA.jpg",
-            "https://storage.googleapis.com/soma-web/1560475925-produto_cor-24011499_4060_3-CAMISA-DE-SEDA-BASICA-ESTAMPA-DE-ONCA.jpg",
-            "https://storage.googleapis.com/soma-web/1560475925-produto_cor-24011499_4060_4-CAMISA-DE-SEDA-BASICA-ESTAMPA-DE-ONCA.jpg",
-            "https://storage.googleapis.com/soma-web/1560475925-produto_cor-24011499_4060_5-CAMISA-DE-SEDA-BASICA-ESTAMPA-DE-ONCA.jpg",
-            "https://storage.googleapis.com/soma-web/283728-produto_estilo-283728_01.jpg",
-            "https://storage.googleapis.com/soma-web/283728-produto_estilo-283728_02.jpg",
-            "https://storage.googleapis.com/soma-web/283728-produto_estilo-283728_03.jpg",
-            "https://storage.googleapis.com/soma-web/283728-produto_estilo-2d839c70-89df-4fa6-b174-26f15725e8a9.jpg",
-            "https://storage.googleapis.com/soma-web/283728-produto_estilo-5676a59a-7e6f-4852-a680-b352f126679b.jpg"
-          ],
-          nome_colecao: ["INV20"],
-          qtde_entregue: 192,
-          categoria: "SEDA",
-          preco_varejo: 798,
-          data_inicial: ["2019-06-17"],
-          id_marca: 6,
-          id_produto: 931344208,
-          entrega_ajustada: "2020-01-10",
-          marca: "ANIMALE",
-          data_fim: ["1981-12-13"],
-          produto: "24.01.1499",
-          subcategoria: "CAMISA",
-          desc_cor_produto: "EST ONÇA YUNES PRETO",
-          id_marca_linx: 1,
-          preco_varejo_original: 798,
-          qtde_programada: 192,
-          desc_produto: "CAMISA SEDA BASICA ONCA",
-          data_prog: "2020-02-12",
-          ultima_data_agendamento_entrega: "2020-01-10",
-          distribuicao: true,
-          preco_custo: 159.39,
-          _id: "1560475925",
-          validBasedinSchedule: true
-        },
-        {
-            cor_produto: "6000",
-            estampa: "",
-            nome_arquivo: [
-              "https://storage.googleapis.com/soma-web/1601850436-produto_cor-24011526_6000_1-CAMISA-DE-SEDA-BASICA-COM-BOLSOS-AMARELA.jpg",
-            ],
-            nome_colecao: ["INV20"],
-            qtde_entregue: 59,
-            categoria: "SEDA",
-            preco_varejo: 758,
-            data_inicial: ["2019-06-27"],
-            id_marca: 6,
-            id_produto: 933340142,
-            entrega_ajustada: "2019-12-04",
-            marca: "ANIMALE",
-            data_fim: ["1981-12-13"],
-            produto: "24.01.1526",
-            subcategoria: "CAMISA",
-            desc_cor_produto: "AMARELO YOKO",
-            id_marca_linx: 1,
-            preco_varejo_original: 758,
-            qtde_programada: 59,
-            desc_produto: "CAMISA SEDA GABRIELA",
-            data_prog: "2020-02-12",
-            ultima_data_agendamento_entrega: "2019-12-06",
-            distribuicao: true,
-            preco_custo: 147.71,
-            _id: "1601850436",
-            validBasedinSchedule: true
-          },        {
-            cor_produto: "6000",
-            estampa: "",
-            nome_arquivo: [
-              "https://storage.googleapis.com/soma-web/1601850436-produto_cor-24011526_6000_1-CAMISA-DE-SEDA-BASICA-COM-BOLSOS-AMARELA.jpg",
-            ],
-            nome_colecao: ["INV20"],
-            qtde_entregue: 59,
-            categoria: "SEDA",
-            preco_varejo: 758,
-            data_inicial: ["2019-06-27"],
-            id_marca: 6,
-            id_produto: 933340142,
-            entrega_ajustada: "2019-12-04",
-            marca: "ANIMALE",
-            data_fim: ["1981-12-13"],
-            produto: "24.01.1526",
-            subcategoria: "CAMISA",
-            desc_cor_produto: "AMARELO YOKO",
-            id_marca_linx: 1,
-            preco_varejo_original: 758,
-            qtde_programada: 59,
-            desc_produto: "CAMISA SEDA GABRIELA",
-            data_prog: "2020-02-12",
-            ultima_data_agendamento_entrega: "2019-12-06",
-            distribuicao: true,
-            preco_custo: 147.71,
-            _id: "1601850436",
-            validBasedinSchedule: true
-          },        {
-            cor_produto: "6000",
-            estampa: "",
-            nome_arquivo: [
-              "https://storage.googleapis.com/soma-web/1601850436-produto_cor-24011526_6000_1-CAMISA-DE-SEDA-BASICA-COM-BOLSOS-AMARELA.jpg",
-            ],
-            nome_colecao: ["INV20"],
-            qtde_entregue: 59,
-            categoria: "SEDA",
-            preco_varejo: 758,
-            data_inicial: ["2019-06-27"],
-            id_marca: 6,
-            id_produto: 933340142,
-            entrega_ajustada: "2019-12-04",
-            marca: "ANIMALE",
-            data_fim: ["1981-12-13"],
-            produto: "24.01.1526",
-            subcategoria: "CAMISA",
-            desc_cor_produto: "AMARELO YOKO",
-            id_marca_linx: 1,
-            preco_varejo_original: 758,
-            qtde_programada: 59,
-            desc_produto: "CAMISA SEDA GABRIELA",
-            data_prog: "2020-02-12",
-            ultima_data_agendamento_entrega: "2019-12-06",
-            distribuicao: true,
-            preco_custo: 147.71,
-            _id: "1601850436",
-            validBasedinSchedule: true
-          },
-      ]
+      products: []
     };
   }
 
@@ -361,31 +165,21 @@ class Relatorio extends React.Component {
   async getProducts() {
     try {
       const response = await axios.get(
-        `${BASE_URL}/products/selectedProducts`,
-        {
-          params: {
-            dataInicio: "2020-02-01T18:57:00.000Z",
-            dataFim: "2020-02-12T18:57:00.000Z",
-            entregaAjustada: "2020-02-27T18:57:00.000Z",
-            collection_name: "INV20",
-            id_marca_estilo: 6,
-            category: "a",
-            subcategory: "b"
-          }
-        }
+        `${BASE_URL}/myProducts/getReport?id_relatorio=${this.getParamFromUrl("id_relatorio")}`
       );
       let products = response.data;
 
+
       if (products.length < 1 || _.isEmpty(products)) {
         return this.props.enqueueSnackbar(
-          "Não há produtos programados para essas datas ",
+          "Não há produtos neste relatório",
           { variant: "warning" }
         );
       }
-      this.setState({ allProgramacoes: products });
+      this.setState({ products });
     } catch (err) {
       console.log(err);
-      return this.props.enqueueSnackbar("Problemas no backend", {
+      return this.props.enqueueSnackbar("Problemas para buscar relatório", {
         variant: "error"
       });
     }
@@ -393,14 +187,12 @@ class Relatorio extends React.Component {
   }
 
   unmarkAllFilters = filterParam => {
-    const { allProgramacoes } = this.state;
-    const programacoes = Object.keys(allProgramacoes);
+    const { products } = this.state;
     const categorias = [];
     const subcategorias = [];
     const estampas = [];
 
-    programacoes.map(programacao => {
-      return allProgramacoes[programacao].map(produto => {
+      products.map(produto => {
         if (filterParam === "Categoria") {
           if (
             !categorias.some(
@@ -442,8 +234,7 @@ class Relatorio extends React.Component {
         }
 
         return true;
-      });
-    });
+      })
     categorias.push("");
     subcategorias.push("");
     estampas.push("");
@@ -462,14 +253,12 @@ class Relatorio extends React.Component {
     return this.refreshFilter(filters);
   };
   mountFiltersOptions = () => {
-    const { allProgramacoes } = this.state;
-    const programacoes = Object.keys(allProgramacoes);
+    const { products } = this.state;
     const categorias = [];
     const subcategorias = [];
     const estampas = [];
 
-    programacoes.map(programacao => {
-      return allProgramacoes[programacao].map(produto => {
+ products.map(produto => {
         if (
           !categorias.some(categoria => categoria.name === produto.categoria) &&
           produto.categoria
@@ -492,7 +281,6 @@ class Relatorio extends React.Component {
         }
         return true;
       });
-    });
 
     const filters = {
       Categoria: categorias,
@@ -507,31 +295,6 @@ class Relatorio extends React.Component {
 
     return this.refreshFilter(filters);
   };
-
-  getAllParamsFromUrl() {
-    const user = new User();
-    const dataInicio = this.getParamFromUrl("dataInicio");
-    const dataFim = this.getParamFromUrl("dataFim");
-    const entregaAjustada = this.getParamFromUrl("entregaAjustada");
-    const category = this.getParamFromUrl("categoria");
-    const subcategory = this.getParamFromUrl("subcategoria");
-    const collection_name = this.getParamFromUrl("colecao");
-    const id_marca_estilo = user.getIdMarcaEstilo();
-
-    return {
-      dataInicio,
-      dataFim,
-      entregaAjustada,
-      category,
-      subcategory,
-      collection_name,
-      id_marca_estilo
-    };
-  }
-
-  getJsonFromUrl(param) {
-    return JSON.parse(this.getParamFromUrl(param));
-  }
 
   getParamFromUrl(param) {
     const urlSearch = new URLSearchParams(this.props.location.search);
@@ -571,7 +334,7 @@ class Relatorio extends React.Component {
             cor_produto,
             qtde_programada,
             desc_cor_produto,
-            _id
+            id,
             // id_produto
           } = produtos;
           const image = UTILS.imagesFromProducts(
@@ -598,7 +361,7 @@ class Relatorio extends React.Component {
                   > */}
               <div
                 className={classes.card}
-                onClick={() => this.handleClickProduct(_id)}
+                onClick={() => this.handleClickProduct(id)}
               >
                 <Typography variant="h6" component="p">
                   {produto}
