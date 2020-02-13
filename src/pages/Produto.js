@@ -10,7 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import Header from "../components/recursableComponents/Header";
 
 import { BASE_URL } from "../consts";
-import imagesFromProducts from "../imageUrl";
+import UTILS from "../imageUrl";
 
 const styles = theme => ({
   root: {
@@ -124,7 +124,7 @@ class Produto extends React.Component {
         params: this.getAllParamsFromUrl()
       });
       const product = resp.data[0];
-      const previewImage = imagesFromProducts(
+      const previewImage = UTILS.imagesFromProducts(
         600,
         600,
         product.produto,

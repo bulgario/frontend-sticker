@@ -34,8 +34,12 @@ import { IconButton } from "@material-ui/core";
 
 import FilterDrawer from "../components/recursableComponents/FilterDrawer";
 import OrderDrawer from "../components/recursableComponents/OrderDrawer";
+import TopDrawer from "../components/recursableComponents/TopDrawer"
 
-import imagesFromProducts from "../imageUrl";
+
+
+
+import UTILS from "../imageUrl";
 const axios = require("axios");
 const _ = require("lodash");
 
@@ -150,6 +154,7 @@ class Relatorio extends React.Component {
       orderAsc: true,
       filterSelected: { Categoria: true, Subcategoria: true, Estampa: true },
       filtersLen: {},
+      openTopDrawer: false,
       products: [
         {
           cor_produto: "6012",
@@ -569,7 +574,7 @@ class Relatorio extends React.Component {
             _id
             // id_produto
           } = produtos;
-          const image = imagesFromProducts(
+          const image = UTILS.imagesFromProducts(
             220,
             320,
             produtos.produto,
@@ -707,6 +712,9 @@ class Relatorio extends React.Component {
   openOrder = () => {
     this.setState({ openOrderDrawer: !this.state.openOrderDrawer });
   };
+  openTopDrawer = () => {
+    this.setState({ openTopDrawer: !this.state.openTopDrawer });
+  };
 
   compare = (a, b) => {
     if (!a[this.state.orderBy] || !b[this.state.orderBy]) return;
@@ -771,6 +779,9 @@ class Relatorio extends React.Component {
             </IconButton>
           }
         />
+                <TopDrawer      
+          openMenu={this.openTopDrawer}
+          open={this.state.openTopDrawer}></TopDrawer>
         <FilterDrawer
           openMenu={this.openFilter}
           open={this.state.open}
@@ -847,7 +858,7 @@ class Relatorio extends React.Component {
         </Container>
         {/* </DragDropContext> */}
 
-        <Footer></Footer>
+        <Footer openTopDrawer={this.openTopDrawer}></Footer>
       </Fragment>
     );
   }
