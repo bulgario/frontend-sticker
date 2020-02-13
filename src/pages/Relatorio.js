@@ -24,7 +24,6 @@ import Divider from "@material-ui/core/Divider";
 
 import { withSnackbar } from "notistack";
 import { BASE_URL } from "../consts";
-import User from "../services/User";
 
 import ArrowBack from "@material-ui/icons/ArrowBack";
 
@@ -361,31 +360,20 @@ class Relatorio extends React.Component {
   async getProducts() {
     try {
       const response = await axios.get(
-        `${BASE_URL}/products/selectedProducts`,
-        {
-          params: {
-            dataInicio: "2020-02-01T18:57:00.000Z",
-            dataFim: "2020-02-12T18:57:00.000Z",
-            entregaAjustada: "2020-02-27T18:57:00.000Z",
-            collection_name: "INV20",
-            id_marca_estilo: 6,
-            category: "a",
-            subcategory: "b"
-          }
-        }
+        `${BASE_URL}/myProducts/getReport?id_relatorio=${this.getParamFromUrl("id_relatorio")}`
       );
       let products = response.data;
-
+        console.log(products)
       if (products.length < 1 || _.isEmpty(products)) {
         return this.props.enqueueSnackbar(
-          "Não há produtos programados para essas datas ",
+          "Não há produtos neste relatório",
           { variant: "warning" }
         );
       }
-      this.setState({ allProgramacoes: products });
+      this.setState({ products });
     } catch (err) {
       console.log(err);
-      return this.props.enqueueSnackbar("Problemas no backend", {
+      return this.props.enqueueSnackbar("Problemas para buscar relatório", {
         variant: "error"
       });
     }
@@ -393,14 +381,14 @@ class Relatorio extends React.Component {
   }
 
   unmarkAllFilters = filterParam => {
-    const { allProgramacoes } = this.state;
-    const programacoes = Object.keys(allProgramacoes);
+    const { products } = this.state;
+    const programacoes = Object.keys(products);
     const categorias = [];
     const subcategorias = [];
     const estampas = [];
 
     programacoes.map(programacao => {
-      return allProgramacoes[programacao].map(produto => {
+      return products[programacao].map(produto => {
         if (filterParam === "Categoria") {
           if (
             !categorias.some(
@@ -462,14 +450,14 @@ class Relatorio extends React.Component {
     return this.refreshFilter(filters);
   };
   mountFiltersOptions = () => {
-    const { allProgramacoes } = this.state;
-    const programacoes = Object.keys(allProgramacoes);
+    const { products } = this.state;
+    const programacoes = Object.keys(products);
     const categorias = [];
     const subcategorias = [];
     const estampas = [];
 
     programacoes.map(programacao => {
-      return allProgramacoes[programacao].map(produto => {
+      return products[programacao].map(produto => {
         if (
           !categorias.some(categoria => categoria.name === produto.categoria) &&
           produto.categoria
@@ -507,31 +495,6 @@ class Relatorio extends React.Component {
 
     return this.refreshFilter(filters);
   };
-
-  getAllParamsFromUrl() {
-    const user = new User();
-    const dataInicio = this.getParamFromUrl("dataInicio");
-    const dataFim = this.getParamFromUrl("dataFim");
-    const entregaAjustada = this.getParamFromUrl("entregaAjustada");
-    const category = this.getParamFromUrl("categoria");
-    const subcategory = this.getParamFromUrl("subcategoria");
-    const collection_name = this.getParamFromUrl("colecao");
-    const id_marca_estilo = user.getIdMarcaEstilo();
-
-    return {
-      dataInicio,
-      dataFim,
-      entregaAjustada,
-      category,
-      subcategory,
-      collection_name,
-      id_marca_estilo
-    };
-  }
-
-  getJsonFromUrl(param) {
-    return JSON.parse(this.getParamFromUrl(param));
-  }
 
   getParamFromUrl(param) {
     const urlSearch = new URLSearchParams(this.props.location.search);
