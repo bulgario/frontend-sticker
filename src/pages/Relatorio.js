@@ -169,13 +169,7 @@ class Relatorio extends React.Component {
       );
       let products = response.data;
 
-      //COMENTAR ESSA PARTE QUANDO SUBIR A API
-      products= products.map(product => {
-        let produto = product._source
-        produto.id =product._id
-        return produto
-      })
-        console.log(products,'meus produtos tá bonito')
+
       if (products.length < 1 || _.isEmpty(products)) {
         return this.props.enqueueSnackbar(
           "Não há produtos neste relatório",
