@@ -46,7 +46,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function BottomAppBar() {
+export default function BottomAppBar(props) {
   const classes = useStyles();
 
   return (
@@ -58,8 +58,8 @@ export default function BottomAppBar() {
             <CommentIcon />
           </IconButton>
           <Typography variant="body2" component="h6">RESUMO</Typography> */}
-          <Fab color="primary" aria-label="add" className={classes.fabButton}>
-            <AddIcon  className={classes.whiteButton}/>
+          <Fab color="primary" aria-label="add" className={classes.fabButton} onClick={props.openTopDrawer}>
+            <AddIcon  className={classes.whiteButton} />
           </Fab>
           <div className={classes.grow} />
           {/* <IconButton edge="start" color="inherit" aria-label="open drawer">

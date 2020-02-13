@@ -2,18 +2,19 @@ import React from "react";
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 import { withRouter } from "react-router-dom";
 
-// import AutoComplete from "./SearchAutoComplete"
+import AutoComplete from "./AutoComplete"
 import { makeStyles } from "@material-ui/core/styles";
-
 
 const useStyles = makeStyles(theme => ({
   root: {
-    height: 'auto'
+    height: 'auto',
+    
   },
   close: {
     flexGrow: 1,
     height: 0
   },
+  padding: theme.spacing(2),
 
 }));
 
@@ -49,9 +50,10 @@ function TopDrawer(props) {
         onClose={toggleDrawer("top", false)}
         onOpen={toggleDrawer("top", true)}
         anchor="top"
+        className={classes.padding}
         
       >
-        {/* <AutoComplete ></AutoComplete> */}
+                    <AutoComplete/>
       </SwipeableDrawer>
      </div>
   );

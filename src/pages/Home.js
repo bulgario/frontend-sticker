@@ -13,7 +13,7 @@ import TopDrawer from "../components/recursableComponents/TopDrawer"
 
 import IconButton from "@material-ui/core/IconButton";
 import Menu from "@material-ui/icons/Menu";
-// import Search from "@material-ui/icons/Search";
+import Search from "@material-ui/icons/Search";
 
 const styles = theme => ({
   container: {},
@@ -101,16 +101,16 @@ class Home extends React.Component {
 
         <Header
           title="+Produtos"
-          // rightIcon={
-          //   <IconButton
-          //     aria-label="upload picture"
-          //     component="span"
-          //     className={classes.whiteButton}
-          //     onClick={this.openMenu2}
-          //   >
-          //     <Search  />
-          //   </IconButton>
-          // }
+          rightIcon={
+            <IconButton
+              aria-label="upload picture"
+              component="span"
+              className={classes.whiteButton}
+              onClick={this.openMenu2}
+            >
+              <Search  />
+            </IconButton>
+          }
           leftIcon={
             <IconButton
               onClick={this.openMenu}

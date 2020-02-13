@@ -2,7 +2,7 @@ import React from "react";
 import Autosuggest from "react-autosuggest";
 import { debounce } from "throttle-debounce";
 import { BASE_URL } from "../../consts";
-import imagesFromProducts from "../../imageUrl";
+import UTILS from "../../imageUrl";
 import Grid from "@material-ui/core/Grid";
 import { withRouter } from "react-router-dom";
 import List from '@material-ui/core/List';
@@ -112,7 +112,7 @@ class AutoComplete extends React.Component {
         })
         .then(resp => {
           resp.data.map(product => {
-            const previewImage = imagesFromProducts(
+            const previewImage =  UTILS.imagesFromProducts(
               60,
               60,
               product.produto,
