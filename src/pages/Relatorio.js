@@ -542,7 +542,8 @@ class Relatorio extends React.Component {
             </IconButton>
           }
         />
-                <TopDrawer      
+                <TopDrawer 
+                relatorioPage={true}     
           openMenu={this.openTopDrawer}
           open={this.state.openTopDrawer}></TopDrawer>
         <FilterDrawer

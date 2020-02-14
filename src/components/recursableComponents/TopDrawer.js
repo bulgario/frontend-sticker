@@ -14,7 +14,10 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
     height: 0
   },
-  padding: theme.spacing(2),
+  padding: {
+    padding: theme.spacing(2),
+  backgroundColor:'#fcb92c'
+},
 
 }));
 
@@ -42,20 +45,20 @@ function TopDrawer(props) {
   };
 
   return (
-    <div className={classes.root}>
 
       <SwipeableDrawer
       disableBackdropTransition={!iOS} disableDiscovery={iOS}
         open={props.open}
         onClose={toggleDrawer("top", false)}
         onOpen={toggleDrawer("top", true)}
-        anchor="top"
-        className={classes.padding}
-        
-      >
-                    <AutoComplete/>
+        anchor="top">
+        <div
+         className={classes.padding}
+
+        >
+        <AutoComplete relatorioPage={props.relatorioPage}/>
+        </div>
       </SwipeableDrawer>
-     </div>
   );
 }
 export default withRouter(TopDrawer);
