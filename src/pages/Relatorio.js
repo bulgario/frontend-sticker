@@ -607,7 +607,7 @@ class Relatorio extends React.Component {
             <CardMedia
               className={classes.mainImage}
               title="Vitrine"
-              image="https://img.elo7.com.br/product/244x194/1BF6822/adesivos-para-vitrines-liquidacao-vitrine-de-lojas.jpg"
+              // image="https://img.elo7.com.br/product/244x194/1BF6822/adesivos-para-vitrines-liquidacao-vitrine-de-lojas.jpg"
             />
           </Grid>
 

@@ -186,7 +186,7 @@ class MyProductsCards extends React.Component {
               <Grid item direction="row" justify="flex-end" container>
                 <CardMedia
                   className={classes.cover}
-                  image={meusProdutos.imagemJanela}
+                  // image={meusProdutos.imagemJanela}
                   title="Vitrine"
                 />
               </Grid>
