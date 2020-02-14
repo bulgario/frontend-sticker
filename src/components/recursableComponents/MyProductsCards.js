@@ -97,7 +97,7 @@ class MyProductsCards extends React.Component {
   };
 
   render() {
-    const { classes, nameCardBox, meusProdutos } = this.props;
+    const { classes, nameCardBox, meusProdutos } = this.props; //eslint-disable-line
     const { checked } = this.state;
 
     const handleNameChange = event => {
