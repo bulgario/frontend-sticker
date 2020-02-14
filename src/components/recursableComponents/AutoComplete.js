@@ -13,8 +13,70 @@ import { withRouter } from "react-router-dom";
 
 import axios from "axios";
 import { Typography,Grid } from "@material-ui/core";
+import {makeStyles } from '@material-ui/core/styles';
+
+
+const useStyles = makeStyles(theme => ({
+  list: {
+    width: 280
+  },
+  fullList: {
+    width: "auto"
+  },
+  root: {
+padding: theme.spacing(0.6),
+
+  },
+  popper: {
+    backgroundColor:'transparent',
+
+  },  paper: {
+    backgroundColor:'white',
+    borderRadius: 0,
+    marginRight: theme.spacing(-0.2),
+    marginLeft: theme.spacing(-1.1),
+    [theme.breakpoints.up("md")]: {
+      marginRight: theme.spacing(-4.5),
+    }
+
+
+  },
+  paper2: {
+    backgroundColor:'white',
+    borderRadius: 0,
+    marginRight: theme.spacing(-1.4),
+    marginLeft: theme.spacing(-1.1),
+    [theme.breakpoints.up("md")]: {
+      marginRight: theme.spacing(-5.5),
+    }
+
+
+  },
+  underline: {
+    "&&&:before": {
+      borderBottom: "none"
+    },
+    "&&:after": {
+      borderBottom: "none"
+    }
+  },
+  mainLabel: {
+    margin: theme.spacing(1)
+  },
+  button: {
+    color: "white",
+    marginTop: theme.spacing(2),
+    marginRight: theme.spacing(3),
+    marginLeft: theme.spacing(3),
+    marginBottom: theme.spacing(2)
+  },
+  selectAll: {
+    marginRight: theme.spacing(2)
+  }
+}));
 
  function ProdutoAutoComplete(props) {
+  const classes = useStyles();
 
   const [open, setOpen] = React.useState(false);
   const [options, setOptions] = React.useState([]);
@@ -46,7 +108,7 @@ import { Typography,Grid } from "@material-ui/core";
       option.cor_produto
     );
     return (
-      <Grid container direction="row" sm={12} xs={12} justify="space-between" alignItems="space-between" onClick={() => props.history.push(`/produto?produto=${option.id}`)}>
+      <Grid  container direction="row" sm={12} xs={12} justify="space-between" alignItems="space-between" onClick={() => props.history.push(`/produto?produto=${option.id}`)}>
         <Grid container item direction="column" sm={9} xs={9} md={3} lg={3} >
         <Grid container item direction="row" justify="space-between" alignItems="center">
         <Typography color="textSecondary"  variant="subtitle2">{UTILS.formatToMaxCaractersAllowed(option.desc_produto,20)}</Typography>
@@ -73,13 +135,16 @@ import { Typography,Grid } from "@material-ui/core";
     );
   };
   return (
+    <div style={{backgroundColor:'white'}}>
+
     <Autocomplete
+    // disablePortal={true}
     noOptionsText="Nenhum produto foi encontrado"
     loadingText="Buscando produtos..."
       inputvalue={value}
       onChange={onTagsChange}
       id="asynchronous-demo"
-      style={{ width: "97%", marginTop: 5, marginLeft: 5, marginBottom: 7 }}
+      style={{ width: "97%", marginTop: 5, marginLeft: 5, marginBottom: 7, border:"solid 0 white" }}
       open={open}
       onOpen={() => {
         setOpen(true);
@@ -94,8 +159,24 @@ import { Typography,Grid } from "@material-ui/core";
       getOptionLabel={option => option.desc_produto}
       options={options}
       loading={loading}
+      classes={props.relatorioPage?
+        {
+          popper: classes.popper, 
+          paper: classes.paper2,
+          root: classes.root,
+          listbox: classes.listbox,
+         
+        }: {
+          popper: classes.popper, 
+          paper: classes.paper,
+          root: classes.root,
+          listbox: classes.listbox,
+         
+        }}
       renderInput={params => (
         <TextField
+        disableUnderline={true}
+        inputStyle={{borderWidth: 0,backgroundColor:'green'}}
         placeholder="Descrição do produto"
           onChange={e => {
             fetchUrl(e);
@@ -103,9 +184,9 @@ import { Typography,Grid } from "@material-ui/core";
           {...params}
           // label="Buscar produtos"
           fullWidth
-          variant="outlined"
+          // variant="outlined"
           InputProps={{
-            ...params.InputProps,
+            ...params.InputProps, classes,
             endAdornment: (
               <React.Fragment>
                 {loading ? (
@@ -118,6 +199,8 @@ import { Typography,Grid } from "@material-ui/core";
         />
       )}
     />
+        </div>
+
   );
 }
 
