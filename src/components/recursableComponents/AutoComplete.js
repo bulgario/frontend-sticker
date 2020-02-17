@@ -90,9 +90,14 @@ padding: theme.spacing(0.6),
       `${BASE_URL}/products/search_product?desc_produto=${target.value}`
     );
     setLoading(false);
-
     setOptions(response.data);
   };
+
+  let event;
+  const debouce = async ({ target }) => {
+    clearTimeout(event);
+    event = setTimeout(()=>fetchUrl({target}), 500);
+  }
 
   const onTagsChange = async (event, value) => {
 
@@ -179,7 +184,7 @@ padding: theme.spacing(0.6),
         inputStyle={{borderWidth: 0,backgroundColor:'green'}}
         placeholder="Descrição do produto"
           onChange={e => {
-            fetchUrl(e);
+            debouce(e);
           }}
           {...params}
           // label="Buscar produtos"
