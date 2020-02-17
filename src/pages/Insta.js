@@ -550,7 +550,7 @@ class Insta extends React.Component {
 
     if (distribuicao === true) {
       return classes.greenIcon;
-    } else if (validBasedinSchedule === false) {
+    } else if (validBasedinSchedule === true) {
       return classes.yellowIcon;
     } else {
       return classes.redIcon;
