@@ -35,9 +35,6 @@ import FilterDrawer from "../components/recursableComponents/FilterDrawer";
 import OrderDrawer from "../components/recursableComponents/OrderDrawer";
 import TopDrawer from "../components/recursableComponents/TopDrawer"
 
-
-
-
 import UTILS from "../imageUrl";
 const axios = require("axios");
 const _ = require("lodash");
@@ -136,6 +133,14 @@ const styles = theme => ({
       paddingRight: theme.spacing(1.5),
       paddingLeft: theme.spacing(0)
     }
+  },
+  emoji: {
+    fontSize: '100px',
+    margin: '0 auto'
+  },
+  emojiPosition: {
+    margin: '0 auto',
+    textAlign: 'center'
   }
 });
 
@@ -154,7 +159,8 @@ class Relatorio extends React.Component {
       filterSelected: { Categoria: true, Subcategoria: true, Estampa: true },
       filtersLen: {},
       openTopDrawer: false,
-      products: []
+      products: [],
+      noProducts: false
     };
   }
 
@@ -169,8 +175,8 @@ class Relatorio extends React.Component {
       );
       let products = response.data;
 
-
       if (products.length < 1 || _.isEmpty(products)) {
+        this.setState({ noProducts: true })
         return this.props.enqueueSnackbar(
           "Não há produtos neste relatório",
           { variant: "warning" }
@@ -615,7 +621,12 @@ class Relatorio extends React.Component {
           <div className={classes.margin}>
             <Grid container direction="column" spacing={2}>
             <Grid item direction="row" justify="center">
-            {this.renderProductsCardsView(this.filterProducts(this.state.products))}
+            {this.state.noProducts ? 
+            <div className={classes.emojiPosition}>
+              <Typography variant="h6" component="p">Sem Produtos no seu Relatório</Typography>
+              <span role="img" className={classes.emoji} aria-label="Shrug">🤷</span>
+            </div>
+            : this.renderProductsCardsView(this.filterProducts(this.state.products))}
                  </Grid>
             </Grid>
           </div>
