@@ -104,8 +104,8 @@ class MyProducts extends React.Component {
     const user = new User()
     const date = new Date()
 
-    const generateNewCards = () => {
-      this.setState({ 
+    const generateNewCards = async () => {
+      await this.setState({ 
         vitrine: [...this.state.vitrine,
         { 
           id_usuario : user.user.id_usuario,
@@ -113,8 +113,8 @@ class MyProducts extends React.Component {
           data_criacao : date,
           produto_tags: {},
           referencia_tags: {},
-        }] 
-      }, () => console.log(this.state.vitrine));
+        }]
+      });
     };
 
     return (

@@ -127,17 +127,29 @@ class MyProductsCards extends React.Component {
         id
       } = this.props.meusProdutos;
       try {
-        await axios.post(`${BASE_URL}/myProducts/createNewRelatory`,{
-          "id_usuario" : id_usuario,
-          "nome_relatorio":  nome_relatorio,
-          // "img_relatorio": img_relatorio,
-          "data_criacao" : data_criacao,
-          "produto_tags": produto_tags ,
-          "referencia_tags": referencia_tags,
-        })
-        this.props.enqueueSnackbar("Salvo com Sucesso.", {
-          variant: "success"
-        });
+        if(this.props.meusProdutos.id) {
+          await axios.post(`${BASE_URL}/myProducts/editRelatory`, {
+            id_relatorio: id,
+            id_usuario: id_usuario,
+            nome_relatorio: nome_relatorio,
+            produto_tags: produto_tags,
+            referencia_tags: referencia_tags
+          })
+          this.props.enqueueSnackbar("Salvo com Sucesso.", {
+            variant: "success"
+          });
+        } else {
+          await axios.post(`${BASE_URL}/myProducts/createNewRelatory`, {
+            id_usuario: id_usuario,
+            nome_relatorio: nome_relatorio,
+            data_criacao: data_criacao,
+            produto_tags: produto_tags,
+            referencia_tags: referencia_tags
+          })
+          this.props.enqueueSnackbar("Novo Relatório Criado com Sucesso.", {
+            variant: "success"
+          });
+        }
         this.setState({ disabled: true });
       } catch (error) {
         console.log("Error Saving your collection of products:", error);
