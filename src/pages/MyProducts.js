@@ -88,7 +88,7 @@ class MyProducts extends React.Component {
     } catch (err) {
       console.log("Error getting reports:", err)
     }
-  } 
+  }
 
   getAllParamsFromUrl() {
     const user = new User();
@@ -101,11 +101,20 @@ class MyProducts extends React.Component {
   render() {
     const { classes } = this.props;
     const { vitrine } = this.state;
-    
+    const user = new User()
+    const date = new Date()
+
     const generateNewCards = () => {
-      this.setState({ vitrine: [...this.state.vitrine, {}] }, () =>
-        console.log(this.state.vitrine)
-      );
+      this.setState({ 
+        vitrine: [...this.state.vitrine,
+        { 
+          id_usuario : user.user.id_usuario,
+          // "img_relatorio": img_relatorio,
+          data_criacao : date,
+          produto_tags: {},
+          referencia_tags: {},
+        }] 
+      }, () => console.log(this.state.vitrine));
     };
 
     return (
@@ -145,7 +154,7 @@ class MyProducts extends React.Component {
                   ? meusProdutos.nome_relatorio
                   : ""
               }
-              redirectTo={`/relatorio?id_relatorio=${123}`}
+              redirectTo={`/relatorio?id_relatorio=${meusProdutos.id}`}
               getProdutosData={setStateProduct}
               meusProdutos={meusProdutos}
               index={i}

@@ -13,6 +13,9 @@ import CardMedia from "@material-ui/core/CardMedia";
 import CreateIcon from "@material-ui/icons/Create";
 import CheckIcon from "@material-ui/icons/Check";
 
+import {BASE_URL} from '../../consts';
+import User from "../../services/User";
+import axios from "axios";
 
 import PropTypes from 'prop-types';
 // import Switch from '@material-ui/core/Switch';
@@ -89,6 +92,7 @@ class MyProductsCards extends React.Component {
     this.state = {
       disabled: true,
       checked: true,
+
     };
   }
 
@@ -102,7 +106,7 @@ class MyProductsCards extends React.Component {
 
     const handleNameChange = event => {
       const obj = Object.assign(this.props.meusProdutos, {
-        nome_relatorio: event.target.value
+        nome_relatorio: event.target.value,
       });
 
       this.props.getProdutosData(obj);
@@ -112,9 +116,25 @@ class MyProductsCards extends React.Component {
       this.setState({ disabled: !this.state.disabled });
     };
 
-    const handleSaveData = () => {
+    const handleSaveData = async () => {
+      const {
+        id_usuario,
+        nome_relatorio,
+        // img_relatorio,
+        data_criacao,
+        produto_tags,
+        referencia_tags,
+        id
+      } = this.props.meusProdutos;
       try {
-        // this.props.meusProdutos  POST PARA ENVIAR O DADO PORRA
+        await axios.post(`${BASE_URL}/myProducts/createNewRelatory`,{
+          "id_usuario" : id_usuario,
+          "nome_relatorio":  nome_relatorio,
+          // "img_relatorio": img_relatorio,
+          "data_criacao" : data_criacao,
+          "produto_tags": produto_tags ,
+          "referencia_tags": referencia_tags,
+        })
         this.props.enqueueSnackbar("Salvo com Sucesso.", {
           variant: "success"
         });
