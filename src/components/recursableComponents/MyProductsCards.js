@@ -12,14 +12,18 @@ import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import CreateIcon from "@material-ui/icons/Create";
 import CheckIcon from "@material-ui/icons/Check";
+import DeleteIcon from '@material-ui/icons/Delete';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
 
 import {BASE_URL} from '../../consts';
-import User from "../../services/User";
 import axios from "axios";
 
 import PropTypes from 'prop-types';
-// import Switch from '@material-ui/core/Switch';
-// import Paper from '@material-ui/core/Paper';
 import Grow from '@material-ui/core/Grow';
 
 
@@ -83,7 +87,9 @@ const styles = theme => ({
   checkSave: {
     cursor: "pointer"
   },
-  iconCheck: {}
+  deleteIcon: {
+    cursor: "pointer"
+  }
 });
 
 class MyProductsCards extends React.Component {
@@ -92,7 +98,7 @@ class MyProductsCards extends React.Component {
     this.state = {
       disabled: true,
       checked: true,
-
+      open: false,
     };
   }
 
@@ -159,6 +165,38 @@ class MyProductsCards extends React.Component {
       }
     };
 
+    const handleDeleteCard = async () => {
+     const { id } = this.props.meusProdutos;
+      try {
+        await axios.delete(`${BASE_URL}/myProducts/deleteRelatory`, {
+          data: {
+            id_relatorio: id
+          }
+        })
+        this.props.meusProdutos.deleted = true
+        this.props.enqueueSnackbar("Relatório Deletado com Sucesso.", {
+          variant: "success"
+        });
+        this.props.removeSelf()
+        this.setState({ open: false });
+      } catch (error) {
+        console.log("Error Deleting your relatory:", error);
+        this.props.enqueueSnackbar("Erro ao Deletar Sua Coleção.", {
+          variant: "error"
+        });
+        this.setState({ open: false });
+      }
+    }
+
+    const handleClickOpen = async () => {
+      this.setState({ open: true });
+      
+    };
+  
+    const handleClose = () => {
+      this.setState({ open: false });
+    };
+
     return (
       <Fragment>
       <Grow
@@ -214,13 +252,41 @@ class MyProductsCards extends React.Component {
                       Compartilhar
                     </Button>
                   </CardActions>
+                  <Grid item direction="row" justify="flex-end">
+                    <DeleteIcon
+                      // color="primary"
+                      className={classes.deleteIcon}
+                      onClick={handleClickOpen}
+                    />
+                     <Dialog
+                      open={this.state.open}
+                      onClose={handleClose}
+                      aria-labelledby="alert-dialog-title"
+                      aria-describedby="alert-dialog-description"
+                    >
+                      <DialogTitle id="alert-dialog-title">{"Exclusão do Relatório"}</DialogTitle>
+                      <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                          Você tem certeza que deseja excluir o relatório?
+                        </DialogContentText>
+                      </DialogContent>
+                      <DialogActions>
+                        <Button onClick={handleClose} color="primary">
+                          NÃO, PERA
+                        </Button>
+                        <Button onClick={handleDeleteCard} color="primary" autoFocus>
+                          VAMO
+                        </Button>
+                      </DialogActions>
+                    </Dialog>
+                  </Grid>
                 </Grid>
               <Grid item direction="row" justify="flex-end" container>
-                <CardMedia
+                {/* <CardMedia
                   className={classes.cover}
                   // image={meusProdutos.imagemJanela}
                   title="Vitrine"
-                />
+                /> */}
               </Grid>
             </CardContent>
           </Card>

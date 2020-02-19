@@ -117,6 +117,10 @@ class MyProducts extends React.Component {
       });
     };
 
+    const removeSelf = (index) => {
+      this.setState({ vitrine: vitrine.filter((e, i) => i !== index)})
+    }
+
     return (
       <Fragment>
         <Header
@@ -157,6 +161,7 @@ class MyProducts extends React.Component {
               redirectTo={`/relatorio?id_relatorio=${meusProdutos.id}`}
               getProdutosData={setStateProduct}
               meusProdutos={meusProdutos}
+              removeSelf={() => removeSelf(i)}
               index={i}
             />
           );
