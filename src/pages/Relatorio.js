@@ -166,6 +166,7 @@ class Relatorio extends React.Component {
 
   componentDidMount() {
     this.getProducts();
+    this.getRelatory();
   }
 
   async getProducts() {
@@ -173,6 +174,7 @@ class Relatorio extends React.Component {
       const response = await axios.get(
         `${BASE_URL}/myProducts/getReport?id_relatorio=${this.getParamFromUrl("id_relatorio")}`
       );
+
       let products = response.data;
 
       if (products.length < 1 || _.isEmpty(products)) {
@@ -190,6 +192,21 @@ class Relatorio extends React.Component {
       });
     }
     this.mountFiltersOptions();
+  }
+
+  async getRelatory() {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/myProducts/getRelatory?id_relatorio=${this.getParamFromUrl("id_relatorio")}`
+      );
+      let relatory = response.data;
+      this.setState({ relatory })
+    } catch (error) {
+      console.log(error)
+      return this.props.enqueueSnackbar("Problemas para buscar relatório", {
+        variant: "error"
+      });
+    }
   }
 
   unmarkAllFilters = filterParam => {
@@ -516,6 +533,8 @@ class Relatorio extends React.Component {
   };
   render() {
     const { classes } = this.props;
+    const { relatory } = this.state
+    
     return (
       <Fragment>
         <LoadingDialog
@@ -524,7 +543,7 @@ class Relatorio extends React.Component {
         />
 
         <Header
-          title="Vitrine 02/12/2020"
+          title={relatory ? relatory.nome_relatorio : ""}
           rightIcon={
             <IconButton
               aria-label="upload picture"
@@ -610,13 +629,13 @@ class Relatorio extends React.Component {
             </Grid>
           </Grid>
           <Divider id="some"></Divider>
-          <Grid container direction="row" justify="center">
+          {/* <Grid container direction="row" justify="center">
             <CardMedia
               className={classes.mainImage}
               title="Vitrine"
-              // image="https://img.elo7.com.br/product/244x194/1BF6822/adesivos-para-vitrines-liquidacao-vitrine-de-lojas.jpg"
+              image="https://img.elo7.com.br/product/244x194/1BF6822/adesivos-para-vitrines-liquidacao-vitrine-de-lojas.jpg"
             />
-          </Grid>
+          </Grid> */}
 
           <div className={classes.margin}>
             <Grid container direction="column" spacing={2}>
