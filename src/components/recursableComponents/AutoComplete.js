@@ -4,9 +4,11 @@ import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { BASE_URL } from "../../consts";
+import User from "../../services/User"
 
 import UTILS from "../../imageUrl";
 
+import Button from '@material-ui/core/Button';
 
 import { withRouter } from "react-router-dom";
 
@@ -82,7 +84,13 @@ padding: theme.spacing(0.6),
   const [options, setOptions] = React.useState([]);
   const [value, setValue] = React.useState("");
   const [loading, setLoading] = React.useState(false);
+  const [valueInput, getValueInput] = React.useState("");
 
+  const getAllProductsBasedInInput = () => {
+    const user = new User();
+    const id_marca_estilo = user.user.id_marca_estilo;
+    return props.history.push(`/produtos?desc_produto=${valueInput}&id_marca_estilo=${id_marca_estilo}`)
+  }
 
   const fetchUrl = async ({ target }) => {
     setLoading(true);
@@ -95,12 +103,12 @@ padding: theme.spacing(0.6),
 
   let event;
   const debouce = async ({ target }) => {
+    getValueInput(target.value)
     clearTimeout(event);
     event = setTimeout(()=>fetchUrl({target}), 500);
   }
 
   const onTagsChange = async (event, value) => {
-
     setValue(value);
   };
 
@@ -141,7 +149,7 @@ padding: theme.spacing(0.6),
   };
   return (
     <div style={{backgroundColor:'white'}}>
-
+      <Button onClick={getAllProductsBasedInInput}>Buscar</Button>
     <Autocomplete
     // disablePortal={true}
     noOptionsText="Nenhum produto foi encontrado"
@@ -154,6 +162,7 @@ padding: theme.spacing(0.6),
       onOpen={() => {
         setOpen(true);
       }}
+      // popupIcon={}
       onClose={() => {
         setOpen(false);
       }}
@@ -210,4 +219,3 @@ padding: theme.spacing(0.6),
 }
 
 export default withRouter(ProdutoAutoComplete);
-

@@ -9,7 +9,6 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import CardMedia from '@material-ui/core/CardMedia';
 
-
 import ListItemText from '@material-ui/core/ListItemText';
 
 import "./styles.css";
