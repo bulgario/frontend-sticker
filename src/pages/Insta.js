@@ -605,7 +605,7 @@ class Insta extends React.Component {
                     ref={provided.innerRef}
                   > */}
               <Card
-              elevation={4} variant="elevation"
+              elevation={5} variant="elevation"
                 className={classes.card}
                 onClick={() => this.handleClickProduct(_id)}
               >
