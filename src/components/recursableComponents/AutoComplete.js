@@ -4,19 +4,15 @@ import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { BASE_URL } from "../../consts";
-import User from "../../services/User"
-
-import UTILS from "../../imageUrl";
-
 import Button from '@material-ui/core/Button';
-
 import { withRouter } from "react-router-dom";
 
+import User from "../../services/User"
+import UTILS from "../../imageUrl";
 
 import axios from "axios";
 import { Typography,Grid } from "@material-ui/core";
 import {makeStyles } from '@material-ui/core/styles';
-
 
 const useStyles = makeStyles(theme => ({
   list: {
@@ -214,7 +210,6 @@ padding: theme.spacing(0.6),
       )}
     />
         </div>
-
   );
 }
 

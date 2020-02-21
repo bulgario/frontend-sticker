@@ -28,6 +28,9 @@ import { BASE_URL } from "../consts";
 import ArrowBack from "@material-ui/icons/ArrowBack";
 
 import Toc from "@material-ui/icons/Toc";
+import CheckIcon from '@material-ui/icons/Check';
+import DoneAllIcon from '@material-ui/icons/DoneAll';
+
 
 import { IconButton } from "@material-ui/core";
 
@@ -160,7 +163,10 @@ class AllProducts extends React.Component {
       filtersLen: {},
       openTopDrawer: false,
       products: [],
-      noProducts: false
+      noProducts: false,
+      relatoryPage: true,
+      handleApplied: false,
+      handleTodos: false
     };
   }
 
@@ -175,10 +181,10 @@ class AllProducts extends React.Component {
         params: this.getAllParamsFromUrl()
       });
       let surveyedProducts  = response.data
-      if(response) {
+    
         this.setState({ products: surveyedProducts })
-        this.setState({ produto: surveyedProducts })
-      }
+        this.setState({ produto: surveyedProducts })    
+        //FALTA FEEDBACK PARA USER QUE NAO HÁ PRODUTOS
   }
 
   getAllParamsFromUrl() {
@@ -195,8 +201,6 @@ class AllProducts extends React.Component {
     const urlSearch = new URLSearchParams(this.props.location.search);
     return urlSearch.get(param);
   }
-
-
 
   unmarkAllFilters = filterParam => {
     const { products } = this.state;
@@ -332,6 +336,7 @@ class AllProducts extends React.Component {
 
   renderProductsCardsView(data) {
     const { classes } = this.props;
+    const { handleApplied } = this.state
 
     return (
       <Grid
@@ -342,7 +347,6 @@ class AllProducts extends React.Component {
         spacing={0}
       >
         {data.map((produtos, index) => {
-          
           const {
             produto,
             desc_produto,
@@ -412,7 +416,7 @@ class AllProducts extends React.Component {
                 {produtos.image ? (
                   <CardMedia
                     id="border"
-                    className={classes.mediaCard}
+                    className={handleApplied ? classes.mediaCardApplied : classes.mediaCard}
                     image={produtos.image}
                     title="Produto"
                   />
@@ -644,7 +648,13 @@ class AllProducts extends React.Component {
         </Container>
         {/* </DragDropContext> */}
 
-        <Footer openTopDrawer={this.openTopDrawer}></Footer>
+        <Footer 
+          relatoryPage={this.state.relatoryPage}
+          openTopDrawer={this.openTopDrawer}
+          leftIconTodos={<CheckIcon></CheckIcon>}
+          rightIconTodos={<DoneAllIcon></DoneAllIcon>}
+        >
+        </Footer>
       </Fragment>
     );
   }
