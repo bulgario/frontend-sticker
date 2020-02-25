@@ -239,7 +239,7 @@ class Produto extends React.Component {
                 <Grid item xs={6} sm={6} alignSelf="flex-end">
                   <Typography
                     color="textSecondary"
-                    variant="p"
+                    
                     component="h3"
                     className={classes.marginLeft}
                   >
@@ -285,7 +285,7 @@ class Produto extends React.Component {
                   </Typography>
                   <Typography
                     color="textSecondary"
-                    variant="p"
+                    
                     component="subtitle2"
                   >
                     {data_prog}
@@ -298,7 +298,7 @@ class Produto extends React.Component {
                   </Typography>
 
                   <Typography
-                    variant="p"
+                    
                     component="subtitle2"
                     color="textSecondary"
                   >
@@ -328,7 +328,7 @@ class Produto extends React.Component {
                   </Typography>
                   <Typography
                     color="textSecondary"
-                    variant="p"
+                    
                     component="subtitle2"
                   >
                     {cor_produto}
@@ -341,7 +341,7 @@ class Produto extends React.Component {
                   </Typography>
 
                   <Typography
-                    variant="p"
+                    
                     component="subtitle2"
                     color="textSecondary"
                   >

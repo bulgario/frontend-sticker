@@ -412,7 +412,7 @@ class AllProducts extends React.Component {
                   {produto}
                 </Typography>
                 <Typography
-                  variant="p"
+                  
                   color="textSecondary"
                   component="p"
                   className={classes.desc_produto}
@@ -430,7 +430,7 @@ class AllProducts extends React.Component {
                 </Typography>
                 {/* <Typography variant="body2" color="textSecondary" component="p">{produtos.desc_cor_produto}</Typography> */}
                 <Typography
-                  variant="p"
+                  
                   color="textSecondary"
                   component="p"
                   className={classes.desc_produto}
@@ -663,7 +663,6 @@ class AllProducts extends React.Component {
               direction="row"
             >
               <IconButton
-                color="black"
                 aria-label="add"
                 onClick={() => this.setState({ showReportsList: true })}
               >

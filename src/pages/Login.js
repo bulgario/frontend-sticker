@@ -237,7 +237,7 @@ class Login extends React.Component {
         </Grid>
         <Grid item xs={8}>
 
-        <Typography align="center" component="p" variant="p" className={classes.forgotPasswordText}>
+        <Typography align="center" component="p"  className={classes.forgotPasswordText}>
               Esqueceu seu login ou senha?
             </Typography>
           <Button
@@ -252,7 +252,7 @@ class Login extends React.Component {
           </Button>
         </Grid>
           <Typography
-          variant="p"
+          
           component="small"
             align="center"
           >
@@ -269,7 +269,7 @@ class Login extends React.Component {
       <Grid item xs={12} sm={4}  className={classes.grid}>
         <Container className={classes.main}>
           <Grid container item justify={'center'} alignItems="center" direction="column">
-            <Typography variant="p"  component="h4" >+Produtos</Typography>
+            <Typography   component="h4" >+Produtos</Typography>
             <CardMedia
               component={'img'}
               src={'http://desenvolvimento.somagrupo.com.br/img/soma_trans.png'}
