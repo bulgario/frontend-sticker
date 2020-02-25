@@ -124,7 +124,7 @@ class MyProducts extends React.Component {
     return (
       <Fragment>
         <Header
-          title="Meus Produtos"
+          title="Meus relatórios"
           rightIcon={null}
           leftIcon={
             <IconButton

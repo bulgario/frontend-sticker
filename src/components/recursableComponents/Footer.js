@@ -58,7 +58,7 @@ export default function BottomAppBar(props) {
             <CommentIcon />
           </IconButton>
           <Typography variant="body2" component="h6">RESUMO</Typography> */}
-          <Fab color="primary" aria-label="add" className={classes.fabButton} onClick={props.openTopDrawer}>
+          <Fab color="primary" aria-label="add" className={classes.fabButton} onClick={props.onClick}>
             <AddIcon  className={classes.whiteButton} />
           </Fab>
           <div className={classes.grow} />
