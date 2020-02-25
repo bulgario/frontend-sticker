@@ -652,7 +652,7 @@ class Relatorio extends React.Component {
         </Container>
         {/* </DragDropContext> */}
 
-        <Footer openTopDrawer={this.openTopDrawer}></Footer>
+        <Footer onClick={this.openTopDrawer}></Footer>
       </Fragment>
     );
   }

@@ -12,10 +12,15 @@ import Footer from "../components/recursableComponents/Footer";
 
 import LoadingDialog from "../components/recursableComponents/LoadingDialog";
 
+import ChooseReportList from "../components/recursableComponents/ChooseReportList";
+import User from "../services/User";
+
+import ChipsList from "../components/recursableComponents/ChipsList";
+
+
 import CardMedia from "@material-ui/core/CardMedia";
 
 import Typography from "@material-ui/core/Typography";
-
 
 import { signIn } from "../actions";
 import FilterList from "@material-ui/icons/FilterList";
@@ -36,12 +41,13 @@ import { IconButton } from "@material-ui/core";
 
 import FilterDrawer from "../components/recursableComponents/FilterDrawer";
 import OrderDrawer from "../components/recursableComponents/OrderDrawer";
-import TopDrawer from "../components/recursableComponents/TopDrawer"
+import TopDrawer from "../components/recursableComponents/TopDrawer";
+
+
+import AddIcon from "@material-ui/icons/Add";
 
 import UTILS from "../imageUrl";
 const axios = require("axios");
-const _ = require("lodash");
-
 const styles = theme => ({
   margin: {
     margin: theme.spacing(1)
@@ -113,19 +119,24 @@ const styles = theme => ({
     }
   },
   containerSmall: {
-      marginBottom: theme.spacing(10),
+    marginBottom: theme.spacing(10),
     [theme.breakpoints.down("xs")]: {
       paddingRight: theme.spacing(0),
       paddingLeft: theme.spacing(0),
-      marginBottom: theme.spacing(2),
-
+      marginBottom: theme.spacing(2)
     },
     [theme.breakpoints.down("sm")]: {
       paddingRight: theme.spacing(0),
       paddingLeft: theme.spacing(0),
-      marginBottom: theme.spacing(2),
-
+      marginBottom: theme.spacing(2)
     }
+  },
+  hideXsLabel: {
+    [theme.breakpoints.down("xs")]: {
+      
+      display:'none',
+    },
+
   },
   paddingRightSmall: {
     [theme.breakpoints.down("xs")]: {
@@ -138,12 +149,12 @@ const styles = theme => ({
     }
   },
   emoji: {
-    fontSize: '100px',
-    margin: '0 auto'
+    fontSize: "100px",
+    margin: "0 auto"
   },
   emojiPosition: {
-    margin: '0 auto',
-    textAlign: 'center'
+    margin: "0 auto",
+    textAlign: "center"
   }
 });
 
@@ -166,12 +177,33 @@ class AllProducts extends React.Component {
       noProducts: false,
       relatoryPage: true,
       handleApplied: false,
-      handleTodos: false
+      handleTodos: false,
+      showReportsList: false,
+      reports: [],
+      reportsNames: [],
     };
   }
 
   componentDidMount() {
-    this.getProductsBySearch()
+    this.getProductsBySearch();
+    this.getReports();
+  }
+
+  async getReports() {
+    const user = new User();
+    const id_user = user.getUser().id_usuario;
+
+    try {
+      await axios
+        .get(`${BASE_URL}/myProducts/getReports`, {
+          params: { id_user }
+        })
+        .then(data => {
+          this.setState({ reports: data.data });
+        });
+    } catch (err) {
+      console.log("Error getting reports:", err);
+    }
   }
 
   async getProductsBySearch() {
@@ -179,17 +211,18 @@ class AllProducts extends React.Component {
       `${BASE_URL}/products/listProductsWithSearchQuery`,
       {
         params: this.getAllParamsFromUrl()
-      });
-      let surveyedProducts  = response.data
-    
-        this.setState({ products: surveyedProducts })
-        this.setState({ produto: surveyedProducts })    
-        //FALTA FEEDBACK PARA USER QUE NAO HÁ PRODUTOS
+      }
+    );
+    let surveyedProducts = response.data;
+    if (response) {
+      this.setState({ products: surveyedProducts });
+      this.setState({ produto: surveyedProducts });
+    }
   }
 
   getAllParamsFromUrl() {
     const desc_produto = this.getParamFromUrl("desc_produto");
-    const id_marca_estilo = this.getParamFromUrl("id_marca_estilo")
+    const id_marca_estilo = this.getParamFromUrl("id_marca_estilo");
 
     return {
       desc_produto,
@@ -208,49 +241,47 @@ class AllProducts extends React.Component {
     const subcategorias = [];
     const estampas = [];
 
-      products.map(produto => {
-        if (filterParam === "Categoria") {
-          if (
-            !categorias.some(
-              categoria => categoria.name === produto.categoria
-            ) &&
-            produto.categoria
-          ) {
-            categorias.push({
-              name: produto.categoria,
-              checked: this.state.filterSelected["Categoria"]
-            });
-          }
+    products.map(produto => {
+      if (filterParam === "Categoria") {
+        if (
+          !categorias.some(categoria => categoria.name === produto.categoria) &&
+          produto.categoria
+        ) {
+          categorias.push({
+            name: produto.categoria,
+            checked: this.state.filterSelected["Categoria"]
+          });
         }
+      }
 
-        if (filterParam === "Subcategoria") {
-          if (
-            !subcategorias.some(
-              subcategoria => subcategoria.name === produto.subcategoria
-            ) &&
-            produto.subcategoria
-          ) {
-            subcategorias.push({
-              name: produto.subcategoria,
-              checked: this.state.filterSelected["Subcategoria"]
-            });
-          }
+      if (filterParam === "Subcategoria") {
+        if (
+          !subcategorias.some(
+            subcategoria => subcategoria.name === produto.subcategoria
+          ) &&
+          produto.subcategoria
+        ) {
+          subcategorias.push({
+            name: produto.subcategoria,
+            checked: this.state.filterSelected["Subcategoria"]
+          });
         }
+      }
 
-        if (filterParam === "Estampa") {
-          if (
-            !estampas.some(estampa => estampa.name === produto.estampa) &&
-            produto.estampa
-          ) {
-            estampas.push({
-              name: produto.estampa,
-              checked: this.state.filterSelected["Estampa"]
-            });
-          }
+      if (filterParam === "Estampa") {
+        if (
+          !estampas.some(estampa => estampa.name === produto.estampa) &&
+          produto.estampa
+        ) {
+          estampas.push({
+            name: produto.estampa,
+            checked: this.state.filterSelected["Estampa"]
+          });
         }
+      }
 
-        return true;
-      })
+      return true;
+    });
     categorias.push("");
     subcategorias.push("");
     estampas.push("");
@@ -274,29 +305,29 @@ class AllProducts extends React.Component {
     const subcategorias = [];
     const estampas = [];
 
- products.map(produto => {
-        if (
-          !categorias.some(categoria => categoria.name === produto.categoria) &&
-          produto.categoria
-        ) {
-          categorias.push({ name: produto.categoria, checked: true });
-        }
-        if (
-          !subcategorias.some(
-            subcategoria => subcategoria.name === produto.subcategoria
-          ) &&
-          produto.subcategoria
-        ) {
-          subcategorias.push({ name: produto.subcategoria, checked: true });
-        }
-        if (
-          !estampas.some(estampa => estampa.name === produto.estampa) &&
-          produto.estampa
-        ) {
-          estampas.push({ name: produto.estampa, checked: true });
-        }
-        return true;
-      });
+    products.map(produto => {
+      if (
+        !categorias.some(categoria => categoria.name === produto.categoria) &&
+        produto.categoria
+      ) {
+        categorias.push({ name: produto.categoria, checked: true });
+      }
+      if (
+        !subcategorias.some(
+          subcategoria => subcategoria.name === produto.subcategoria
+        ) &&
+        produto.subcategoria
+      ) {
+        subcategorias.push({ name: produto.subcategoria, checked: true });
+      }
+      if (
+        !estampas.some(estampa => estampa.name === produto.estampa) &&
+        produto.estampa
+      ) {
+        estampas.push({ name: produto.estampa, checked: true });
+      }
+      return true;
+    });
 
     const filters = {
       Categoria: categorias,
@@ -312,11 +343,6 @@ class AllProducts extends React.Component {
     return this.refreshFilter(filters);
   };
 
-  getParamFromUrl(param) {
-    const urlSearch = new URLSearchParams(this.props.location.search);
-    return urlSearch.get(param);
-  }
-
   filterProducts(produtos) {
     const { categoriaFilter, subcategoriaFilter, estampaFilter } = this.state;
     const produtosFiltrados = produtos.filter(produto => {
@@ -326,7 +352,7 @@ class AllProducts extends React.Component {
         estampaFilter.includes(produto.estampa)
       );
     });
-    
+
     return produtosFiltrados.sort(this.compare);
   }
 
@@ -353,7 +379,7 @@ class AllProducts extends React.Component {
             cor_produto,
             qtde_programada,
             desc_cor_produto,
-            id,
+            id
             // id_produto
           } = produtos;
           const image = UTILS.imagesFromProducts(
@@ -413,20 +439,13 @@ class AllProducts extends React.Component {
                     ? `${desc_cor_produto.substring(0, 13)}...`
                     : desc_cor_produto}
                 </Typography>
-                {produtos.image ? (
                   <CardMedia
                     id="border"
                     className={handleApplied ? classes.mediaCardApplied : classes.mediaCard}
                     image={produtos.image}
                     title="Produto"
                   />
-                ) : (
-                  <CardMedia
-                    className={classes.mediaCard}
-                    image={"/no-picture.png"}
-                    title="Produto sem foto"
-                  />
-                )}
+
                 <Typography variant="h5" component="p" color="textSecondary">
                   {qtde_programada}
                 </Typography>
@@ -527,10 +546,31 @@ class AllProducts extends React.Component {
         }
       });
   };
+
+  handleToogleChips = (nome_relatorio) =>  {
+    const {reportsNames} = this.state
+    if (!reportsNames.includes(nome_relatorio)) { 
+      reportsNames.push(nome_relatorio)
+
+    } else { 
+      const index  = reportsNames.indexOf(nome_relatorio);
+      reportsNames.splice(index, 1);
+
+    }
+
+    this.setState({reportsNames})
+
+  }
+  removeChips = (index) => () => { 
+    const {reportsNames} = this.state
+    reportsNames.splice(index,1)
+    this.setState({reportsNames})
+
+  }
   render() {
     const { classes } = this.props;
-    const { relatory } = this.state
-    
+    const { relatory } = this.state;
+
     return (
       <Fragment>
         <LoadingDialog
@@ -563,10 +603,11 @@ class AllProducts extends React.Component {
             </IconButton>
           }
         />
-                <TopDrawer 
-                relatorioPage={true}     
+        <TopDrawer
+          relatorioPage={true}
           openMenu={this.openTopDrawer}
-          open={this.state.openTopDrawer}></TopDrawer>
+          open={this.state.openTopDrawer}
+        ></TopDrawer>
         <FilterDrawer
           openMenu={this.openFilter}
           open={this.state.open}
@@ -586,6 +627,8 @@ class AllProducts extends React.Component {
           orderAsc={this.state.orderAsc}
         ></OrderDrawer>
         <Container className={classes.containerSmall}>
+        <ChipsList reportsNames={this.state.reportsNames}removeChips={this.removeChips}></ChipsList>
+
           <Grid
             id="some"
             item
@@ -598,22 +641,41 @@ class AllProducts extends React.Component {
           >
             <Grid
               container
-              xs={6}
+              xs={1}
               item
-              sm={6}
+              sm={2}
               alignItems="center"
               justify="flex-start"
             >
               <IconButton onClick={this.openFilter}>
                 <FilterList></FilterList>
               </IconButton>
-              <Typography component="p">Filtrar</Typography>
+              <Typography  className={classes.hideXsLabel} component="p">Filtrar</Typography>
+            </Grid>
+
+            <Grid
+              container
+              xs={10}
+              item
+              sm={8}
+              alignItems="center"
+              justify="center"
+              direction="row"
+            >
+              <IconButton
+                color="black"
+                aria-label="add"
+                onClick={() => this.setState({ showReportsList: true })}
+              >
+                <AddIcon  />
+              </IconButton>
+              <Typography className={classes.hideXsLabel}>Relatório</Typography>
             </Grid>
             <Grid
               container
-              xs={6}
+              xs={1}
               item
-              sm={6}
+              sm={2}
               alignItems="center"
               justify="flex-end"
               className={classes.paddingRightSmall}
@@ -621,9 +683,10 @@ class AllProducts extends React.Component {
               <IconButton onClick={this.openOrder}>
                 <Toc></Toc>
               </IconButton>
-              <Typography component="p">Ordenar</Typography>
+              <Typography className={classes.hideXsLabel} component="p">Ordenar</Typography>
             </Grid>
           </Grid>
+
           <Divider id="some"></Divider>
           {/* <Grid container direction="row" justify="center">
             <CardMedia
@@ -635,26 +698,42 @@ class AllProducts extends React.Component {
 
           <div className={classes.margin}>
             <Grid container direction="column" spacing={2}>
-            <Grid item direction="row" justify="center">
-            {this.state.noProducts ? 
-            <div className={classes.emojiPosition}>
-              <Typography variant="h6" component="p">Sem Produtos no seu Relatório</Typography>
-              <span role="img" className={classes.emoji} aria-label="Shrug">🤷</span>
-            </div>
-            : this.renderProductsCardsView(this.state.products)}
-                 </Grid>
+              <Grid item direction="row" justify="center">
+                {this.state.noProducts ? (
+                  <div className={classes.emojiPosition}>
+                    <Typography variant="h6" component="p">
+                      Sem Produtos no seu Relatório
+                    </Typography>
+                    <span
+                      role="img"
+                      className={classes.emoji}
+                      aria-label="Shrug"
+                    >
+                      🤷
+                    </span>
+                  </div>
+                ) : (
+                  this.renderProductsCardsView(this.state.products)
+                )}
+              </Grid>
             </Grid>
           </div>
         </Container>
         {/* </DragDropContext> */}
 
-        <Footer 
-          relatoryPage={this.state.relatoryPage}
-          openTopDrawer={this.openTopDrawer}
-          leftIconTodos={<CheckIcon></CheckIcon>}
-          rightIconTodos={<DoneAllIcon></DoneAllIcon>}
-        >
-        </Footer>
+        <Footer
+                  relatoryPage={this.state.relatoryPage}
+
+               leftIconTodos={<CheckIcon></CheckIcon>}
+               rightIconTodos={<DoneAllIcon></DoneAllIcon>}
+        onClick={this.openTopDrawer}></Footer>
+        <ChooseReportList
+          onClose={() => this.setState({ showReportsList: false })}
+          reports={this.state.reports}
+          reportsNames={this.state.reportsNames}
+          open={this.state.showReportsList}
+          handleToogleChips={this.handleToogleChips}
+        ></ChooseReportList>
       </Fragment>
     );
   }
