@@ -604,7 +604,8 @@ class Insta extends React.Component {
                     {...provided.dragHandleProps}
                     ref={provided.innerRef}
                   > */}
-              <div
+              <Card
+              elevation={5} variant="elevation"
                 className={classes.card}
                 onClick={() => this.handleClickProduct(_id)}
               >
@@ -663,7 +664,7 @@ class Insta extends React.Component {
                 <Typography variant="h5" component="p" color="textSecondary">
                   {qtde_programada}
                 </Typography>
-              </div>
+              </Card>
               {/* </div>
                 )}
               </Draggable> */}
