@@ -19,6 +19,8 @@ import ChipsList from "../components/recursableComponents/ChipsList";
 
 
 import CardMedia from "@material-ui/core/CardMedia";
+import Card from "@material-ui/core/Card";
+
 
 import Typography from "@material-ui/core/Typography";
 
@@ -37,7 +39,7 @@ import CheckIcon from '@material-ui/icons/Check';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
 
 
-import { IconButton } from "@material-ui/core";
+import  IconButton  from "@material-ui/core/IconButton";
 
 import FilterDrawer from "../components/recursableComponents/FilterDrawer";
 import OrderDrawer from "../components/recursableComponents/OrderDrawer";
@@ -77,9 +79,9 @@ const styles = theme => ({
     width: 220,
     boxSizing: "border-box",
     objectFit: "scale-down",
-    border: "2px groove",
-    borderRadius: "3px",
-    borderColor: "#8080801a",
+    // border: "2px groove",
+    // borderRadius: "3px",
+    // borderColor: "#8080801a",
 
     [theme.breakpoints.down("sm")]: {
       height: 220,
@@ -404,7 +406,9 @@ class AllProducts extends React.Component {
                     {...provided.dragHandleProps}
                     ref={provided.innerRef}
                   > */}
-              <div
+              <Card
+              variant="elevation"
+              elevation={4}
                 className={classes.card}
                 onClick={() => this.handleClickProduct(id)}
               >
@@ -449,7 +453,7 @@ class AllProducts extends React.Component {
                 <Typography variant="h5" component="p" color="textSecondary">
                   {qtde_programada}
                 </Typography>
-              </div>
+              </Card>
               {/* </div>
                 )}
               </Draggable> */}
