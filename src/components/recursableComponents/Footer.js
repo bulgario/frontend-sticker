@@ -49,11 +49,11 @@ const useStyles = makeStyles(theme => ({
 
 export default function BottomAppBar(props) {
   const handleTodos = () => {
-    props.allApplied(false)
+    // props.allApplied(false)
    }
    
    const handleApplied = () => {
-    props.applied(false)
+    // props.applied(false)
    }
 
   const classes = useStyles();
