@@ -35,9 +35,6 @@ import FilterDrawer from "../components/recursableComponents/FilterDrawer";
 import OrderDrawer from "../components/recursableComponents/OrderDrawer";
 import TopDrawer from "../components/recursableComponents/TopDrawer"
 
-
-
-
 import UTILS from "../imageUrl";
 const axios = require("axios");
 const _ = require("lodash");
@@ -136,6 +133,14 @@ const styles = theme => ({
       paddingRight: theme.spacing(1.5),
       paddingLeft: theme.spacing(0)
     }
+  },
+  emoji: {
+    fontSize: '100px',
+    margin: '0 auto'
+  },
+  emojiPosition: {
+    margin: '0 auto',
+    textAlign: 'center'
   }
 });
 
@@ -154,12 +159,14 @@ class Relatorio extends React.Component {
       filterSelected: { Categoria: true, Subcategoria: true, Estampa: true },
       filtersLen: {},
       openTopDrawer: false,
-      products: []
+      products: [],
+      noProducts: false
     };
   }
 
   componentDidMount() {
     this.getProducts();
+    this.getRelatory();
   }
 
   async getProducts() {
@@ -167,10 +174,11 @@ class Relatorio extends React.Component {
       const response = await axios.get(
         `${BASE_URL}/myProducts/getReport?id_relatorio=${this.getParamFromUrl("id_relatorio")}`
       );
+
       let products = response.data;
 
-
       if (products.length < 1 || _.isEmpty(products)) {
+        this.setState({ noProducts: true })
         return this.props.enqueueSnackbar(
           "Não há produtos neste relatório",
           { variant: "warning" }
@@ -184,6 +192,21 @@ class Relatorio extends React.Component {
       });
     }
     this.mountFiltersOptions();
+  }
+
+  async getRelatory() {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/myProducts/getRelatory?id_relatorio=${this.getParamFromUrl("id_relatorio")}`
+      );
+      let relatory = response.data;
+      this.setState({ relatory })
+    } catch (error) {
+      console.log(error)
+      return this.props.enqueueSnackbar("Problemas para buscar relatório", {
+        variant: "error"
+      });
+    }
   }
 
   unmarkAllFilters = filterParam => {
@@ -510,6 +533,8 @@ class Relatorio extends React.Component {
   };
   render() {
     const { classes } = this.props;
+    const { relatory } = this.state
+    
     return (
       <Fragment>
         <LoadingDialog
@@ -518,7 +543,7 @@ class Relatorio extends React.Component {
         />
 
         <Header
-          title="Vitrine 02/12/2020"
+          title={relatory ? relatory.nome_relatorio : ""}
           rightIcon={
             <IconButton
               aria-label="upload picture"
@@ -604,18 +629,23 @@ class Relatorio extends React.Component {
             </Grid>
           </Grid>
           <Divider id="some"></Divider>
-          <Grid container direction="row" justify="center">
+          {/* <Grid container direction="row" justify="center">
             <CardMedia
               className={classes.mainImage}
               title="Vitrine"
-              // image="https://img.elo7.com.br/product/244x194/1BF6822/adesivos-para-vitrines-liquidacao-vitrine-de-lojas.jpg"
+              image="https://img.elo7.com.br/product/244x194/1BF6822/adesivos-para-vitrines-liquidacao-vitrine-de-lojas.jpg"
             />
-          </Grid>
+          </Grid> */}
 
           <div className={classes.margin}>
             <Grid container direction="column" spacing={2}>
             <Grid item direction="row" justify="center">
-            {this.renderProductsCardsView(this.filterProducts(this.state.products))}
+            {this.state.noProducts ? 
+            <div className={classes.emojiPosition}>
+              <Typography variant="h6" component="p">Sem Produtos no seu Relatório</Typography>
+              <span role="img" className={classes.emoji} aria-label="Shrug">🤷</span>
+            </div>
+            : this.renderProductsCardsView(this.filterProducts(this.state.products))}
                  </Grid>
             </Grid>
           </div>

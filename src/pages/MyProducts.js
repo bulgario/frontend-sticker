@@ -11,6 +11,10 @@ import AddCircleIcon from "@material-ui/icons/AddCircle";
 import Header from "../components/recursableComponents/Header";
 import MyProductsCards from "../components/recursableComponents/MyProductsCards";
 
+import {BASE_URL} from '../consts';
+import User from "../services/User";
+import axios from "axios";
+
 const styles = theme => ({
   container: {
     display: "flex",
@@ -66,40 +70,56 @@ class MyProducts extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      vitrine: [
-        {
-          nome_relatorio: "Vitrine 04/12/19",
-          id_usuario: 123,
-          imagemJanela:
-            "https://img.elo7.com.br/product/244x194/1BF6822/adesivos-para-vitrines-liquidacao-vitrine-de-lojas.jpg",
-          produto_tags: {
-            id_produto_1: [1, 2, 3],
-            id_produto_2: []
-          }
-        },
-        {
-          nome_relatorio: "Vitrine 04/12/19",
-          id_usuario: 456,
-          imagemJanela:
-            "https://img.elo7.com.br/product/244x194/1BF6822/adesivos-para-vitrines-liquidacao-vitrine-de-lojas.jpg",
-          produto_tags: {
-            id_produto_1: [1, 2, 3],
-            id_produto_2: []
-          }
-        }
-      ]
+      vitrine: []
+    };
+  }
+
+  componentDidMount() {
+    this.getReports()
+  }
+
+  async getReports() {
+    try {
+      await axios.get(`${BASE_URL}/myProducts/getReports`, {
+        params: this.getAllParamsFromUrl()
+      }).then(data => {
+        this.setState({ vitrine: data.data })
+      })
+    } catch (err) {
+      console.log("Error getting reports:", err)
+    }
+  }
+
+  getAllParamsFromUrl() {
+    const user = new User();
+    const id_user = user.getUser().id_usuario;
+    return {
+      id_user,
     };
   }
 
   render() {
     const { classes } = this.props;
     const { vitrine } = this.state;
+    const user = new User()
+    const date = new Date()
 
-    const generateNewCards = () => {
-      this.setState({ vitrine: [...this.state.vitrine, {}] }, () =>
-        console.log(this.state.vitrine)
-      );
+    const generateNewCards = async () => {
+      await this.setState({ 
+        vitrine: [...this.state.vitrine,
+        { 
+          id_usuario : user.user.id_usuario,
+          // "img_relatorio": img_relatorio,
+          data_criacao : date,
+          produto_tags: {},
+          referencia_tags: {},
+        }]
+      });
     };
+
+    const removeSelf = (index) => {
+      this.setState({ vitrine: vitrine.filter((e, i) => i !== index)})
+    }
 
     return (
       <Fragment>
@@ -138,9 +158,10 @@ class MyProducts extends React.Component {
                   ? meusProdutos.nome_relatorio
                   : ""
               }
-              redirectTo={`/relatorio?id_relatorio=${123}`}
+              redirectTo={`/relatorio?id_relatorio=${meusProdutos.id}`}
               getProdutosData={setStateProduct}
               meusProdutos={meusProdutos}
+              removeSelf={() => removeSelf(i)}
               index={i}
             />
           );

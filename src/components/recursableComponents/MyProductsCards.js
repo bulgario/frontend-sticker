@@ -12,11 +12,18 @@ import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import CreateIcon from "@material-ui/icons/Create";
 import CheckIcon from "@material-ui/icons/Check";
+import DeleteIcon from '@material-ui/icons/Delete';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
+
+import {BASE_URL} from '../../consts';
+import axios from "axios";
 
 import PropTypes from 'prop-types';
-// import Switch from '@material-ui/core/Switch';
-// import Paper from '@material-ui/core/Paper';
 import Grow from '@material-ui/core/Grow';
 
 
@@ -80,7 +87,9 @@ const styles = theme => ({
   checkSave: {
     cursor: "pointer"
   },
-  iconCheck: {}
+  deleteIcon: {
+    cursor: "pointer"
+  }
 });
 
 class MyProductsCards extends React.Component {
@@ -89,6 +98,7 @@ class MyProductsCards extends React.Component {
     this.state = {
       disabled: true,
       checked: true,
+      open: false,
     };
   }
 
@@ -102,7 +112,7 @@ class MyProductsCards extends React.Component {
 
     const handleNameChange = event => {
       const obj = Object.assign(this.props.meusProdutos, {
-        nome_relatorio: event.target.value
+        nome_relatorio: event.target.value,
       });
 
       this.props.getProdutosData(obj);
@@ -112,12 +122,40 @@ class MyProductsCards extends React.Component {
       this.setState({ disabled: !this.state.disabled });
     };
 
-    const handleSaveData = () => {
+    const handleSaveData = async () => {
+      const {
+        id_usuario,
+        nome_relatorio,
+        // img_relatorio,
+        data_criacao,
+        produto_tags,
+        referencia_tags,
+        id
+      } = this.props.meusProdutos;
       try {
-        // this.props.meusProdutos  POST PARA ENVIAR O DADO PORRA
-        this.props.enqueueSnackbar("Salvo com Sucesso.", {
-          variant: "success"
-        });
+        if(this.props.meusProdutos.id) {
+          await axios.post(`${BASE_URL}/myProducts/editRelatory`, {
+            id_relatorio: id,
+            id_usuario: id_usuario,
+            nome_relatorio: nome_relatorio,
+            produto_tags: produto_tags,
+            referencia_tags: referencia_tags
+          })
+          this.props.enqueueSnackbar("Salvo com Sucesso.", {
+            variant: "success"
+          });
+        } else {
+          await axios.post(`${BASE_URL}/myProducts/createNewRelatory`, {
+            id_usuario: id_usuario,
+            nome_relatorio: nome_relatorio,
+            data_criacao: data_criacao,
+            produto_tags: produto_tags,
+            referencia_tags: referencia_tags
+          })
+          this.props.enqueueSnackbar("Novo Relatório Criado com Sucesso.", {
+            variant: "success"
+          });
+        }
         this.setState({ disabled: true });
       } catch (error) {
         console.log("Error Saving your collection of products:", error);
@@ -125,6 +163,38 @@ class MyProductsCards extends React.Component {
           variant: "error"
         });
       }
+    };
+
+    const handleDeleteCard = async () => {
+     const { id } = this.props.meusProdutos;
+      try {
+        await axios.delete(`${BASE_URL}/myProducts/deleteRelatory`, {
+          data: {
+            id_relatorio: id
+          }
+        })
+        this.props.meusProdutos.deleted = true
+        this.props.enqueueSnackbar("Relatório Deletado com Sucesso.", {
+          variant: "success"
+        });
+        this.props.removeSelf()
+        this.setState({ open: false });
+      } catch (error) {
+        console.log("Error Deleting your relatory:", error);
+        this.props.enqueueSnackbar("Erro ao Deletar Sua Coleção.", {
+          variant: "error"
+        });
+        this.setState({ open: false });
+      }
+    }
+
+    const handleClickOpen = async () => {
+      this.setState({ open: true });
+      
+    };
+  
+    const handleClose = () => {
+      this.setState({ open: false });
     };
 
     return (
@@ -182,13 +252,41 @@ class MyProductsCards extends React.Component {
                       Compartilhar
                     </Button>
                   </CardActions>
+                  <Grid item direction="row" justify="flex-end">
+                    <DeleteIcon
+                      // color="primary"
+                      className={classes.deleteIcon}
+                      onClick={handleClickOpen}
+                    />
+                     <Dialog
+                      open={this.state.open}
+                      onClose={handleClose}
+                      aria-labelledby="alert-dialog-title"
+                      aria-describedby="alert-dialog-description"
+                    >
+                      <DialogTitle id="alert-dialog-title">{"Exclusão do Relatório"}</DialogTitle>
+                      <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                          Você tem certeza que deseja excluir o relatório?
+                        </DialogContentText>
+                      </DialogContent>
+                      <DialogActions>
+                        <Button onClick={handleClose} color="primary">
+                          NÃO, PERA
+                        </Button>
+                        <Button onClick={handleDeleteCard} color="primary" autoFocus>
+                          VAMO
+                        </Button>
+                      </DialogActions>
+                    </Dialog>
+                  </Grid>
                 </Grid>
               <Grid item direction="row" justify="flex-end" container>
-                <CardMedia
+                {/* <CardMedia
                   className={classes.cover}
                   // image={meusProdutos.imagemJanela}
                   title="Vitrine"
-                />
+                /> */}
               </Grid>
             </CardContent>
           </Card>
