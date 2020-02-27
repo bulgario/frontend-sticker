@@ -94,7 +94,7 @@ import {
         return true;
       }
 
-      if (this.matchRoute(route, ROUTES.MYPRODUCTS)) {
+      if (this.matchRoute(route, ROUTES.MYREPORTS)) {
         return true;
       }
 

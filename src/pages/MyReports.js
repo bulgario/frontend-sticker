@@ -9,9 +9,9 @@ import Grid from "@material-ui/core/Grid";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 
 import Header from "../components/recursableComponents/Header";
-import MyProductsCards from "../components/recursableComponents/MyProductsCards";
+import MyProductsCards from "../components/recursableComponents/MyReportsCards";
 
-import {BASE_URL} from '../consts';
+import { BASE_URL } from "../consts";
 import User from "../services/User";
 import axios from "axios";
 
@@ -66,27 +66,29 @@ const styles = theme => ({
   }
 });
 
-class MyProducts extends React.Component {
+class MyReports extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      vitrine: []
+      vitrine: [],
     };
   }
 
   componentDidMount() {
-    this.getReports()
+    this.getReports();
   }
 
   async getReports() {
     try {
-      await axios.get(`${BASE_URL}/myProducts/getReports`, {
-        params: this.getAllParamsFromUrl()
-      }).then(data => {
-        this.setState({ vitrine: data.data })
-      })
+      await axios
+        .get(`${BASE_URL}/myProducts/getReports`, {
+          params: this.getAllParamsFromUrl()
+        })
+        .then(data => {
+          this.setState({ vitrine: data.data });
+        });
     } catch (err) {
-      console.log("Error getting reports:", err)
+      console.log("Error getting reports:", err);
     }
   }
 
@@ -94,32 +96,66 @@ class MyProducts extends React.Component {
     const user = new User();
     const id_user = user.getUser().id_usuario;
     return {
-      id_user,
+      id_user
     };
   }
 
   render() {
     const { classes } = this.props;
     const { vitrine } = this.state;
-    const user = new User()
-    const date = new Date()
+    const user = new User();
+    const date = new Date();
 
     const generateNewCards = async () => {
-      await this.setState({ 
-        vitrine: [...this.state.vitrine,
-        { 
-          id_usuario : user.user.id_usuario,
-          // "img_relatorio": img_relatorio,
-          data_criacao : date,
-          produto_tags: {},
-          referencia_tags: {},
-        }]
-      });
+      let relatory = {
+        id_usuario: user.user.id_usuario,
+        // "img_relatorio": img_relatorio,
+        data_criacao: date,
+        produto_tags: {},
+        referencia_tags: {},
+        id: null
+      };
+
+      if (relatory) {
+        const {
+          id_usuario,
+          nome_relatorio,
+          data_criacao,
+          produto_tags,
+          referencia_tags
+        } = relatory;
+        try {
+          const produto = await axios.post(
+            `${BASE_URL}/myProducts/createNewRelatory`,
+            {
+              id_usuario: id_usuario,
+              nome_relatorio: nome_relatorio,
+              data_criacao: data_criacao,
+              produto_tags: produto_tags,
+              referencia_tags: referencia_tags
+            }
+          );
+          relatory.id = produto.data;
+          await this.setState({
+            vitrine: [...this.state.vitrine, relatory]
+          });
+
+          this.props.enqueueSnackbar("Novo Relatório Criado com Sucesso.", {
+            variant: "success"
+          });
+        } catch (error) {
+          this.props.enqueueSnackbar("Erro ao criar seu novo Relatório.", {
+            variant: "error"
+          });
+          console.log("Error creating new Relatory:", error)
+        }
+      }
     };
 
-    const removeSelf = (index) => {
-      this.setState({ vitrine: vitrine.filter((e, i) => i !== index)})
-    }
+    const removeSelf = index => {
+      const newVitrine = vitrine.filter((e, i) => i !== index)
+      this.setState({ vitrine: newVitrine });
+    };
 
     return (
       <Fragment>
@@ -148,22 +184,24 @@ class MyProducts extends React.Component {
                 ]
               },
               () => {
-                console.log(this.state.vitrine);
+                // console.log(this.state.vitrine);
               }
             );
           return (
-            <MyProductsCards
-              nameCardBox={
-                meusProdutos.nome_relatorio !== ""
-                  ? meusProdutos.nome_relatorio
-                  : ""
-              }
-              redirectTo={`/relatorio?id_relatorio=${meusProdutos.id}`}
-              getProdutosData={setStateProduct}
-              meusProdutos={meusProdutos}
-              removeSelf={() => removeSelf(i)}
-              index={i}
-            />
+            <Grid direction="row" container spacing={3}>
+              <MyProductsCards
+                nameCardBox={
+                  meusProdutos.nome_relatorio !== ""
+                    ? meusProdutos.nome_relatorio
+                    : ""
+                }
+                redirectTo={`/relatorio?id_relatorio=${meusProdutos.id}`}
+                getProdutosData={setStateProduct}
+                meusProdutos={meusProdutos}
+                removeSelf={() => removeSelf(i)}
+                index={i}
+              />
+            </Grid>
           );
         })}
         <Grid container item direction="row" alignItems="flex-end" xs={12}>
@@ -181,6 +219,6 @@ class MyProducts extends React.Component {
 }
 
 const wrapperComponent = withStyles(styles)(
-  withSnackbar(withRouter(MyProducts))
+  withSnackbar(withRouter(MyReports))
 );
 export default wrapperComponent;
