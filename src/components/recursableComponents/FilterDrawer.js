@@ -113,7 +113,7 @@ function ResponsiveNavbar(props) {
             <Grid container direction="column">
               <Grid container item direction="row" alignItems="center">
                 <Typography    align="justify"
-              variant="p"
+              
               component="h5" className={classes.selectAll} >Selecionar Todos</Typography>
                 <Checkbox
                   edge="start"

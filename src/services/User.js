@@ -101,6 +101,10 @@ import {
       if (this.matchRoute(route, ROUTES.RELATORIO)) {
         return true;
       }
+
+      if (this.matchRoute(route, ROUTES.PRODUTOS)) {
+        return true;
+      }
   
       return false;
     };

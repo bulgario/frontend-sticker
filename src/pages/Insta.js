@@ -613,7 +613,7 @@ class Insta extends React.Component {
                   {produto}
                 </Typography>
                 <Typography
-                  variant="p"
+                  
                   color="textSecondary"
                   component="p"
                   className={classes.desc_produto}
@@ -631,7 +631,7 @@ class Insta extends React.Component {
                 </Typography>
                 {/* <Typography variant="body2" color="textSecondary" component="p">{produtos.desc_cor_produto}</Typography> */}
                 <Typography
-                  variant="p"
+                  
                   color="textSecondary"
                   component="p"
                   className={classes.desc_produto}
@@ -776,13 +776,13 @@ class Insta extends React.Component {
                           container
                         >
                           <Typography
-                            variant="p"
+                            
                             component="subtitle"
                             align="start"
                           >
                            {`${ this.GetFormattedDate()}`}
                           </Typography>
-                          <Typography variant="p" component="p" align="center">
+                          <Typography  component="p" align="center">
                             {`Data da programação:  ${programacao}`}
                           </Typography>
                         </Grid>
@@ -799,7 +799,7 @@ class Insta extends React.Component {
                           {produto}
                         </Typography>
                         <Typography
-                          variant="p"
+                          
                           color="textSecondary"
                           component="p"
                           className={classes.desc_produto}
@@ -817,7 +817,7 @@ class Insta extends React.Component {
                         </Typography>
                         {/* <Typography variant="body2" color="textSecondary" component="p">{produtos.desc_cor_produto}</Typography> */}
                         <Typography
-                          variant="p"
+                          
                           color="textSecondary"
                           component="p"
                           className={classes.desc_produto}
@@ -885,7 +885,7 @@ class Insta extends React.Component {
                           }}
                         ></div>
                       ) : null}
-                      {/* {index=== 12?<div style={{width: 300,backgroundColor:'brown', margin: 20}}><Typography component="p" variant="p"> Data da programação: {programacao}</Typography></div>:null} */}
+                      {/* {index=== 12?<div style={{width: 300,backgroundColor:'brown', margin: 20}}><Typography component="p" > Data da programação: {programacao}</Typography></div>:null} */}
                     </Grid>
                   </Fragment>
                 );
@@ -924,11 +924,11 @@ class Insta extends React.Component {
                   justify="flex-start"
                   container
                 >
-                  <Typography variant="p" component="subtitle" align="start">
+                  <Typography  component="subtitle" align="start">
                                    {`${ this.GetFormattedDate()}`}
 
                   </Typography>
-                  <Typography variant="p" component="p" align="center">
+                  <Typography  component="p" align="center">
                     {`Data da programação:  ${programacao}`}
                   </Typography>
                 </Grid>
