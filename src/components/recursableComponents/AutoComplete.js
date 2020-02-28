@@ -85,7 +85,7 @@ padding: theme.spacing(0.6),
   const getAllProductsBasedInInput = () => {
     const user = new User();
     const id_marca_estilo = user.user.id_marca_estilo;
-    return props.history.push(`/produtos?desc_produto=${valueInput}&id_marca_estilo=${id_marca_estilo}`)
+    return props.history.push(`/produtos?desc_produto=${valueInput}&id_marca_estilo=${id_marca_estilo}&referencia=${valueInput}`)
   }
 
   const fetchUrl = async ({ target }) => {

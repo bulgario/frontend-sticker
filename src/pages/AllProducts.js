@@ -210,7 +210,7 @@ class AllProducts extends React.Component {
     const response = await axios.get(
       `${BASE_URL}/products/listProductsWithSearchQuery`,
       {
-        params: this.getAllParamsFromUrl()
+        params: this.getAllParamsFromUrl(),
       }
     );
     let surveyedProducts = response.data;
@@ -223,10 +223,12 @@ class AllProducts extends React.Component {
   getAllParamsFromUrl() {
     const desc_produto = this.getParamFromUrl("desc_produto");
     const id_marca_estilo = this.getParamFromUrl("id_marca_estilo");
+    const referencia = this.getParamFromUrl("referencia");
 
     return {
       desc_produto,
-      id_marca_estilo
+      id_marca_estilo,
+      referencia
     };
   }
 
