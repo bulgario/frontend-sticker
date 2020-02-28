@@ -784,7 +784,7 @@ class AllProducts extends React.Component {
                   }}
                 ></CheckIcon>
               </IconButton>
-              <Typography  className={classes.hideXsLabel} >Aplicar </Typography>
+              <Typography  className={classes.hideXsLabel} >Salvar </Typography>
             </Grid>
           }
           rightIconTodos={
