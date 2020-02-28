@@ -90,9 +90,15 @@ padding: theme.spacing(0.6),
 
   const fetchUrl = async ({ target }) => {
     setLoading(true);
-    const response = await axios.get(
-      `${BASE_URL}/products/search_product?desc_produto=${target.value}`
-    );
+    const user = new User();
+    const id_marca_estilo =  user.user.id_marca_estilo
+    const response = await axios.get(`${BASE_URL}/products/search_product`, {
+      params: {
+        id_marca: id_marca_estilo,
+        desc_produto: target.value,
+        referencia: target.value
+      }
+    });
     setLoading(false);
     setOptions(response.data);
   };
