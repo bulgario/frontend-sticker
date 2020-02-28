@@ -10,6 +10,7 @@ import AddCircleIcon from "@material-ui/icons/AddCircle";
 
 import Header from "../components/recursableComponents/Header";
 import MyProductsCards from "../components/recursableComponents/MyReportsCards";
+import BottomAppBar from "../components/recursableComponents/Footer"
 
 import { BASE_URL } from "../consts";
 import User from "../services/User";
@@ -124,6 +125,7 @@ class MyReports extends React.Component {
           produto_tags,
           referencia_tags
         } = relatory;
+        
         try {
           const produto = await axios.post(
             `${BASE_URL}/myProducts/createNewRelatory`,
@@ -204,15 +206,9 @@ class MyReports extends React.Component {
             </Grid>
           );
         })}
-        <Grid container item direction="row" alignItems="flex-end" xs={12}>
-          <Grid item direction="row" justify="flex-end" container>
-            <AddCircleIcon
-              className={classes.circleIcon}
-              color="primary"
-              onClick={generateNewCards}
-            />
-          </Grid>
-        </Grid>
+        <BottomAppBar
+          onClick={generateNewCards}
+        />
       </Fragment>
     );
   }

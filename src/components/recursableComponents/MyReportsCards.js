@@ -87,6 +87,7 @@ const styles = theme => ({
   },
   deleteIcon: {
     cursor: "pointer",
+    width: theme.spacing(5),
     paddingLeft: theme.spacing(2)
   },
   CreateIcon: {
@@ -149,10 +150,15 @@ class MyReporstsCards extends React.Component {
         }
         this.setState({ disabled: true });
       } catch (error) {
-        console.log("Error Saving your collection of products:", error);
-        this.props.enqueueSnackbar("Erro ao Salvar Sua Coleção.", {
-          variant: "error"
-        });
+        if(error.response.status === 409) {
+          this.props.enqueueSnackbar("Nome do Relatório já existe.", {
+            variant: "error"
+          });
+        } else {
+          this.props.enqueueSnackbar("Erro ao Salvar Seu Relatório.", {
+            variant: "error"
+          });
+        } 
       }
     };
 
