@@ -239,6 +239,7 @@ class AllProducts extends React.Component {
       this.setState({ products: surveyedProducts, allProductsSelectedIds });
       this.setState({ produto: surveyedProducts });
     }
+    this.mountFiltersOptions()
   }
 
   getAllParamsFromUrl() {
@@ -543,6 +544,15 @@ class AllProducts extends React.Component {
       subcategoriaFilter: subcategorias,
       estampaFilter: estampas
     });
+
+    const produtosFiltrados = this.state.products.filter(produto => {
+      return (
+        categorias.includes(produto.categoria) &&
+        subcategorias.includes(produto.subcategoria) &&
+        estampas.includes(produto.estampa)
+      );
+    });
+    this.setState({allProductsSelectedIds: produtosFiltrados.map(produto => produto.id)})
   };
 
   openOrder = () => {
@@ -748,7 +758,7 @@ class AllProducts extends React.Component {
                     </span>
                   </div>
                 ) : (
-                  this.renderProductsCardsView(this.state.products)
+                  this.renderProductsCardsView(this.filterProducts(this.state.products))
                 )}
               </Grid>
             </Grid>
@@ -788,7 +798,8 @@ class AllProducts extends React.Component {
                 if (this.state.selectedProducts.length === allProducts.length) {
                   this.setState({ selectedProducts: [] });
                 } else {
-                  this.setState({ selectedProducts: this.state.products.map(produto =>produto.id) });
+                  //selecionando todos os produtos
+                  this.setState({ selectedProducts: this.filterProducts(this.state.products).map(produto =>produto.id) });
                 }
               }}
             >
