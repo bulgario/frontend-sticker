@@ -91,8 +91,10 @@ function ProdutoAutoComplete(props) {
 
   const fetchUrl = async ({ target }) => {
     setLoading(true);
+    const user = new User();
+    const id_marca_estilo = user.user.id_marca_estilo;
     const response = await axios.get(
-      `${BASE_URL}/products/search_product?desc_produto=${target.value}`
+      `${BASE_URL}/products/search_product?desc_produto=${target.value}&id_marca=${id_marca_estilo}`
     );
     setLoading(false);
     setOptions(response.data);
@@ -109,7 +111,7 @@ function ProdutoAutoComplete(props) {
 
     getValueInput(target.value);
     clearTimeout(event);
-    event = setTimeout(()=>fetchUrl({target}), 1000);
+    event = setTimeout(()=>fetchUrl({target}), 500);
   };
 
   const onTagsChange = async (event, value) => {
