@@ -21,9 +21,12 @@ export default function OutlinedChips(props) {
     <div className={classes.root}>
         <Grid container direction="row" justify="center" alignItems="center "spacing={1} item >  
         
-        {props.reportsNames.map((nome_relatorio,index) => {
-            return (  <Grid item  ><Chip label={nome_relatorio} onDelete={  props.removeChips(index)} color="primary" variant="outlined" /></Grid>  
+        {props.reports.map((report,index) => {
+          if(props.reportsIds.includes(report.id)) {
+            return (  <Grid item  ><Chip label={report.nome_relatorio} onDelete={  props.removeChips(report)} color="primary" variant="outlined" /></Grid>  
             )
+          }
+          return null
         })}
         </Grid>
 

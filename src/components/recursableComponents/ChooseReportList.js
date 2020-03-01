@@ -31,7 +31,7 @@ class ChooseReportList extends Component {
      return checked.join()
 
   }
-  handleToggle ({nome_relatorio}){
+  handleToggle ({nome_relatorio,id}){
     const {reportsIds} = this.state
     if (!reportsIds.includes(nome_relatorio)) { 
       reportsIds.push(nome_relatorio)
@@ -42,7 +42,7 @@ class ChooseReportList extends Component {
 
     }
     this.setState({ reportsIds})
-    return this.props.handleToogleChips(nome_relatorio)
+    return this.props.handleToogleChips(nome_relatorio,id)
   };
 
 
@@ -60,7 +60,7 @@ class ChooseReportList extends Component {
               <Checkbox
                 edge="end"
                 onChange={() => this.handleToggle(report)}
-                checked={this.props.reportsNames.includes(report.nome_relatorio)}
+                checked={this.props.reportsIds.includes(report.id)}
                 color="primary"
               />
             </ListItemSecondaryAction>
