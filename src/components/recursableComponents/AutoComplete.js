@@ -4,7 +4,6 @@ import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 // import CircularProgress from "@material-ui/core/CircularProgress";
 import { BASE_URL } from "../../consts";
-import Button from "@material-ui/core/Button";
 import { withRouter } from "react-router-dom";
 
 import User from "../../services/User";

@@ -224,6 +224,68 @@ class AllProducts extends React.Component {
     }
   }
 
+  mountDataToSaveReports() {
+    try {
+      const {selectedProducts, reportsIds} = this.state
+      const productsToSend = {produto_tags: {}}
+  
+      selectedProducts.map(productId => {
+        productsToSend["produto_tags"][productId] = []
+        return true
+      })
+      const arrayToSave = reportsIds.map(reportId => {
+        const obj = {...productsToSend,
+          id_relatorio: reportId,
+        }
+
+        return obj
+      })
+  
+      return arrayToSave
+    } catch(err) {
+      console.log(err)
+    }
+
+    return true
+  }
+  async saveProductsToReports() {
+
+    try{
+      const {selectedProducts, reportsIds} = this.state
+      if (selectedProducts.length <1) {
+        return this.props.enqueueSnackbar(
+          "Nenhum produto foi selecionado.",
+          { variant: "warning" }
+        );
+
+      }
+
+      if (reportsIds.length <1) {
+        return this.props.enqueueSnackbar(
+          "Nenhum relatório foi selecionado.",
+          { variant: "warning" }
+        );
+
+      }
+
+      const data = this.mountDataToSaveReports()
+      
+     await Promise.all(data.map(data => axios.post(`${BASE_URL}/myProducts/editRelatory`,data)))
+        
+      return   this.props.enqueueSnackbar(
+        "Produtos salvos com sucesso.",
+        { variant: "success" }
+      );
+
+    } catch(err) {
+
+      return this.props.enqueueSnackbar(
+        "Não foi possível salvar os produtos.",
+        { variant: "error" }
+      );
+
+    }
+  }
   async getProductsBySearch() {
     const response = await axios.get(
       `${BASE_URL}/products/listProductsWithSearchQuery`,
@@ -774,6 +836,7 @@ class AllProducts extends React.Component {
               direction="row"
               justify="flex-start"
               alignItems="center"
+              onClick={() => this.saveProductsToReports()}
             >
               <IconButton>
                 <CheckIcon
