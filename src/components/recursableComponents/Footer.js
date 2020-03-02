@@ -3,13 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Toolbar from '@material-ui/core/Toolbar';
-// import Typography from '@material-ui/core/Typography';
-// import IconButton from '@material-ui/core/IconButton';
 import Fab from '@material-ui/core/Fab';
-import Typography from '@material-ui/core/Typography';
-// import CommentIcon from '@material-ui/icons/Comment';
-// import ShuffleIcon from '@material-ui/icons/Shuffle';
-
 import AddIcon from '@material-ui/icons/Add';
 import Grid from "@material-ui/core/Grid";
 
@@ -81,11 +75,6 @@ export default function BottomAppBar(props) {
             onClick={handleApplied}
             >
           {props.leftIconTodos}
-          {props.leftIconTodos ?
-            <Typography variant="h6" gutterBottom>
-              Aplicar
-            </Typography>
-          : ""}
           </Grid>
           <Grid
             container
@@ -101,11 +90,6 @@ export default function BottomAppBar(props) {
           <div className={classes.grow} />
 
           {props.rightIconTodos}
-          {props.rightIconTodos ?
-            <Typography variant="h6" gutterBottom>
-              Todos
-            </Typography>
-          : ""}
           </Grid>
           {/* <IconButton edge="start" color="inherit" aria-label="open drawer">
             <ShuffleIcon />

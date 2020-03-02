@@ -7,7 +7,6 @@ import { withRouter } from "react-router-dom";
 
 import SearchIcon from "@material-ui/icons/Search";
 
-
 import Header from "../components/recursableComponents/Header";
 import Footer from "../components/recursableComponents/Footer";
 
@@ -18,10 +17,8 @@ import User from "../services/User";
 
 import ChipsList from "../components/recursableComponents/ChipsList";
 
-
 import CardMedia from "@material-ui/core/CardMedia";
 import Card from "@material-ui/core/Card";
-
 
 import Typography from "@material-ui/core/Typography";
 
@@ -36,17 +33,14 @@ import { BASE_URL } from "../consts";
 import ArrowBack from "@material-ui/icons/ArrowBack";
 
 import Toc from "@material-ui/icons/Toc";
-import CheckIcon from '@material-ui/icons/Check';
-import DoneAllIcon from '@material-ui/icons/DoneAll';
+import CheckIcon from "@material-ui/icons/Check";
+import DoneAllIcon from "@material-ui/icons/DoneAll";
 
-
-import  IconButton  from "@material-ui/core/IconButton";
+import IconButton from "@material-ui/core/IconButton";
 
 import FilterDrawer from "../components/recursableComponents/FilterDrawer";
 import OrderDrawer from "../components/recursableComponents/OrderDrawer";
 import TopDrawer from "../components/recursableComponents/TopDrawer";
-
-
 
 import UTILS from "../imageUrl";
 const axios = require("axios");
@@ -157,10 +151,8 @@ const styles = theme => ({
   },
   hideXsLabel: {
     [theme.breakpoints.down("xs")]: {
-      
-      display:'none',
-    },
-
+      display: "none"
+    }
   },
   paddingRightSmall: {
     [theme.breakpoints.down("xs")]: {
@@ -205,7 +197,8 @@ class AllProducts extends React.Component {
       showReportsList: false,
       reports: [],
       reportsNames: [],
-      selectedProducts: [],
+      reportsIds:[],
+      selectedProducts: []
     };
   }
 
@@ -231,6 +224,68 @@ class AllProducts extends React.Component {
     }
   }
 
+  mountDataToSaveReports() {
+    try {
+      const {selectedProducts, reportsIds} = this.state
+      const productsToSend = {produto_tags: {}}
+  
+      selectedProducts.map(productId => {
+        productsToSend["produto_tags"][productId] = []
+        return true
+      })
+      const arrayToSave = reportsIds.map(reportId => {
+        const obj = {...productsToSend,
+          id_relatorio: reportId,
+        }
+
+        return obj
+      })
+  
+      return arrayToSave
+    } catch(err) {
+      console.log(err)
+    }
+
+    return true
+  }
+  async saveProductsToReports() {
+
+    try{
+      const {selectedProducts, reportsIds} = this.state
+      if (selectedProducts.length <1) {
+        return this.props.enqueueSnackbar(
+          "Nenhum produto foi selecionado.",
+          { variant: "warning" }
+        );
+
+      }
+
+      if (reportsIds.length <1) {
+        return this.props.enqueueSnackbar(
+          "Nenhum relatório foi selecionado.",
+          { variant: "warning" }
+        );
+
+      }
+
+      const data = this.mountDataToSaveReports()
+      
+     await Promise.all(data.map(data => axios.post(`${BASE_URL}/myProducts/editRelatory`,data)))
+        
+      return   this.props.enqueueSnackbar(
+        "Produtos salvos com sucesso.",
+        { variant: "success" }
+      );
+
+    } catch(err) {
+
+      return this.props.enqueueSnackbar(
+        "Não foi possível salvar os produtos.",
+        { variant: "error" }
+      );
+
+    }
+  }
   async getProductsBySearch() {
     const response = await axios.get(
       `${BASE_URL}/products/listProductsWithSearchQuery`,
@@ -238,12 +293,15 @@ class AllProducts extends React.Component {
         params: this.getAllParamsFromUrl(),
       }
     );
-    let surveyedProducts = response.data;
     if (response) {
+      let surveyedProducts = response.data;
 
-      this.setState({ products: surveyedProducts });
+      const allProductsSelectedIds = surveyedProducts.map(produto => produto.id);
+
+      this.setState({ products: surveyedProducts, allProductsSelectedIds });
       this.setState({ produto: surveyedProducts });
     }
+    this.mountFiltersOptions()
   }
 
   getAllParamsFromUrl() {
@@ -385,23 +443,20 @@ class AllProducts extends React.Component {
   }
 
   handleClickProduct(id) {
-    const {selectedProducts} = this.state
-    if (!selectedProducts.includes(id)) { 
-      selectedProducts.push(id)
-
-    } else { 
-      const index  = selectedProducts.indexOf(id);
+    const { selectedProducts } = this.state;
+    if (!selectedProducts.includes(id)) {
+      selectedProducts.push(id);
+    } else {
+      const index = selectedProducts.indexOf(id);
       selectedProducts.splice(index, 1);
-
     }
-
-    this.setState({selectedProducts})
+    this.setState({ selectedProducts });
     // return this.props.history.push(`/produto?produto=${id}`);
   }
 
   renderProductsCardsView(data) {
     const { classes } = this.props;
-    const { handleApplied } = this.state
+    const { handleApplied } = this.state;
 
     return (
       <Grid
@@ -444,16 +499,19 @@ class AllProducts extends React.Component {
                     ref={provided.innerRef}
                   > */}
               <Card
-              variant="elevation"
-              elevation={!this.state.selectedProducts.includes(id)?2:4}
-                className={!this.state.selectedProducts.includes(id)?classes.cardOpacity: classes.card}
+                variant="elevation"
+                elevation={!this.state.selectedProducts.includes(id) ? 0 : 4}
+                className={
+                  !this.state.selectedProducts.includes(id)
+                    ? classes.cardOpacity
+                    : classes.card
+                }
                 onClick={() => this.handleClickProduct(id)}
               >
                 <Typography variant="h6" component="p">
                   {produto}
                 </Typography>
                 <Typography
-                  
                   color="textSecondary"
                   component="p"
                   className={classes.desc_produto}
@@ -471,7 +529,6 @@ class AllProducts extends React.Component {
                 </Typography>
                 {/* <Typography variant="body2" color="textSecondary" component="p">{produtos.desc_cor_produto}</Typography> */}
                 <Typography
-                  
                   color="textSecondary"
                   component="p"
                   className={classes.desc_produto}
@@ -480,12 +537,14 @@ class AllProducts extends React.Component {
                     ? `${desc_cor_produto.substring(0, 13)}...`
                     : desc_cor_produto}
                 </Typography>
-                  <CardMedia
-                    id="border"
-                    className={handleApplied ? classes.mediaCardApplied : classes.mediaCard}
-                    image={produtos.image}
-                    title="Produto"
-                  />
+                <CardMedia
+                  id="border"
+                  className={
+                    handleApplied ? classes.mediaCardApplied : classes.mediaCard
+                  }
+                  image={produtos.image}
+                  title="Produto"
+                />
 
                 <Typography variant="h5" component="p" color="textSecondary">
                   {qtde_programada}
@@ -549,6 +608,15 @@ class AllProducts extends React.Component {
       subcategoriaFilter: subcategorias,
       estampaFilter: estampas
     });
+
+    const produtosFiltrados = this.state.products.filter(produto => {
+      return (
+        categorias.includes(produto.categoria) &&
+        subcategorias.includes(produto.subcategoria) &&
+        estampas.includes(produto.estampa)
+      );
+    });
+    this.setState({allProductsSelectedIds: produtosFiltrados.map(produto => produto.id)})
   };
 
   openOrder = () => {
@@ -588,26 +656,27 @@ class AllProducts extends React.Component {
       });
   };
 
-  handleToogleChips = (nome_relatorio) =>  {
-    const {reportsNames} = this.state
-    if (!reportsNames.includes(nome_relatorio)) { 
-      reportsNames.push(nome_relatorio)
+  handleToogleChips = (nome_relatorio,id) => {
+    const { reportsIds } = this.state
 
-    } else { 
-      const index  = reportsNames.indexOf(nome_relatorio);
-      reportsNames.splice(index, 1);
 
+    if (!reportsIds.includes(id)) {
+      reportsIds.push(id);
+    } else {
+      const index = reportsIds.indexOf(id);
+      reportsIds.splice(index, 1);
     }
+    this.setState({ reportsIds });
+  };
+  removeChips = ({nome_relatorio,id}) => () => {
+    const {  reportsIds } = this.state;
 
-    this.setState({reportsNames})
 
-  }
-  removeChips = (index) => () => { 
-    const {reportsNames} = this.state
-    reportsNames.splice(index,1)
-    this.setState({reportsNames})
+    const indexId = reportsIds.indexOf(id)
+    reportsIds.splice(indexId, 1);
 
-  }
+    this.setState({ reportsIds });
+  };
   render() {
     const { classes } = this.props;
     const { relatory } = this.state;
@@ -666,7 +735,6 @@ class AllProducts extends React.Component {
           orderAsc={this.state.orderAsc}
         ></OrderDrawer>
         <Container className={classes.containerSmall}>
-
           <Grid
             id="some"
             item
@@ -688,7 +756,9 @@ class AllProducts extends React.Component {
               <IconButton onClick={this.openFilter}>
                 <FilterList></FilterList>
               </IconButton>
-              <Typography  className={classes.hideXsLabel} component="p">Filtrar</Typography>
+              <Typography className={classes.hideXsLabel} component="p">
+                Filtrar
+              </Typography>
             </Grid>
 
             <Grid
@@ -700,7 +770,12 @@ class AllProducts extends React.Component {
               justify="center"
               direction="row"
             >
-                      <ChipsList reportsNames={this.state.reportsNames}removeChips={this.removeChips}></ChipsList>
+              <ChipsList
+                reportsIds={this.state.reportsIds}
+
+                reports={this.state.reports}
+                removeChips={this.removeChips}
+              ></ChipsList>
 
               {/* <IconButton
                 aria-label="add"
@@ -722,18 +797,13 @@ class AllProducts extends React.Component {
               <IconButton onClick={this.openOrder}>
                 <Toc></Toc>
               </IconButton>
-              <Typography className={classes.hideXsLabel} component="p">Ordenar</Typography>
+              <Typography className={classes.hideXsLabel} component="p">
+                Ordenar
+              </Typography>
             </Grid>
           </Grid>
 
           <Divider id="some"></Divider>
-          {/* <Grid container direction="row" justify="center">
-            <CardMedia
-              className={classes.mainImage}
-              title="Vitrine"
-              image="https://img.elo7.com.br/product/244x194/1BF6822/adesivos-para-vitrines-liquidacao-vitrine-de-lojas.jpg"
-            />
-          </Grid> */}
 
           <div className={classes.margin}>
             <Grid container direction="column" spacing={2}>
@@ -752,7 +822,7 @@ class AllProducts extends React.Component {
                     </span>
                   </div>
                 ) : (
-                  this.renderProductsCardsView(this.state.products)
+                  this.renderProductsCardsView(this.filterProducts(this.state.products))
                 )}
               </Grid>
             </Grid>
@@ -761,15 +831,55 @@ class AllProducts extends React.Component {
         {/* </DragDropContext> */}
 
         <Footer
-                  relatoryPage={this.state.relatoryPage}
-
-               leftIconTodos={<CheckIcon onClick={() => {this.setState({selectingProducts: !this.state.selectingProducts})}}></CheckIcon>}
-               rightIconTodos={<DoneAllIcon></DoneAllIcon>}
-        onClick={() => this.setState({ showReportsList: true })}></Footer>
+          relatoryPage={this.state.relatoryPage}
+          leftIconTodos={
+            <Grid
+              container
+              direction="row"
+              justify="flex-start"
+              alignItems="center"
+              onClick={() => this.saveProductsToReports()}
+            >
+              <IconButton>
+                <CheckIcon
+                  onClick={() => {
+                    this.setState({
+                      selectingProducts: !this.state.selectingProducts
+                    });
+                  }}
+                ></CheckIcon>
+              </IconButton>
+              <Typography  className={classes.hideXsLabel} >Salvar </Typography>
+            </Grid>
+          }
+          rightIconTodos={
+            <Grid
+              container
+              direction="row"
+              alignItems="center"
+              justify="flex-end"
+              onClick={() => {
+                const allProducts = this.state.allProductsSelectedIds;
+                if (this.state.selectedProducts.length === allProducts.length) {
+                  this.setState({ selectedProducts: [] });
+                } else {
+                  //selecionando todos os produtos
+                  this.setState({ selectedProducts: this.filterProducts(this.state.products).map(produto =>produto.id) });
+                }
+              }}
+            >
+              <IconButton>
+                <DoneAllIcon></DoneAllIcon>
+              </IconButton>
+              <Typography className={classes.hideXsLabel}>Selecionar todos</Typography>
+            </Grid>
+          }
+          onClick={() => this.setState({ showReportsList: true })}
+        ></Footer>
         <ChooseReportList
           onClose={() => this.setState({ showReportsList: false })}
           reports={this.state.reports}
-          reportsNames={this.state.reportsNames}
+          reportsIds={this.state.reportsIds}
           open={this.state.showReportsList}
           handleToogleChips={this.handleToogleChips}
         ></ChooseReportList>
