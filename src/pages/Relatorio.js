@@ -13,6 +13,7 @@ import Footer from "../components/recursableComponents/Footer";
 import LoadingDialog from "../components/recursableComponents/LoadingDialog";
 
 import CardMedia from "@material-ui/core/CardMedia";
+import Card from "@material-ui/core/Card";
 
 import Typography from "@material-ui/core/Typography";
 
@@ -68,9 +69,9 @@ const styles = theme => ({
     width: 220,
     boxSizing: "border-box",
     objectFit: "scale-down",
-    border: "2px groove",
-    borderRadius: "3px",
-    borderColor: "#8080801a",
+    // border: "2px groove",
+    // borderRadius: "3px",
+    // borderColor: "#8080801a",
 
     [theme.breakpoints.down("sm")]: {
       height: 220,
@@ -382,7 +383,9 @@ class Relatorio extends React.Component {
                     {...provided.dragHandleProps}
                     ref={provided.innerRef}
                   > */}
-              <div
+              <Card
+              variant="elevation"
+              elevation={4}
                 className={classes.card}
                 onClick={() => this.handleClickProduct(id)}
               >
@@ -434,7 +437,7 @@ class Relatorio extends React.Component {
                 <Typography variant="h5" component="p" color="textSecondary">
                   {qtde_programada}
                 </Typography>
-              </div>
+              </Card>
               {/* </div>
                 )}
               </Draggable> */}
