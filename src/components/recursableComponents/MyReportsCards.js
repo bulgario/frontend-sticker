@@ -130,7 +130,7 @@ class MyReporstsCards extends React.Component {
         id_usuario,
         nome_relatorio,
         // img_relatorio,
-        data_criacao,
+        // data_criacao,
         produto_tags,
         referencia_tags,
         id

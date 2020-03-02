@@ -6,7 +6,6 @@ import { withSnackbar } from "notistack";
 import { IconButton } from "@material-ui/core";
 import ArrowBack from "@material-ui/icons/ArrowBack";
 import Grid from "@material-ui/core/Grid";
-import AddCircleIcon from "@material-ui/icons/AddCircle";
 
 import Header from "../components/recursableComponents/Header";
 import MyProductsCards from "../components/recursableComponents/MyReportsCards";
