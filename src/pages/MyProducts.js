@@ -6,7 +6,6 @@ import { withSnackbar } from "notistack";
 import { IconButton } from "@material-ui/core";
 import ArrowBack from "@material-ui/icons/ArrowBack";
 import Grid from "@material-ui/core/Grid";
-import AddCircleIcon from "@material-ui/icons/AddCircle";
 
 import Header from "../components/recursableComponents/Header";
 import MyProductsCards from "../components/recursableComponents/MyProductsCards";
@@ -98,6 +97,10 @@ class MyProducts extends React.Component {
     };
   }
 
+  componentDidUpdate() {
+    console.log("update")
+  }
+
   render() {
     const { classes } = this.props;
     const { vitrine } = this.state;
@@ -168,11 +171,11 @@ class MyProducts extends React.Component {
         })}
         <Grid container item direction="row" alignItems="flex-end" xs={12}>
           <Grid item direction="row" justify="flex-end" container>
-            <AddCircleIcon
+            {/* <AddCircleIcon
               className={classes.circleIcon}
               color="primary"
               onClick={generateNewCards}
-            />
+            /> */}
           </Grid>
         </Grid>
       </Fragment>

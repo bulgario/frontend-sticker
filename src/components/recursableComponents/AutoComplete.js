@@ -83,18 +83,20 @@ function ProdutoAutoComplete(props) {
   const getAllProductsBasedInInput = () => {
     const user = new User();
     const id_marca_estilo = user.user.id_marca_estilo;
-    return props.history.push(
-      `/produtos?desc_produto=${valueInput}&id_marca_estilo=${id_marca_estilo}`
-    );
-  };
+    return props.history.push(`/produtos?desc_produto=${valueInput}&id_marca_estilo=${id_marca_estilo}&referencia=${valueInput}`)
+  }
 
   const fetchUrl = async ({ target }) => {
     setLoading(true);
     const user = new User();
-    const id_marca_estilo = user.user.id_marca_estilo;
-    const response = await axios.get(
-      `${BASE_URL}/products/search_product?desc_produto=${target.value}&id_marca=${id_marca_estilo}`
-    );
+    const id_marca_estilo =  user.user.id_marca_estilo
+    const response = await axios.get(`${BASE_URL}/products/search_product`, {
+      params: {
+        id_marca: id_marca_estilo,
+        desc_produto: target.value,
+        referencia: target.value
+      }
+    });
     setLoading(false);
     setOptions(response.data);
   };
