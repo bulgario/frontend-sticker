@@ -197,7 +197,7 @@ class AllProducts extends React.Component {
       showReportsList: false,
       reports: [],
       reportsNames: [],
-      reportsIds:[],
+      reportsIds:this.getParamFromUrl("addRelatorio")?[this.getParamFromUrl("addRelatorio")]:[],
       selectedProducts: []
     };
   }
@@ -272,11 +272,11 @@ class AllProducts extends React.Component {
       
      await Promise.all(data.map(data => axios.post(`${BASE_URL}/myProducts/editRelatory`,data)))
         
-      return   this.props.enqueueSnackbar(
+      this.props.enqueueSnackbar(
         "Produtos salvos com sucesso.",
         { variant: "success" }
       );
-
+        return this.props.history.push(`/relatorio?id_relatorio=${this.getParamFromUrl("addRelatorio")}`)
     } catch(err) {
 
       return this.props.enqueueSnackbar(

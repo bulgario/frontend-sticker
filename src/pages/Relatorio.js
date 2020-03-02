@@ -161,7 +161,8 @@ class Relatorio extends React.Component {
       filtersLen: {},
       openTopDrawer: false,
       products: [],
-      noProducts: false
+      noProducts: false,
+      activeReport: this.getParamFromUrl("id_relatorio")
     };
   }
 
@@ -571,6 +572,7 @@ class Relatorio extends React.Component {
           }
         />
                 <TopDrawer 
+                activeReport={this.state.activeReport}
                 relatorioPage={true}     
           openMenu={this.openTopDrawer}
           open={this.state.openTopDrawer}></TopDrawer>

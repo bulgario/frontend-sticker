@@ -56,7 +56,7 @@ function TopDrawer(props) {
          className={classes.padding}
 
         >
-        <AutoComplete relatorioPage={props.relatorioPage}/>
+        <AutoComplete relatorioPage={props.relatorioPage} activeReport={props.activeReport}/>
         </div>
       </SwipeableDrawer>
   );
