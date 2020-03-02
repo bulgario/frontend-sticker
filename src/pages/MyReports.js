@@ -69,6 +69,7 @@ const styles = theme => ({
 class MyReports extends React.Component {
   constructor(props) {
     super(props);
+    this.myRef = React.createRef()
     this.state = {
       vitrine: [],
     };
@@ -79,9 +80,9 @@ class MyReports extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    console.log(document.documentElement.clientWidth)
-    console.log(document.documentElement.clientHeight)
-    window.scrollTo(0, 1000);
+  //  let lastItem = this.state.vitrine[this.state.vitrine.length - 1]
+  //  console.log(lastItem)
+  //   window.scrollTo(lastItem, 0);
   }
 
   async getReports() {
@@ -157,6 +158,7 @@ class MyReports extends React.Component {
           console.log("Error creating new Relatory:", error)
         }
       }
+      this.scrollToMyRef()
     };
 
     const removeSelf = index => {
@@ -195,7 +197,7 @@ class MyReports extends React.Component {
               }
             );
           return (
-            <Grid direction="row" container spacing={3}>
+            <Grid direction="row" ref={this.myRef} container spacing={3}>
               <MyProductsCards
                 nameCardBox={
                   meusProdutos.nome_relatorio !== ""
@@ -217,6 +219,10 @@ class MyReports extends React.Component {
       </Fragment>
     );
   }
+
+  scrollToMyRef = () => {
+    window.scrollTo({ behavior: 'smooth', top: this.myRef.current.offsetTop })
+  }  
 }
 
 const wrapperComponent = withStyles(styles)(
