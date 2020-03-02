@@ -4,7 +4,7 @@ export const ROUTES = {
   INSTA: "/insta",
   HOME: "/home",
   SELECTEDPRODUCT: "/produto",
-  MYPRODUCTS: "/meusprodutos",
+  MYREPORTS: "/meusprodutos",
   RELATORIO: "/relatorio",
   PRODUTOS: "/produtos"
 };

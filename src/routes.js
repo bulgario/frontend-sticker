@@ -6,7 +6,7 @@ import Search from './pages/Search'
 import Insta from './pages/Insta'
 import Home from './pages/Home'
 import Produto from './pages/Produto'
-import MyProducts from './pages/MyProducts'
+import MyReports from './pages/MyReports'
 import Relatorio from './pages/Relatorio'
 import Produtos from './pages/AllProducts'
 
@@ -45,7 +45,7 @@ function PrivateRoutes(props) {
 			<Route path={ROUTES.SEARCH} component={Search} />
 			<Route path={ROUTES.INSTA} component={Insta} />
 			<Route path={ROUTES.SELECTEDPRODUCT} component={Produto} />
-			<Route path={ROUTES.MYPRODUCTS} component={MyProducts} />
+			<Route path={ROUTES.MYREPORTS} component={MyReports} />
 			<Route path={ROUTES.RELATORIO} component={Relatorio} />
 			<Route path={ROUTES.PRODUTOS} component={Produtos} />
 		  </Switch>
