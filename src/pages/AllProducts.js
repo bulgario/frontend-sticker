@@ -5,7 +5,8 @@ import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import { withRouter } from "react-router-dom";
 
-import PencilIcon from "@material-ui/icons/CreateOutlined";
+import SearchIcon from "@material-ui/icons/Search";
+
 
 import Header from "../components/recursableComponents/Header";
 import Footer from "../components/recursableComponents/Footer";
@@ -19,6 +20,8 @@ import ChipsList from "../components/recursableComponents/ChipsList";
 
 
 import CardMedia from "@material-ui/core/CardMedia";
+import Card from "@material-ui/core/Card";
+
 
 import Typography from "@material-ui/core/Typography";
 
@@ -37,14 +40,13 @@ import CheckIcon from '@material-ui/icons/Check';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
 
 
-import { IconButton } from "@material-ui/core";
+import  IconButton  from "@material-ui/core/IconButton";
 
 import FilterDrawer from "../components/recursableComponents/FilterDrawer";
 import OrderDrawer from "../components/recursableComponents/OrderDrawer";
 import TopDrawer from "../components/recursableComponents/TopDrawer";
 
 
-import AddIcon from "@material-ui/icons/Add";
 
 import UTILS from "../imageUrl";
 const axios = require("axios");
@@ -69,17 +71,39 @@ const styles = theme => ({
       margin: theme.spacing(0.6),
       marginBottom: theme.spacing(4)
     },
+    // opacity: 0.5,
+    boxSizing: "border-box"
+  },
+
+  cardOpacity: {
+    cursor: "pointer",
+    minHeight: 450,
+    maxWidth: 300,
+    maxHeight: 500,
+    minWidth: 300,
+    margin: theme.spacing(0.6),
+    padding: theme.spacing(0.6),
+    backgroundColor: "white",
+    [theme.breakpoints.down("sm")]: {
+      minHeight: 337,
+      maxWidth: 160,
+      maxHeight: 350,
+      minWidth: 160,
+      margin: theme.spacing(0.6),
+      marginBottom: theme.spacing(4)
+    },
+    opacity: 0.4,
     boxSizing: "border-box"
   },
 
   mediaCard: {
-    height: 320,
+    height: 310,
     width: 220,
     boxSizing: "border-box",
     objectFit: "scale-down",
-    border: "2px groove",
-    borderRadius: "3px",
-    borderColor: "#8080801a",
+    // border: "2px groove",
+    // borderRadius: "3px",
+    // borderColor: "#8080801a",
 
     [theme.breakpoints.down("sm")]: {
       height: 220,
@@ -181,6 +205,7 @@ class AllProducts extends React.Component {
       showReportsList: false,
       reports: [],
       reportsNames: [],
+      selectedProducts: [],
     };
   }
 
@@ -215,6 +240,7 @@ class AllProducts extends React.Component {
     );
     let surveyedProducts = response.data;
     if (response) {
+
       this.setState({ products: surveyedProducts });
       this.setState({ produto: surveyedProducts });
     }
@@ -359,7 +385,18 @@ class AllProducts extends React.Component {
   }
 
   handleClickProduct(id) {
-    return this.props.history.push(`/produto?produto=${id}`);
+    const {selectedProducts} = this.state
+    if (!selectedProducts.includes(id)) { 
+      selectedProducts.push(id)
+
+    } else { 
+      const index  = selectedProducts.indexOf(id);
+      selectedProducts.splice(index, 1);
+
+    }
+
+    this.setState({selectedProducts})
+    // return this.props.history.push(`/produto?produto=${id}`);
   }
 
   renderProductsCardsView(data) {
@@ -406,8 +443,10 @@ class AllProducts extends React.Component {
                     {...provided.dragHandleProps}
                     ref={provided.innerRef}
                   > */}
-              <div
-                className={classes.card}
+              <Card
+              variant="elevation"
+              elevation={!this.state.selectedProducts.includes(id)?2:4}
+                className={!this.state.selectedProducts.includes(id)?classes.cardOpacity: classes.card}
                 onClick={() => this.handleClickProduct(id)}
               >
                 <Typography variant="h6" component="p">
@@ -451,7 +490,7 @@ class AllProducts extends React.Component {
                 <Typography variant="h5" component="p" color="textSecondary">
                   {qtde_programada}
                 </Typography>
-              </div>
+              </Card>
               {/* </div>
                 )}
               </Draggable> */}
@@ -587,11 +626,9 @@ class AllProducts extends React.Component {
               aria-label="upload picture"
               component="span"
               className={classes.whiteButton}
-              onClick={() => {
-                // this.setState({print:true,loadingPrint:true})
-              }}
+              onClick={this.openTopDrawer}
             >
-              <PencilIcon></PencilIcon>
+              <SearchIcon></SearchIcon>
             </IconButton>
           }
           leftIcon={
@@ -629,7 +666,6 @@ class AllProducts extends React.Component {
           orderAsc={this.state.orderAsc}
         ></OrderDrawer>
         <Container className={classes.containerSmall}>
-        <ChipsList reportsNames={this.state.reportsNames}removeChips={this.removeChips}></ChipsList>
 
           <Grid
             id="some"
@@ -664,13 +700,15 @@ class AllProducts extends React.Component {
               justify="center"
               direction="row"
             >
-              <IconButton
+                      <ChipsList reportsNames={this.state.reportsNames}removeChips={this.removeChips}></ChipsList>
+
+              {/* <IconButton
                 aria-label="add"
                 onClick={() => this.setState({ showReportsList: true })}
               >
                 <AddIcon  />
               </IconButton>
-              <Typography className={classes.hideXsLabel}>Relatório</Typography>
+              <Typography className={classes.hideXsLabel}>Relatório</Typography> */}
             </Grid>
             <Grid
               container
@@ -725,9 +763,9 @@ class AllProducts extends React.Component {
         <Footer
                   relatoryPage={this.state.relatoryPage}
 
-               leftIconTodos={<CheckIcon></CheckIcon>}
+               leftIconTodos={<CheckIcon onClick={() => {this.setState({selectingProducts: !this.state.selectingProducts})}}></CheckIcon>}
                rightIconTodos={<DoneAllIcon></DoneAllIcon>}
-        onClick={this.openTopDrawer}></Footer>
+        onClick={() => this.setState({ showReportsList: true })}></Footer>
         <ChooseReportList
           onClose={() => this.setState({ showReportsList: false })}
           reports={this.state.reports}
