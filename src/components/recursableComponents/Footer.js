@@ -1,68 +1,76 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Toolbar from '@material-ui/core/Toolbar';
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import AppBar from "@material-ui/core/AppBar";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Toolbar from "@material-ui/core/Toolbar";
+import Fab from "@material-ui/core/Fab";
+import AddIcon from "@material-ui/icons/Add";
 import Grid from "@material-ui/core/Grid";
 
 const useStyles = makeStyles(theme => ({
   text: {
-    padding: theme.spacing(2, 2, 0),
+    padding: theme.spacing(2, 2, 0)
   },
   paper: {
-    paddingBottom: 50,
+    paddingBottom: 50
   },
   list: {
-    marginBottom: theme.spacing(2),
+    marginBottom: theme.spacing(2)
   },
   subheader: {
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: theme.palette.background.paper
   },
   appBar: {
-    top: 'auto',
+    top: "auto",
     bottom: 0,
-    backgroundColor:'white'
+    backgroundColor: "white"
   },
   grow: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   fabButton: {
-    position: 'absolute',
+    position: "absolute",
     zIndex: 1,
     top: -30,
     left: 0,
     right: 0,
-    margin: '0 auto',
+    margin: "0 auto"
   },
   whiteButton: {
-    color:"white"
+    color: "white"
   }
 }));
 
 export default function BottomAppBar(props) {
   const handleTodos = () => {
     // props.allApplied(false)
-   }
-   
-   const handleApplied = () => {
+  };
+
+  const handleApplied = () => {
     // props.applied(false)
-   }
+  };
 
   const classes = useStyles();
   return (
-        <React.Fragment>
-          <CssBaseline />
-          <AppBar position="fixed" className={classes.appBar}>
+    <React.Fragment>
+      <CssBaseline />
+      <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           {/* <IconButton edge="start" color="inherit" aria-label="open drawer">
             <CommentIcon />
           </IconButton>
           <Typography variant="body2" component="h6">RESUMO</Typography> */}
-          <Fab color="primary" aria-label="add" className={classes.fabButton} onClick={props.onClick}>
-            <AddIcon  className={classes.whiteButton} />
-          </Fab>
+          {props.hideButton ? null : (
+            <Fab
+              color="primary"
+              aria-label="add"
+              className={classes.fabButton}
+              onClick={props.onClick}
+            >
+              <AddIcon className={classes.whiteButton} />
+            </Fab>
+          )}
+
           <Grid
             container
             xs={6}
@@ -73,8 +81,8 @@ export default function BottomAppBar(props) {
             className={classes.paddingRightSmall}
             id="applied"
             onClick={handleApplied}
-            >
-          {props.leftIconTodos}
+          >
+            {props.leftIconTodos}
           </Grid>
           <Grid
             container
@@ -86,10 +94,10 @@ export default function BottomAppBar(props) {
             className={classes.paddingRightSmall}
             id="todos"
             onClick={handleTodos}
-            >
-          <div className={classes.grow} />
+          >
+            <div className={classes.grow} />
 
-          {props.rightIconTodos}
+            {props.rightIconTodos}
           </Grid>
           {/* <IconButton edge="start" color="inherit" aria-label="open drawer">
             <ShuffleIcon />
@@ -97,7 +105,6 @@ export default function BottomAppBar(props) {
           <Typography variant="body2" component="h6">AGRUPAR</Typography> */}
         </Toolbar>
       </AppBar>
-        </React.Fragment>
-    
+    </React.Fragment>
   );
 }

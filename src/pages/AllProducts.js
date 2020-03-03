@@ -276,7 +276,10 @@ class AllProducts extends React.Component {
         "Produtos salvos com sucesso.",
         { variant: "success" }
       );
+      if(this.getParamFromUrl("addRelatorio")) {
         return this.props.history.push(`/relatorio?id_relatorio=${this.getParamFromUrl("addRelatorio")}`)
+      }
+      return 
     } catch(err) {
 
       return this.props.enqueueSnackbar(
@@ -456,7 +459,6 @@ class AllProducts extends React.Component {
 
   renderProductsCardsView(data) {
     const { classes } = this.props;
-    const { handleApplied } = this.state;
 
     return (
       <Grid
@@ -539,9 +541,7 @@ class AllProducts extends React.Component {
                 </Typography>
                 <CardMedia
                   id="border"
-                  className={
-                    handleApplied ? classes.mediaCardApplied : classes.mediaCard
-                  }
+                  className={ classes.mediaCard}
                   image={produtos.image}
                   title="Produto"
                 />
@@ -772,6 +772,7 @@ class AllProducts extends React.Component {
             >
               <ChipsList
                 reportsIds={this.state.reportsIds}
+                showModalReports={() => this.setState({ showReportsList: true })}
 
                 reports={this.state.reports}
                 removeChips={this.removeChips}
@@ -831,6 +832,7 @@ class AllProducts extends React.Component {
         {/* </DragDropContext> */}
 
         <Footer
+          hideButton={true}
           relatoryPage={this.state.relatoryPage}
           leftIconTodos={
             <Grid
@@ -874,7 +876,6 @@ class AllProducts extends React.Component {
               <Typography className={classes.hideXsLabel}>Selecionar todos</Typography>
             </Grid>
           }
-          onClick={() => this.setState({ showReportsList: true })}
         ></Footer>
         <ChooseReportList
           onClose={() => this.setState({ showReportsList: false })}
