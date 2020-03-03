@@ -42,14 +42,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function BottomAppBar(props) {
-  const handleTodos = () => {
-    // props.allApplied(false)
-  };
-
-  const handleApplied = () => {
-    // props.applied(false)
-  };
-
   const classes = useStyles();
   return (
     <React.Fragment>
@@ -80,7 +72,6 @@ export default function BottomAppBar(props) {
             justify="flex-start"
             className={classes.paddingRightSmall}
             id="applied"
-            onClick={handleApplied}
           >
             {props.leftIconTodos}
           </Grid>
@@ -93,7 +84,20 @@ export default function BottomAppBar(props) {
             justify="flex-end"
             className={classes.paddingRightSmall}
             id="todos"
-            onClick={handleTodos}
+          >
+            <div className={classes.grow} />
+
+            {props.rightIconTodos}
+          </Grid>
+          <Grid
+            container
+            xs={6}
+            item
+            sm={6}
+            alignItems="center"
+            justify="flex-end"
+            className={classes.paddingRightSmall}
+            id="todos"
           >
             <div className={classes.grow} />
 
