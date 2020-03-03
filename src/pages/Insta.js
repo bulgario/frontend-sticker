@@ -6,6 +6,7 @@ import Grid from "@material-ui/core/Grid";
 import { withRouter } from "react-router-dom";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Header from "../components/recursableComponents/Header";
+import Footer from "../components/recursableComponents/Footer"
 import LoadingDialog from "../components/recursableComponents/LoadingDialog";
 
 // import DroppableWrapper from "../components/recursableComponents/DroppableWrapper";
@@ -36,10 +37,11 @@ import User from "../services/User";
 // import IconButton from '@material-ui/core/IconButton';
 import ArrowBack from "@material-ui/icons/ArrowBack";
 import Print from "@material-ui/icons/Print";
+import ShareIcon from '@material-ui/icons/Share';
 
 import Toc from "@material-ui/icons/Toc";
 
-import { IconButton } from "@material-ui/core";
+import { IconButton, Icon } from "@material-ui/core";
 
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
@@ -241,6 +243,26 @@ const styles = theme => ({
       paddingRight: theme.spacing(1.5),
       paddingLeft: theme.spacing(0)
     }
+  },
+  cardOpacity: {
+    cursor: "pointer",
+    minHeight: 450,
+    maxWidth: 300,
+    maxHeight: 500,
+    minWidth: 300,
+    margin: theme.spacing(0.6),
+    padding: theme.spacing(0.6),
+    backgroundColor: "white",
+    [theme.breakpoints.down("sm")]: {
+      minHeight: 337,
+      maxWidth: 160,
+      maxHeight: 350,
+      minWidth: 160,
+      margin: theme.spacing(0.6),
+      marginBottom: theme.spacing(4)
+    },
+    opacity: 0.4,
+    boxSizing: "border-box"
   }
 });
 
@@ -267,7 +289,9 @@ class Insta extends React.Component {
       orderAsc: true,
       print: false,
       filterSelected: { Categoria: true, Subcategoria: true, Estampa: true },
-      filtersLen: {}
+      filtersLen: {},
+      selectItens: false,
+      selectedProducts: []
     };
   }
 
@@ -533,6 +557,57 @@ class Insta extends React.Component {
     });
   }
 
+  renderSelectedItens = () => {
+    const { allProgramacoes } = this.state;
+    const { classes } = this.props;
+    const programacoes = Object.keys(allProgramacoes);
+    return programacoes.map(programacao => {
+      return (
+        <Grid item direction="row" justify="center">
+          {/* <div className={classes.root}> */}
+          <ExpansionPanel>
+            <ExpansionPanelSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <Grid
+                item
+                alignItems="center"
+                direction="row"
+                justify="flex-start"
+                container
+              >
+                <Typography variant="h5" component="p">
+                  {programacao}
+                </Typography>
+
+                {/* <IconButton>
+                    <ArrowDropDownIcon></ArrowDropDownIcon>
+                  </IconButton> */}
+              </Grid>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails className={classes.root}>
+              {/* <Divider variant="middle" className={classes.divider}></Divider> */}
+              {/* <DroppableWrapper
+              droppableId={produtos[0]}
+              direction="horizontal"
+              isCombineEnabled={true}
+                > */}
+              {this.state.expanded
+                ? this.renderProductsCardsView(
+                    this.filterProducts(allProgramacoes[programacao])
+                  )
+                : this.renderProductsInstaView(allProgramacoes[programacao])}
+              {/* </DroppableWrapper> */}
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+          {/* </div> */}
+        </Grid>
+      );
+    });
+  }
+
   filterProducts(produtos) {
     const { categoriaFilter, subcategoriaFilter, estampaFilter } = this.state;
     const produtosFiltrados = produtos.filter(produto => {
@@ -557,8 +632,19 @@ class Insta extends React.Component {
     }
   }
 
-  handleClickProduct(id) {
-    return this.props.history.push(`/produto?produto=${id}`);
+  handleClickProduct = (id) => {
+    const { selectedProducts } = this.state;
+    if(this.state.selectItens) {
+      if (!selectedProducts.includes(id)) {
+        selectedProducts.push(id);
+      } else {
+        const index = selectedProducts.indexOf(id);
+        selectedProducts.splice(index, 1);
+      }
+      this.setState({ selectedProducts });
+    } else {
+      return this.props.history.push(`/produto?produto=${id}`); 
+    }
   }
 
   renderProductsCardsView(data) {
@@ -605,8 +691,8 @@ class Insta extends React.Component {
                     ref={provided.innerRef}
                   > */}
               <Card
-              elevation={5} variant="elevation"
-                className={classes.card}
+                elevation={!this.state.selectedProducts.includes(_id) ? 0 : 4}
+                className={ this.state.selectItens && !this.state.selectedProducts.includes(_id) ? classes.cardOpacity : classes.card}
                 onClick={() => this.handleClickProduct(_id)}
               >
                 <Typography variant="h6" component="p">
@@ -1069,6 +1155,13 @@ class Insta extends React.Component {
         }
       });
   };
+
+  handleItensSelect = () => {
+    const { selectItens } = this.state
+    this.setState({ selectItens: !selectItens })
+
+  }
+
   render() {
     const { classes } = this.props;
     return (
@@ -1101,6 +1194,16 @@ class Insta extends React.Component {
             >
               <ArrowBack></ArrowBack>
             </IconButton>
+          }
+          rightIconAfter={
+           <IconButton
+            aria-label="upload picture"
+            component="span"
+            className={classes.whiteButton}
+            onClick={this.handleItensSelect}
+           >
+            <ShareIcon></ShareIcon>
+           </IconButton>   
           }
         />
         <FilterDrawer
@@ -1177,10 +1280,12 @@ class Insta extends React.Component {
 
           <div className={classes.margin}>
             <Grid container direction="column" spacing={2}>
-              {this.state.print
-                ? this.programacoesToPrint()
-                : this.renderProgramacoes()}
-              {/* {this.renderProgramacoes()} */}
+              {this.state.print ? 
+                this.programacoesToPrint() :
+                this.state.selectItens ?
+                this.renderSelectedItens() :
+                this.renderProgramacoes()
+              }
             </Grid>
           </div>
         </Container>
@@ -1191,6 +1296,7 @@ class Insta extends React.Component {
             <AddIcon />
           </Fab> */}
         </Grid>
+        {this.state.selectItens ? <Footer/>: null}
       </Fragment>
     );
   }
