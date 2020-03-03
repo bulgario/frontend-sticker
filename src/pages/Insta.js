@@ -42,12 +42,16 @@ import ShareIcon from '@material-ui/icons/Share';
 import Toc from "@material-ui/icons/Toc";
 
 import { IconButton, Icon } from "@material-ui/core";
+import CheckIcon from "@material-ui/icons/Check";
+import DoneAllIcon from "@material-ui/icons/DoneAll";
 
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import FilterDrawer from "../components/recursableComponents/FilterDrawer";
 import OrderDrawer from "../components/recursableComponents/OrderDrawer";
+import ChipsList from "../components/recursableComponents/ChipsList";
+import ChooseReportList from "../components/recursableComponents/ChooseReportList";
 
 import UTILS from "../imageUrl";
 const axios = require("axios");
@@ -291,7 +295,9 @@ class Insta extends React.Component {
       filterSelected: { Categoria: true, Subcategoria: true, Estampa: true },
       filtersLen: {},
       selectItens: false,
-      selectedProducts: []
+      selectedProducts: [],
+      showReportsList: false,
+      reportsIds:this.getParamFromUrl("addRelatorio")?[this.getParamFromUrl("addRelatorio")]:[],
     };
   }
 
@@ -644,6 +650,41 @@ class Insta extends React.Component {
       this.setState({ selectedProducts });
     } else {
       return this.props.history.push(`/produto?produto=${id}`); 
+    }
+  }
+
+  async saveProductsToReports() {
+    try{
+      const {selectedProducts, reportsIds} = this.state
+      if (selectedProducts.length <1) {
+        return this.props.enqueueSnackbar(
+          "Nenhum produto foi selecionado.",
+          { variant: "warning" }
+        );
+
+      }
+      if (reportsIds.length <1) {
+        return this.props.enqueueSnackbar(
+          "Nenhum relatório foi selecionado.",
+          { variant: "warning" }
+        );
+
+      }
+      const data = this.mountDataToSaveReports()    
+      await Promise.all(data.map(data => axios.post(`${BASE_URL}/myProducts/editRelatory`,data)))      
+      this.props.enqueueSnackbar(
+        "Produtos salvos com sucesso.",
+        { variant: "success" }
+      );
+      if(this.getParamFromUrl("addRelatorio")) {
+        return this.props.history.push(`/relatorio?id_relatorio=${this.getParamFromUrl("addRelatorio")}`)
+      }
+      return 
+    } catch(err) {
+      return this.props.enqueueSnackbar(
+        "Não foi possível salvar os produtos.",
+        { variant: "error" }
+      );
     }
   }
 
@@ -1276,6 +1317,31 @@ class Insta extends React.Component {
               <Typography component="p">Ordenar</Typography>
             </Grid>
           </Grid>
+          <Grid
+              container
+              xs={10}
+              item
+              sm={8}
+              alignItems="center"
+              justify="center"
+              direction="row"
+            >
+              {/* <ChipsList
+                reportsIds={this.state.reportsIds}
+                showModalReports={() => this.setState({ showReportsList: true })}
+
+                reports={this.state.reports}
+                removeChips={this.removeChips}
+              ></ChipsList> */}
+
+              {/* <IconButton
+                aria-label="add"
+                onClick={() => this.setState({ showReportsList: true })}
+              >
+                <AddIcon  />
+              </IconButton>
+              <Typography className={classes.hideXsLabel}>Relatório</Typography> */}
+            </Grid>
           <Divider id="some"></Divider>
 
           <div className={classes.margin}>
@@ -1296,7 +1362,60 @@ class Insta extends React.Component {
             <AddIcon />
           </Fab> */}
         </Grid>
-        {this.state.selectItens ? <Footer/>: null}
+        {this.state.selectItens ?   
+        <Footer
+          hideButton={true}
+          relatoryPage={this.state.relatoryPage}
+          leftIconTodos={
+            <Grid
+              container
+              direction="row"
+              justify="flex-start"
+              alignItems="center"
+              onClick={() => this.saveProductsToReports()}
+            >
+              <IconButton>
+                <CheckIcon
+                  onClick={() => {
+                    this.setState({
+                      selectingProducts: !this.state.selectingProducts
+                    });
+                  }}
+                ></CheckIcon>
+              </IconButton>
+              <Typography  className={classes.hideXsLabel} >Salvar </Typography>
+            </Grid>
+          }
+          rightIconTodos={
+            <Grid
+              container
+              direction="row"
+              alignItems="center"
+              justify="flex-end"
+              onClick={() => {
+                const allProducts = this.state.allProductsSelectedIds;
+                if (this.state.selectedProducts.length === allProducts.length) {
+                  this.setState({ selectedProducts: [] });
+                } else {
+                  //selecionando todos os produtos
+                  this.setState({ selectedProducts: this.filterProducts(this.state.products).map(produto =>produto.id) });
+                }
+              }}
+            >
+              <IconButton>
+                <DoneAllIcon></DoneAllIcon>
+              </IconButton>
+              <Typography className={classes.hideXsLabel}>Selecionar todos</Typography>
+            </Grid>
+          }
+        ></Footer> : null}
+         {/* <ChooseReportList
+          onClose={() => this.setState({ showReportsList: false })}
+          reports={this.state.reports}
+          reportsIds={this.state.reportsIds}
+          open={this.state.showReportsList}
+          handleToogleChips={this.handleToogleChips}
+        ></ChooseReportList> */}
       </Fragment>
     );
   }
