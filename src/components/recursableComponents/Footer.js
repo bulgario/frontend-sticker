@@ -75,20 +75,7 @@ export default function BottomAppBar(props) {
           >
             {props.leftIconTodos}
           </Grid>
-          <Grid
-            container
-            xs={6}
-            item
-            sm={6}
-            alignItems="center"
-            justify="flex-end"
-            className={classes.paddingRightSmall}
-            id="todos"
-          >
-            <div className={classes.grow} />
 
-            {props.rightIconTodos}
-          </Grid>
           <Grid
             container
             xs={6}
