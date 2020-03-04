@@ -565,7 +565,7 @@ class Relatorio extends React.Component {
               aria-label="upload picture"
               component="span"
               className={classes.whiteButton}
-              onClick={() => this.props.history.go(-1)}
+              onClick={() => this.props.history.push(this.props.location.state.lastPage)}
             >
               <ArrowBack></ArrowBack>
             </IconButton>
