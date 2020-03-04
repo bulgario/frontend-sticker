@@ -1259,6 +1259,19 @@ class Insta extends React.Component {
     }
   }
 
+  handleToogleChips = (nome_relatorio,id) => {
+    const { reportsIds } = this.state
+
+
+    if (!reportsIds.includes(id)) {
+      reportsIds.push(id);
+    } else {
+      const index = reportsIds.indexOf(id);
+      reportsIds.splice(index, 1);
+    }
+    this.setState({ reportsIds });
+  };
+
   removeChips = ({nome_relatorio,id}) => () => {
     const {  reportsIds } = this.state;
 
@@ -1395,6 +1408,7 @@ class Insta extends React.Component {
             >
             {this.state.selectItens ?
               <ChipsList
+              className={classes.chipList}
               reportsIds={this.state.reportsIds}
               showModalReports={() => this.setState({ showReportsList: true })}
               reports={this.state.reports}
@@ -1468,13 +1482,13 @@ class Insta extends React.Component {
             </Grid>
           }
         ></Footer> : null}
-         {/* <ChooseReportList
+         <ChooseReportList
           onClose={() => this.setState({ showReportsList: false })}
           reports={this.state.reports}
           reportsIds={this.state.reportsIds}
           open={this.state.showReportsList}
           handleToogleChips={this.handleToogleChips}
-        ></ChooseReportList> */}
+        ></ChooseReportList>
       </Fragment>
     );
   }
