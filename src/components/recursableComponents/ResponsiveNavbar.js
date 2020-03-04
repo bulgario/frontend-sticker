@@ -52,7 +52,7 @@ function ResponsiveNavbar(props) {
   };
   const menuIcons = [
     {
-      name: "check",
+      name: "date_range",
       text: "Recebimento",
       action: () => redirect(ROUTES.SEARCH),
       show: user.canAcessThisRoute(ROUTES.SEARCH),
