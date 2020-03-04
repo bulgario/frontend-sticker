@@ -277,7 +277,12 @@ class AllProducts extends React.Component {
         { variant: "success" }
       );
       if(this.getParamFromUrl("addRelatorio")) {
-        return this.props.history.replace(`/relatorio?id_relatorio=${this.getParamFromUrl("addRelatorio")}`)
+
+        return this.props.history.replace({
+          pathname: `/relatorio`,
+          search: `?id_relatorio=${this.getParamFromUrl("addRelatorio")}`,
+          state: { lastPage: `${this.props.location.pathname}${this.props.location.search}` }
+        })
       }
       return 
     } catch(err) {
