@@ -169,7 +169,7 @@ class MyReports extends React.Component {
     return (
       <Fragment>
         <Header
-          title="Meus relatórios"
+          title="Meus Produtos"
           rightIcon={null}
           leftIcon={
             <IconButton
