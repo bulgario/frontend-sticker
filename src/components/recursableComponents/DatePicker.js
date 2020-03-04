@@ -36,8 +36,12 @@ const styles = theme => ({
 });
 
 const MaterialUIPickers = props =>  {
-  const [selectedDateInicio, setSelectedDateInicio] = React.useState(null);
-  const [selectedDateFim, setSelectedDateFim] = React.useState(null);
+  const current = new Date();
+  const tomorrowDay = new Date(current.getTime() + 86400000);
+  const fiveDaysFromToday = new Date(current.getTime() + 86400000 * 5 );
+  console.log(tomorrowDay,fiveDaysFromToday)
+  const [selectedDateInicio, setSelectedDateInicio] = React.useState(tomorrowDay);
+  const [selectedDateFim, setSelectedDateFim] = React.useState(fiveDaysFromToday);
   const [selectedDateUltimo, setSelectedDateUltimo] = React.useState(null);
   const user = new User();
   const id_marca = user.user.id_marca_estilo
