@@ -52,19 +52,20 @@ function ResponsiveNavbar(props) {
   };
   const menuIcons = [
     {
-      name: "date_range",
-      text: "Recebimento",
-      action: () => redirect(ROUTES.SEARCH),
-      show: user.canAcessThisRoute(ROUTES.SEARCH),
-      route: ROUTES.SEARCH
-    },
-    {
       name: "shopping_cart",
       text: "Meus Produtos",
       action: () => redirect(ROUTES.MYREPORTS),
       show: user.canAcessThisRoute(ROUTES.MYREPORTS),
       route: ROUTES.MYREPORTS
     },
+    {
+      name: "date_range",
+      text: "Recebimento",
+      action: () => redirect(ROUTES.SEARCH),
+      show: user.canAcessThisRoute(ROUTES.SEARCH),
+      route: ROUTES.SEARCH
+    },
+
     // {
     //   name: "note",
     //   text: "Meus relatórios",
