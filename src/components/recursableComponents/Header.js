@@ -57,7 +57,7 @@ const Header = props => {
         </Grid>
 
         <Grid item>{props.rightIcon}</Grid>
-
+        {props.rightIconAfter ? <Grid item>{props.rightIconAfter}</Grid> : ""}
       </Grid>
     </div>
   );

@@ -6,6 +6,7 @@ import Grid from "@material-ui/core/Grid";
 import { withRouter } from "react-router-dom";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Header from "../components/recursableComponents/Header";
+import Footer from "../components/recursableComponents/Footer";
 import LoadingDialog from "../components/recursableComponents/LoadingDialog";
 
 // import DroppableWrapper from "../components/recursableComponents/DroppableWrapper";
@@ -36,16 +37,21 @@ import User from "../services/User";
 // import IconButton from '@material-ui/core/IconButton';
 import ArrowBack from "@material-ui/icons/ArrowBack";
 import Print from "@material-ui/icons/Print";
+import ShareIcon from "@material-ui/icons/Share";
 
 import Toc from "@material-ui/icons/Toc";
 
 import { IconButton } from "@material-ui/core";
+import CheckIcon from "@material-ui/icons/Check";
+import DoneAllIcon from "@material-ui/icons/DoneAll";
 
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import FilterDrawer from "../components/recursableComponents/FilterDrawer";
 import OrderDrawer from "../components/recursableComponents/OrderDrawer";
+import ChipsList from "../components/recursableComponents/ChipsList";
+import ChooseReportList from "../components/recursableComponents/ChooseReportList";
 
 import UTILS from "../imageUrl";
 const axios = require("axios");
@@ -241,6 +247,26 @@ const styles = theme => ({
       paddingRight: theme.spacing(1.5),
       paddingLeft: theme.spacing(0)
     }
+  },
+  cardOpacity: {
+    cursor: "pointer",
+    minHeight: 450,
+    maxWidth: 300,
+    maxHeight: 500,
+    minWidth: 300,
+    margin: theme.spacing(0.6),
+    padding: theme.spacing(0.6),
+    backgroundColor: "white",
+    [theme.breakpoints.down("sm")]: {
+      minHeight: 337,
+      maxWidth: 160,
+      maxHeight: 350,
+      minWidth: 160,
+      margin: theme.spacing(0.6),
+      marginBottom: theme.spacing(4)
+    },
+    opacity: 0.4,
+    boxSizing: "border-box"
   }
 });
 
@@ -267,12 +293,19 @@ class Insta extends React.Component {
       orderAsc: true,
       print: false,
       filterSelected: { Categoria: true, Subcategoria: true, Estampa: true },
-      filtersLen: {}
+      filtersLen: {},
+      selectItens: false,
+      selectedProducts: [],
+      showReportsList: false,
+      reportsIds: [],
+      reports: [],
+      products: []
     };
   }
 
   componentDidMount() {
     this.getProducts();
+    this.getRelatories();
   }
   async getProducts() {
     try {
@@ -298,6 +331,21 @@ class Insta extends React.Component {
       });
     }
     this.mountFiltersOptions();
+  }
+
+  async getRelatories() {
+    const user = new User();
+    const id_usuario = user.user.id_usuario;
+    await axios
+      .get(`${BASE_URL}/myProducts/getReports`, {
+        params: {
+          id_user: id_usuario
+        }
+      })
+      .then(data => {
+        this.setState({ reports: data.data });
+        this.setState({ reportsIds: data.data.map(ids => ids.id) });
+      });
   }
 
   unmarkAllFilters = filterParam => {
@@ -533,6 +581,57 @@ class Insta extends React.Component {
     });
   }
 
+  renderSelectedItens = () => {
+    const { allProgramacoes } = this.state;
+    const { classes } = this.props;
+    const programacoes = Object.keys(allProgramacoes);
+    return programacoes.map(programacao => {
+      return (
+        <Grid item direction="row" justify="center">
+          {/* <div className={classes.root}> */}
+          <ExpansionPanel>
+            <ExpansionPanelSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <Grid
+                item
+                alignItems="center"
+                direction="row"
+                justify="flex-start"
+                container
+              >
+                <Typography variant="h5" component="p">
+                  {programacao}
+                </Typography>
+
+                {/* <IconButton>
+                    <ArrowDropDownIcon></ArrowDropDownIcon>
+                  </IconButton> */}
+              </Grid>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails className={classes.root}>
+              {/* <Divider variant="middle" className={classes.divider}></Divider> */}
+              {/* <DroppableWrapper
+              droppableId={produtos[0]}
+              direction="horizontal"
+              isCombineEnabled={true}
+                > */}
+              {this.state.expanded
+                ? this.renderProductsCardsView(
+                    this.filterProducts(allProgramacoes[programacao])
+                  )
+                : this.renderProductsInstaView(allProgramacoes[programacao])}
+              {/* </DroppableWrapper> */}
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+          {/* </div> */}
+        </Grid>
+      );
+    });
+  };
+
   filterProducts(produtos) {
     const { categoriaFilter, subcategoriaFilter, estampaFilter } = this.state;
     const produtosFiltrados = produtos.filter(produto => {
@@ -557,8 +656,78 @@ class Insta extends React.Component {
     }
   }
 
-  handleClickProduct(id) {
-    return this.props.history.push(`/produto?produto=${id}`);
+  handleClickProduct = id => {
+    const { selectedProducts } = this.state;
+    if (this.state.selectItens) {
+      if (!selectedProducts.includes(id)) {
+        selectedProducts.push(id);
+      } else {
+        const index = selectedProducts.indexOf(id);
+        selectedProducts.splice(index, 1);
+      }
+      this.setState({ selectedProducts });
+    } else {
+      return this.props.history.push(`/produto?produto=${id}`);
+    }
+  };
+
+  mountDataToSaveReports() {
+    try {
+      const { selectedProducts, reportsIds } = this.state;
+      const productsToSend = { produto_tags: {} };
+
+      selectedProducts.map(productId => {
+        productsToSend["produto_tags"][productId] = [];
+        return true;
+      });
+      const arrayToSave = reportsIds.map(reportId => {
+        const obj = { ...productsToSend, id_relatorio: reportId };
+
+        return obj;
+      });
+
+      return arrayToSave;
+    } catch (err) {
+      console.log(err);
+    }
+
+    return true;
+  }
+
+  async saveProductsToReports() {
+    try {
+      const { selectedProducts, reportsIds } = this.state;
+      if (selectedProducts.length < 1) {
+        return this.props.enqueueSnackbar("Nenhum produto foi selecionado.", {
+          variant: "warning"
+        });
+      }
+      if (reportsIds.length < 1) {
+        return this.props.enqueueSnackbar("Nenhum relatório foi selecionado.", {
+          variant: "warning"
+        });
+      }
+      const data = this.mountDataToSaveReports();
+      await Promise.all(
+        data.map(data =>
+          axios.post(`${BASE_URL}/myProducts/editRelatory`, data)
+        )
+      );
+      this.props.enqueueSnackbar("Produtos salvos com sucesso.", {
+        variant: "success"
+      });
+      if (this.getParamFromUrl("addRelatorio")) {
+        return this.props.history.push(
+          `/relatorio?id_relatorio=${this.getParamFromUrl("addRelatorio")}`
+        );
+      }
+      return;
+    } catch (err) {
+      return this.props.enqueueSnackbar(
+        "Não foi possível salvar os produtos.",
+        { variant: "error" }
+      );
+    }
   }
 
   renderProductsCardsView(data) {
@@ -605,15 +774,19 @@ class Insta extends React.Component {
                     ref={provided.innerRef}
                   > */}
               <Card
-              elevation={5} variant="elevation"
-                className={classes.card}
+                elevation={!this.state.selectedProducts.includes(_id) ? 0 : 4}
+                className={
+                  this.state.selectItens &&
+                  !this.state.selectedProducts.includes(_id)
+                    ? classes.cardOpacity
+                    : classes.card
+                }
                 onClick={() => this.handleClickProduct(_id)}
               >
                 <Typography variant="h6" component="p">
                   {produto}
                 </Typography>
                 <Typography
-                  
                   color="textSecondary"
                   component="p"
                   className={classes.desc_produto}
@@ -631,7 +804,6 @@ class Insta extends React.Component {
                 </Typography>
                 {/* <Typography variant="body2" color="textSecondary" component="p">{produtos.desc_cor_produto}</Typography> */}
                 <Typography
-                  
                   color="textSecondary"
                   component="p"
                   className={classes.desc_produto}
@@ -678,28 +850,33 @@ class Insta extends React.Component {
   checkLastImg = async image => {
     const { allProgramacoes } = this.state;
     const programacoes = Object.keys(allProgramacoes);
-    const programacaoWithProducts = programacoes.filter(programacao => this.filterProducts(allProgramacoes[programacao]).length >=1) 
+    const programacaoWithProducts = programacoes.filter(
+      programacao =>
+        this.filterProducts(allProgramacoes[programacao]).length >= 1
+    );
 
     // console.log(programacaoWithProducts,'programacoes com produtos')
     // const ultima_programacao = programacaoWithProducts[programacaoWithProducts.length-1]
     const produtosFiltrados = this.filterProducts(
-      allProgramacoes[programacaoWithProducts[programacaoWithProducts.length - 1]]
+      allProgramacoes[
+        programacaoWithProducts[programacaoWithProducts.length - 1]
+      ]
     );
     const ultimo_produto = produtosFiltrados[produtosFiltrados.length - 1];
 
     if (image === ultimo_produto.image) {
       await this.setState({ loadingPrint: false });
 
-      window.print()
+      window.print();
       this.setState({ print: false, loadingPrint: false });
     }
   };
 
   GetFormattedDate() {
-    const  todayTime = new Date().toISOString().split("T")[0];
-    const [year,month,day] = todayTime.split("-")
+    const todayTime = new Date().toISOString().split("T")[0];
+    const [year, month, day] = todayTime.split("-");
     return month + "-" + day + "-" + year;
-}
+  }
   programacoesToPrint() {
     const { allProgramacoes } = this.state;
     const { classes } = this.props;
@@ -765,9 +942,8 @@ class Insta extends React.Component {
                 }
                 return (
                   <Fragment>
-                    {index % 12 ===0 && index>0? (
-                      <div style={{ width: "100%"}}>
-                        
+                    {index % 12 === 0 && index > 0 ? (
+                      <div style={{ width: "100%" }}>
                         <Grid
                           item
                           // alignItems="center"
@@ -775,14 +951,10 @@ class Insta extends React.Component {
                           justify="flex-start"
                           container
                         >
-                          <Typography
-                            
-                            component="subtitle"
-                            align="start"
-                          >
-                           {`${ this.GetFormattedDate()}`}
+                          <Typography component="subtitle" align="start">
+                            {`${this.GetFormattedDate()}`}
                           </Typography>
-                          <Typography  component="p" align="center">
+                          <Typography component="p" align="center">
                             {`Data da programação:  ${programacao}`}
                           </Typography>
                         </Grid>
@@ -799,7 +971,6 @@ class Insta extends React.Component {
                           {produto}
                         </Typography>
                         <Typography
-                          
                           color="textSecondary"
                           component="p"
                           className={classes.desc_produto}
@@ -817,7 +988,6 @@ class Insta extends React.Component {
                         </Typography>
                         {/* <Typography variant="body2" color="textSecondary" component="p">{produtos.desc_cor_produto}</Typography> */}
                         <Typography
-                          
                           color="textSecondary"
                           component="p"
                           className={classes.desc_produto}
@@ -893,9 +1063,13 @@ class Insta extends React.Component {
             );
             if (produtosPerProgramacao <= 4) {
               produtosParaMostrarFiltrados.push(
-                <Grid item container >
+                <Grid item container>
                   <div
-                    style={{ backgroundColor: "transparent", height: 690, width: 50 ,}}
+                    style={{
+                      backgroundColor: "transparent",
+                      height: 690,
+                      width: 50
+                    }}
                   ></div>
                 </Grid>
               );
@@ -909,7 +1083,11 @@ class Insta extends React.Component {
               produtosParaMostrarFiltrados.push(
                 <Grid item container align="center">
                   <div
-                    style={{ backgroundColor: "transparent", height: 355, width: 50 }}
+                    style={{
+                      backgroundColor: "transparent",
+                      height: 355,
+                      width: 50
+                    }}
                   ></div>
                 </Grid>
               );
@@ -924,11 +1102,10 @@ class Insta extends React.Component {
                   justify="flex-start"
                   container
                 >
-                  <Typography  component="subtitle" align="start">
-                                   {`${ this.GetFormattedDate()}`}
-
+                  <Typography component="subtitle" align="start">
+                    {`${this.GetFormattedDate()}`}
                   </Typography>
-                  <Typography  component="p" align="center">
+                  <Typography component="p" align="center">
                     {`Data da programação:  ${programacao}`}
                   </Typography>
                 </Grid>
@@ -1016,17 +1193,15 @@ class Insta extends React.Component {
       });
     });
 
-
-
     categorias.push("");
     subcategorias.push("");
     estampas.push("");
     this.setState({
       filterSelected: {
-        "Estampa": estampas.length -1 === this.state.estampaInitialLen,
-        "Subcategoria":
-          subcategorias.length-1  === this.state.subcategoriaInitialLen,
-        "Categoria": categorias.length -1  === this.state.categoriaInitialLen
+        Estampa: estampas.length - 1 === this.state.estampaInitialLen,
+        Subcategoria:
+          subcategorias.length - 1 === this.state.subcategoriaInitialLen,
+        Categoria: categorias.length - 1 === this.state.categoriaInitialLen
       }
     });
     this.setState({
@@ -1069,8 +1244,54 @@ class Insta extends React.Component {
         }
       });
   };
+
+  handleItensSelect = () => {
+    const { selectItens } = this.state;
+    this.setState({ selectItens: !selectItens });
+  };
+
+  handleSelectAllItens = async () => {
+    const allProducts = [];
+    Object.values(this.state.allProgramacoes).map(data => {
+      return this.filterProducts(data).map(val => allProducts.push(val));
+    });
+
+    if (this.state.selectedProducts.length === allProducts.length) {
+      await this.setState({ selectedProducts: [] });
+    } else {
+      //selecionando todos os produtos
+      await this.setState({
+        selectedProducts: this.filterProducts(allProducts).map(
+          produto => produto._id
+        )
+      });
+    }
+  };
+
+  handleToogleChips = (nome_relatorio, id) => {
+    const { reportsIds } = this.state;
+
+    if (!reportsIds.includes(id)) {
+      reportsIds.push(id);
+    } else {
+      const index = reportsIds.indexOf(id);
+      reportsIds.splice(index, 1);
+    }
+    this.setState({ reportsIds });
+  };
+
+  removeChips = ({ nome_relatorio, id }) => () => {
+    const { reportsIds } = this.state;
+
+    const indexId = reportsIds.indexOf(id);
+    reportsIds.splice(indexId, 1);
+
+    this.setState({ reportsIds });
+  };
+
   render() {
     const { classes } = this.props;
+
     return (
       <Fragment>
         <LoadingDialog
@@ -1081,16 +1302,26 @@ class Insta extends React.Component {
         <Header
           title="Resultados da programação"
           rightIcon={
-            <IconButton
-              aria-label="upload picture"
-              component="span"
-              className={classes.whiteButton}
-              onClick={() => {
-                this.setState({print:true,loadingPrint:true})
-              }}
-            >
-              <Print></Print>
-            </IconButton>
+            <Grid container direction="row">
+              <IconButton
+                aria-label="upload picture"
+                component="span"
+                className={classes.whiteButton}
+                onClick={this.handleItensSelect}
+              >
+                <ShareIcon></ShareIcon>
+              </IconButton>
+              <IconButton
+                aria-label="upload picture"
+                component="span"
+                className={classes.whiteButton}
+                onClick={() => {
+                  this.setState({ print: true, loadingPrint: true });
+                }}
+              >
+                <Print></Print>
+              </IconButton>
+            </Grid>
           }
           leftIcon={
             <IconButton
@@ -1102,6 +1333,9 @@ class Insta extends React.Component {
               <ArrowBack></ArrowBack>
             </IconButton>
           }
+          // rightIconAfter={
+
+          // }
         />
         <FilterDrawer
           openMenu={this.openFilter}
@@ -1173,14 +1407,43 @@ class Insta extends React.Component {
               <Typography component="p">Ordenar</Typography>
             </Grid>
           </Grid>
+          <Grid
+            container
+            xs={10}
+            item
+            sm={8}
+            alignItems="center"
+            justify="center"
+            direction="row"
+          >
+            {this.state.selectItens ? (
+              <ChipsList
+                className={classes.chipList}
+                reportsIds={this.state.reportsIds}
+                showModalReports={() =>
+                  this.setState({ showReportsList: true })
+                }
+                reports={this.state.reports}
+                removeChips={this.removeChips}
+              />
+            ) : null}
+            {/* <IconButton
+                aria-label="add"
+                onClick={() => this.setState({ showReportsList: true })}
+              >
+                <AddIcon  />
+              </IconButton>
+              <Typography className={classes.hideXsLabel}>Relatório</Typography> */}
+          </Grid>
           <Divider id="some"></Divider>
 
           <div className={classes.margin}>
             <Grid container direction="column" spacing={2}>
               {this.state.print
                 ? this.programacoesToPrint()
+                : this.state.selectItens
+                ? this.renderSelectedItens()
                 : this.renderProgramacoes()}
-              {/* {this.renderProgramacoes()} */}
             </Grid>
           </div>
         </Container>
@@ -1191,6 +1454,55 @@ class Insta extends React.Component {
             <AddIcon />
           </Fab> */}
         </Grid>
+        {this.state.selectItens ? (
+          <Footer
+            hideButton={true}
+            relatoryPage={this.state.relatoryPage}
+            leftIconTodos={
+              <Grid
+                container
+                direction="row"
+                justify="flex-start"
+                alignItems="center"
+                onClick={() => this.saveProductsToReports()}
+              >
+                <IconButton>
+                  <CheckIcon
+                    onClick={() => {
+                      this.setState({
+                        selectingProducts: !this.state.selectingProducts
+                      });
+                    }}
+                  ></CheckIcon>
+                </IconButton>
+                <Typography className={classes.hideXsLabel}>Salvar </Typography>
+              </Grid>
+            }
+            rightIconTodos={
+              <Grid
+                container
+                direction="row"
+                alignItems="center"
+                justify="flex-end"
+                onClick={() => this.handleSelectAllItens()}
+              >
+                <IconButton>
+                  <DoneAllIcon></DoneAllIcon>
+                </IconButton>
+                <Typography className={classes.hideXsLabel}>
+                  Selecionar todos
+                </Typography>
+              </Grid>
+            }
+          ></Footer>
+        ) : null}
+        <ChooseReportList
+          onClose={() => this.setState({ showReportsList: false })}
+          reports={this.state.reports}
+          reportsIds={this.state.reportsIds}
+          open={this.state.showReportsList}
+          handleToogleChips={this.handleToogleChips}
+        ></ChooseReportList>
       </Fragment>
     );
   }
