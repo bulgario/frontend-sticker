@@ -298,6 +298,7 @@ class Insta extends React.Component {
       selectedProducts: [],
       showReportsList: false,
       reportsIds:this.getParamFromUrl("addRelatorio")?[this.getParamFromUrl("addRelatorio")]:[],
+      products: []
     };
   }
 
@@ -1203,6 +1204,20 @@ class Insta extends React.Component {
 
   }
 
+  handleSelectAllItens = async () => {
+    const allProducts = []
+    Object.values(this.state.allProgramacoes).map(data => {
+      data.map(val => allProducts.push(val))
+    })
+
+    if(this.state.selectedProducts.length === allProducts.length) {
+      await this.setState({ selectedProducts: [] });
+    } else {
+      //selecionando todos os produtos
+      await this.setState({ selectedProducts: this.filterProducts(allProducts).map(produto => produto._id) });
+    }
+  }
+
   render() {
     const { classes } = this.props;
     return (
@@ -1392,15 +1407,7 @@ class Insta extends React.Component {
               direction="row"
               alignItems="center"
               justify="flex-end"
-              onClick={() => {
-                const allProducts = this.state.allProductsSelectedIds;
-                if (this.state.selectedProducts.length === allProducts.length) {
-                  this.setState({ selectedProducts: [] });
-                } else {
-                  //selecionando todos os produtos
-                  this.setState({ selectedProducts: this.filterProducts(this.state.products).map(produto =>produto.id) });
-                }
-              }}
+              onClick={() => this.handleSelectAllItens()}
             >
               <IconButton>
                 <DoneAllIcon></DoneAllIcon>
