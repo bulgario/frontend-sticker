@@ -1253,7 +1253,7 @@ class Insta extends React.Component {
   handleSelectAllItens = async () => {
     const allProducts = [];
     Object.values(this.state.allProgramacoes).map(data => {
-      return data.map(val => allProducts.push(val));
+      return this.filterProducts(data).map(val => allProducts.push(val));
     });
 
     if (this.state.selectedProducts.length === allProducts.length) {
