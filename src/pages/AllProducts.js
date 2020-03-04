@@ -277,7 +277,7 @@ class AllProducts extends React.Component {
         { variant: "success" }
       );
       if(this.getParamFromUrl("addRelatorio")) {
-        return this.props.history.push(`/relatorio?id_relatorio=${this.getParamFromUrl("addRelatorio")}`)
+        return this.props.history.replace(`/relatorio?id_relatorio=${this.getParamFromUrl("addRelatorio")}`)
       }
       return 
     } catch(err) {
