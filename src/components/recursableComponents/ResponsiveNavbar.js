@@ -52,19 +52,19 @@ function ResponsiveNavbar(props) {
   };
   const menuIcons = [
     {
-      name: "check",
+      name: "date_range",
       text: "Recebimento",
       action: () => redirect(ROUTES.SEARCH),
       show: user.canAcessThisRoute(ROUTES.SEARCH),
       route: ROUTES.SEARCH
     },
-    // {
-    //   name: "shopping-cart",
-    //   text: "Venda",
-    //   action: () => redirect(ROUTES.HOME),
-    //   show: user.canAcessThisRoute(ROUTES.HOME),
-    //   route: ROUTES.INSTA
-    // },
+    {
+      name: "shopping_cart",
+      text: "Meus Produtos",
+      action: () => redirect(ROUTES.MYREPORTS),
+      show: user.canAcessThisRoute(ROUTES.MYREPORTS),
+      route: ROUTES.MYREPORTS
+    },
     // {
     //   name: "note",
     //   text: "Meus relatórios",

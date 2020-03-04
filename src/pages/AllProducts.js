@@ -277,7 +277,7 @@ class AllProducts extends React.Component {
         { variant: "success" }
       );
       if(this.getParamFromUrl("addRelatorio")) {
-        return this.props.history.push(`/relatorio?id_relatorio=${this.getParamFromUrl("addRelatorio")}`)
+        return this.props.history.replace(`/relatorio?id_relatorio=${this.getParamFromUrl("addRelatorio")}`)
       }
       return 
     } catch(err) {
@@ -446,7 +446,9 @@ class AllProducts extends React.Component {
   }
 
   handleClickProduct(id) {
-    const { selectedProducts } = this.state;
+    const { selectedProducts,reportsIds } = this.state;
+    if(reportsIds.length <1) return this.props.history.push(`/produto?produto=${id}`);
+
     if (!selectedProducts.includes(id)) {
       selectedProducts.push(id);
     } else {
@@ -454,7 +456,6 @@ class AllProducts extends React.Component {
       selectedProducts.splice(index, 1);
     }
     this.setState({ selectedProducts });
-    // return this.props.history.push(`/produto?produto=${id}`);
   }
 
   renderProductsCardsView(data) {
@@ -502,9 +503,9 @@ class AllProducts extends React.Component {
                   > */}
               <Card
                 variant="elevation"
-                elevation={!this.state.selectedProducts.includes(id) ? 0 : 4}
+                elevation={!this.state.selectedProducts.includes(id) && this.state.reportsIds.length >=1 ? 0 : 4}
                 className={
-                  !this.state.selectedProducts.includes(id)
+                  !this.state.selectedProducts.includes(id) && this.state.reportsIds.length >=1
                     ? classes.cardOpacity
                     : classes.card
                 }
@@ -861,6 +862,9 @@ class AllProducts extends React.Component {
               alignItems="center"
               justify="flex-end"
               onClick={() => {
+                if(this.state.reportsIds.length <1) {
+                  return 
+                }
                 const allProducts = this.state.allProductsSelectedIds;
                 if (this.state.selectedProducts.length === allProducts.length) {
                   this.setState({ selectedProducts: [] });
