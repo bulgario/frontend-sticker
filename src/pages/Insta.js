@@ -297,13 +297,15 @@ class Insta extends React.Component {
       selectItens: false,
       selectedProducts: [],
       showReportsList: false,
-      reportsIds:this.getParamFromUrl("addRelatorio")?[this.getParamFromUrl("addRelatorio")]:[],
+      reportsIds: [],
+      reports: [],
       products: []
     };
   }
 
   componentDidMount() {
     this.getProducts();
+    this.getRelatories()
   }
   async getProducts() {
     try {
@@ -329,6 +331,21 @@ class Insta extends React.Component {
       });
     }
     this.mountFiltersOptions();
+  }
+
+  async getRelatories() {
+    const user = new User();
+    const id_usuario = user.user.id_usuario
+    await axios
+        .get(`${BASE_URL}/myProducts/getReports`, {
+          params: {
+            id_user: id_usuario
+          }
+        })
+        .then(data => {
+          this.setState({ reports: data.data })
+          this.setState({ reportsIds: data.data.map(ids => ids.id) })
+        });
   }
 
   unmarkAllFilters = filterParam => {
@@ -654,17 +671,42 @@ class Insta extends React.Component {
     }
   }
 
+  mountDataToSaveReports() {
+    try {
+      const {selectedProducts, reportsIds} = this.state
+      const productsToSend = {produto_tags: {}}
+  
+      selectedProducts.map(productId => {
+        productsToSend["produto_tags"][productId] = []
+        return true
+      })
+      const arrayToSave = reportsIds.map(reportId => {
+        const obj = {...productsToSend,
+          id_relatorio: reportId,
+        }
+
+        return obj
+      })
+  
+      return arrayToSave
+    } catch(err) {
+      console.log(err)
+    }
+
+    return true
+  }
+
   async saveProductsToReports() {
     try{
       const {selectedProducts, reportsIds} = this.state
-      if (selectedProducts.length <1) {
+      if (selectedProducts.length < 1) {
         return this.props.enqueueSnackbar(
           "Nenhum produto foi selecionado.",
           { variant: "warning" }
         );
 
       }
-      if (reportsIds.length <1) {
+      if (reportsIds.length < 1) {
         return this.props.enqueueSnackbar(
           "Nenhum relatório foi selecionado.",
           { variant: "warning" }
@@ -1201,7 +1243,6 @@ class Insta extends React.Component {
   handleItensSelect = () => {
     const { selectItens } = this.state
     this.setState({ selectItens: !selectItens })
-
   }
 
   handleSelectAllItens = async () => {
@@ -1218,8 +1259,19 @@ class Insta extends React.Component {
     }
   }
 
+  removeChips = ({nome_relatorio,id}) => () => {
+    const {  reportsIds } = this.state;
+
+
+    const indexId = reportsIds.indexOf(id)
+    reportsIds.splice(indexId, 1);
+
+    this.setState({ reportsIds });
+  };
+
   render() {
     const { classes } = this.props;
+
     return (
       <Fragment>
         <LoadingDialog
@@ -1341,14 +1393,14 @@ class Insta extends React.Component {
               justify="center"
               direction="row"
             >
-              {/* <ChipsList
-                reportsIds={this.state.reportsIds}
-                showModalReports={() => this.setState({ showReportsList: true })}
-
-                reports={this.state.reports}
-                removeChips={this.removeChips}
-              ></ChipsList> */}
-
+            {this.state.selectItens ?
+              <ChipsList
+              reportsIds={this.state.reportsIds}
+              showModalReports={() => this.setState({ showReportsList: true })}
+              reports={this.state.reports}
+              removeChips={this.removeChips}
+              />
+            : null}
               {/* <IconButton
                 aria-label="add"
                 onClick={() => this.setState({ showReportsList: true })}
