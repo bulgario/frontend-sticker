@@ -38,8 +38,7 @@ const styles = theme => ({
 const MaterialUIPickers = props =>  {
   const current = new Date();
   const tomorrowDay = new Date(current.getTime() + 86400000);
-  const fiveDaysFromToday = new Date(current.getTime() + 86400000 * 5 );
-  console.log(tomorrowDay,fiveDaysFromToday)
+  const fiveDaysFromToday = new Date(current.getTime() + 86400000 * 8 );
   const [selectedDateInicio, setSelectedDateInicio] = React.useState(tomorrowDay);
   const [selectedDateFim, setSelectedDateFim] = React.useState(fiveDaysFromToday);
   const [selectedDateUltimo, setSelectedDateUltimo] = React.useState(null);

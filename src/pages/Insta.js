@@ -8,33 +8,22 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Header from "../components/recursableComponents/Header";
 import Footer from "../components/recursableComponents/Footer";
 import LoadingDialog from "../components/recursableComponents/LoadingDialog";
-
-// import DroppableWrapper from "../components/recursableComponents/DroppableWrapper";
 import Badge from "@material-ui/core/Badge";
 import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
-// import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 
 import Typography from "@material-ui/core/Typography";
 
-// import Fab from "@material-ui/core/Fab";
 
 import { signIn } from "../actions";
-// import AddIcon from "@material-ui/icons/Add";
 import FilterList from "@material-ui/icons/FilterList";
 
 import Divider from "@material-ui/core/Divider";
 
-// import FormControlLabel from "@material-ui/core/FormControlLabel";
-// import Box from "@material-ui/core/Box";
-
-// import Switch from "@material-ui/core/Switch";
 import { withSnackbar } from "notistack";
 import { BASE_URL } from "../consts";
 import User from "../services/User";
-// import { DragDropContext, Draggable } from "react-beautiful-dnd";
 
-// import IconButton from '@material-ui/core/IconButton';
 import ArrowBack from "@material-ui/icons/ArrowBack";
 import Print from "@material-ui/icons/Print";
 import ShareIcon from "@material-ui/icons/Share";
@@ -60,11 +49,8 @@ const _ = require("lodash");
 const styles = theme => ({
   root: {
     maxWidth: "97.5%",
-    // paddingLeft: theme.spacing(-4),
     marginLeft: theme.spacing(-4),
     marginRight: theme.spacing(-6)
-
-    // backgroundColor: "red"
   },
   main: {
     flexGrow: 1,
@@ -76,10 +62,6 @@ const styles = theme => ({
   media: {
     height: 400,
     width: 280,
-    // [theme.breakpoints.down('xs')]: {
-    //   height: 150,
-    //   width: 140,
-    // },
     [theme.breakpoints.down("sm")]: {
       height: 210,
       width: 120
@@ -96,29 +78,20 @@ const styles = theme => ({
   },
   cardToPrint: {
     cursor: "pointer",
-    // backgroundColor: "blue",
     minHeight: 305,
     maxWidth: 160,
     maxHeight: 305,
     minWidth: 160,
     margin: theme.spacing(0.6),
-    // marginLeft:theme.spacing(-3),
     marginBottom: theme.spacing(0),
-    // padding: theme.spacing(0.6),
-    // backgroundColor: "white",
     [theme.breakpoints.down("sm")]: {
       minHeight: 305,
       maxWidth: 160,
       maxHeight: 305,
       minWidth: 160,
       margin: theme.spacing(0.6),
-      // marginLeft:theme.spacing(-3),
       marginBottom: theme.spacing(0)
-      // marginLeft:theme.spacing(-2),
 
-      // paddingLeft: theme.spacing(-3),
-
-      // padding: theme.spacing(1),
     },
     boxSizing: "border-box"
   },
@@ -137,28 +110,16 @@ const styles = theme => ({
       maxHeight: 350,
       minWidth: 160,
       margin: theme.spacing(0.6),
-      // marginLeft:theme.spacing(-3),
       marginBottom: theme.spacing(4)
-      // marginLeft:theme.spacing(-2),
 
-      // paddingLeft: theme.spacing(-3),
-
-      // padding: theme.spacing(1),
     },
     boxSizing: "border-box"
   },
-  // badge: {
-  //       paddingRight: theme.spacing(-19),
-  //   paddingTop: theme.spacing(-0.5),
-  // },
   mediaCard: {
     height: 320,
     width: 220,
     boxSizing: "border-box",
     objectFit: "scale-down",
-    // marginLeft: theme.spacing(1),
-    // marginRight: theme.spacing(-1),
-    // marginTop: theme.spacing(-0.5),
     [theme.breakpoints.down("sm")]: {
       height: 220,
       width: 140
@@ -172,9 +133,6 @@ const styles = theme => ({
     width: 140,
     boxSizing: "border-box",
     objectFit: "scale-down",
-    // marginLeft: theme.spacing(1),
-    // marginRight: theme.spacing(-1),
-    // marginTop: theme.spacing(-0.5),
     [theme.breakpoints.down("sm")]: {
       height: 180,
       width: 140
@@ -209,7 +167,6 @@ const styles = theme => ({
   },
   cardHeader: {
     textAlign: "center"
-    // paddingVertical:theme.spacing(-2)
   },
   textField: {
     width: 190,
@@ -267,7 +224,12 @@ const styles = theme => ({
     },
     opacity: 0.4,
     boxSizing: "border-box"
-  }
+  },
+  hideXsLabel: {
+    [theme.breakpoints.down("xs")]: {
+      display: "none"
+    }
+  },
 });
 
 class Insta extends React.Component {
@@ -494,41 +456,6 @@ class Insta extends React.Component {
     return urlSearch.get(param);
   }
 
-  onDragEnd = result => {
-    // const {destination,source, draggableId} = result
-    // if (!destination) return
-    // if (destination.droppableId === source.droppableId && destination.index === source.index) {
-    //   return
-    // }
-    // // console.log(result)
-    // // console.log(this.state.allProgramacoes,'velha programacao')
-    // const produtosPerProgramation = this.state.allProgramacoes[source.droppableId]
-    // // console.log(produtosPerProgramation)
-    // const newArray = Array.from(produtosPerProgramation)
-    // // console.log(source.droppableId)
-    // const productToReplace = produtosPerProgramation.find((item,index) => index === source.index)
-    // // console.log(productToReplace,'produto achado')
-    // // console.log(newArray[source.index],'produto original')
-    // newArray.splice(source.index,1)
-    // newArray.splice(destination.index,0,productToReplace)
-    // // console.log(newArray,'novo array')
-    // const newProgramation = {
-    //   ...this.state.allProgramacoes,
-    //   [source.droppableId] : newArray
-    // }
-    // // console.log(newProgramation,' nova programacao')
-    // const newState = {
-    //   ...this.state,
-    //   allProgramacoes: newProgramation
-    //   //  {
-    //   //   ...this.state.allProgramacoes,
-    //   //   [source.droppableId] : newArray
-    //   // }
-    // }
-    // // console.log(newState)
-    // return
-    // // this.setState(newState)
-  };
 
   renderProgramacoes() {
     const { allProgramacoes } = this.state;
@@ -537,7 +464,6 @@ class Insta extends React.Component {
     return programacoes.map(programacao => {
       return (
         <Grid item direction="row" justify="center">
-          {/* <div className={classes.root}> */}
           <ExpansionPanel>
             <ExpansionPanelSummary
               expandIcon={<ExpandMoreIcon />}
@@ -554,19 +480,9 @@ class Insta extends React.Component {
                 <Typography variant="h5" component="p">
                   {programacao}
                 </Typography>
-
-                {/* <IconButton>
-                    <ArrowDropDownIcon></ArrowDropDownIcon>
-                  </IconButton> */}
               </Grid>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails className={classes.root}>
-              {/* <Divider variant="middle" className={classes.divider}></Divider> */}
-              {/* <DroppableWrapper
-              droppableId={produtos[0]}
-              direction="horizontal"
-              isCombineEnabled={true}
-                > */}
               {this.state.expanded
                 ? this.renderProductsCardsView(
                     this.filterProducts(allProgramacoes[programacao])
@@ -588,7 +504,6 @@ class Insta extends React.Component {
     return programacoes.map(programacao => {
       return (
         <Grid item direction="row" justify="center">
-          {/* <div className={classes.root}> */}
           <ExpansionPanel>
             <ExpansionPanelSummary
               expandIcon={<ExpandMoreIcon />}
@@ -606,27 +521,16 @@ class Insta extends React.Component {
                   {programacao}
                 </Typography>
 
-                {/* <IconButton>
-                    <ArrowDropDownIcon></ArrowDropDownIcon>
-                  </IconButton> */}
               </Grid>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails className={classes.root}>
-              {/* <Divider variant="middle" className={classes.divider}></Divider> */}
-              {/* <DroppableWrapper
-              droppableId={produtos[0]}
-              direction="horizontal"
-              isCombineEnabled={true}
-                > */}
               {this.state.expanded
                 ? this.renderProductsCardsView(
                     this.filterProducts(allProgramacoes[programacao])
                   )
                 : this.renderProductsInstaView(allProgramacoes[programacao])}
-              {/* </DroppableWrapper> */}
             </ExpansionPanelDetails>
           </ExpansionPanel>
-          {/* </div> */}
         </Grid>
       );
     });
@@ -760,19 +664,7 @@ class Insta extends React.Component {
           produtos.image = image;
 
           return (
-            // <Fragment>
             <Grid item align="center" className="">
-              {/* <Draggable
-                draggableId={id_produto.toString()}
-                index={index}
-                key={index}
-              >
-                {provided => (
-                  <div
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                    ref={provided.innerRef}
-                  > */}
               <Card
                 elevation={!this.state.selectedProducts.includes(_id) ? 0 : 4}
                 className={
@@ -802,7 +694,6 @@ class Insta extends React.Component {
                 >
                   {cor_produto}
                 </Typography>
-                {/* <Typography variant="body2" color="textSecondary" component="p">{produtos.desc_cor_produto}</Typography> */}
                 <Typography
                   color="textSecondary"
                   component="p"
@@ -815,9 +706,6 @@ class Insta extends React.Component {
                 <Badge
                   badgeContent={""}
                   classes={{ badge: color }}
-                  // color={color}
-                  // className={color}
-                  // anchorOrigin="top"
                 >
                   {produtos.image ? (
                     <CardMedia
@@ -837,11 +725,7 @@ class Insta extends React.Component {
                   {qtde_programada}
                 </Typography>
               </Card>
-              {/* </div>
-                )}
-              </Draggable> */}
             </Grid>
-            // </Fragment>
           );
         })}
       </Grid>
@@ -854,9 +738,6 @@ class Insta extends React.Component {
       programacao =>
         this.filterProducts(allProgramacoes[programacao]).length >= 1
     );
-
-    // console.log(programacaoWithProducts,'programacoes com produtos')
-    // const ultima_programacao = programacaoWithProducts[programacaoWithProducts.length-1]
     const produtosFiltrados = this.filterProducts(
       allProgramacoes[
         programacaoWithProducts[programacaoWithProducts.length - 1]
@@ -986,7 +867,6 @@ class Insta extends React.Component {
                         >
                           {cor_produto}
                         </Typography>
-                        {/* <Typography variant="body2" color="textSecondary" component="p">{produtos.desc_cor_produto}</Typography> */}
                         <Typography
                           color="textSecondary"
                           component="p"
@@ -999,9 +879,6 @@ class Insta extends React.Component {
                         <Badge
                           badgeContent={""}
                           classes={{ badge: color }}
-                          // color={color}
-                          // className={color}
-                          // anchorOrigin="top"
                         >
                           <img
                             className={classes.mediaCardPrint}
@@ -1055,7 +932,6 @@ class Insta extends React.Component {
                           }}
                         ></div>
                       ) : null}
-                      {/* {index=== 12?<div style={{width: 300,backgroundColor:'brown', margin: 20}}><Typography component="p" > Data da programação: {programacao}</Typography></div>:null} */}
                     </Grid>
                   </Fragment>
                 );
@@ -1097,7 +973,6 @@ class Insta extends React.Component {
               <Grid item direction="row" justify="center">
                 <Grid
                   item
-                  // alignItems="center"
                   direction="column"
                   justify="flex-start"
                   container
@@ -1117,7 +992,6 @@ class Insta extends React.Component {
                     alignItems="center"
                     spacing={0}
                   >
-                    {/* {atual += 20} */}
                     {produtosParaMostrarFiltrados}
                   </Grid>
                 }
@@ -1135,17 +1009,6 @@ class Insta extends React.Component {
       <Grid className={classes.horizontalScroll}>
         {data.map((produto, index) => {
           return (
-            // <Draggable
-            //   draggableId={produto.id_produto.toString()}
-            //   index={index}
-            //   key={index}
-            // >
-            //   {provided => (
-            //     <div
-            //       {...provided.draggableProps}
-            //       {...provided.dragHandleProps}
-            //       ref={provided.innerRef}
-            //     >
             <Card className={classes.margin}>
               <CardMedia
                 className={classes.media}
@@ -1153,9 +1016,6 @@ class Insta extends React.Component {
                 title="Produto"
               />
             </Card>
-            //     </div>
-            //   )}
-            // </Draggable>
           );
         })}
       </Grid>
@@ -1333,9 +1193,7 @@ class Insta extends React.Component {
               <ArrowBack></ArrowBack>
             </IconButton>
           }
-          // rightIconAfter={
 
-          // }
         />
         <FilterDrawer
           openMenu={this.openFilter}
@@ -1355,19 +1213,7 @@ class Insta extends React.Component {
           orderBy={this.state.orderBy}
           orderAsc={this.state.orderAsc}
         ></OrderDrawer>
-        {/* <FormControlLabel
-            control={
-              <Switch
-                color="primary"
-                checked={this.state.expanded}
-                onChange={() =>
-                  this.setState({ expanded: !this.state.expanded })
-                }
-              />
-            }
-            label="Detalhes"
-          /> */}
-        {/* <DragDropContext onDragEnd={this.onDragEnd}> */}
+
         <Container className={classes.containerSmall}>
           <Grid
             id="some"
@@ -1381,33 +1227,18 @@ class Insta extends React.Component {
           >
             <Grid
               container
-              xs={6}
+              xs={1}
               item
-              sm={6}
+              sm={2}
               alignItems="center"
               justify="flex-start"
             >
               <IconButton onClick={this.openFilter}>
                 <FilterList></FilterList>
               </IconButton>
-              <Typography component="p">Filtrar</Typography>
+              <Typography className={classes.hideXsLabel} component="p">Filtrar</Typography>
             </Grid>
             <Grid
-              container
-              xs={6}
-              item
-              sm={6}
-              alignItems="center"
-              justify="flex-end"
-              className={classes.paddingRightSmall}
-            >
-              <IconButton onClick={this.openOrder}>
-                <Toc></Toc>
-              </IconButton>
-              <Typography component="p">Ordenar</Typography>
-            </Grid>
-          </Grid>
-          <Grid
             container
             xs={10}
             item
@@ -1427,13 +1258,21 @@ class Insta extends React.Component {
                 removeChips={this.removeChips}
               />
             ) : null}
-            {/* <IconButton
-                aria-label="add"
-                onClick={() => this.setState({ showReportsList: true })}
-              >
-                <AddIcon  />
+          </Grid>
+            <Grid
+              container
+              xs={1}
+              item
+              sm={2}
+              alignItems="center"
+              justify="flex-end"
+              className={classes.paddingRightSmall}
+            >
+              <IconButton onClick={this.openOrder}>
+                <Toc></Toc>
               </IconButton>
-              <Typography className={classes.hideXsLabel}>Relatório</Typography> */}
+              <Typography className={classes.hideXsLabel} component="p">Ordenar</Typography>
+            </Grid>
           </Grid>
           <Divider id="some"></Divider>
 
@@ -1447,12 +1286,8 @@ class Insta extends React.Component {
             </Grid>
           </div>
         </Container>
-        {/* </DragDropContext> */}
 
         <Grid container justify="center">
-          {/* <Fab aria-label={"Add"} className={classes.fab} color={"primary"}>
-            <AddIcon />
-          </Fab> */}
         </Grid>
         {this.state.selectItens ? (
           <Footer
