@@ -297,7 +297,7 @@ class Insta extends React.Component {
       selectItens: false,
       selectedProducts: [],
       showReportsList: false,
-      reportsIds: [],
+      reportsIds: this.getParamFromUrl("addRelatorio")?[this.getParamFromUrl("addRelatorio")]:[],
       reports: [],
       products: []
     };
@@ -344,7 +344,7 @@ class Insta extends React.Component {
       })
       .then(data => {
         this.setState({ reports: data.data });
-        this.setState({ reportsIds: data.data.map(ids => ids.id) });
+        // this.setState({ reportsIds: data.data.map(ids => ids.id) });
       });
   }
 
@@ -1418,7 +1418,6 @@ class Insta extends React.Component {
           >
             {this.state.selectItens ? (
               <ChipsList
-                className={classes.chipList}
                 reportsIds={this.state.reportsIds}
                 showModalReports={() =>
                   this.setState({ showReportsList: true })
