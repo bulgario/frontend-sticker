@@ -36,8 +36,11 @@ const styles = theme => ({
 });
 
 const MaterialUIPickers = props =>  {
-  const [selectedDateInicio, setSelectedDateInicio] = React.useState(null);
-  const [selectedDateFim, setSelectedDateFim] = React.useState(null);
+  const current = new Date();
+  const tomorrowDay = new Date(current.getTime() + 86400000);
+  const eightDaysFromToday = new Date(current.getTime() + 86400000 * 8 );
+  const [selectedDateInicio, setSelectedDateInicio] = React.useState(tomorrowDay);
+  const [selectedDateFim, setSelectedDateFim] = React.useState(eightDaysFromToday);
   const [selectedDateUltimo, setSelectedDateUltimo] = React.useState(null);
   const user = new User();
   const id_marca = user.user.id_marca_estilo
@@ -79,12 +82,39 @@ const MaterialUIPickers = props =>  {
       } catch (error) {
         return props.enqueueSnackbar(
           "Problemas para buscar coleções",
-          { variant: "warning" }
+          { variant: "error" }
         );
 
       }
     }
   }
+  React.useEffect( () => {
+    async function getInitialCollection() {
+      try {
+        const response = await axios.get(`${BASE_URL}/collections/getCollectionBasedInData`, {
+          params: getDatasForCollection(tomorrowDay,eightDaysFromToday, id_marca)
+        }); 
+        const collection = response.data
+        if(collection.length < 1) {
+          return props.enqueueSnackbar(
+            "Não há produtos programados para essas datas ",
+            { variant: "warning" }
+          );
+        }
+        props.choosedCollection(collection)
+  
+      } catch (error) {
+        return props.enqueueSnackbar(
+          "Problemas para buscar coleções",
+          { variant: "error" }
+        );
+  
+      }
+    }
+
+    getInitialCollection()
+
+  },[]); //eslint-disable-line
 
   const getDatasForCollection = (selectedDateInicio,selectedDateFim, id_marca) => {
     const dataInicio = selectedDateInicio
@@ -153,13 +183,15 @@ const MaterialUIPickers = props =>  {
           format="yyyy-MM-dd"
           margin="normal"
           id="date-picker-inline"
-          label={"Ínicio"}
+          label={"Início"}
           value={selectedDateUltimo}
           onChange={handleDateUltimoAgendamento}
           KeyboardButtonProps={{
             'aria-label': 'change date',
           }}
         />
+        {/* <TextField value={5} label="Limite de recebimento" variant="outlined"
+></TextField> */}
       </Grid>
       </Grid>
     </MuiPickersUtilsProvider>
