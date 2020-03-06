@@ -79,12 +79,6 @@ class MyReports extends React.Component {
     this.getReports();
   }
 
-  componentDidUpdate(prevProps) {
-  //  let lastItem = this.state.vitrine[this.state.vitrine.length - 1]
-  //  console.log(lastItem)
-  //   window.scrollTo(lastItem, 0);
-  }
-
   async getReports() {
     try {
       await axios
@@ -163,6 +157,7 @@ class MyReports extends React.Component {
 
     const removeSelf = index => {
       const newVitrine = vitrine.filter((e, i) => i !== index)
+      
       this.setState({ vitrine: newVitrine });
     };
 
@@ -183,6 +178,7 @@ class MyReports extends React.Component {
           }
         />
         {vitrine.map((meusProdutos, i) => {
+          
           const setStateProduct = (obj, cb) =>
             this.setState(
               {

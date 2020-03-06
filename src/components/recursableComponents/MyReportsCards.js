@@ -243,6 +243,7 @@ class MyReporstsCards extends React.Component {
                       inputProps={{
                         "aria-label": "Description"
                       }}
+                      value={this.props.meusProdutos.nome_relatorio}
                     />
                     {this.state.disabled ? (
                       <CreateIcon
