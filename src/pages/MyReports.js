@@ -8,7 +8,7 @@ import ArrowBack from "@material-ui/icons/ArrowBack";
 import Grid from "@material-ui/core/Grid";
 
 import Header from "../components/recursableComponents/Header";
-import MyProductsCards from "../components/recursableComponents/MyReportsCards";
+import MyReportsCards from "../components/recursableComponents/MyReportsCards";
 import BottomAppBar from "../components/recursableComponents/Footer"
 
 import { BASE_URL } from "../consts";
@@ -139,9 +139,8 @@ class MyReports extends React.Component {
           );
           relatory.id = produto.data;
           await this.setState({
-            vitrine: [...this.state.vitrine, relatory]
+            vitrine: [relatory ,...this.state.vitrine]
           });
-
           this.props.enqueueSnackbar("Novo Relatório Criado com Sucesso.", {
             variant: "success"
           });
@@ -178,7 +177,6 @@ class MyReports extends React.Component {
           }
         />
         {vitrine.map((meusProdutos, i) => {
-          
           const setStateProduct = (obj, cb) =>
             this.setState(
               {
@@ -189,12 +187,12 @@ class MyReports extends React.Component {
                 ]
               },
               () => {
-                // console.log(this.state.vitrine);
+                console.log(this.state.vitrine);
               }
             );
           return (
             <Grid direction="row" ref={this.myRef} container spacing={3}>
-              <MyProductsCards
+              <MyReportsCards
                 nameCardBox={
                   meusProdutos.nome_relatorio !== ""
                     ? meusProdutos.nome_relatorio

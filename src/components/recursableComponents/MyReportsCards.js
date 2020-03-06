@@ -112,7 +112,6 @@ class MyReporstsCards extends React.Component {
   render() {
     const { classes, nameCardBox, meusProdutos } = this.props; //eslint-disable-line
     const { checked } = this.state;
-
     const handleNameChange = event => {
       const obj = Object.assign(this.props.meusProdutos, {
         nome_relatorio: event.target.value
@@ -243,7 +242,7 @@ class MyReporstsCards extends React.Component {
                       inputProps={{
                         "aria-label": "Description"
                       }}
-                      value={this.props.meusProdutos.nome_relatorio}
+                      value={this.props.meusProdutos.nome_relatorio || ""}
                     />
                     {this.state.disabled ? (
                       <CreateIcon
