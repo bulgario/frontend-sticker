@@ -101,7 +101,8 @@ class MyReporstsCards extends React.Component {
     this.state = {
       disabled: true,
       checked: true,
-      open: false
+      open: false,
+      newCard: false
     };
   }
 
@@ -220,7 +221,7 @@ class MyReporstsCards extends React.Component {
         }
       }
     };
-
+  
     return (
       <Fragment>
         <Grid item xs={12}>

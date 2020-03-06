@@ -144,6 +144,7 @@ class MyReports extends React.Component {
           this.props.enqueueSnackbar("Novo Relatório Criado com Sucesso.", {
             variant: "success"
           });
+          this.setState({ newRelatory: relatory })
         } catch (error) {
           this.props.enqueueSnackbar("Erro ao criar seu novo Relatório.", {
             variant: "error"
@@ -202,6 +203,7 @@ class MyReports extends React.Component {
                 getProdutosData={setStateProduct}
                 meusProdutos={meusProdutos}
                 removeSelf={() => removeSelf(i)}
+                newRelatory={this.state.newRelatory}
                 index={i}
               />
             </Grid>
@@ -215,7 +217,7 @@ class MyReports extends React.Component {
   }
 
   scrollToMyRef = () => {
-    window.scrollTo({ behavior: 'smooth', top: this.myRef.current.offsetTop })
+    window.scrollTo({ behavior: 'smooth', top: 0 })
   }  
 }
 
