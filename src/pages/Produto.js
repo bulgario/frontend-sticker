@@ -9,6 +9,8 @@ import Typography from "@material-ui/core/Typography";
 
 import Header from "../components/recursableComponents/Header";
 
+import '@brainhubeu/react-carousel/lib/style.css';
+import Carousel, { Dots } from '@brainhubeu/react-carousel';
 import { BASE_URL } from "../consts";
 import UTILS from "../imageUrl";
 
@@ -100,7 +102,7 @@ const styles = theme => ({
     },
   },
   border: {
-      border: ' 1px solid #fafafa'
+      border: ' 15px solid #FFFFFF'
   }
 });
 
@@ -110,7 +112,7 @@ class Produto extends React.Component {
     super(props);
     this.state = {
       product: [],
-      photoProduct: ""
+      photoProduct: []
     };
   }
 
@@ -124,13 +126,9 @@ class Produto extends React.Component {
         params: this.getAllParamsFromUrl()
       });
       const product = resp.data[0];
-      const previewImage = UTILS.imagesFromProducts(
-        600,
-        600,
-        product.produto,
-        product.cor_produto
-      );
-      console.log(previewImage);
+      const previewImage = UTILS.handleImage(product.nome_arquivo, 400, 400)
+      await this.setState({ newPhotos: previewImage });
+
       await this.setState({ photoProduct: previewImage });
       await this.setState({ product: product });
     } catch (err) {
@@ -180,6 +178,23 @@ class Produto extends React.Component {
             </IconButton>
           }
         />
+        <Carousel
+        autoPlay={2000}
+        animationSpeed={1000}
+        infinite
+        dots
+        slidesPerPage={2}
+        >
+          {photoProduct.map(image => {
+            return (
+              <Grid item container justify="center">
+              <div className={classes.border}>
+                <img src={image}/>
+              </div>
+              </Grid>
+            )
+          })}
+        </Carousel>
 
         <Container className={classes.containerSmall}>
           <Grid
@@ -191,18 +206,7 @@ class Produto extends React.Component {
             alignItems="center"
           >
             <Grid className={classes.root}>
-              <Grid item container justify="center">
-                <div className={classes.border}>
-                <CardMedia
-                  className={classes.mediaCard}
-                  image={photoProduct}
-                  title="Produto"
-                />
-                </div>
-
-              </Grid>
               <br></br>
-
               <Grid
                 item
                 container
