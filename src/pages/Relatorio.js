@@ -29,7 +29,7 @@ import { BASE_URL } from "../consts";
 import ArrowBack from "@material-ui/icons/ArrowBack";
 
 import Toc from "@material-ui/icons/Toc";
-
+import DeleteIcon from '@material-ui/icons/Delete';
 import { IconButton } from "@material-ui/core";
 
 import FilterDrawer from "../components/recursableComponents/FilterDrawer";
@@ -142,6 +142,46 @@ const styles = theme => ({
   emojiPosition: {
     margin: '0 auto',
     textAlign: 'center'
+  },
+  card: {
+    cursor: "pointer",
+    minHeight: 450,
+    maxWidth: 300,
+    maxHeight: 500,
+    minWidth: 300,
+    margin: theme.spacing(0.6),
+    padding: theme.spacing(0.6),
+    backgroundColor: "white",
+    [theme.breakpoints.down("sm")]: {
+      minHeight: 337,
+      maxWidth: 160,
+      maxHeight: 350,
+      minWidth: 160,
+      margin: theme.spacing(0.6),
+      marginBottom: theme.spacing(4)
+    },
+    // opacity: 0.5,
+    boxSizing: "border-box"
+  },
+  cardOpacity: {
+    cursor: "pointer",
+    minHeight: 450,
+    maxWidth: 300,
+    maxHeight: 500,
+    minWidth: 300,
+    margin: theme.spacing(0.6),
+    padding: theme.spacing(0.6),
+    backgroundColor: "white",
+    [theme.breakpoints.down("sm")]: {
+      minHeight: 337,
+      maxWidth: 160,
+      maxHeight: 350,
+      minWidth: 160,
+      margin: theme.spacing(0.6),
+      marginBottom: theme.spacing(4)
+    },
+    opacity: 0.4,
+    boxSizing: "border-box"
   }
 });
 
@@ -162,7 +202,10 @@ class Relatorio extends React.Component {
       openTopDrawer: false,
       products: [],
       noProducts: false,
-      activeReport: this.getParamFromUrl("id_relatorio")
+      activeReport: this.getParamFromUrl("id_relatorio"),
+      removeItens: false,
+      reportsIds:this.getParamFromUrl("addRelatorio")?[this.getParamFromUrl("addRelatorio")]:[],
+      selectedProducts: []
     };
   }
 
@@ -196,6 +239,25 @@ class Relatorio extends React.Component {
     this.mountFiltersOptions();
   }
 
+  async removeItensFromRelatory(products) {
+    const id_relatorio = this.getParamFromUrl("id_relatorio")
+
+    const data = this.mountDataToSaveItensOnRelatory(id_relatorio, products)
+    try {
+      await axios.post(`${BASE_URL}/myProducts/editRelatory`, data)
+      
+      this.props.enqueueSnackbar("Produtos removidos com sucesso.", {
+        variant: "success"
+      });
+      return true
+    } catch (error) {
+      console.log("Error removeItensFromRelatory", error)
+      return this.props.enqueueSnackbar("Erro ao tentar deletar itens do relatório", {
+        variant: "error"
+      });
+    }
+  }
+
   async getRelatory() {
     try {
       const response = await axios.get(
@@ -208,6 +270,24 @@ class Relatorio extends React.Component {
       return this.props.enqueueSnackbar("Problemas para buscar relatório", {
         variant: "error"
       });
+    }
+  }
+
+  mountDataToSaveItensOnRelatory = (idRelatorio, products) => {
+    try {
+      const productsToSend = {produto_tags: {}}
+
+      products.map(productId => {
+        productsToSend["produto_tags"][productId] = []
+        return true
+      })
+      const arrayToSave = {...productsToSend, id_relatorio: idRelatorio}
+
+      return arrayToSave
+
+    } catch (error) {
+      console.log(error)
+      return false
     }
   }
 
@@ -339,7 +419,18 @@ class Relatorio extends React.Component {
   }
 
   handleClickProduct(id) {
-    return this.props.history.push(`/produto?produto=${id}`);
+    const { selectedProducts, reportsIds, removeItens } = this.state;
+    if(!removeItens) {
+      return this.props.history.push(`/produto?produto=${id}`);
+    }
+    // if(reportsIds.length <1) return this.props.history.push(`/produto?produto=${id}`);
+    if (!selectedProducts.includes(id)) {
+      selectedProducts.push(id);
+    } else {
+      const index = selectedProducts.indexOf(id);
+      selectedProducts.splice(index, 1);
+    }
+    this.setState({ selectedProducts });
   }
 
   renderProductsCardsView(data) {
@@ -387,7 +478,9 @@ class Relatorio extends React.Component {
               <Card
               variant="elevation"
               elevation={4}
-                className={classes.card}
+                className={ !this.state.selectedProducts.includes(id) && this.state.removeItens
+                  ? classes.cardOpacity
+                  : classes.card}
                 onClick={() => this.handleClickProduct(id)}
               >
                 <Typography variant="h6" component="p">
@@ -535,10 +628,41 @@ class Relatorio extends React.Component {
         }
       });
   };
+
+  handleClickEdit = () => {
+    this.setState({ removeItens: !this.state.removeItens })
+  }
+
+  removeProductsFromRelatory = () => {
+    const { selectedProducts, products } = this.state
+
+    if(selectedProducts.length > 0) {
+      const removingItens = this.removeItensFromRelatory(selectedProducts)
+      
+      if(removingItens) {
+        const lastProducts = products.filter(val => !selectedProducts.includes(val.id))
+        
+        this.setState({ products: lastProducts })
+        return this.props.enqueueSnackbar(
+          "Itens Removidos do seu relatório",
+          { variant: "success" }
+        );
+      } 
+    }
+    if(selectedProducts.length === 0) {
+      this.setState({ removeItens: !this.state.removeItens })
+      return this.props.enqueueSnackbar(
+        "Nenhum item selecionado",
+        { variant: "warning" }
+      );
+    }
+    this.setState({ removeItens: !this.state.removeItens })
+  }
+
   render() {
     const { classes } = this.props;
-    const { relatory } = this.state
-    
+    const { relatory, products } = this.state
+
     return (
       <Fragment>
         <LoadingDialog
@@ -557,7 +681,13 @@ class Relatorio extends React.Component {
                 // this.setState({print:true,loadingPrint:true})
               }}
             >
-              <PencilIcon></PencilIcon>
+              {this.state.removeItens ? 
+                <DeleteIcon
+                  onClick={this.removeProductsFromRelatory}
+                />
+              : <PencilIcon
+                  onClick={this.handleClickEdit}
+              />}
             </IconButton>
           }
           leftIcon={
