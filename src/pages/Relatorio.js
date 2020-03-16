@@ -1,37 +1,33 @@
 import React, { Fragment } from "react";
 import { connect } from "react-redux";
-import withStyles from "@material-ui/core/styles/withStyles";
-import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
 import { withRouter } from "react-router-dom";
-
-import PencilIcon from "@material-ui/icons/CreateOutlined";
-
-import Header from "../components/recursableComponents/Header";
-import Footer from "../components/recursableComponents/Footer";
-
-import LoadingDialog from "../components/recursableComponents/LoadingDialog";
-
-import CardMedia from "@material-ui/core/CardMedia";
-import Card from "@material-ui/core/Card";
-
-import Typography from "@material-ui/core/Typography";
-
-
 import { signIn } from "../actions";
-import FilterList from "@material-ui/icons/FilterList";
-
-import Divider from "@material-ui/core/Divider";
-
 import { withSnackbar } from "notistack";
 import { BASE_URL } from "../consts";
 
-import ArrowBack from "@material-ui/icons/ArrowBack";
-
+import withStyles from "@material-ui/core/styles/withStyles";
+import Container from "@material-ui/core/Container";
+import Grid from "@material-ui/core/Grid";
+import PencilIcon from "@material-ui/icons/CreateOutlined";
+import CardMedia from "@material-ui/core/CardMedia";
+import Card from "@material-ui/core/Card";
+import Typography from "@material-ui/core/Typography";
+import FilterList from "@material-ui/icons/FilterList";
+import Divider from "@material-ui/core/Divider";
 import Toc from "@material-ui/icons/Toc";
 import DeleteIcon from '@material-ui/icons/Delete';
 import { IconButton } from "@material-ui/core";
+import ArrowBack from "@material-ui/icons/ArrowBack";
 
+import { makeStyles } from '@material-ui/core/styles';
+import Switch from '@material-ui/core/Switch';
+import Paper from '@material-ui/core/Paper';
+import Grow from '@material-ui/core/Grow';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+
+import Header from "../components/recursableComponents/Header";
+import Footer from "../components/recursableComponents/Footer";
+import LoadingDialog from "../components/recursableComponents/LoadingDialog";
 import FilterDrawer from "../components/recursableComponents/FilterDrawer";
 import OrderDrawer from "../components/recursableComponents/OrderDrawer";
 import TopDrawer from "../components/recursableComponents/TopDrawer"
@@ -39,6 +35,7 @@ import TopDrawer from "../components/recursableComponents/TopDrawer"
 import UTILS from "../imageUrl";
 const axios = require("axios");
 const _ = require("lodash");
+
 
 const styles = theme => ({
   margin: {
@@ -205,7 +202,8 @@ class Relatorio extends React.Component {
       activeReport: this.getParamFromUrl("id_relatorio"),
       removeItens: false,
       reportsIds:this.getParamFromUrl("addRelatorio")?[this.getParamFromUrl("addRelatorio")]:[],
-      selectedProducts: []
+      selectedProducts: [],
+      checked: true
     };
   }
 
@@ -245,7 +243,6 @@ class Relatorio extends React.Component {
     const data = this.mountDataToSaveItensOnRelatory(id_relatorio, products)
     try {
       await axios.post(`${BASE_URL}/myProducts/editRelatory`, data)
-      
       this.props.enqueueSnackbar("Produtos removidos com sucesso.", {
         variant: "success"
       });
@@ -443,6 +440,7 @@ class Relatorio extends React.Component {
         alignItems="center"
         spacing={0}
       >
+
         {data.map((produtos, index) => {
           const {
             produto,
@@ -463,6 +461,11 @@ class Relatorio extends React.Component {
 
           return (
             // <Fragment>
+            <Grow 
+              in={this.state.checked}
+              style={{ transitionDelay: this.state.checked ? '500ms' : '0ms' }}
+              {...(this.state.checked ? { timeout: 1500 } : {})}
+            >
             <Grid item align="center" className="">
               {/* <Draggable
                 draggableId={id_produto.toString()}
@@ -536,9 +539,11 @@ class Relatorio extends React.Component {
                 )}
               </Draggable> */}
             </Grid>
+            </Grow>
             // </Fragment>
           );
         })}
+        
       </Grid>
     );
   }
@@ -629,25 +634,21 @@ class Relatorio extends React.Component {
       });
   };
 
-  handleClickEdit = () => {
-    this.setState({ removeItens: !this.state.removeItens })
+  handleClickEdit = async () => {
+    await this.setState({ removeItens: !this.state.removeItens })
   }
 
-  removeProductsFromRelatory = () => {
+  removeProductsFromRelatory = async () => {
     const { selectedProducts, products } = this.state
 
     if(selectedProducts.length > 0) {
-      const removingItens = this.removeItensFromRelatory(selectedProducts)
+      const removingItens = await this.removeItensFromRelatory(selectedProducts)
       
       if(removingItens) {
         const lastProducts = products.filter(val => !selectedProducts.includes(val.id))
         
-        this.setState({ products: lastProducts })
-        return this.props.enqueueSnackbar(
-          "Itens Removidos do seu relatório",
-          { variant: "success" }
-        );
-      } 
+        await this.setState({ products: lastProducts })
+      }
     }
     if(selectedProducts.length === 0) {
       this.setState({ removeItens: !this.state.removeItens })
