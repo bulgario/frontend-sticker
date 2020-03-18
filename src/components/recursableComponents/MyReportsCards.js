@@ -237,15 +237,15 @@ class MyReporstsCards extends React.Component {
                     <Input
                       defaultValue={nameCardBox}
                       onChange={handleNameChange}
-                      placeholder="Nome Coleção"
+                      placeholder="Nome relatório"
                       className={classes.input}
-                      disabled={this.state.disabled}
+                      disabled={this.state.disabled && !this.props.isNewRelatory}
                       inputProps={{
                         "aria-label": "Description"
                       }}
-                      value={this.props.meusProdutos.nome_relatorio || ""}
+                      value={this.props.meusProdutos.nome_relatorio || "Nome relatório"}
                     />
-                    {this.state.disabled ? (
+                    {this.state.disabled  && !this.props.isNewRelatory?  (
                       <CreateIcon
                         onClick={handleInputDisable}
                         className={classes.CreateIcon}

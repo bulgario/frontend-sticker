@@ -4,13 +4,12 @@ import { withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import { IconButton, Container } from "@material-ui/core";
 import ArrowBack from "@material-ui/icons/ArrowBack";
-import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 
 import Header from "../components/recursableComponents/Header";
 
 import '@brainhubeu/react-carousel/lib/style.css';
-import Carousel, { Dots } from '@brainhubeu/react-carousel';
+import Carousel from '@brainhubeu/react-carousel';
 import { BASE_URL } from "../consts";
 import UTILS from "../imageUrl";
 
@@ -189,7 +188,7 @@ class Produto extends React.Component {
             return (
               <Grid item container justify="center">
               <div className={classes.border}>
-                <img src={image}/>
+                <img src={image} alt="produto"/>
               </div>
               </Grid>
             )

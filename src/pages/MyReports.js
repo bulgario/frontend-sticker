@@ -72,6 +72,7 @@ class MyReports extends React.Component {
     this.myRef = React.createRef()
     this.state = {
       vitrine: [],
+      newRelatory: {},
     };
   }
 
@@ -186,9 +187,6 @@ class MyReports extends React.Component {
                   obj,
                   ...this.state.vitrine.slice(i + 1)
                 ]
-              },
-              () => {
-                console.log(this.state.vitrine);
               }
             );
           return (
@@ -203,6 +201,7 @@ class MyReports extends React.Component {
                 getProdutosData={setStateProduct}
                 meusProdutos={meusProdutos}
                 removeSelf={() => removeSelf(i)}
+                isNewRelatory={this.state.newRelatory.id === meusProdutos.id}
                 newRelatory={this.state.newRelatory}
                 index={i}
               />
