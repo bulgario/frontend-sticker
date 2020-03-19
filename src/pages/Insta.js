@@ -561,6 +561,7 @@ class Insta extends React.Component {
   }
 
   handleClickProduct = id => {
+    console.log("sou um produto", id)
     const { selectedProducts } = this.state;
     if (this.state.selectItens) {
       if (!selectedProducts.includes(id)) {
@@ -577,25 +578,30 @@ class Insta extends React.Component {
 
   mountDataToSaveReports() {
     try {
-      const { selectedProducts, reportsIds } = this.state;
-      const productsToSend = { produto_tags: {} };
+      const {selectedProducts, reportsIds} = this.state
 
-      selectedProducts.map(productId => {
-        productsToSend["produto_tags"][productId] = [];
-        return true;
-      });
-      const arrayToSave = reportsIds.map(reportId => {
-        const obj = { ...productsToSend, id_relatorio: reportId };
+      const arr = []
+      selectedProducts.forEach(reportId => {
+        let obj = new Object()
+        obj["id_produto_cor"] = reportId
+        obj.tags = []
+        arr.push(obj)
+      })
+      
+      const allProducts = reportsIds.map(reportId => {
+        // console.log("aaaa", arr)
+        // const obj = { ...arr }
+        const arrayToSave = { produto_tags: arr,  id_relatorio: reportId}
+        return arrayToSave
+      })
+      console.log("eeee", allProducts)
+      return allProducts
 
-        return obj;
-      });
-
-      return arrayToSave;
-    } catch (err) {
-      console.log(err);
+    } catch(err) {
+      console.log(err)
     }
 
-    return true;
+    return true
   }
 
   async saveProductsToReports() {
@@ -651,7 +657,7 @@ class Insta extends React.Component {
             cor_produto,
             qtde_programada,
             desc_cor_produto,
-            _id
+            id
             // id_produto
           } = produtos;
           const color = this.chooseBalls(produtos);
@@ -666,14 +672,14 @@ class Insta extends React.Component {
           return (
             <Grid item align="center" className="">
               <Card
-                elevation={!this.state.selectedProducts.includes(_id) ? 0 : 4}
+                elevation={!this.state.selectedProducts.includes(id) ? 0 : 4}
                 className={
                   this.state.selectItens &&
-                  !this.state.selectedProducts.includes(_id)
+                  !this.state.selectedProducts.includes(id)
                     ? classes.cardOpacity
                     : classes.card
                 }
-                onClick={() => this.handleClickProduct(_id)}
+                onClick={() => this.handleClickProduct(id)}
               >
                 <Typography variant="h6" component="p">
                   {produto}

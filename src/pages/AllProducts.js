@@ -227,21 +227,24 @@ class AllProducts extends React.Component {
   mountDataToSaveReports() {
     try {
       const {selectedProducts, reportsIds} = this.state
-      const productsToSend = {produto_tags: {}}
-  
-      selectedProducts.map(productId => {
-        productsToSend["produto_tags"][productId] = []
-        return true
+      const arr = []
+      selectedProducts.forEach(reportId => {
+        let obj = new Object()
+        obj["id_produto_cor"] = reportId
+        obj.tags = []
+        arr.push(obj)
       })
-      const arrayToSave = reportsIds.map(reportId => {
-        const obj = {...productsToSend,
-          id_relatorio: reportId,
-        }
+      
+      const allProducts = reportsIds.map(reportId => {
+        // console.log("aaaa", arr)
+        // const obj = { ...arr }
+        const arrayToSave = { produto_tags: arr,  id_relatorio: reportId}
+        return arrayToSave
+      })
 
-        return obj
-      })
-  
-      return arrayToSave
+      
+      return allProducts
+
     } catch(err) {
       console.log(err)
     }
@@ -269,8 +272,7 @@ class AllProducts extends React.Component {
       }
 
       const data = this.mountDataToSaveReports()
-      
-     await Promise.all(data.map(data => axios.post(`${BASE_URL}/myProducts/editRelatory`,data)))
+      await Promise.all(data.map(data => axios.post(`${BASE_URL}/myProducts/editRelatory`,data)))
         
       this.props.enqueueSnackbar(
         "Produtos salvos com sucesso.",
