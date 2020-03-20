@@ -229,7 +229,7 @@ class AllProducts extends React.Component {
       const {selectedProducts, reportsIds} = this.state
       const arr = []
       selectedProducts.forEach(reportId => {
-        let obj = new Object()
+        let obj = {}
         obj["id_produto_cor"] = reportId
         obj.tags = []
         arr.push(obj)

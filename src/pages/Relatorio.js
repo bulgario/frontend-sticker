@@ -19,11 +19,8 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { IconButton } from "@material-ui/core";
 import ArrowBack from "@material-ui/icons/ArrowBack";
 
-import { makeStyles } from '@material-ui/core/styles';
-import Switch from '@material-ui/core/Switch';
-import Paper from '@material-ui/core/Paper';
+
 import Grow from '@material-ui/core/Grow';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 import Header from "../components/recursableComponents/Header";
 import Footer from "../components/recursableComponents/Footer";
@@ -139,26 +136,6 @@ const styles = theme => ({
   emojiPosition: {
     margin: '0 auto',
     textAlign: 'center'
-  },
-  card: {
-    cursor: "pointer",
-    minHeight: 450,
-    maxWidth: 300,
-    maxHeight: 500,
-    minWidth: 300,
-    margin: theme.spacing(0.6),
-    padding: theme.spacing(0.6),
-    backgroundColor: "white",
-    [theme.breakpoints.down("sm")]: {
-      minHeight: 337,
-      maxWidth: 160,
-      maxHeight: 350,
-      minWidth: 160,
-      margin: theme.spacing(0.6),
-      marginBottom: theme.spacing(4)
-    },
-    // opacity: 0.5,
-    boxSizing: "border-box"
   },
   cardOpacity: {
     cursor: "pointer",
@@ -419,7 +396,7 @@ class Relatorio extends React.Component {
   }
 
   handleClickProduct(id) {
-    const { selectedProducts, reportsIds, removeItens } = this.state;
+    const { selectedProducts, removeItens } = this.state;
     if(!removeItens) {
       return this.props.history.push(`/produto?produto=${id}`);
     }
@@ -665,7 +642,7 @@ class Relatorio extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { relatory, products } = this.state
+    const { relatory } = this.state
 
     return (
       <Fragment>

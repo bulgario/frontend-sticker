@@ -598,7 +598,7 @@ class Insta extends React.Component {
 
       const arr = []
       selectedProducts.forEach(reportId => {
-        let obj = new Object()
+        let obj = {}
         obj["id_produto_cor"] = reportId
         obj.tags = []
         arr.push(obj)
@@ -688,7 +688,7 @@ class Insta extends React.Component {
           return (
             <Grid item align="center" className="">
               <Card
-                elevation={!this.state.selectedProducts.includes(_id) && this.state.selectItens ? 0 : 4}
+                elevation={!this.state.selectedProducts.includes(id) && this.state.selectItens ? 0 : 4}
                 className={
                   this.state.selectItens &&
                   !this.state.selectedProducts.includes(id)
