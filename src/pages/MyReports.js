@@ -113,8 +113,8 @@ class MyReports extends React.Component {
         id_usuario: user.user.id_usuario,
         // "img_relatorio": img_relatorio,
         data_criacao: date,
-        produto_tags: {},
-        referencia_tags: {},
+        produto_tags: [],
+        referencia_tags: [],
         id: null
       };
 
