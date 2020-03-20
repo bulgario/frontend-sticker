@@ -229,7 +229,7 @@ class Relatorio extends React.Component {
       }
       this.setState({ products });
     } catch (err) {
-      console.log(err);
+      console.log(err.data);
       return this.props.enqueueSnackbar("Problemas para buscar relatório", {
         variant: "error"
       });
@@ -241,6 +241,7 @@ class Relatorio extends React.Component {
     const id_relatorio = this.getParamFromUrl("id_relatorio")
 
     const data = this.mountDataToSaveItensOnRelatory(id_relatorio, products)
+    console.log(data)
     try {
       await axios.post(`${BASE_URL}/myProducts/editRelatory`, data)
       this.props.enqueueSnackbar("Produtos removidos com sucesso.", {
@@ -261,7 +262,7 @@ class Relatorio extends React.Component {
         `${BASE_URL}/myProducts/getRelatory?id_relatorio=${this.getParamFromUrl("id_relatorio")}`
       );
       let relatory = response.data;
-      this.setState({ relatory })
+      this.setState({ relatory,products: relatory.produto_tags })
     } catch (error) {
       console.log(error)
       return this.props.enqueueSnackbar("Problemas para buscar relatório", {
@@ -272,20 +273,22 @@ class Relatorio extends React.Component {
 
   mountDataToSaveItensOnRelatory = (idRelatorio, products) => {
     try {
-      const productsToSend = {produto_tags: {}}
-
-      products.map(productId => {
-        productsToSend["produto_tags"][productId] = []
-        return true
+      const arr = []
+      products.forEach(reportId => {
+          let obj = {}
+        obj["id_produto_cor"] = reportId
+        obj.tags = []
+        arr.push(obj)
       })
-      const arrayToSave = {...productsToSend, id_relatorio: idRelatorio}
+      
 
-      return arrayToSave
-
-    } catch (error) {
-      console.log(error)
-      return false
+        const arrayToSave = { produto_tags: arr,  id_relatorio: idRelatorio}
+        return arrayToSave
+      
+    } catch(err) {
+      console.log(err)
     }
+    return true
   }
 
   unmarkAllFilters = filterParam => {
@@ -634,8 +637,8 @@ class Relatorio extends React.Component {
       });
   };
 
-  handleClickEdit = async () => {
-    await this.setState({ removeItens: !this.state.removeItens })
+  handleClickEdit =  () => {
+     this.setState({ removeItens: !this.state.removeItens })
   }
 
   removeProductsFromRelatory = async () => {
