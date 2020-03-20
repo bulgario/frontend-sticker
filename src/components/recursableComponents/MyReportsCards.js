@@ -137,12 +137,10 @@ class MyReporstsCards extends React.Component {
       } = this.props.meusProdutos;
       try {
         if (this.props.meusProdutos.id) {
-          await axios.post(`${BASE_URL}/myProducts/editRelatory`, {
+          await axios.post(`${BASE_URL}/myProducts/editRelatoryName`, {
             id_relatorio: id,
             id_usuario: id_usuario,
-            nome_relatorio: nome_relatorio,
-            produto_tags: produto_tags,
-            referencia_tags: referencia_tags
+            nome_relatorio: nome_relatorio
           });
           this.props.enqueueSnackbar("Salvo com Sucesso.", {
             variant: "success"
