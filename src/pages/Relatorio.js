@@ -180,6 +180,7 @@ class Relatorio extends React.Component {
       removeItens: false,
       reportsIds:this.getParamFromUrl("addRelatorio")?[this.getParamFromUrl("addRelatorio")]:[],
       selectedProducts: [],
+      remainingProducts: [],
       checked: true
     };
   }
@@ -214,13 +215,12 @@ class Relatorio extends React.Component {
     this.mountFiltersOptions();
   }
 
-  async removeItensFromRelatory(products) {
+  async removeItensFromRelatory(products, remainingProducts) {
+    
     const id_relatorio = this.getParamFromUrl("id_relatorio")
-
-    const data = this.mountDataToSaveItensOnRelatory(id_relatorio, products)
-    console.log(data)
+    const data = this.mountDataToSaveItensOnRelatory(id_relatorio, remainingProducts)
     try {
-      await axios.post(`${BASE_URL}/myProducts/editRelatory`, data)
+      await axios.post(`${BASE_URL}/myProducts/removeItensFromRelatory`, data)
       this.props.enqueueSnackbar("Produtos removidos com sucesso.", {
         variant: "success"
       });
@@ -251,17 +251,14 @@ class Relatorio extends React.Component {
   mountDataToSaveItensOnRelatory = (idRelatorio, products) => {
     try {
       const arr = []
-      products.forEach(reportId => {
+      products.forEach(product => {
           let obj = {}
-        obj["id_produto_cor"] = reportId
+        obj["id_produto_cor"] = product.id
         obj.tags = []
         arr.push(obj)
       })
-      
-
-        const arrayToSave = { produto_tags: arr,  id_relatorio: idRelatorio}
-        return arrayToSave
-      
+      const arrayToSave = { produto_tags: arr,  id_relatorio: idRelatorio}
+      return arrayToSave
     } catch(err) {
       console.log(err)
     }
@@ -620,15 +617,13 @@ class Relatorio extends React.Component {
 
   removeProductsFromRelatory = async () => {
     const { selectedProducts, products } = this.state
+    const lastProducts = products.filter(val => !selectedProducts.includes(val.id))
+
+    await this.setState({ products: lastProducts })
 
     if(selectedProducts.length > 0) {
-      const removingItens = await this.removeItensFromRelatory(selectedProducts)
-      
-      if(removingItens) {
-        const lastProducts = products.filter(val => !selectedProducts.includes(val.id))
-        
-        await this.setState({ products: lastProducts })
-      }
+      const removingItens = await this.removeItensFromRelatory(selectedProducts, lastProducts)
+
     }
     if(selectedProducts.length === 0) {
       this.setState({ removeItens: !this.state.removeItens })
