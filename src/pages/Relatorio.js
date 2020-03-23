@@ -622,8 +622,7 @@ class Relatorio extends React.Component {
     await this.setState({ products: lastProducts })
 
     if(selectedProducts.length > 0) {
-      const removingItens = await this.removeItensFromRelatory(selectedProducts, lastProducts)
-
+      await this.removeItensFromRelatory(selectedProducts, lastProducts)
     }
     if(selectedProducts.length === 0) {
       this.setState({ removeItens: !this.state.removeItens })
