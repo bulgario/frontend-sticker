@@ -131,8 +131,8 @@ class MyReporstsCards extends React.Component {
         nome_relatorio,
         // img_relatorio,
         // data_criacao,
-        produto_tags,
-        referencia_tags,
+        // produto_tags,
+        // referencia_tags,
         id
       } = this.props.meusProdutos;
       try {
