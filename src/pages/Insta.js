@@ -13,6 +13,7 @@ import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
 
 import Typography from "@material-ui/core/Typography";
+import Tooltip from '@material-ui/core/Tooltip';
 
 
 import { signIn } from "../actions";
@@ -40,7 +41,10 @@ import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import FilterDrawer from "../components/recursableComponents/FilterDrawer";
 import OrderDrawer from "../components/recursableComponents/OrderDrawer";
 import ChipsList from "../components/recursableComponents/ChipsList";
+import SwipeableCarrousel from "../components/recursableComponents/SwipeableViews";
+
 import ChooseReportList from "../components/recursableComponents/ChooseReportList";
+
 
 import UTILS from "../imageUrl";
 const axios = require("axios");
@@ -97,17 +101,17 @@ const styles = theme => ({
   },
   card: {
     cursor: "pointer",
-    minHeight: 450,
+    minHeight: 560,
     maxWidth: 300,
-    maxHeight: 500,
+    maxHeight: 560,
     minWidth: 300,
     margin: theme.spacing(0.6),
-    padding: theme.spacing(0.6),
+    // padding: theme.spacing(0.6),
     backgroundColor: "white",
     [theme.breakpoints.down("sm")]: {
-      minHeight: 337,
+      minHeight: 380,
       maxWidth: 160,
-      maxHeight: 350,
+      maxHeight: 380,
       minWidth: 160,
       margin: theme.spacing(0.6),
       marginBottom: theme.spacing(4)
@@ -116,16 +120,26 @@ const styles = theme => ({
     boxSizing: "border-box"
   },
   mediaCard: {
-    height: 320,
-    width: 220,
+    position:'relative', top:-21,
+    marginBottom: theme.spacing(-2),
+    height: 415,
+    width: 300,
     boxSizing: "border-box",
-    objectFit: "scale-down",
+    objectFit: "scale-up",
     [theme.breakpoints.down("sm")]: {
       height: 220,
-      width: 140
+      width: 160,
+      left: 0,
     },
 
     borderColor: "#FFE600"
+  },
+  badge: {
+    position:'relative',top:5,left: 285,
+    [theme.breakpoints.down("sm")]: {
+      // top: 180,
+      left: 140
+    },
   },
 
   mediaCardPrint: {
@@ -207,17 +221,17 @@ const styles = theme => ({
   },
   cardOpacity: {
     cursor: "pointer",
-    minHeight: 450,
+    minHeight: 560,
     maxWidth: 300,
-    maxHeight: 500,
+    maxHeight: 560,
     minWidth: 300,
     margin: theme.spacing(0.6),
     padding: theme.spacing(0.6),
     backgroundColor: "white",
     [theme.breakpoints.down("sm")]: {
-      minHeight: 337,
+      minHeight: 380,
       maxWidth: 160,
-      maxHeight: 350,
+      maxHeight: 380,
       minWidth: 160,
       margin: theme.spacing(0.6),
       marginBottom: theme.spacing(4)
@@ -485,7 +499,7 @@ class Insta extends React.Component {
                 justify="flex-start"
                 container
               >
-                <Typography variant="h5" component="p">
+                <Typography variant="h5">
                   {programacao}
                 </Typography>
               </Grid>
@@ -533,7 +547,7 @@ class Insta extends React.Component {
                 justify="flex-start"
                 container
               >
-                <Typography variant="h5" component="p">
+                <Typography variant="h5">
                   {programacao}
                 </Typography>
 
@@ -568,11 +582,11 @@ class Insta extends React.Component {
     const { classes } = this.props;
 
     if (distribuicao === true) {
-      return classes.greenIcon;
+      return [classes.greenIcon,"Produto recebido"];
     } else if (validBasedinSchedule === true) {
-      return classes.yellowIcon;
+      return [classes.yellowIcon,"Produto pode não ser recebido na data de recebimento desejada"];
     } else {
-      return classes.redIcon;
+      return [classes.redIcon,"Produto não será recebido na data de recebimento desejada"];
     }
   }
 
@@ -588,7 +602,7 @@ class Insta extends React.Component {
       }
       this.setState({ selectedProducts });
     } else {
-      return this.props.history.push(`/produto?produto=${id}`);
+      // return this.props.history.push(`/produto?produto=${id}`);
     }
   };
 
@@ -673,10 +687,11 @@ class Insta extends React.Component {
             cor_produto,
             qtde_programada,
             desc_cor_produto,
-            id
+            id,
+            preco_varejo_original,
             // id_produto
           } = produtos;
-          const color = this.chooseBalls(produtos);
+          const [color,text] = this.chooseBalls(produtos);
           const image = UTILS.imagesFromProducts(
             220,
             320,
@@ -686,9 +701,9 @@ class Insta extends React.Component {
           produtos.image = image;
 
           return (
-            <Grid item align="center" className="">
+            <Grid item  className="">
               <Card
-                elevation={!this.state.selectedProducts.includes(id) && this.state.selectItens ? 0 : 4}
+                elevation={!this.state.selectedProducts.includes(id) && this.state.selectItens ? 0 : 2}
                 className={
                   this.state.selectItens &&
                   !this.state.selectedProducts.includes(id)
@@ -697,55 +712,55 @@ class Insta extends React.Component {
                 }
                 onClick={() => this.handleClickProduct(id)}
               >
-                <Typography variant="h6" component="p">
-                  {produto}
-                </Typography>
-                <Typography
-                  color="textSecondary"
-                  component="p"
-                  className={classes.desc_produto}
-                >
-                  {desc_produto.length > 13
-                    ? `${desc_produto.substring(0, 13)}...`
-                    : desc_produto}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  color="textSecondary"
-                  component="h3"
-                >
-                  {cor_produto}
-                </Typography>
-                <Typography
-                  color="textSecondary"
-                  component="p"
-                  className={classes.desc_produto}
-                >
-                  {desc_cor_produto.length > 13
-                    ? `${desc_cor_produto.substring(0, 13)}...`
-                    : desc_cor_produto}
-                </Typography>
+                {/* <div style={{margin:0, padding:0}}> */}
+                <Tooltip title={text}   className={classes.badge}>
                 <Badge
+                 
                   badgeContent={""}
                   classes={{ badge: color }}
                 >
-                  {produtos.image ? (
-                    <CardMedia
-                      className={classes.mediaCard}
-                      image={produtos.image}
-                      title="Produto"
-                    />
-                  ) : (
-                    <CardMedia
-                      className={classes.mediaCard}
-                      image={"/no-picture.png"}
-                      title="Produto sem foto"
-                    />
-                  )}
-                </Badge>
-                <Typography variant="h5" component="p" color="textSecondary">
-                  {qtde_programada}
+                  </Badge>
+                  </Tooltip>
+                    {/* <Fragment > */}
+                    <SwipeableCarrousel photos={produtos.nome_arquivo?[ ...produtos.nome_arquivo]: [produtos.image]} stepper={true} id={id}  ></SwipeableCarrousel>
+                    {/* </Fragment> */}
+
+                  {/* </div> */}
+                
+
+
+                  <Grid container alignItems="flex-start" direction="column">
+
+                  <Typography
+                  color="textSecondary"
+                    variant="body2"
+                  className={classes.desc_produto}
+                >
+                  {`#${index+1}`} {UTILS.formatToMaxCaractersAllowed(desc_produto,22)}
                 </Typography>
+                  <Typography variant="subtitle2"                   color="textSecondary"
+>
+                  {`Ref ${produto}`}
+                </Typography>
+
+                <Typography
+                  variant="body2"
+                  color="textSecondary"
+                >
+                  {`${cor_produto} - ${UTILS.formatToMaxCaractersAllowed(desc_cor_produto,18)} `}
+                </Typography>
+
+
+
+                <Typography variant="body2" >
+                  {`R$${preco_varejo_original},00`}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  {`Qtde programada -  ${qtde_programada}`}
+                </Typography>
+
+                  </Grid>
+
               </Card>
             </Grid>
           );
@@ -857,7 +872,7 @@ class Insta extends React.Component {
                           <Typography component="subtitle" align="start">
                             {`${this.GetFormattedDate()}`}
                           </Typography>
-                          <Typography component="p" align="center">
+                          <Typography align="center">
                             {`Data da programação:  ${programacao}`}
                           </Typography>
                         </Grid>
@@ -868,14 +883,14 @@ class Insta extends React.Component {
                       <div
                         className={classes.cardToPrint}
                         id="card"
-                        onClick={() => this.handleClickProduct(_id)}
+                        // onClick={() => this.handleClickProduct(_id)}
                       >
-                        <Typography variant="h6" component="p">
+                        <Typography variant="h6">
                           {produto}
                         </Typography>
                         <Typography
                           color="textSecondary"
-                          component="p"
+                         
                           className={classes.desc_produto}
                         >
                           {desc_produto.length > 13
@@ -891,7 +906,7 @@ class Insta extends React.Component {
                         </Typography>
                         <Typography
                           color="textSecondary"
-                          component="p"
+                         
                           className={classes.desc_produto}
                         >
                           {desc_cor_produto.length > 13
@@ -911,7 +926,7 @@ class Insta extends React.Component {
                         </Badge>
                         <Typography
                           variant="h5"
-                          component="p"
+                         
                           color="textSecondary"
                           className="prende"
                         >
@@ -1002,7 +1017,7 @@ class Insta extends React.Component {
                   <Typography component="subtitle" align="start">
                     {`${this.GetFormattedDate()}`}
                   </Typography>
-                  <Typography component="p" align="center">
+                  <Typography align="center">
                     {`Data da programação:  ${programacao}`}
                   </Typography>
                 </Grid>
@@ -1258,7 +1273,7 @@ class Insta extends React.Component {
               <IconButton onClick={this.openFilter}>
                 <FilterList></FilterList>
               </IconButton>
-              <Typography className={classes.hideXsLabel} component="p">Filtrar</Typography>
+              <Typography className={classes.hideXsLabel}>Filtrar</Typography>
             </Grid>
             <Grid
             container
@@ -1292,7 +1307,7 @@ class Insta extends React.Component {
               <IconButton onClick={this.openOrder}>
                 <Toc></Toc>
               </IconButton>
-              <Typography className={classes.hideXsLabel} component="p">Ordenar</Typography>
+              <Typography className={classes.hideXsLabel}>Ordenar</Typography>
             </Grid>
           </Grid>
           <Divider id="some"></Divider>

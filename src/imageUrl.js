@@ -6,7 +6,7 @@ const UTILS = {
 		return previewImage
 	},
 
-	formatToMaxCaractersAllowed(text,max) {
+	formatToMaxCaractersAllowed(text,max=13) {
 		if(!text) return "texto não inserido"
 		if (text.length > max) {
 				return `${text.substring(0, max)}...`

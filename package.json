@@ -13,6 +13,7 @@
     "connected-react-router": "^6.5.2",
     "date-fns": "^2.5.0",
     "file-saver": "^2.0.2",
+    "immer": "^6.0.2",
     "material-ui-popup-state": "^1.5.1",
     "notistack": "^0.9.7",
     "react": "^16.10.2",
@@ -24,6 +25,10 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.2.0",
     "react-select": "^3.0.8",
+    "react-swipeable-views": "^0.13.9",
+    "reactotron-react-js": "^3.3.7",
+    "reactotron-redux": "^3.1.2",
+    "redux": "^4.0.5",
     "redux-starter-kit": "^0.9.1",
     "throttle-debounce": "^2.1.0"
   },
