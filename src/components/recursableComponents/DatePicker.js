@@ -179,7 +179,6 @@ const MaterialUIPickers = props =>  {
       </div>
       <Grid container justify="space-around">
         <TextField 
-          value={5} 
           label="Limite de recebimento" 
           variant="outlined"
           type="number"
