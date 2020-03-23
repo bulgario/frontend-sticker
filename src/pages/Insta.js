@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import { connect } from "react-redux";
 import withStyles from "@material-ui/core/styles/withStyles";
-import Container from "@material-ui/core/Container";
+// import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import { withRouter } from "react-router-dom";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
@@ -52,16 +52,20 @@ const _ = require("lodash");
 
 const styles = theme => ({
   root: {
-    maxWidth: "97.5%",
-    marginLeft: theme.spacing(-4),
-    marginRight: theme.spacing(-6)
+    transition: 'background-color 1.2s ',
+    backgroundColor:'white'
+  },
+  expanded: {
+    transition: 'background-color 1s ',
+    backgroundColor:'#fafafa'
+
   },
   main: {
     flexGrow: 1,
     height: "auto"
   },
   margin: {
-    margin: theme.spacing(1)
+    margin: theme.spacing(0.5)
   },
   media: {
     height: 400,
@@ -118,21 +122,6 @@ const styles = theme => ({
 
     },
     boxSizing: "border-box"
-  },
-  mediaCard: {
-    position:'relative', top:-21,
-    marginBottom: theme.spacing(-2),
-    height: 415,
-    width: 300,
-    boxSizing: "border-box",
-    objectFit: "scale-up",
-    [theme.breakpoints.down("sm")]: {
-      height: 220,
-      width: 160,
-      left: 0,
-    },
-
-    borderColor: "#FFE600"
   },
   badge: {
     position:'relative',top:5,left: 285,
@@ -210,13 +199,15 @@ const styles = theme => ({
     }
   },
   paddingRightSmall: {
+     paddingRight: theme.spacing(1.5),
+
     [theme.breakpoints.down("xs")]: {
-      paddingRight: theme.spacing(1.5),
-      paddingLeft: theme.spacing(0)
+       paddingRight: theme.spacing(1.5),
+       paddingLeft: theme.spacing(0)
     },
     [theme.breakpoints.down("sm")]: {
-      paddingRight: theme.spacing(1.5),
-      paddingLeft: theme.spacing(0)
+       paddingRight: theme.spacing(1.5),
+       paddingLeft: theme.spacing(0)
     }
   },
   cardOpacity: {
@@ -485,8 +476,14 @@ class Insta extends React.Component {
         maxHeight = Math.ceil(numRows) * 500
       }
       return (
-        <Grid item direction="row" justify="center" style={{marginBottom: 0,maxHeight}}>
-          <ExpansionPanel>
+        <Grid item direction="row" justify="center" style={{width:'100%', marginTop: '0.5%',maxHeight}}>
+          <ExpansionPanel 
+          classes={{
+                root: classes.root,
+                expanded: classes.expanded
+                }}
+                >
+                
             <ExpansionPanelSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1a-content"
@@ -504,7 +501,7 @@ class Insta extends React.Component {
                 </Typography>
               </Grid>
             </ExpansionPanelSummary>
-            <ExpansionPanelDetails className={classes.root}>
+            <ExpansionPanelDetails style={{padding:0}} >
               {this.state.expanded
                 ? this.renderProductsCardsView(
                     this.filterProducts(allProgramacoes[programacao])
@@ -521,7 +518,7 @@ class Insta extends React.Component {
 
   renderSelectedItens = () => {
     const { allProgramacoes } = this.state;
-    const { classes } = this.props;
+    // const { classes } = this.props;
     const programacoes = Object.keys(allProgramacoes);
     return programacoes.map(programacao => {
       let numRows,maxHeight
@@ -553,7 +550,7 @@ class Insta extends React.Component {
 
               </Grid>
             </ExpansionPanelSummary>
-            <ExpansionPanelDetails className={classes.root}>
+            <ExpansionPanelDetails >
               {this.state.expanded
                 ? this.renderProductsCardsView(
                     this.filterProducts(allProgramacoes[programacao])
@@ -729,16 +726,16 @@ class Insta extends React.Component {
                 
 
 
-                  <Grid container alignItems="flex-start" direction="column">
+                  <Grid style={{marginLeft: 10}}container alignItems="flex-start" direction="column">
 
                   <Typography
                   color="textSecondary"
                     variant="body2"
                   className={classes.desc_produto}
                 >
-                  {`#${index+1}`} {UTILS.formatToMaxCaractersAllowed(desc_produto,22)}
+                 {UTILS.formatToMaxCaractersAllowed(desc_produto,32)}
                 </Typography>
-                  <Typography variant="subtitle2"                   color="textSecondary"
+                  <Typography variant="body2"                   color="textSecondary"
 >
                   {`Ref ${produto}`}
                 </Typography>
@@ -747,16 +744,16 @@ class Insta extends React.Component {
                   variant="body2"
                   color="textSecondary"
                 >
-                  {`${cor_produto} - ${UTILS.formatToMaxCaractersAllowed(desc_cor_produto,18)} `}
+                  {`${cor_produto} - ${UTILS.formatToMaxCaractersAllowed(desc_cor_produto,29)} `}
                 </Typography>
 
 
 
-                <Typography variant="body2" >
+                <Typography variant="body2" color="textSecondary" >
                   {`R$${preco_varejo_original},00`}
                 </Typography>
                 <Typography variant="body2" color="textSecondary">
-                  {`Qtde programada -  ${qtde_programada}`}
+                  {`Qtde programada:  ${qtde_programada}`}
                 </Typography>
 
                   </Grid>
@@ -1251,7 +1248,7 @@ class Insta extends React.Component {
           orderAsc={this.state.orderAsc}
         ></OrderDrawer>
 
-        <Container className={classes.containerSmall}>
+        <div className={classes.containerSmall}>
           <Grid
             id="some"
             item
@@ -1313,7 +1310,7 @@ class Insta extends React.Component {
           <Divider id="some"></Divider>
 
           <div className={classes.margin}>
-            <Grid container direction="column" spacing={2}>
+            <Grid container direction="column" >
               {this.state.print
                 ? this.programacoesToPrint()
                 : this.state.selectItens
@@ -1321,7 +1318,7 @@ class Insta extends React.Component {
                 : this.renderProgramacoes()}
             </Grid>
           </div>
-        </Container>
+        </div>
 
         <Grid container justify="center">
         </Grid>
