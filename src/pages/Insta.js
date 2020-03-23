@@ -521,16 +521,18 @@ class Insta extends React.Component {
     // const { classes } = this.props;
     const programacoes = Object.keys(allProgramacoes);
     return programacoes.map(programacao => {
-      let numRows,maxHeight
-      if(window.innerWidth >= 555) {
-         numRows = allProgramacoes[programacao].length/3 < 1? 1: allProgramacoes[programacao].length/3
-        maxHeight = Math.ceil(numRows) * 580 
-      } else{
-        numRows = allProgramacoes[programacao].length/2 < 1? 1: allProgramacoes[programacao].length/2
-        maxHeight = Math.ceil(numRows) * 500
-      }
+      // let numRows,maxHeight
+      // if(window.innerWidth >= 555) {
+      //    numRows = allProgramacoes[programacao].length/3 < 1? 1: allProgramacoes[programacao].length/3
+      //   maxHeight = Math.ceil(numRows) * 580 
+      // } else{
+      //   numRows = allProgramacoes[programacao].length/2 < 1? 1: allProgramacoes[programacao].length/2
+      //   maxHeight = Math.ceil(numRows) * 500
+      // }
       return (
-        <Grid item direction="row" justify="center" style={{marginBottom: 0,maxHeight}}>
+        // <Grid item direction="row" justify="center" style={{marginBottom: 0,maxHeight}}>
+        <Grid item direction="row" justify="center" style={{marginBottom: 0}}>
+
           <ExpansionPanel>
             <ExpansionPanelSummary
               expandIcon={<ExpandMoreIcon />}
