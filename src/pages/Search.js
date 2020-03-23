@@ -53,7 +53,8 @@ class Search extends React.Component {
       anchorEl: null,
       choosedNameCollection: "",
       id_marca_user: "",
-      marca_user: ""
+      marca_user: "",
+      checked: true
     };
   }
 
@@ -127,9 +128,9 @@ class Search extends React.Component {
           this.state.data_inicio
         ).toISOString()}&dataFim=${new Date(
           this.state.data_fim
-        ).toISOString()}&entregaAjustada=${new Date(
+        ).toISOString()}&entregaAjustada=${
           this.state.data_ultimo
-        ).toISOString()}&categoria=${this.state.choosedCategory}&subcategoria=${
+        }&categoria=${this.state.choosedCategory}&subcategoria=${
           this.state.choosedSubCategory
         }&colecao=${this.state.choosedNameCollection}`
       );
@@ -154,8 +155,10 @@ class Search extends React.Component {
     if (data_fim && data_inicio && data_ultimo) {
       return (
         <Grid container justify="center">
-          <div>
+          <Grid container item justify="center">
             <InputLabel id="label-subcategory">Colecao</InputLabel>
+          </Grid>
+          <Grid container item justify="center">
             <Select
               labelId="label-subcategory"
               id="demo-simple-select-outlined"
@@ -177,8 +180,8 @@ class Search extends React.Component {
               })}
             </Select>
             {/* </Menu> */}
-          </div>
-          <Grid container justify="center">
+          </Grid>
+          <Grid container item justify="center">
             <Button
               className={classes.button}
               variant="contained"
@@ -218,7 +221,8 @@ class Search extends React.Component {
             choosedCollection={this.getCollections}
           />
         </Grid>
-        {this.renderInputs()}
+        <br></br>
+          {this.renderInputs()}
       </Fragment>
     );
   }

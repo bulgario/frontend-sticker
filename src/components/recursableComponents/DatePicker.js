@@ -10,6 +10,7 @@ import { Typography } from '@material-ui/core';
 import {BASE_URL} from '../../consts';
 import { withSnackbar } from "notistack";
 import { withStyles } from "@material-ui/core/styles";
+import TextField from '@material-ui/core/TextField';
 
 import User from "../../services/User"
 
@@ -58,9 +59,9 @@ const MaterialUIPickers = props =>  {
   }
 
   const handleDateUltimoAgendamento = (date) => {
-    setSelectedDateUltimo(date)
-    props.choosedData(selectedDateInicio, selectedDateFim, date)
-    getCollection(selectedDateInicio, selectedDateFim, date)
+    setSelectedDateUltimo(date.target.value)
+    props.choosedData(selectedDateInicio, selectedDateFim, date.target.value)
+    getCollection(selectedDateInicio, selectedDateFim, date.target.value)
   }
 
   const getCollection = async (selectedDateInicio,selectedDateFim) => {
@@ -177,21 +178,14 @@ const MaterialUIPickers = props =>  {
       </Grid>
       </div>
       <Grid container justify="space-around">
-        <KeyboardDatePicker
-          disableToolbar  
-          variant="inline"
-          format="yyyy-MM-dd"
-          margin="normal"
-          id="date-picker-inline"
-          label={"Início"}
+        <TextField 
+          value={5} 
+          label="Limite de recebimento" 
+          variant="outlined"
+          type="number"
           value={selectedDateUltimo}
           onChange={handleDateUltimoAgendamento}
-          KeyboardButtonProps={{
-            'aria-label': 'change date',
-          }}
         />
-        {/* <TextField value={5} label="Limite de recebimento" variant="outlined"
-></TextField> */}
       </Grid>
       </Grid>
     </MuiPickersUtilsProvider>
