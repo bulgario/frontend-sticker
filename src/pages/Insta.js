@@ -467,16 +467,18 @@ class Insta extends React.Component {
     const { classes } = this.props;
     const programacoes = Object.keys(allProgramacoes);
     return programacoes.map(programacao => {
-      let numRows,maxHeight
-      if(window.innerWidth >= 555) {
-         numRows = allProgramacoes[programacao].length/3 < 1? 1: allProgramacoes[programacao].length/3
-        maxHeight = Math.ceil(numRows) * 580 
-      } else{
-        numRows = allProgramacoes[programacao].length/2 < 1? 1: allProgramacoes[programacao].length/2
-        maxHeight = Math.ceil(numRows) * 500
-      }
+      // let numRows,maxHeight
+      // if(window.innerWidth >= 555) {
+      //    numRows = allProgramacoes[programacao].length/3 < 1? 1: allProgramacoes[programacao].length/3
+      //   maxHeight = Math.ceil(numRows) * 580 
+      // } else{
+      //   numRows = allProgramacoes[programacao].length/2 < 1? 1: allProgramacoes[programacao].length/2
+      //   maxHeight = Math.ceil(numRows) * 500
+      // }
       return (
-        <Grid item direction="row" justify="center" style={{width:'100%', marginTop: '0.5%',maxHeight}}>
+        // <Grid item direction="row" justify="center" style={{width:'100%', marginTop: '0.5%',maxHeight}}>
+                <Grid item direction="row" justify="center" style={{width:'100%', marginTop: '0.5%'}}>
+
           <ExpansionPanel 
           classes={{
                 root: classes.root,
@@ -721,7 +723,7 @@ class Insta extends React.Component {
                   </Badge>
                   </Tooltip>
                     {/* <Fragment > */}
-                    <SwipeableCarrousel photos={produtos.nome_arquivo?[ ...produtos.nome_arquivo]: [produtos.image]} stepper={true} id={id}  ></SwipeableCarrousel>
+                    <SwipeableCarrousel  photos={produtos.nome_arquivo?[ ...produtos.nome_arquivo]: [produtos.image]} stepper={window.innerWidth >= 555?true:false} id={id}  ></SwipeableCarrousel>
                     {/* </Fragment> */}
 
                   {/* </div> */}
@@ -735,7 +737,7 @@ class Insta extends React.Component {
                     variant="body2"
                   className={classes.desc_produto}
                 >
-                 {UTILS.formatToMaxCaractersAllowed(desc_produto,32)}
+                 {UTILS.formatToMaxCaractersAllowed(desc_produto,window.innerWidth >= 555?32:16)}
                 </Typography>
                   <Typography variant="body2"                   color="textSecondary"
 >
@@ -746,7 +748,7 @@ class Insta extends React.Component {
                   variant="body2"
                   color="textSecondary"
                 >
-                  {`${cor_produto} - ${UTILS.formatToMaxCaractersAllowed(desc_cor_produto,29)} `}
+                  {`${cor_produto} - ${UTILS.formatToMaxCaractersAllowed(desc_cor_produto,window.innerWidth >= 555?29:10)} `}
                 </Typography>
 
 
