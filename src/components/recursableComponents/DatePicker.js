@@ -183,7 +183,9 @@ const MaterialUIPickers = props =>  {
       </div>
       <Grid container justify="space-around">
         <TextField 
-         endAdornment={<InputAdornment position="end">dia(s)</InputAdornment>}
+                 InputProps={{
+                  endAdornment: <InputAdornment position="end">dia(s)</InputAdornment>,
+                }}
           label="Limite de recebimento" 
           variant="outlined"
           type="number"
