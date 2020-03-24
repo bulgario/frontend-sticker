@@ -1,7 +1,6 @@
 import React, { Fragment } from "react";
 import { connect } from "react-redux";
 import withStyles from "@material-ui/core/styles/withStyles";
-// import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import { withRouter } from "react-router-dom";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
@@ -11,8 +10,6 @@ import LoadingDialog from "../components/recursableComponents/LoadingDialog";
 import CardProduct from "../components/recursableComponents/CardProduct";
 
 import Badge from "@material-ui/core/Badge";
-import Card from "@material-ui/core/Card";
-import CardMedia from "@material-ui/core/CardMedia";
 
 import Typography from "@material-ui/core/Typography";
 
