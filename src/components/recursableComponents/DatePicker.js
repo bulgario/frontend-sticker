@@ -11,6 +11,10 @@ import {BASE_URL} from '../../consts';
 import { withSnackbar } from "notistack";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from '@material-ui/core/TextField';
+import InputAdornment from '@material-ui/core/InputAdornment';
+
+
+
 
 import User from "../../services/User"
 
@@ -179,6 +183,7 @@ const MaterialUIPickers = props =>  {
       </div>
       <Grid container justify="space-around">
         <TextField 
+         endAdornment={<InputAdornment position="end">dia(s)</InputAdornment>}
           label="Limite de recebimento" 
           variant="outlined"
           type="number"

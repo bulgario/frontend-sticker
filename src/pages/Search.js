@@ -6,6 +6,7 @@ import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
+import FormControl from "@material-ui/core/FormControl";
 import { withRouter } from "react-router-dom";
 
 import InputLabel from "@material-ui/core/InputLabel";
@@ -31,13 +32,15 @@ const styles = theme => ({
   },
   select: {
     width: 160,
-    marginLeft: theme.spacing(0.6),
-    marginRight: theme.spacing(0.6)
   },
   whiteButton: {
     color: "white",
     sizeSmall: "100px"
-  }
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
 });
 class Search extends React.Component {
   constructor(props) {
@@ -155,22 +158,18 @@ class Search extends React.Component {
     if (data_fim && data_inicio && data_ultimo) {
       return (
         <Grid container justify="center">
-          <Grid container item justify="center">
-            <InputLabel id="label-subcategory">Colecao</InputLabel>
-          </Grid>
-          <Grid container item justify="center">
-            <Select
-              labelId="label-subcategory"
-              id="demo-simple-select-outlined"
-              value={this.state.choosedNameCollection}
-              onChange={e => {
-                this.setState({ choosedNameCollection: e.target.value });
-              }}
-              labelWidth={100}
-              label="choosedNameCollection"
-              variant="outlined"
-              className={this.props.classes.select}
-            >
+       <FormControl variant="outlined" className={classes.formControl}>
+        <InputLabel id="demo-simple-select-outlined-label">Coleção</InputLabel>
+        <Select
+         className={classes.select}
+          labelId="demo-simple-select-outlined-label"
+          id="demo-simple-select-outlined"
+          value={this.state.choosedNameCollection}        
+          onChange={e => {
+            this.setState({ choosedNameCollection: e.target.value });
+          }}
+          label="Coleção"
+        >
               {this.state.nome_collection.map(collection => {
                 return (
                   <MenuItem key={collection} value={collection}>
@@ -178,9 +177,8 @@ class Search extends React.Component {
                   </MenuItem>
                 );
               })}
-            </Select>
-            {/* </Menu> */}
-          </Grid>
+        </Select>
+      </FormControl>
           <Grid container item justify="center">
             <Button
               className={classes.button}

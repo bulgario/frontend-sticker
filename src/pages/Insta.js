@@ -52,11 +52,11 @@ const _ = require("lodash");
 
 const styles = theme => ({
   root: {
-    transition: 'background-color 1.2s ',
+    transition: 'background-color 1.6s ',
     backgroundColor:'white'
   },
   expanded: {
-    transition: 'background-color 1s ',
+    transition: 'background-color 1.6s ',
     backgroundColor:'#fafafa'
 
   },
