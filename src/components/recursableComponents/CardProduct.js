@@ -157,7 +157,7 @@ const ProductCard = props => {
           <Typography variant="body2" color="textSecondary">
             {`${cor_produto} - ${UTILS.formatToMaxCaractersAllowed(
               desc_cor_produto,
-              window.innerWidth >= 555 ? 29 : 10
+              window.innerWidth >= 555 ? 26 : 10
             )} `}
           </Typography>
 
