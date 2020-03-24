@@ -68,7 +68,9 @@ function SwipeableCarrousel(props) {
 
 
   const handleClickProduct = id => {
-      return props.history.push(`/produto?produto=${id}`);
+        if(props.redirect) {
+          return props.history.push(`/produto?produto=${id}`);
+        }
   };
   const renderImg = img => {
     return (                 

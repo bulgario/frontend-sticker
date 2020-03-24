@@ -8,12 +8,13 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Header from "../components/recursableComponents/Header";
 import Footer from "../components/recursableComponents/Footer";
 import LoadingDialog from "../components/recursableComponents/LoadingDialog";
+import CardProduct from "../components/recursableComponents/CardProduct";
+
 import Badge from "@material-ui/core/Badge";
 import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
 
 import Typography from "@material-ui/core/Typography";
-import Tooltip from '@material-ui/core/Tooltip';
 
 
 import { signIn } from "../actions";
@@ -41,7 +42,6 @@ import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import FilterDrawer from "../components/recursableComponents/FilterDrawer";
 import OrderDrawer from "../components/recursableComponents/OrderDrawer";
 import ChipsList from "../components/recursableComponents/ChipsList";
-import SwipeableCarrousel from "../components/recursableComponents/SwipeableViews";
 
 import ChooseReportList from "../components/recursableComponents/ChooseReportList";
 
@@ -75,15 +75,6 @@ const styles = theme => ({
       width: 120
     }
   },
-  greenIcon: {
-    backgroundColor: "#25d64c"
-  },
-  yellowIcon: {
-    backgroundColor: "#ebf918"
-  },
-  redIcon: {
-    backgroundColor: "#ff491b"
-  },
   cardToPrint: {
     cursor: "pointer",
     minHeight: 305,
@@ -99,26 +90,6 @@ const styles = theme => ({
       minWidth: 160,
       margin: theme.spacing(0.6),
       marginBottom: theme.spacing(0)
-
-    },
-    boxSizing: "border-box"
-  },
-  card: {
-    cursor: "pointer",
-    minHeight: 560,
-    maxWidth: 300,
-    maxHeight: 560,
-    minWidth: 300,
-    margin: theme.spacing(0.6),
-    // padding: theme.spacing(0.6),
-    backgroundColor: "white",
-    [theme.breakpoints.down("sm")]: {
-      minHeight: 380,
-      maxWidth: 160,
-      maxHeight: 380,
-      minWidth: 160,
-      margin: theme.spacing(0.6),
-      marginBottom: theme.spacing(4)
 
     },
     boxSizing: "border-box"
@@ -209,26 +180,6 @@ const styles = theme => ({
        paddingRight: theme.spacing(1.5),
        paddingLeft: theme.spacing(0)
     }
-  },
-  cardOpacity: {
-    cursor: "pointer",
-    minHeight: 560,
-    maxWidth: 300,
-    maxHeight: 560,
-    minWidth: 300,
-    margin: theme.spacing(0.6),
-    padding: theme.spacing(0.6),
-    backgroundColor: "white",
-    [theme.breakpoints.down("sm")]: {
-      minHeight: 380,
-      maxWidth: 160,
-      maxHeight: 380,
-      minWidth: 160,
-      margin: theme.spacing(0.6),
-      marginBottom: theme.spacing(4)
-    },
-    opacity: 0.4,
-    boxSizing: "border-box"
   },
   hideXsLabel: {
     [theme.breakpoints.down("xs")]: {
@@ -504,68 +455,16 @@ class Insta extends React.Component {
               </Grid>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails style={{padding:0}} >
-              {this.state.expanded
-                ? this.renderProductsCardsView(
+              { this.renderProductsCardsView(
                     this.filterProducts(allProgramacoes[programacao])
-                  )
-                : this.renderProductsInstaView(allProgramacoes[programacao])}
-              {/* </DroppableWrapper> */}
+                  )}
             </ExpansionPanelDetails>
           </ExpansionPanel>
-          {/* </div> */}
         </Grid>
       );
     });
   }
 
-  renderSelectedItens = () => {
-    const { allProgramacoes } = this.state;
-    // const { classes } = this.props;
-    const programacoes = Object.keys(allProgramacoes);
-    return programacoes.map(programacao => {
-      // let numRows,maxHeight
-      // if(window.innerWidth >= 555) {
-      //    numRows = allProgramacoes[programacao].length/3 < 1? 1: allProgramacoes[programacao].length/3
-      //   maxHeight = Math.ceil(numRows) * 580 
-      // } else{
-      //   numRows = allProgramacoes[programacao].length/2 < 1? 1: allProgramacoes[programacao].length/2
-      //   maxHeight = Math.ceil(numRows) * 500
-      // }
-      return (
-        // <Grid item direction="row" justify="center" style={{marginBottom: 0,maxHeight}}>
-        <Grid item direction="row" justify="center" style={{marginBottom: 0}}>
-
-          <ExpansionPanel>
-            <ExpansionPanelSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Grid
-                item
-                alignItems="center"
-                direction="row"
-                justify="flex-start"
-                container
-              >
-                <Typography variant="h5">
-                  {programacao}
-                </Typography>
-
-              </Grid>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails >
-              {this.state.expanded
-                ? this.renderProductsCardsView(
-                    this.filterProducts(allProgramacoes[programacao])
-                  )
-                : this.renderProductsInstaView(allProgramacoes[programacao])}
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
-        </Grid>
-      );
-    });
-  };
 
   filterProducts(produtos) {
     const { categoriaFilter, subcategoriaFilter, estampaFilter } = this.state;
@@ -578,21 +477,7 @@ class Insta extends React.Component {
     });
     return produtosFiltrados.sort(this.compare);
   }
-
-  chooseBalls({ distribuicao, validBasedinSchedule }) {
-    const { classes } = this.props;
-
-    if (distribuicao === true) {
-      return [classes.greenIcon,"Produto recebido"];
-    } else if (validBasedinSchedule === true) {
-      return [classes.yellowIcon,"Produto pode não ser recebido na data de recebimento desejada"];
-    } else {
-      return [classes.redIcon,"Produto não será recebido na data de recebimento desejada"];
-    }
-  }
-
-  handleClickProduct = id => {
-    console.log("sou um produto", id)
+  handleClickProduct(id) {
     const { selectedProducts } = this.state;
     if (this.state.selectItens) {
       if (!selectedProducts.includes(id)) {
@@ -603,7 +488,6 @@ class Insta extends React.Component {
       }
       this.setState({ selectedProducts });
     } else {
-      // return this.props.history.push(`/produto?produto=${id}`);
     }
   };
 
@@ -672,7 +556,6 @@ class Insta extends React.Component {
   }
 
   renderProductsCardsView(data) {
-    const { classes } = this.props;
     return (
       <Grid
         container
@@ -682,89 +565,14 @@ class Insta extends React.Component {
         spacing={0}
       >
         {data.map((produtos, index) => {
-          const {
-            produto,
-            desc_produto,
-            cor_produto,
-            qtde_programada,
-            desc_cor_produto,
-            id,
-            preco_varejo_original,
-            // id_produto
-          } = produtos;
-          const [color,text] = this.chooseBalls(produtos);
-          const image = UTILS.imagesFromProducts(
-            220,
-            320,
-            produtos.produto,
-            produtos.cor_produto
-          );
-          produtos.image = image;
 
           return (
-            <Grid item  className="">
-              <Card
-                elevation={!this.state.selectedProducts.includes(id) && this.state.selectItens ? 0 : 2}
-                className={
-                  this.state.selectItens &&
-                  !this.state.selectedProducts.includes(id)
-                    ? classes.cardOpacity
-                    : classes.card
-                }
-                onClick={() => this.handleClickProduct(id)}
-              >
-                {/* <div style={{margin:0, padding:0}}> */}
-                <Tooltip title={text}   className={classes.badge}>
-                <Badge
-                 
-                  badgeContent={""}
-                  classes={{ badge: color }}
-                >
-                  </Badge>
-                  </Tooltip>
-                    {/* <Fragment > */}
-                    <SwipeableCarrousel  photos={produtos.nome_arquivo?[ ...produtos.nome_arquivo]: [produtos.image]} stepper={window.innerWidth >= 555?true:false} id={id}  ></SwipeableCarrousel>
-                    {/* </Fragment> */}
+            <CardProduct redirect={!this.state.selectItens} productToRender={produtos} cardOpacity={this.state.selectItens &&
+              !this.state.selectedProducts.includes(produtos.id)}
+              handleClickProduct={() => this.handleClickProduct(produtos.id)}
+             >
+            </CardProduct>)
 
-                  {/* </div> */}
-                
-
-
-                  <Grid style={{marginLeft: 10}}container alignItems="flex-start" direction="column">
-
-                  <Typography
-                  color="textSecondary"
-                    variant="body2"
-                  className={classes.desc_produto}
-                >
-                 {UTILS.formatToMaxCaractersAllowed(desc_produto,window.innerWidth >= 555?32:16)}
-                </Typography>
-                  <Typography variant="body2"                   color="textSecondary"
->
-                  {`Ref ${produto}`}
-                </Typography>
-
-                <Typography
-                  variant="body2"
-                  color="textSecondary"
-                >
-                  {`${cor_produto} - ${UTILS.formatToMaxCaractersAllowed(desc_cor_produto,window.innerWidth >= 555?29:10)} `}
-                </Typography>
-
-
-
-                <Typography variant="body2" color="textSecondary" >
-                  {`R$${preco_varejo_original},00`}
-                </Typography>
-                <Typography variant="body2" color="textSecondary">
-                  {`Qtde programada:  ${qtde_programada}`}
-                </Typography>
-
-                  </Grid>
-
-              </Card>
-            </Grid>
-          );
         })}
       </Grid>
     );
@@ -1041,24 +849,6 @@ class Insta extends React.Component {
     );
   }
 
-  renderProductsInstaView(data) {
-    const { classes } = this.props;
-    return (
-      <Grid className={classes.horizontalScroll}>
-        {data.map((produto, index) => {
-          return (
-            <Card className={classes.margin}>
-              <CardMedia
-                className={classes.media}
-                image={produto.image}
-                title="Produto"
-              />
-            </Card>
-          );
-        })}
-      </Grid>
-    );
-  }
 
   openFilter = () => {
     this.setState({ open: !this.state.open });
@@ -1149,9 +939,10 @@ class Insta extends React.Component {
   };
 
   handleSelectAllItens = async () => {
-    const allProducts = [];
-    Object.values(this.state.allProgramacoes).map(data => {
-      return this.filterProducts(data).map(val => allProducts.push(val));
+    let allProducts = [];
+    const programacoes = Object.keys(this.state.allProgramacoes);
+   programacoes.map(programacao => {
+      return this.filterProducts(this.state.allProgramacoes[programacao]).map(produto=> allProducts.push(produto))
     });
 
     if (this.state.selectedProducts.length === allProducts.length) {
@@ -1160,7 +951,7 @@ class Insta extends React.Component {
       //selecionando todos os produtos
       await this.setState({
         selectedProducts: this.filterProducts(allProducts).map(
-          produto => produto._id
+          produto => produto.id
         )
       });
     }
@@ -1317,8 +1108,6 @@ class Insta extends React.Component {
             <Grid container direction="column" >
               {this.state.print
                 ? this.programacoesToPrint()
-                : this.state.selectItens
-                ? this.renderSelectedItens()
                 : this.renderProgramacoes()}
             </Grid>
           </div>
