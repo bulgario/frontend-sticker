@@ -243,20 +243,20 @@ class Produto extends React.Component {
             )
           })}
         </Carousel>
-        <Grid container md={6} spacing={1}>
+        <Grid container md={12} spacing={1}>
           <Grid container direction="row" item md={12} xs={12} spacing={3}>
             <Grid item xs={12}>
               <Typography variant="h3" component="p" className={classes.title}>Programação</Typography>
             </Grid>
           </Grid>
-            <Grid container  direction="row" item md={6} xs={12} spacing={3}>
+            <Grid container  direction="row" justify="flex-start" item md={6} xs={12} spacing={3}>
               {singleItem("Descricao cor", desc_cor)}
               {singleItem("periodo PCP", periodo_pcp)}
               {singleItem("Categoria", categoria)}
               {singleItem("Subcategoria", subcategoria)}
               {singleItem("Estilista", estilista)}
             </Grid>
-            <Grid container  direction="row" item md={6} xs={12} spacing={3}>
+            <Grid container  direction="row" justify="flex-end" item md={6} xs={12} spacing={3}>
               {singleItem("Descricao do Produto", desc_produto)}
               {singleItem("Referencia", referencia)}
               {singleItem("Fornecedor", fornecedor)}
