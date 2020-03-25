@@ -164,9 +164,9 @@ const ProductCard = props => {
           <Typography variant="body2" color="textSecondary">
             {`R$${preco_varejo_original},00`}
           </Typography>
-          <Typography variant="body2" color="textSecondary">
+    {qtde_programada &&       <Typography variant="body2" color="textSecondary">
             {`Qtde programada:  ${qtde_programada}`}
-          </Typography>
+          </Typography>}
         </Grid>
       </Card>
     </Grid>

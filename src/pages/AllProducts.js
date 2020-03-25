@@ -1,7 +1,6 @@
 import React, { Fragment } from "react";
 import { connect } from "react-redux";
 import withStyles from "@material-ui/core/styles/withStyles";
-import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import { withRouter } from "react-router-dom";
 
@@ -17,9 +16,8 @@ import User from "../services/User";
 
 import ChipsList from "../components/recursableComponents/ChipsList";
 
-import CardMedia from "@material-ui/core/CardMedia";
-import Card from "@material-ui/core/Card";
 
+import CardProduct from "../components/recursableComponents/CardProduct";
 import Typography from "@material-ui/core/Typography";
 
 import { signIn } from "../actions";
@@ -42,52 +40,10 @@ import FilterDrawer from "../components/recursableComponents/FilterDrawer";
 import OrderDrawer from "../components/recursableComponents/OrderDrawer";
 import TopDrawer from "../components/recursableComponents/TopDrawer";
 
-import UTILS from "../imageUrl";
 const axios = require("axios");
 const styles = theme => ({
   margin: {
     margin: theme.spacing(1)
-  },
-  card: {
-    cursor: "pointer",
-    minHeight: 450,
-    maxWidth: 300,
-    maxHeight: 500,
-    minWidth: 300,
-    margin: theme.spacing(0.6),
-    padding: theme.spacing(0.6),
-    backgroundColor: "white",
-    [theme.breakpoints.down("sm")]: {
-      minHeight: 337,
-      maxWidth: 160,
-      maxHeight: 350,
-      minWidth: 160,
-      margin: theme.spacing(0.6),
-      marginBottom: theme.spacing(4)
-    },
-    // opacity: 0.5,
-    boxSizing: "border-box"
-  },
-
-  cardOpacity: {
-    cursor: "pointer",
-    minHeight: 450,
-    maxWidth: 300,
-    maxHeight: 500,
-    minWidth: 300,
-    margin: theme.spacing(0.6),
-    padding: theme.spacing(0.6),
-    backgroundColor: "white",
-    [theme.breakpoints.down("sm")]: {
-      minHeight: 337,
-      maxWidth: 160,
-      maxHeight: 350,
-      minWidth: 160,
-      margin: theme.spacing(0.6),
-      marginBottom: theme.spacing(4)
-    },
-    opacity: 0.4,
-    boxSizing: "border-box"
   },
 
   mediaCard: {
@@ -155,6 +111,8 @@ const styles = theme => ({
     }
   },
   paddingRightSmall: {
+    paddingRight: theme.spacing(1.5),
+
     [theme.breakpoints.down("xs")]: {
       paddingRight: theme.spacing(1.5),
       paddingLeft: theme.spacing(0)
@@ -453,8 +411,8 @@ class AllProducts extends React.Component {
   }
 
   handleClickProduct(id) {
-    const { selectedProducts,reportsIds } = this.state;
-    if(reportsIds.length <1) return this.props.history.push(`/produto?produto=${id}`);
+    const { selectedProducts } = this.state;
+    // if(reportsIds.length <1) return this.props.history.push(`/produto?produto=${id}`);
 
     if (!selectedProducts.includes(id)) {
       selectedProducts.push(id);
@@ -466,7 +424,7 @@ class AllProducts extends React.Component {
   }
 
   renderProductsCardsView(data) {
-    const { classes } = this.props;
+    // const { classes } = this.props;
 
     return (
       <Grid
@@ -476,95 +434,15 @@ class AllProducts extends React.Component {
         alignItems="center"
         spacing={0}
       >
-        {data.map((produtos, index) => {
-          const {
-            produto,
-            desc_produto,
-            cor_produto,
-            qtde_programada,
-            desc_cor_produto,
-            id
-            // id_produto
-          } = produtos;
-          const image = UTILS.imagesFromProducts(
-            220,
-            320,
-            produtos.produto,
-            produtos.cor_produto
-          );
-          produtos.image = image;
+                  {data.map((produtos, index) => {
 
-          return (
-            // <Fragment>
-            <Grid item align="center" className="">
-              {/* <Draggable
-                draggableId={id_produto.toString()}
-                index={index}
-                key={index}
-              >
-                {provided => (
-                  <div
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                    ref={provided.innerRef}
-                  > */}
-              <Card
-                variant="elevation"
-                elevation={!this.state.selectedProducts.includes(id) && this.state.reportsIds.length >=1 ? 0 : 4}
-                className={
-                  !this.state.selectedProducts.includes(id) && this.state.reportsIds.length >=1
-                    ? classes.cardOpacity
-                    : classes.card
-                }
-                onClick={() => this.handleClickProduct(id)}
-              >
-                <Typography variant="h6" component="p">
-                  {produto}
-                </Typography>
-                <Typography
-                  color="textSecondary"
-                  component="p"
-                  className={classes.desc_produto}
-                >
-                  {desc_produto.length > 13
-                    ? `${desc_produto.substring(0, 13)}...`
-                    : desc_produto}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  color="textSecondary"
-                  component="h3"
-                >
-                  {cor_produto}
-                </Typography>
-                {/* <Typography variant="body2" color="textSecondary" component="p">{produtos.desc_cor_produto}</Typography> */}
-                <Typography
-                  color="textSecondary"
-                  component="p"
-                  className={classes.desc_produto}
-                >
-                  {desc_cor_produto.length > 13
-                    ? `${desc_cor_produto.substring(0, 13)}...`
-                    : desc_cor_produto}
-                </Typography>
-                <CardMedia
-                  id="border"
-                  className={ classes.mediaCard}
-                  image={produtos.image}
-                  title="Produto"
-                />
+return (
+  <CardProduct redirect={this.state.reportsIds.length <1} productToRender={produtos} cardOpacity={!this.state.selectedProducts.includes(produtos.id) && this.state.reportsIds.length >=1}
+    handleClickProduct={() => this.handleClickProduct(produtos.id)}
+   >
+  </CardProduct>)
 
-                <Typography variant="h5" component="p" color="textSecondary">
-                  {qtde_programada}
-                </Typography>
-              </Card>
-              {/* </div>
-                )}
-              </Draggable> */}
-            </Grid>
-            // </Fragment>
-          );
-        })}
+})}
       </Grid>
     );
   }
@@ -742,7 +620,7 @@ class AllProducts extends React.Component {
           orderBy={this.state.orderBy}
           orderAsc={this.state.orderAsc}
         ></OrderDrawer>
-        <Container className={classes.containerSmall}>
+        {/* <Container className={classes.containerSmall}> */}
           <Grid
             id="some"
             item
@@ -836,7 +714,7 @@ class AllProducts extends React.Component {
               </Grid>
             </Grid>
           </div>
-        </Container>
+        {/* </Container> */}
         {/* </DragDropContext> */}
 
         <Footer

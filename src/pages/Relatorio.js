@@ -6,11 +6,8 @@ import { withSnackbar } from "notistack";
 import { BASE_URL } from "../consts";
 
 import withStyles from "@material-ui/core/styles/withStyles";
-import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import PencilIcon from "@material-ui/icons/CreateOutlined";
-import CardMedia from "@material-ui/core/CardMedia";
-import Card from "@material-ui/core/Card";
 import Typography from "@material-ui/core/Typography";
 import FilterList from "@material-ui/icons/FilterList";
 import Divider from "@material-ui/core/Divider";
@@ -18,6 +15,7 @@ import Toc from "@material-ui/icons/Toc";
 import DeleteIcon from '@material-ui/icons/Delete';
 import { IconButton } from "@material-ui/core";
 import ArrowBack from "@material-ui/icons/ArrowBack";
+import CardProduct from "../components/recursableComponents/CardProduct";
 
 
 import Grow from '@material-ui/core/Grow';
@@ -29,7 +27,6 @@ import FilterDrawer from "../components/recursableComponents/FilterDrawer";
 import OrderDrawer from "../components/recursableComponents/OrderDrawer";
 import TopDrawer from "../components/recursableComponents/TopDrawer"
 
-import UTILS from "../imageUrl";
 const axios = require("axios");
 const _ = require("lodash");
 
@@ -37,25 +34,6 @@ const _ = require("lodash");
 const styles = theme => ({
   margin: {
     margin: theme.spacing(1)
-  },
-  card: {
-    cursor: "pointer",
-    minHeight: 450,
-    maxWidth: 300,
-    maxHeight: 500,
-    minWidth: 300,
-    margin: theme.spacing(0.6),
-    padding: theme.spacing(0.6),
-    backgroundColor: "white",
-    [theme.breakpoints.down("sm")]: {
-      minHeight: 337,
-      maxWidth: 160,
-      maxHeight: 350,
-      minWidth: 160,
-      margin: theme.spacing(0.6),
-      marginBottom: theme.spacing(4)
-    },
-    boxSizing: "border-box"
   },
 
   mediaCard: {
@@ -120,6 +98,7 @@ const styles = theme => ({
     }
   },
   paddingRightSmall: {
+    paddingRight: theme.spacing(1.5),
     [theme.breakpoints.down("xs")]: {
       paddingRight: theme.spacing(1.5),
       paddingLeft: theme.spacing(0)
@@ -137,26 +116,6 @@ const styles = theme => ({
     margin: '0 auto',
     textAlign: 'center'
   },
-  cardOpacity: {
-    cursor: "pointer",
-    minHeight: 450,
-    maxWidth: 300,
-    maxHeight: 500,
-    minWidth: 300,
-    margin: theme.spacing(0.6),
-    padding: theme.spacing(0.6),
-    backgroundColor: "white",
-    [theme.breakpoints.down("sm")]: {
-      minHeight: 337,
-      maxWidth: 160,
-      maxHeight: 350,
-      minWidth: 160,
-      margin: theme.spacing(0.6),
-      marginBottom: theme.spacing(4)
-    },
-    opacity: 0.4,
-    boxSizing: "border-box"
-  }
 });
 
 class Relatorio extends React.Component {
@@ -393,11 +352,10 @@ class Relatorio extends React.Component {
   }
 
   handleClickProduct(id) {
-    const { selectedProducts, removeItens } = this.state;
-    if(!removeItens) {
-      return this.props.history.push(`/produto?produto=${id}`);
-    }
-    // if(reportsIds.length <1) return this.props.history.push(`/produto?produto=${id}`);
+    const { selectedProducts } = this.state;
+    // if(!this.state.removeItens) {
+    //   return this.props.history.push(`/produto?produto=${id}`);
+    // }
     if (!selectedProducts.includes(id)) {
       selectedProducts.push(id);
     } else {
@@ -408,7 +366,6 @@ class Relatorio extends React.Component {
   }
 
   renderProductsCardsView(data) {
-    const { classes } = this.props;
     return (
       <Grid
         container
@@ -419,23 +376,6 @@ class Relatorio extends React.Component {
       >
 
         {data.map((produtos, index) => {
-          const {
-            produto,
-            desc_produto,
-            cor_produto,
-            qtde_programada,
-            desc_cor_produto,
-            id,
-            // id_produto
-          } = produtos;
-          const image = UTILS.imagesFromProducts(
-            220,
-            320,
-            produtos.produto,
-            produtos.cor_produto
-          );
-          produtos.image = image;
-
           return (
             // <Fragment>
             <Grow 
@@ -443,79 +383,10 @@ class Relatorio extends React.Component {
               style={{ transitionDelay: this.state.checked ? '500ms' : '0ms' }}
               {...(this.state.checked ? { timeout: 1500 } : {})}
             >
-            <Grid item align="center" className="">
-              {/* <Draggable
-                draggableId={id_produto.toString()}
-                index={index}
-                key={index}
+              <CardProduct redirect={!this.state.removeItens} productToRender={produtos} cardOpacity={!this.state.selectedProducts.includes(produtos.id) && this.state.removeItens}
+                handleClickProduct={() => this.handleClickProduct(produtos.id)}
               >
-                {provided => (
-                  <div
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                    ref={provided.innerRef}
-                  > */}
-              <Card
-              variant="elevation"
-              elevation={4}
-                className={ !this.state.selectedProducts.includes(id) && this.state.removeItens
-                  ? classes.cardOpacity
-                  : classes.card}
-                onClick={() => this.handleClickProduct(id)}
-              >
-                <Typography variant="h6" component="p">
-                  {produto}
-                </Typography>
-                <Typography
-                  
-                  color="textSecondary"
-                  component="p"
-                  className={classes.desc_produto}
-                >
-                  {desc_produto.length > 13
-                    ? `${desc_produto.substring(0, 13)}...`
-                    : desc_produto}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  color="textSecondary"
-                  component="h3"
-                >
-                  {cor_produto}
-                </Typography>
-                {/* <Typography variant="body2" color="textSecondary" component="p">{produtos.desc_cor_produto}</Typography> */}
-                <Typography
-                  
-                  color="textSecondary"
-                  component="p"
-                  className={classes.desc_produto}
-                >
-                  {desc_cor_produto.length > 13
-                    ? `${desc_cor_produto.substring(0, 13)}...`
-                    : desc_cor_produto}
-                </Typography>
-                {produtos.image ? (
-                  <CardMedia
-                    id="border"
-                    className={classes.mediaCard}
-                    image={produtos.image}
-                    title="Produto"
-                  />
-                ) : (
-                  <CardMedia
-                    className={classes.mediaCard}
-                    image={"/no-picture.png"}
-                    title="Produto sem foto"
-                  />
-                )}
-                <Typography variant="h5" component="p" color="textSecondary">
-                  {qtde_programada}
-                </Typography>
-              </Card>
-              {/* </div>
-                )}
-              </Draggable> */}
-            </Grid>
+              </CardProduct>
             </Grow>
             // </Fragment>
           );
@@ -707,7 +578,7 @@ class Relatorio extends React.Component {
           orderBy={this.state.orderBy}
           orderAsc={this.state.orderAsc}
         ></OrderDrawer>
-        <Container className={classes.containerSmall}>
+        {/* <Container className={classes.containerSmall}> */}
           <Grid
             id="some"
             item
@@ -747,13 +618,6 @@ class Relatorio extends React.Component {
             </Grid>
           </Grid>
           <Divider id="some"></Divider>
-          {/* <Grid container direction="row" justify="center">
-            <CardMedia
-              className={classes.mainImage}
-              title="Vitrine"
-              image="https://img.elo7.com.br/product/244x194/1BF6822/adesivos-para-vitrines-liquidacao-vitrine-de-lojas.jpg"
-            />
-          </Grid> */}
 
           <div className={classes.margin}>
             <Grid container direction="column" spacing={2}>
@@ -767,7 +631,7 @@ class Relatorio extends React.Component {
                  </Grid>
             </Grid>
           </div>
-        </Container>
+        {/* </Container> */}
         {/* </DragDropContext> */}
 
         <Footer onClick={this.openTopDrawer}></Footer>
