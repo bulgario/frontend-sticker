@@ -425,9 +425,10 @@ class Insta extends React.Component {
       // }
       return (
         // <Grid item direction="row" justify="center" style={{width:'100%', marginTop: '0.5%',maxHeight}}>
-                <Grid item direction="row" justify="center" style={{width:'100%', marginTop: '0.5%'}}>
+                <Grid item  style={{width:'100%', marginTop: '0.5%'}}>
 
           <ExpansionPanel 
+          key={`${programacao}`}
           classes={{
                 root: classes.root,
                 expanded: classes.expanded
@@ -564,7 +565,7 @@ class Insta extends React.Component {
         {data.map((produtos, index) => {
 
           return (
-            <CardProduct redirect={!this.state.selectItens} productToRender={produtos} cardOpacity={this.state.selectItens &&
+            <CardProduct key={`${produtos.id}${index}`}redirect={!this.state.selectItens} productToRender={produtos} cardOpacity={this.state.selectItens &&
               !this.state.selectedProducts.includes(produtos.id)}
               handleClickProduct={() => this.handleClickProduct(produtos.id)}
              >

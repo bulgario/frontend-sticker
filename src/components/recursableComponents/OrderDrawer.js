@@ -89,7 +89,7 @@ function OrderDrawer(props) {
       {[{id:4,name:"Cor",value: 'desc_cor_produto'},{id:1,name:"Preço",value: 'preco_varejo'},{id:2,name:"Entrega ajustada",value:'entrega_ajustada'}].map(item => {
         const labelId = `checkbox-list-secondary-label-${item.value}`;
         return (
-            <Grid container item direction="row" justify="space-between" alignItems="flex-start">
+            <Grid container item direction="row" justify="space-between" alignItems="flex-start" key={item.id}>
 
           <ListItem key={item.value} button onClick={handleToggle(item.value)}>
           {/* <Grid container item direction="row" justify="space-between" alignItems="flex-start"  > */}

@@ -75,6 +75,7 @@ function SwipeableCarrousel(props) {
   const renderImg = img => {
     return (                 
            <CardMedia
+           key={`${img}`}
            onClick={() => handleClickProduct(props.id)}
           className={classes.mediaCard}
           image={img}
