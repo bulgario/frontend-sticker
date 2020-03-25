@@ -121,9 +121,10 @@ const ProductCard = props => {
         className={props.cardOpacity ? classes.cardOpacity : classes.card}
         onClick={() => props.handleClickProduct(productToRender.id)}
       >
-        <Tooltip title={text} className={classes.badge}>
+        {props.showBadges && (<Tooltip title={text} className={classes.badge}>
           <Badge badgeContent={""} classes={{ badge: color }}></Badge>
-        </Tooltip>
+        </Tooltip> )}
+
         <SwipeableCarrousel
         redirect={props.redirect}
           photos={

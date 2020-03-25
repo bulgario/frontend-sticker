@@ -565,7 +565,7 @@ class Insta extends React.Component {
         {data.map((produtos, index) => {
 
           return (
-            <CardProduct key={`${produtos.id}${index}`}redirect={!this.state.selectItens} productToRender={produtos} cardOpacity={this.state.selectItens &&
+            <CardProduct showBadges={true} key={`${produtos.id}${index}`}redirect={!this.state.selectItens} productToRender={produtos} cardOpacity={this.state.selectItens &&
               !this.state.selectedProducts.includes(produtos.id)}
               handleClickProduct={() => this.handleClickProduct(produtos.id)}
              >
