@@ -6,6 +6,17 @@ import { IconButton, Container } from "@material-ui/core";
 import ArrowBack from "@material-ui/icons/ArrowBack";
 import Typography from "@material-ui/core/Typography";
 
+
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+
+
+
+
 import Header from "../components/recursableComponents/Header";
 
 import '@brainhubeu/react-carousel/lib/style.css';
@@ -96,9 +107,13 @@ const styles = theme => ({
     marginRight: theme.spacing(4)
   },
   title: {
-    [theme.breakpoints.down("xs")]: {
-      marginLeft: theme.spacing(-2.3),
-    },
+    marginLeft: theme.spacing(3),
+    textAlign: 'center',
+    fontWeight: 'bold'
+  },
+  item: {
+    marginLeft: theme.spacing(3),
+    textAlign: 'center',
   },
   border: {
       border: ' 15px solid #FFFFFF'
@@ -111,7 +126,7 @@ class Produto extends React.Component {
     super(props);
     this.state = {
       product: [],
-      photoProduct: []
+      photoProduct: [],
     };
   }
 
@@ -127,8 +142,13 @@ class Produto extends React.Component {
       const product = resp.data[0];
       const previewImage = UTILS.handleImage(product.nome_arquivo, 400, 400)
       await this.setState({ newPhotos: previewImage });
-
       await this.setState({ photoProduct: previewImage });
+      
+
+      const programation = this.getProgramacoes(product)
+     
+      console.log("aa", product)
+      await this.setState({ programations: programation })
       await this.setState({ product: product });
     } catch (err) {
       console.log(err);
@@ -136,9 +156,22 @@ class Produto extends React.Component {
     }
   }
 
+  getProgramacoes = (product) => {
+    const obj = []
+    product.programacoes.map(programacoes => {
+      return obj.push(programacoes)
+    })
+    return obj
+  }
+
   getAllParamsFromUrl() {
     const produto = this.getParamFromUrl("produto");
-    return produto;
+    const dataProg = this.getParamFromUrl("data_prog")
+
+    return {
+      produto,
+      dataProg
+    };
   }
 
   getParamFromUrl(param) {
@@ -148,18 +181,34 @@ class Produto extends React.Component {
 
   render(props) {
     const { classes } = this.props;
-    const { photoProduct } = this.state;
+    const { photoProduct, programations } = this.state;
+    console.log("bb", this.state.programations)
     const {
       preco_varejo_original,
-      // preco_custo,
+      preco_varejo,
       desc_produto,
-      produto,
-      cor_produto,
-      data_prog,
-      qtde_programada,
-      // qtde_entregue,
-      entrega_ajustada
+      desc_cor,
+      fornecedor,
+      referencia,
+      periodo_pcp,
+      categoria,
+      subcategoria,
+      estilista,
+      programacoes
     } = this.state.product;
+
+    const singleItem = (title, item) => {
+      return (
+        <Grid container item xs={12} spacing={3}>
+          <Grid item xs={2}>
+            <Typography variant="h9" component="p" className={classes.title}>{title}:</Typography>
+          </Grid>
+          <Grid item xs={2}>
+            <Typography variant="h12" component="p" className={classes.item}>{item}</Typography>
+          </Grid> 
+        </Grid>
+      )
+    }
 
     return (
       <Fragment>
@@ -194,167 +243,55 @@ class Produto extends React.Component {
             )
           })}
         </Carousel>
-
-        <Container className={classes.containerSmall}>
-          <Grid
-            direction="column"
-            container
-            xs={12}
-            sm={12}
-            justify="center"
-            alignItems="center"
-          >
-            <Grid className={classes.root}>
-              <br></br>
-              <Grid
-                item
-                container
-                direction="row"
-                justify="center"
-                alignItems="center"
-                xs={12}
-                sm={12}
-              >
-                <Grid
-                  className={classes.labelWrapper}
-                  container
-                  item
-                  justify="flex-start"
-                  direction="row"
-                  alignItems="center"
-                >
-                  <div className={classes.leftBarLabel}></div>
-                  {/* <Grid item ></Grid> */}
-                  <Typography variant="h5" component="p" className={classes.title}>
-                    Programação
-                  </Typography>
-                  <Grid item></Grid>
-                </Grid>
-                <Grid item xs={6} sm={6}>
-                  <Typography
-                    variant="h6"
-                    component="h4"
-                    className={classes.minWidth}
-                  >
-                    {desc_produto}
-                  </Typography>
-                </Grid>
-                <Grid item xs={6} sm={6} alignSelf="flex-end">
-                  <Typography
-                    color="textSecondary"
-                    
-                    component="h3"
-                    className={classes.marginLeft}
-                  >
-                    R${preco_varejo_original}
-                  </Typography>
-                </Grid>
-              </Grid>
-              <Grid
-                item
-                container
-                direction="row"
-                justify="flex-start"
-                alignItems="center"
-              >
-                <Typography    variant="h6"
-                    component="h4"
-                    
-                    >
-                  Ref:
-                </Typography>
-                <Typography
-                  variant="h6"
-                  component="h4"
-                  color="textSecondary"
-                  className={classes.refLabel}
-                >
-                  {produto}
-                </Typography>
-              </Grid>
-              <br></br>
-
-              <Grid
-                container
-                item
-                direction="row"
-                alignItems="center"
-                justify="space-between"
-                xs={12}
-              >
-                <Grid container item direction="column" xs={6}>
-                  <Typography variant="h5" component="h4">
-                    Programação
-                  </Typography>
-                  <Typography
-                    color="textSecondary"
-                    
-                    component="subtitle2"
-                  >
-                    {data_prog}
-                  </Typography>
-                </Grid>
-
-                <Grid container item direction="column" xs={6}>
-                  <Typography variant="h5" component="h4">
-                    Recebimento
-                  </Typography>
-
-                  <Typography
-                    
-                    component="subtitle2"
-                    color="textSecondary"
-                  >
-                    {entrega_ajustada}
-                  </Typography>
-                </Grid>
-              </Grid>
-              <br></br>
-
-              <Grid
-                container
-                item
-                direction="row"
-                alignItems="flex-start"
-                xs={12}
-              >
-                <Grid
-                  container
-                  item
-                  direction="column"
-                  xs={6}
-                  sm={6}
-                  className={classes.lastRow}
-                >
-                  <Typography variant="h5" component="h4">
-                    Cor
-                  </Typography>
-                  <Typography
-                    color="textSecondary"
-                    
-                    component="subtitle2"
-                  >
-                    {cor_produto}
-                  </Typography>
-                </Grid>
-
-                <Grid container item direction="column" xs={6}>
-                  <Typography variant="h5" component="h4">
-                    Quantidade
-                  </Typography>
-
-                  <Typography
-                    
-                    component="subtitle2"
-                    color="textSecondary"
-                  >
-                    {qtde_programada} pcs
-                  </Typography>
-                </Grid>
-              </Grid>
+        <Grid container md={6} spacing={1}>
+          <Grid container direction="row" item md={12} xs={12} spacing={3}>
+            <Grid item xs={12}>
+              <Typography variant="h3" component="p" className={classes.title}>Programação</Typography>
             </Grid>
           </Grid>
-        </Container>
+            <Grid container  direction="row" item md={6} xs={12} spacing={3}>
+              {singleItem("Descricao cor", desc_cor)}
+              {singleItem("periodo PCP", periodo_pcp)}
+              {singleItem("Categoria", categoria)}
+              {singleItem("Subcategoria", subcategoria)}
+              {singleItem("Estilista", estilista)}
+            </Grid>
+            <Grid container  direction="row" item md={6} xs={12} spacing={3}>
+              {singleItem("Descricao do Produto", desc_produto)}
+              {singleItem("Referencia", referencia)}
+              {singleItem("Fornecedor", fornecedor)}
+              {singleItem("Preco varejo original", preco_varejo_original)}
+              {singleItem("Preco varejo", preco_varejo)}
+            </Grid>
+              {programacoes ? programacoes.map(programacoes => {
+                return (
+                  <TableContainer>
+                    <Table className={classes.table} aria-label="simple table">
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>Nome Programação</TableCell>
+                          <TableCell align="right">Qtd Programada</TableCell>
+                          <TableCell align="right">Qtd Entregue</TableCell>
+                          <TableCell align="right">Data Prog</TableCell>
+                          <TableCell align="right">Ultima data Agendamento</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                          <TableRow key={programacoes.nome_programacao}>
+                            <TableCell component="th" scope="row">
+                              {programacoes.nome_programacao}
+                            </TableCell>
+                            <TableCell align="right">{programacoes.qtde_programada}</TableCell>
+                            <TableCell align="right">{programacoes.qtde_entregue}</TableCell>
+                            <TableCell align="right">{programacoes.data_prog}</TableCell>
+                            <TableCell align="right">{programacoes.ultima_data_agendamento_entrega}</TableCell>
+                          </TableRow>
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                )
+              }) : null}
+        </Grid>
       </Fragment>
     );
   }
