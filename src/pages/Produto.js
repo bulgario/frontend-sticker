@@ -14,9 +14,6 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
-
-
-
 import Header from "../components/recursableComponents/Header";
 
 import '@brainhubeu/react-carousel/lib/style.css';
@@ -186,6 +183,7 @@ class Produto extends React.Component {
     const {
       preco_varejo_original,
       preco_varejo,
+      preco_custo,
       desc_produto,
       desc_cor,
       fornecedor,
@@ -194,18 +192,30 @@ class Produto extends React.Component {
       categoria,
       subcategoria,
       estilista,
-      programacoes
+      programacoes,
+      estampa,
+      cor_produto,
+      data_primeira_venda,
+      // faturamento,
+      // sobra_atacado
+      // qtd_venda,
+      // vl_pago,
+      // vl_desconto,
+      // markup,
+      // qtd_vendida_preco_cheio,
+      // verba_programada
+      
     } = this.state.product;
 
     const singleItem = (title, item) => {
       return (
-        <Grid container item xs={12} spacing={3}>
+        <Grid container item xs={12} spacing={2}>
           <Grid item xs={2}>
             <Typography variant="h9" component="p" className={classes.title}>{title}:</Typography>
           </Grid>
           <Grid item xs={2}>
-            <Typography variant="h12" component="p" className={classes.item}>{item}</Typography>
-          </Grid> 
+            <Typography variant="h12" component="p" color="textSecondary" className={classes.item}>{item}</Typography>
+          </Grid>
         </Grid>
       )
     }
@@ -243,55 +253,124 @@ class Produto extends React.Component {
             )
           })}
         </Carousel>
-        <Grid container md={12} spacing={1}>
-          <Grid container direction="row" item md={12} xs={12} spacing={3}>
+        <Grid container direction="row" item md={12} xs={12} spacing={3}>
             <Grid item xs={12}>
               <Typography variant="h3" component="p" className={classes.title}>Programação</Typography>
             </Grid>
           </Grid>
-            <Grid container  direction="row" justify="flex-start" item md={6} xs={12} spacing={3}>
-              {singleItem("Descricao cor", desc_cor)}
-              {singleItem("periodo PCP", periodo_pcp)}
-              {singleItem("Categoria", categoria)}
-              {singleItem("Subcategoria", subcategoria)}
-              {singleItem("Estilista", estilista)}
-            </Grid>
-            <Grid container  direction="row" justify="flex-end" item md={6} xs={12} spacing={3}>
-              {singleItem("Descricao do Produto", desc_produto)}
-              {singleItem("Referencia", referencia)}
-              {singleItem("Fornecedor", fornecedor)}
-              {singleItem("Preco varejo original", preco_varejo_original)}
-              {singleItem("Preco varejo", preco_varejo)}
-            </Grid>
-              {programacoes ? programacoes.map(programacoes => {
-                return (
-                  <TableContainer>
-                    <Table className={classes.table} aria-label="simple table">
-                      <TableHead>
-                        <TableRow>
-                          <TableCell>Nome Programação</TableCell>
-                          <TableCell align="right">Qtd Programada</TableCell>
-                          <TableCell align="right">Qtd Entregue</TableCell>
-                          <TableCell align="right">Data Prog</TableCell>
-                          <TableCell align="right">Ultima data Agendamento</TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                          <TableRow key={programacoes.nome_programacao}>
-                            <TableCell component="th" scope="row">
-                              {programacoes.nome_programacao}
-                            </TableCell>
-                            <TableCell align="right">{programacoes.qtde_programada}</TableCell>
-                            <TableCell align="right">{programacoes.qtde_entregue}</TableCell>
-                            <TableCell align="right">{programacoes.data_prog}</TableCell>
-                            <TableCell align="right">{programacoes.ultima_data_agendamento_entrega}</TableCell>
-                          </TableRow>
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                )
-              }) : null}
+          <Grid container  direction="row" justify="flex-start" item md={12} xs={12} spacing={3}>
+            {singleItem("Descricao do Produto", desc_produto)}
+            {singleItem("Referencia", referencia)}
+            {singleItem("Preco", preco_custo)}
+          </Grid>
+        <br></br>
+        <br></br>
+        <br></br>
+        <Grid container md={12} spacing={1}>
+        <Grid item xs={12}>
+          <Typography variant="h5" component="p" className={classes.title}>Detalhes do Produto</Typography>
         </Grid>
+            <Grid container  direction="row" justify="flex-start" item md={12} xs={12} spacing={3}>
+              <TableContainer>
+              <Table className={classes.table} aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell align="right">Cor</TableCell>
+                    <TableCell align="right">Categoria</TableCell>
+                    <TableCell align="right">Subcategoria</TableCell>
+                    <TableCell align="right">Estilista</TableCell>
+                    <TableCell align="right">Fornecedor</TableCell>
+                    <TableCell align="right">Periodo PCP</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  <TableCell align="right">{desc_cor}</TableCell>
+                  <TableCell align="right">{categoria}</TableCell>
+                  <TableCell align="right">{subcategoria}</TableCell>
+                  <TableCell align="right">{estilista}</TableCell>
+                  <TableCell align="right">{fornecedor}</TableCell>
+                  <TableCell align="right">{estilista}</TableCell>
+                  <TableCell align="right">{periodo_pcp}</TableCell>
+                </TableBody>
+              </Table>
+            </TableContainer>
+            </Grid>
+        </Grid>
+        <br></br>
+        <br></br>
+        <br></br>
+        <Grid container  direction="row" justify="flex-start" item md={12} xs={12} spacing={3}>
+        <Grid item xs={12}>
+          <Typography variant="h5" component="p" className={classes.title}>Programação</Typography>
+        </Grid>
+              {programacoes ? programacoes.map(programacoes => {
+                  return (
+                    <TableContainer>
+                      <Table className={classes.table} aria-label="simple table">
+                        <TableHead>
+                          <TableRow>
+                            <TableCell>Nome Programação</TableCell>
+                            <TableCell align="right">Data Prog</TableCell>
+                            <TableCell align="right">Qtd Entregue</TableCell>
+                            <TableCell align="right">Qtd Programada</TableCell>
+                            <TableCell align="right">Ultima data Agendamento</TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            <TableRow key={programacoes.nome_programacao}>
+                              <TableCell component="th" scope="row">
+                                {programacoes.nome_programacao}
+                              </TableCell>
+                              <TableCell align="right">{programacoes.data_prog}</TableCell>
+                              <TableCell align="right">{programacoes.qtde_entregue}</TableCell>
+                              <TableCell align="right">{programacoes.qtde_programada}</TableCell>
+                              <TableCell align="right">{programacoes.ultima_data_agendamento_entrega}</TableCell>
+                            </TableRow>
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  )
+                }) : null}
+            </Grid>
+        <br></br>
+        <br></br>
+        <br></br>
+        <Grid container direction="row" item md={12} xs={12} spacing={3}>
+        <Grid item xs={12}>
+          <Typography variant="h5" component="p" className={classes.title}>Vendas</Typography>
+        </Grid>
+      </Grid>
+      <Grid container  direction="row" justify="flex-start" item md={12} xs={12} spacing={3}>
+        <TableContainer>
+          <Table className={classes.table} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell align="right">Preco Cheio</TableCell>
+                <TableCell align="right">Preco Medio</TableCell>
+                <TableCell align="right">Desconto Medio</TableCell>
+                <TableCell align="right">Markup</TableCell>
+                <TableCell align="right">Qtd Vendida Preço Cheio</TableCell>
+                <TableCell align="right">Data Primeira Venda</TableCell>
+                <TableCell align="right">Verba Programada</TableCell>
+                <TableCell align="right">Faturamento</TableCell>
+                <TableCell align="right">Sobra Atacado</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableCell align="right">{preco_varejo_original}</TableCell>
+              {/* <TableCell align="right">{(qtd_venda/vl_pago)}</TableCell> */}
+              {/* <TableCell align="right">{(vl_desconto/qtd_venda)}</TableCell> */}
+              {/* <TableCell align="right">{markup}</TableCell> */}
+              {/* <TableCell align="right">{qtd_vendida_preco_cheio}</TableCell> */}
+              <TableCell align="right">{data_primeira_venda}</TableCell>
+              {/* <TableCell align="right">{verba_programada}</TableCell> */}
+              {/* <TableCell align="right">{faturamento}</TableCell> */}
+              {/* <TableCell align="right">{sobra_atacado}</TableCell> */}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Grid>
+
       </Fragment>
     );
   }
