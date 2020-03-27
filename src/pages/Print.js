@@ -4,8 +4,14 @@ import Grid from "@material-ui/core/Grid";
 import { withRouter } from "react-router-dom";
 import LoadingDialog from "../components/recursableComponents/LoadingDialog";
 
+// import Tooltip from "@material-ui/core/Tooltip";
 
 import Badge from "@material-ui/core/Badge";
+import Card from "@material-ui/core/Card";
+// import CardMedia from "@material-ui/core/CardMedia";
+import Divider from "@material-ui/core/Divider";
+
+
 
 import Typography from "@material-ui/core/Typography";
 
@@ -17,42 +23,23 @@ import UTILS from "../imageUrl";
 
 
 const styles = theme => ({
-  root: {
-    transition: 'background-color 1.6s ',
-    backgroundColor:'white'
-  },
-  expanded: {
-    transition: 'background-color 1.6s ',
-    backgroundColor:'#fafafa'
 
-  },
-  main: {
-    flexGrow: 1,
-    height: "auto"
-  },
   margin: {
     margin: theme.spacing(0.5)
   },
-  media: {
-    height: 400,
-    width: 280,
-    [theme.breakpoints.down("sm")]: {
-      height: 210,
-      width: 120
-    }
-  },
   cardToPrint: {
     cursor: "pointer",
-    minHeight: 305,
-    maxWidth: 160,
-    maxHeight: 305,
-    minWidth: 160,
+    minHeight: 400,
+    maxWidth: 300,
+    maxHeight: 400,
+    minWidth: 300,
+
     margin: theme.spacing(0.6),
     marginBottom: theme.spacing(0),
     [theme.breakpoints.down("sm")]: {
-      minHeight: 305,
+      minHeight: 320,
       maxWidth: 160,
-      maxHeight: 305,
+      maxHeight: 320,
       minWidth: 160,
       margin: theme.spacing(0.6),
       marginBottom: theme.spacing(0)
@@ -61,65 +48,34 @@ const styles = theme => ({
     boxSizing: "border-box"
   },
   badge: {
-    position:'relative',top:5,left: 285,
+    position: "relative",
+    top: 5,
+    left: 100,
     [theme.breakpoints.down("sm")]: {
       // top: 180,
       left: 140
-    },
+    }
   },
 
   mediaCardPrint: {
+    // height: 415,
+    margin:0,
+    padding:0,
+    width: 300,
     height: 180,
-    width: 140,
+    position: "relative",
+    top:-18,
+    // width: 140,
     boxSizing: "border-box",
-    objectFit: "scale-down",
+    objectFit: "scale-up",
     [theme.breakpoints.down("sm")]: {
-      height: 180,
-      width: 140
+      height: 190,
+      width: 160
     },
 
     borderColor: "#FFE600"
   },
-  productInfo: {
-    width: 250,
-    borderWidth: 1.5,
-    borderColor: "black"
-  },
 
-  dateText: {
-    textAlign: "center",
-    fontWeight: "bold"
-  },
-  horizontalScroll: {
-    display: "flex",
-    justifyContent: "center",
-    flexWrap: "wrap"
-  },
-  fab: {
-    position: "fixed",
-    bottom: theme.spacing(3)
-  },
-  divider: {
-    backgroundColor: "#ffe600",
-    marginLeft: "25%",
-    marginRight: "25%",
-    height: 1.5
-  },
-  cardHeader: {
-    textAlign: "center"
-  },
-  textField: {
-    width: 190,
-    margin: theme.spacing(1)
-  },
-  textFieldFull: {
-    width: 385,
-    margin: theme.spacing(1)
-  },
-  whiteButton: {
-    color: "white",
-    sizeSmall: "100px"
-  },
   desc_produto: {
     [theme.breakpoints.down("xs")]: {
       fontSize: "0.9"
@@ -133,23 +89,6 @@ const styles = theme => ({
     [theme.breakpoints.down("sm")]: {
       paddingRight: theme.spacing(0),
       paddingLeft: theme.spacing(0)
-    }
-  },
-  paddingRightSmall: {
-     paddingRight: theme.spacing(1.5),
-
-    [theme.breakpoints.down("xs")]: {
-       paddingRight: theme.spacing(1.5),
-       paddingLeft: theme.spacing(0)
-    },
-    [theme.breakpoints.down("sm")]: {
-       paddingRight: theme.spacing(1.5),
-       paddingLeft: theme.spacing(0)
-    }
-  },
-  hideXsLabel: {
-    [theme.breakpoints.down("xs")]: {
-      display: "none"
     }
   },
   greenIcon: {
@@ -253,32 +192,34 @@ class Insta extends React.Component {
             if (produtosPerProgramacao < 1) {
               return null;
             }
-            let resto = produtosPerProgramacao % 12;
+            let resto = produtosPerProgramacao % 10;
             let restoInicio = [];
             let restoMeio = [];
             let restoFim = [];
 
             for (let j = 0; j < resto; j++) {
-              if (j <= 3 && resto <= 4) {
+              if (j <= 4 && resto <= 5) {
                 restoInicio.push(produtosPerProgramacao - j);
-              } else if (j > 3 && resto <= 8) {
-                restoMeio.push(produtosPerProgramacao - j + 4);
+              } else if (j >= 5 && resto <= 10) {
+                console.log(resto,'meu resto,')
+                restoMeio.push(produtosPerProgramacao - j + 5);
               } else if (j > 7 && resto > 8) {
                 restoFim.push(produtosPerProgramacao - j + 8);
               }
             }
+            console.log(restoMeio, programacao)
             let produtosAllowed = [];
-            let offSet = 8;
-            let whileVerify = produtosPerProgramacao;
+            // let offSet = 10;
+            // let whileVerify = produtosPerProgramacao;
             let altura = 84;
-            while (whileVerify / 12 >= 1) {
-              altura = 82;
-              whileVerify -= 12;
-              for (let i = 1; i <= 4; i += 1) {
-                produtosAllowed.push(offSet + i);
-              }
-              offSet += 12;
-            }
+            // while (whileVerify / 10 >= 1) {
+            //   altura = 84;
+            //   whileVerify -= 10;
+            //   // for (let i = 1; i <= 10; i += 1) {
+            //   //   produtosAllowed.push(offSet + i);
+            //   // }
+            //   offSet += 10;
+            // }
             let produtosParaMostrarFiltrados = produtosFiltrados.map(
               (produtos, index) => {
                 const {
@@ -287,6 +228,7 @@ class Insta extends React.Component {
                   cor_produto,
                   qtde_programada,
                   desc_cor_produto,
+                  preco_varejo_original
                   // _id
                 } = produtos;
                 const color = this.chooseBalls(produtos);
@@ -302,8 +244,8 @@ class Insta extends React.Component {
                 }
                 return (
                   <Fragment>
-                    {index % 12 === 0 && index > 0 ? (
-                      <div style={{ width: "100%" }}>
+                    {index % 10 === 0 && index > 0 ? (
+                      <div style={{ width: "100%",marginTop: 17}}>
                         <Grid
                           item
                           // alignItems="center"
@@ -317,64 +259,67 @@ class Insta extends React.Component {
                           <Typography align="center">
                             {`Data da programação:  ${programacao}`}
                           </Typography>
+                          <Divider></Divider>
                         </Grid>
                       </div>
                     ) : null}
 
-                    <Grid item align="center" className="">
-                      <div
+                    <Grid item  className="">
+                      <Card
+                      variant="elevation"
+                      elevation={3}
                         className={classes.cardToPrint}
                         id="card"
                         // onClick={() => this.handleClickProduct(_id)}
                       >
-                        <Typography variant="h6">
-                          {produto}
-                        </Typography>
-                        <Typography
-                          color="textSecondary"
-                         
-                          className={classes.desc_produto}
-                        >
-                          {desc_produto.length > 13
-                            ? `${desc_produto.substring(0, 13)}...`
-                            : desc_produto}
-                        </Typography>
-                        <Typography
-                          variant="body2"
-                          color="textSecondary"
-                          component="h3"
-                        >
-                          {cor_produto}
-                        </Typography>
-                        <Typography
-                          color="textSecondary"
-                         
-                          className={classes.desc_produto}
-                        >
-                          {desc_cor_produto.length > 13
-                            ? `${desc_cor_produto.substring(0, 13)}...`
-                            : desc_cor_produto}
-                        </Typography>
-                        <Badge
-                          badgeContent={""}
-                          classes={{ badge: color }}
-                        >
+                                {this.props.showBadges && (<div className={classes.badge}>
+                                  <Badge badgeContent={""}  classes={{ badge: color }}>
+</Badge>
+                                </div>
+
+)}  
+       {/* <Badge badgeContent={""}  classes={{ badge: color }}> */}
                           <img
                             className={classes.mediaCardPrint}
                             src={produtos.image}
-                            alt="Produto sem foto"
+                            alt="imagem"
                             onLoad={() => this.checkLastImg(produtos.image)}
                           />
-                        </Badge>
-                        <Typography
-                          variant="h5"
-                         
-                          color="textSecondary"
-                          className="prende"
-                        >
-                          {qtde_programada}
-                        </Typography>
-                      </div>
+                        {/* </Badge> */}
+                        <Grid
+          style={{ marginLeft: 10 }}
+          container
+          alignItems="flex-start"
+          direction="column"
+        >
+          <Typography
+            color="textSecondary"
+            variant="body2"
+            className={classes.desc_produto}
+          >
+            {UTILS.formatToMaxCaractersAllowed(
+              desc_produto,
+16            )}
+          </Typography>
+          <Typography variant="body2" color="textSecondary">
+            {`Ref ${produto}`}
+          </Typography>
+
+          <Typography variant="body2" color="textSecondary">
+            {`${cor_produto} - ${UTILS.formatToMaxCaractersAllowed(
+              desc_cor_produto,
+             10
+            )} `}
+          </Typography>
+
+          <Typography variant="body2" color="textSecondary">
+            {`R$${preco_varejo_original},00`}
+          </Typography>
+    {qtde_programada &&       <Typography variant="body2" color="textSecondary">
+            {`Qtde programada:  ${qtde_programada}`}
+          </Typography>}
+        </Grid>
+                      </Card>
                       {produtosAllowed.includes(index + 1) ? (
                         <div
                           style={{
@@ -384,24 +329,24 @@ class Insta extends React.Component {
                           }}
                         ></div>
                       ) : null}
-                      {restoInicio.includes(index + 1) && index >= 4 ? (
+                      {restoInicio.includes(index + 1) && index >= 5 ? (
                         <div
                           style={{
-                            height: 700,
+                            height: 325,
                             backgroundColor: "transparent",
                             width: 50
                           }}
                         ></div>
                       ) : null}
-                      {restoMeio.includes(index + 1) && index >= 4 ? (
+                      {/* {restoMeio.includes(index + 1) && index >= 4 ? (
                         <div
                           style={{
-                            height: 380,
-                            backgroundColor: "transparent",
+                            height: 10,
+                            backgroundColor: "green",
                             width: 50
                           }}
                         ></div>
-                      ) : null}
+                      ) : null} */}
                       {restoFim.includes(index + 1) && index >= 4 ? (
                         <div
                           style={{
@@ -416,13 +361,13 @@ class Insta extends React.Component {
                 );
               }
             );
-            if (produtosPerProgramacao <= 4) {
+            if (produtosPerProgramacao <= 5) {
               produtosParaMostrarFiltrados.push(
                 <Grid item container>
                   <div
                     style={{
                       backgroundColor: "transparent",
-                      height: 690,
+                      height: 330,
                       width: 50
                     }}
                   ></div>
@@ -431,8 +376,8 @@ class Insta extends React.Component {
             }
 
             if (
-              produtosPerProgramacao > 4 &&
-              produtosPerProgramacao <= 8 &&
+              produtosPerProgramacao > 5 &&
+              produtosPerProgramacao <= 10 &&
               restoMeio.length < 1
             ) {
               produtosParaMostrarFiltrados.push(
@@ -440,7 +385,7 @@ class Insta extends React.Component {
                   <div
                     style={{
                       backgroundColor: "transparent",
-                      height: 355,
+                      height: 10,
                       width: 50
                     }}
                   ></div>
@@ -462,6 +407,7 @@ class Insta extends React.Component {
                   <Typography align="center">
                     {`Data da programação:  ${programacao}`}
                   </Typography>
+                  <Divider></Divider>
                 </Grid>
                 {
                   <Grid

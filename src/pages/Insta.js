@@ -725,7 +725,7 @@ class Insta extends React.Component {
           <div className={classes.margin}>
             <Grid container direction="column" >
               {this.state.print
-                ? <PrintPage orderBy={this.state.orderBy} orderAsc={this.state.orderAsc} onFinishPrint={() => this.setState({print:false})} allProgramacoes={this.state.allProgramacoes} categoriaFilter={this.state.categoriaFilter} subcategoriaFilter={this.state.subcategoriaFilter} estampaFilter={this.state.estampaFilter}></PrintPage>
+                ? <PrintPage showBadges={true} orderBy={this.state.orderBy} orderAsc={this.state.orderAsc} onFinishPrint={() => this.setState({print:false})} allProgramacoes={this.state.allProgramacoes} categoriaFilter={this.state.categoriaFilter} subcategoriaFilter={this.state.subcategoriaFilter} estampaFilter={this.state.estampaFilter}></PrintPage>
                 : this.renderProgramacoes()}
             </Grid>
           </div>
