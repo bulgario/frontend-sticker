@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
-import { IconButton, Container } from "@material-ui/core";
+import { IconButton } from "@material-ui/core";
 import ArrowBack from "@material-ui/icons/ArrowBack";
 import Typography from "@material-ui/core/Typography";
 
@@ -178,11 +178,11 @@ class Produto extends React.Component {
 
   render(props) {
     const { classes } = this.props;
-    const { photoProduct, programations } = this.state;
+    const { photoProduct,  } = this.state;
     console.log("bb", this.state.programations)
     const {
       preco_varejo_original,
-      preco_varejo,
+      // preco_varejo,
       preco_custo,
       desc_produto,
       desc_cor,
@@ -193,8 +193,8 @@ class Produto extends React.Component {
       subcategoria,
       estilista,
       programacoes,
-      estampa,
-      cor_produto,
+      // estampa,
+      // cor_produto,
       data_primeira_venda,
       // faturamento,
       // sobra_atacado
