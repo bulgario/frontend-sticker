@@ -44,7 +44,7 @@ const useStyles = makeStyles(theme => ({
 export default function BottomAppBar(props) {
   const classes = useStyles();
   return (
-    <React.Fragment>
+    <div id="some">
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
@@ -96,6 +96,6 @@ export default function BottomAppBar(props) {
           <Typography variant="body2" component="h6">AGRUPAR</Typography> */}
         </Toolbar>
       </AppBar>
-    </React.Fragment>
+    </div>
   );
 }

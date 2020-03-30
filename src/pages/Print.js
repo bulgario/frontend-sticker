@@ -257,7 +257,7 @@ class Insta extends React.Component {
                             {`${this.GetFormattedDate()}`}
                           </Typography>
                           <Typography align="center">
-                            {`Data da programação:  ${programacao}`}
+                           {this.props.relatoryName?`${this.props.relatoryName}`:`Data da programação:  ${programacao}`} 
                           </Typography>
                           <Divider></Divider>
                         </Grid>
@@ -405,7 +405,7 @@ class Insta extends React.Component {
                     {`${this.GetFormattedDate()}`}
                   </Typography>
                   <Typography align="center">
-                    {`Data da programação:  ${programacao}`}
+                  {this.props.relatoryName?`${this.props.relatoryName}`:`Data da programação:  ${programacao}`} 
                   </Typography>
                   <Divider></Divider>
                 </Grid>

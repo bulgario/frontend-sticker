@@ -13,6 +13,8 @@ import FilterList from "@material-ui/icons/FilterList";
 import Divider from "@material-ui/core/Divider";
 import Toc from "@material-ui/icons/Toc";
 import DeleteIcon from '@material-ui/icons/Delete';
+import PrintIcon from '@material-ui/icons/Print';
+
 import { IconButton } from "@material-ui/core";
 import ArrowBack from "@material-ui/icons/ArrowBack";
 import CardProduct from "../components/recursableComponents/CardProduct";
@@ -22,10 +24,13 @@ import Grow from '@material-ui/core/Grow';
 
 import Header from "../components/recursableComponents/Header";
 import Footer from "../components/recursableComponents/Footer";
-import LoadingDialog from "../components/recursableComponents/LoadingDialog";
+// import LoadingDialog from "../components/recursableComponents/LoadingDialog";
 import FilterDrawer from "../components/recursableComponents/FilterDrawer";
 import OrderDrawer from "../components/recursableComponents/OrderDrawer";
 import TopDrawer from "../components/recursableComponents/TopDrawer"
+
+import PrintPage from './Print'
+
 
 const axios = require("axios");
 const _ = require("lodash");
@@ -511,14 +516,16 @@ class Relatorio extends React.Component {
 
     return (
       <Fragment>
-        <LoadingDialog
+        {/* <LoadingDialog
           open={this.state.loadingPrint}
           message={"Criando relatório"}
-        />
+        /> */}
 
         <Header
           title={relatory ? relatory.nome_relatorio : ""}
           rightIcon={
+
+            <Grid container direction="row">
             <IconButton
               aria-label="upload picture"
               component="span"
@@ -535,6 +542,18 @@ class Relatorio extends React.Component {
                   onClick={this.handleClickEdit}
               />}
             </IconButton>
+            <IconButton
+              aria-label="upload picture"
+              component="span"
+              className={classes.whiteButton}
+              onClick={() => {
+                this.setState({ print: true, loadingPrint: true });
+              }}
+            >
+              <PrintIcon></PrintIcon>	
+            </IconButton>
+          </Grid>
+
           }
           leftIcon={
             <IconButton
@@ -627,14 +646,24 @@ class Relatorio extends React.Component {
               <Typography variant="h6" component="p">Sem Produtos no seu Relatório</Typography>
               <span role="img" className={classes.emoji} aria-label="Shrug">🤷</span>
             </div>
-            : this.renderProductsCardsView(this.filterProducts(this.state.products))}
+            : this.state.print?<PrintPage showBadges={false} orderBy={this.state.orderBy}
+             orderAsc={this.state.orderAsc} onFinishPrint={() => this.setState({print:false})}
+            relatoryName={this.state.relatory ? relatory.nome_relatorio : ""}
+             //hackzinho pra poder passar no mesmo formato
+              allProgramacoes={{"":this.state.products}}
+               categoriaFilter={this.state.categoriaFilter}
+                subcategoriaFilter={this.state.subcategoriaFilter}
+                 estampaFilter={this.state.estampaFilter}></PrintPage>
+            :this.renderProductsCardsView(this.filterProducts(this.state.products))
+            
+            }
                  </Grid>
             </Grid>
           </div>
         {/* </Container> */}
         {/* </DragDropContext> */}
 
-        <Footer onClick={this.openTopDrawer}></Footer>
+        <Footer  onClick={this.openTopDrawer}></Footer>
       </Fragment>
     );
   }
