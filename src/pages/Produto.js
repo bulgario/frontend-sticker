@@ -5,21 +5,24 @@ import Grid from "@material-ui/core/Grid";
 import { IconButton } from "@material-ui/core";
 import ArrowBack from "@material-ui/icons/ArrowBack";
 import Typography from "@material-ui/core/Typography";
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 
-
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
+import Divider from '@material-ui/core/Divider';
 
 import Header from "../components/recursableComponents/Header";
+import { formatPrice } from '../actions/utils'
 
 import '@brainhubeu/react-carousel/lib/style.css';
 import Carousel from '@brainhubeu/react-carousel';
 import { BASE_URL } from "../consts";
 import UTILS from "../imageUrl";
+
+
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 const styles = theme => ({
   root: {
@@ -30,6 +33,7 @@ const styles = theme => ({
       paddingRight: theme.spacing(0),
       paddingLeft: theme.spacing(2)
     },
+    color: theme.palette.text.primary
   },
   labelWrapper: {
     marginLeft: theme.spacing(-8),
@@ -113,7 +117,28 @@ const styles = theme => ({
     textAlign: 'center',
   },
   border: {
-      border: ' 15px solid #FFFFFF'
+    border: ' 15px solid #FFFFFF'
+  },
+  carousel: {
+    width: 400
+  },
+  divisor: {
+    width: 400,
+    color: 'blue'
+  },
+  arrow: {
+    cursor: 'pointer'
+  },
+  imageStyle: {
+    boxShadow: '2px 2px 5px #ccc'
+  },
+  strongPosition: {
+    paddingRight: 10
+  },
+  divider: {
+    'display': 'flex',
+    'width': theme.spacing(50),
+    'marginBottom': theme.spacing(2)
   }
 });
 
@@ -127,8 +152,11 @@ class Produto extends React.Component {
     };
   }
 
+
   componentDidMount() {
     this.getProduct();
+    window.addEventListener("resize", this.resize.bind(this));
+    this.resize();
   }
 
   async getProduct() {
@@ -141,15 +169,20 @@ class Produto extends React.Component {
       await this.setState({ newPhotos: previewImage });
       await this.setState({ photoProduct: previewImage });
       
-
       const programation = this.getProgramacoes(product)
-     
-      console.log("aa", product)
+
       await this.setState({ programations: programation })
       await this.setState({ product: product });
     } catch (err) {
       console.log(err);
       return err;
+    }
+  }
+
+  resize = () => {
+    let currentHideNav = (window.innerWidth <= 760);
+    if (currentHideNav !== this.state.hideNav) {
+        this.setState({hideNav: currentHideNav});
     }
   }
 
@@ -178,8 +211,7 @@ class Produto extends React.Component {
 
   render(props) {
     const { classes } = this.props;
-    const { photoProduct,  } = this.state;
-    console.log("bb", this.state.programations)
+    const { photoProduct, programations } = this.state;
     const {
       preco_varejo_original,
       // preco_varejo,
@@ -207,23 +239,10 @@ class Produto extends React.Component {
       
     } = this.state.product;
 
-    const singleItem = (title, item) => {
-      return (
-        <Grid container item xs={12} spacing={2}>
-          <Grid item xs={2}>
-            <Typography variant="h9" component="p" className={classes.title}>{title}:</Typography>
-          </Grid>
-          <Grid item xs={2}>
-            <Typography variant="h12" component="p" color="textSecondary" className={classes.item}>{item}</Typography>
-          </Grid>
-        </Grid>
-      )
-    }
-
     return (
       <Fragment>
         <Header
-          title="Programação"
+          title="DETALHES DO PRODUTO"
           rightIcon={null}
           leftIcon={
             <IconButton
@@ -236,142 +255,168 @@ class Produto extends React.Component {
             </IconButton>
           }
         />
-        <Carousel
-        autoPlay={2000}
-        animationSpeed={1000}
-        infinite
-        dots
-        slidesPerPage={2}
-        >
-          {photoProduct.map(image => {
-            return (
-              <Grid item container justify="center">
-              <div className={classes.border}>
-                <img src={image} alt="produto"/>
-              </div>
-              </Grid>
-            )
-          })}
-        </Carousel>
-        <Grid container direction="row" item md={12} xs={12} spacing={3}>
-            <Grid item xs={12}>
-              <Typography variant="h3" component="p" className={classes.title}>Programação</Typography>
-            </Grid>
-          </Grid>
-          <Grid container  direction="row" justify="flex-start" item md={12} xs={12} spacing={3}>
-            {singleItem("Descricao do Produto", desc_produto)}
-            {singleItem("Referencia", referencia)}
-            {singleItem("Preco", preco_custo)}
-          </Grid>
-        <br></br>
-        <br></br>
-        <br></br>
-        <Grid container md={12} spacing={1}>
-        <Grid item xs={12}>
-          <Typography variant="h5" component="p" className={classes.title}>Detalhes do Produto</Typography>
-        </Grid>
-            <Grid container  direction="row" justify="flex-start" item md={12} xs={12} spacing={3}>
-              <TableContainer>
-              <Table className={classes.table} aria-label="simple table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell align="right">Cor</TableCell>
-                    <TableCell align="right">Categoria</TableCell>
-                    <TableCell align="right">Subcategoria</TableCell>
-                    <TableCell align="right">Estilista</TableCell>
-                    <TableCell align="right">Fornecedor</TableCell>
-                    <TableCell align="right">Periodo PCP</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  <TableCell align="right">{desc_cor}</TableCell>
-                  <TableCell align="right">{categoria}</TableCell>
-                  <TableCell align="right">{subcategoria}</TableCell>
-                  <TableCell align="right">{estilista}</TableCell>
-                  <TableCell align="right">{fornecedor}</TableCell>
-                  <TableCell align="right">{estilista}</TableCell>
-                  <TableCell align="right">{periodo_pcp}</TableCell>
-                </TableBody>
-              </Table>
-            </TableContainer>
-            </Grid>
-        </Grid>
-        <br></br>
-        <br></br>
-        <br></br>
-        <Grid container  direction="row" justify="flex-start" item md={12} xs={12} spacing={3}>
-        <Grid item xs={12}>
-          <Typography variant="h5" component="p" className={classes.title}>Programação</Typography>
-        </Grid>
-              {programacoes ? programacoes.map(programacoes => {
-                  return (
-                    <TableContainer>
-                      <Table className={classes.table} aria-label="simple table">
-                        <TableHead>
-                          <TableRow>
-                            <TableCell>Nome Programação</TableCell>
-                            <TableCell align="right">Data Prog</TableCell>
-                            <TableCell align="right">Qtd Entregue</TableCell>
-                            <TableCell align="right">Qtd Programada</TableCell>
-                            <TableCell align="right">Ultima data Agendamento</TableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            <TableRow key={programacoes.nome_programacao}>
-                              <TableCell component="th" scope="row">
-                                {programacoes.nome_programacao}
-                              </TableCell>
-                              <TableCell align="right">{programacoes.data_prog}</TableCell>
-                              <TableCell align="right">{programacoes.qtde_entregue}</TableCell>
-                              <TableCell align="right">{programacoes.qtde_programada}</TableCell>
-                              <TableCell align="right">{programacoes.ultima_data_agendamento_entrega}</TableCell>
-                            </TableRow>
-                        </TableBody>
-                      </Table>
-                    </TableContainer>
-                  )
-                }) : null}
-            </Grid>
-        <br></br>
-        <br></br>
-        <br></br>
-        <Grid container direction="row" item md={12} xs={12} spacing={3}>
-        <Grid item xs={12}>
-          <Typography variant="h5" component="p" className={classes.title}>Vendas</Typography>
-        </Grid>
-      </Grid>
-      <Grid container  direction="row" justify="flex-start" item md={12} xs={12} spacing={3}>
-        <TableContainer>
-          <Table className={classes.table} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell align="right">Preco Cheio</TableCell>
-                <TableCell align="right">Preco Medio</TableCell>
-                <TableCell align="right">Desconto Medio</TableCell>
-                <TableCell align="right">Markup</TableCell>
-                <TableCell align="right">Qtd Vendida Preço Cheio</TableCell>
-                <TableCell align="right">Data Primeira Venda</TableCell>
-                <TableCell align="right">Verba Programada</TableCell>
-                <TableCell align="right">Faturamento</TableCell>
-                <TableCell align="right">Sobra Atacado</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <TableCell align="right">{preco_varejo_original}</TableCell>
-              {/* <TableCell align="right">{(qtd_venda/vl_pago)}</TableCell> */}
-              {/* <TableCell align="right">{(vl_desconto/qtd_venda)}</TableCell> */}
-              {/* <TableCell align="right">{markup}</TableCell> */}
-              {/* <TableCell align="right">{qtd_vendida_preco_cheio}</TableCell> */}
-              <TableCell align="right">{data_primeira_venda}</TableCell>
-              {/* <TableCell align="right">{verba_programada}</TableCell> */}
-              {/* <TableCell align="right">{faturamento}</TableCell> */}
-              {/* <TableCell align="right">{sobra_atacado}</TableCell> */}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Grid>
 
-      </Fragment>
+      <Grid
+        container
+        direction="row"
+        justify="flex-start"
+        alignItems="center"
+      >
+          <Grid item xs={12} sm={6} className={classes.carousel}>
+            <Carousel
+            autoPlay={2000}
+            animationSpeed={1000}
+            infinite
+            arrowRight={<ArrowForwardIosIcon color="primary" className={classes.arrow} name="angle-double-right" />}
+            arrowLeft={<ArrowBackIosIcon color="primary" className={classes.arrow} name="angle-double-left" />}
+            addArrowClickHandler
+            dots
+            slidesPerPage={this.state.hideNav ? 1 : 2}
+            >
+              {photoProduct.map(image => {
+                return (
+                  <Grid item justify="center">
+                  <div className={classes.border}>
+                    <img className={classes.imageStyle} src={image} alt="produto"/>
+                  </div>
+                  </Grid>
+                )
+              })}
+            </Carousel>
+          </Grid>
+          <Grid container xs={12} sm={6}>
+            <Grid item xs={12}>
+                <strong><Typography variant="h9" component="p">Ref:{referencia}</Typography></strong>
+                <Typography variant="h5" component="p">{desc_produto}</Typography>
+                <strong><Typography variant="h9" component="p">{formatPrice(preco_varejo_original)}</Typography></strong>
+              </Grid>
+              <Divider/>
+
+
+            <Divider color="primary" className={classes.divider}></Divider>
+            <Grid item xs={12}>
+                {this.state.product ? (
+                
+                  <ExpansionPanel>
+                    <ExpansionPanelSummary
+                      expandIcon={<ExpandMoreIcon />}
+                      aria-controls="panel1a-content"
+                      id="panel1a-header"
+                    >
+                    <Typography className={classes.heading}>Detalhes do Produto</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>      
+                      <Grid container direction="row">
+                        <Grid item xs={12}>
+                          <Typography variant="h9" component="p"><strong className={classes.strongPosition}>Categoria:</strong>{categoria}</Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                        <Typography variant="h9" component="p"><strong className={classes.strongPosition}>Sub-Categoria:</strong>{subcategoria}</Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                        <Typography variant="h9" component="p"><strong className={classes.strongPosition}>Estilista:</strong>{estilista}</Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                        <Typography variant="h9" component="p"><strong className={classes.strongPosition}>Fornecedor:</strong>{fornecedor}</Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                        <Typography variant="h9" component="p"><strong className={classes.strongPosition}>Periodo PCP:</strong>{periodo_pcp}</Typography>
+                        </Grid>
+                      </Grid>
+                    </ExpansionPanelDetails>
+                  </ExpansionPanel>
+                
+                ) : null}
+            </Grid>  
+            <Divider color="primary" className={classes.divider}></Divider>
+            <Grid item xs={12}>
+              {programacoes ? programacoes.map(programacoes => {
+              return (
+                  <ExpansionPanel>
+                    <ExpansionPanelSummary
+                      expandIcon={<ExpandMoreIcon />}
+                      aria-controls="panel1a-content"
+                      id="panel1a-header"
+                    >
+                      <Typography className={classes.heading}>Programação</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>      
+                      <Grid container direction="row">
+                        <Grid item xs={12}>
+                          <Typography variant="h9" component="p"><strong className={classes.strongPosition}>Nome Programação:</strong>{programacoes.nome_programacao}</Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                        <Typography variant="h9" component="p"><strong className={classes.strongPosition}>Quantidade Programada:</strong>{programacoes.qtde_programada}</Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                        <Typography variant="h9" component="p"><strong className={classes.strongPosition}>Quantidade Entregue:</strong>{programacoes.qtde_entregue}</Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                        <Typography variant="h9" component="p"><strong className={classes.strongPosition}>Data de Programação:</strong>{programacoes.data_prog}</Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                        <Typography variant="h9" component="p"><strong className={classes.strongPosition}>Ultima Data de Agendamento:</strong>{programacoes.ultima_data_agendamento_entrega}</Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                        <Typography variant="h9" component="p"><strong className={classes.strongPosition}>Entrega Ajustada:</strong>{programacoes.entrega_ajustada}</Typography>
+                        </Grid>
+                      </Grid>
+                    </ExpansionPanelDetails>
+                  </ExpansionPanel>
+              )
+              }) : null}
+            </Grid>
+            <Divider color="primary" className={classes.divider}></Divider>
+            <Grid item xs={12}>
+              {this.state.product ? (
+                
+                <ExpansionPanel>
+                  <ExpansionPanelSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                  >
+                  <Typography className={classes.heading}>Vendas</Typography>
+                  </ExpansionPanelSummary>
+                  <ExpansionPanelDetails>      
+                    <Grid container direction="row">
+                      <Grid item xs={12}>
+                        <Typography variant="h9" component="p"><strong className={classes.strongPosition}>Preco Cheio:</strong>{formatPrice(preco_varejo_original)}</Typography>
+                      </Grid>
+                      {/* <Grid item xs={12}>
+                      <Typography variant="h9" component="p"><strong className={classes.strongPosition}>Preco Medio:</strong>{(qtd_venda/vl_pago)}</Typography>
+                      </Grid> */}
+                      {/* <Grid item xs={12}>
+                      <Typography variant="h9" component="p"><strong className={classes.strongPosition}>Desconto Medio:</strong>{(vl_desconto/qtd_venda)}</Typography>
+                      </Grid> */}
+                      {/* <Grid item xs={12}>
+                      <Typography variant="h9" component="p"><strong className={classes.strongPosition}>Markup:</strong>{markup}</Typography>
+                      </Grid> */}
+                      {/* <Grid item xs={12}>
+                      <Typography variant="h9" component="p"><strong>Qtd Vendida Preço Cheio:</strong>{qtd_vendida_preco_cheio}</Typography>
+                      </Grid> */}
+                      <Grid item xs={12}>
+                      <Typography variant="h9" component="p"><strong className={classes.strongPosition}>Data Primeira Venda:</strong>{data_primeira_venda}</Typography>
+                      </Grid>
+                      {/* <Grid item xs={12}>
+                      <Typography variant="h9" component="p"><strong className={classes.strongPosition}>Verba Programada:</strong>{verba_programada}</Typography>
+                      </Grid>
+                      <Grid item xs={12}>
+                      <Typography variant="h9" component="p"><strong className={classes.strongPosition}>Faturamento:</strong>{faturamento}</Typography>
+                      </Grid>
+                      <Grid item xs={12}>
+                      <Typography variant="h9" component="p"><strong className={classes.strongPosition}>Sobra Atacado:</strong>{sobra_atacado}</Typography>
+                      </Grid> */}
+                    </Grid>
+                  </ExpansionPanelDetails>
+                </ExpansionPanel>
+              
+              ) : null}
+            </Grid>
+            <Divider color="primary" className={classes.divider}></Divider>
+          </Grid>
+    </Grid>
+  </Fragment>
     );
   }
 }

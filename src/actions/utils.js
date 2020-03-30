@@ -88,4 +88,9 @@ function getDefaultOptions(method, headers = {}, body = null) {
   
     return { Authorization: authorization };
   };
+
+  export const { format: formatPrice } = new Intl.NumberFormat('pt-br', {
+    style:'currency',
+    currency: 'BRL',
+})
   
