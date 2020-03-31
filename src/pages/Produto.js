@@ -211,13 +211,13 @@ class Produto extends React.Component {
 
   render(props) {
     const { classes } = this.props;
-    const { photoProduct, programations } = this.state;
+    const { photoProduct } = this.state;
     const {
       preco_varejo_original,
       // preco_varejo,
-      preco_custo,
+      // preco_custo,
       desc_produto,
-      desc_cor,
+      // desc_cor,
       fornecedor,
       referencia,
       periodo_pcp,
