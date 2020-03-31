@@ -240,7 +240,6 @@ class Produto extends React.Component {
       // qtd_vendida_preco_cheio,
       // verba_programada
     } = this.state.product;
-    console.log(this.state.product)
     return (
       <Fragment>
         <Header
@@ -291,6 +290,9 @@ class Produto extends React.Component {
               <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Ref:</strong>{referencia}</Typography>
               <Typography variant="h5" component="p">{desc_produto}</Typography>
               <Typography variant="h9" color="textSecondary" component="p">{formatPrice(preco_varejo_original)}</Typography>
+              {this.state.product.colecoes ? (
+                <Typography variant="h5" component="p">{this.state.product.colecoes[0].nome_colecao}</Typography>
+                ) : null}
             </Grid>
             <Divider/>
             <Divider color="primary" className={classes.divider}></Divider>
