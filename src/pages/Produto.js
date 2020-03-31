@@ -120,7 +120,8 @@ const styles = theme => ({
     border: ' 15px solid #FFFFFF'
   },
   carousel: {
-    width: 400
+    width: 400,
+    padding: theme.spacing(1)
   },
   divisor: {
     width: 400,
@@ -139,9 +140,6 @@ const styles = theme => ({
     'display': 'flex',
     'width': theme.spacing(50),
     'marginBottom': theme.spacing(2)
-  },
-  carousel: {
-    padding: theme.spacing(1)
   }
 });
 
