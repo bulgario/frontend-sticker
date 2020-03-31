@@ -139,6 +139,9 @@ const styles = theme => ({
     'display': 'flex',
     'width': theme.spacing(50),
     'marginBottom': theme.spacing(2)
+  },
+  carousel: {
+    padding: theme.spacing(1)
   }
 });
 
@@ -236,9 +239,8 @@ class Produto extends React.Component {
       // markup,
       // qtd_vendida_preco_cheio,
       // verba_programada
-      
     } = this.state.product;
-
+    console.log(this.state.product)
     return (
       <Fragment>
         <Header
@@ -264,14 +266,14 @@ class Produto extends React.Component {
       >
           <Grid item xs={12} sm={6} className={classes.carousel}>
             <Carousel
-            autoPlay={2000}
-            animationSpeed={1000}
+            animationSpeed={1500}
             infinite
             arrowRight={<ArrowForwardIosIcon color="primary" className={classes.arrow} name="angle-double-right" />}
             arrowLeft={<ArrowBackIosIcon color="primary" className={classes.arrow} name="angle-double-left" />}
             addArrowClickHandler
             dots
             slidesPerPage={this.state.hideNav ? 1 : 2}
+            className={classes.carousel}
             >
               {photoProduct.map(image => {
                 return (
@@ -286,46 +288,42 @@ class Produto extends React.Component {
           </Grid>
           <Grid container xs={12} sm={6}>
             <Grid item xs={12}>
-                <strong><Typography variant="h9" component="p">Ref:{referencia}</Typography></strong>
-                <Typography variant="h5" component="p">{desc_produto}</Typography>
-                <strong><Typography variant="h9" component="p">{formatPrice(preco_varejo_original)}</Typography></strong>
-              </Grid>
-              <Divider/>
-
-
+              <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Ref:</strong>{referencia}</Typography>
+              <Typography variant="h5" component="p">{desc_produto}</Typography>
+              <Typography variant="h9" color="textSecondary" component="p">{formatPrice(preco_varejo_original)}</Typography>
+            </Grid>
+            <Divider/>
             <Divider color="primary" className={classes.divider}></Divider>
             <Grid item xs={12}>
                 {this.state.product ? (
-                
                   <ExpansionPanel>
                     <ExpansionPanelSummary
                       expandIcon={<ExpandMoreIcon />}
                       aria-controls="panel1a-content"
                       id="panel1a-header"
                     >
-                    <Typography className={classes.heading}>Detalhes do Produto</Typography>
+                    <Typography color="textSecondary" variant="h5" className={classes.heading}>Detalhes do Produto</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>      
                       <Grid container direction="row">
                         <Grid item xs={12}>
-                          <Typography variant="h9" component="p"><strong className={classes.strongPosition}>Categoria:</strong>{categoria}</Typography>
+                          <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Categoria:</strong>{categoria}</Typography>
                         </Grid>
                         <Grid item xs={12}>
-                        <Typography variant="h9" component="p"><strong className={classes.strongPosition}>Sub-Categoria:</strong>{subcategoria}</Typography>
+                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Sub-Categoria:</strong>{subcategoria}</Typography>
                         </Grid>
                         <Grid item xs={12}>
-                        <Typography variant="h9" component="p"><strong className={classes.strongPosition}>Estilista:</strong>{estilista}</Typography>
+                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Estilista:</strong>{estilista}</Typography>
                         </Grid>
                         <Grid item xs={12}>
-                        <Typography variant="h9" component="p"><strong className={classes.strongPosition}>Fornecedor:</strong>{fornecedor}</Typography>
+                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Fornecedor:</strong>{fornecedor}</Typography>
                         </Grid>
                         <Grid item xs={12}>
-                        <Typography variant="h9" component="p"><strong className={classes.strongPosition}>Periodo PCP:</strong>{periodo_pcp}</Typography>
+                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Periodo PCP:</strong>{periodo_pcp}</Typography>
                         </Grid>
                       </Grid>
                     </ExpansionPanelDetails>
                   </ExpansionPanel>
-                
                 ) : null}
             </Grid>  
             <Divider color="primary" className={classes.divider}></Divider>
@@ -338,27 +336,27 @@ class Produto extends React.Component {
                       aria-controls="panel1a-content"
                       id="panel1a-header"
                     >
-                      <Typography className={classes.heading}>Programação</Typography>
+                      <Typography color="textSecondary" variant="h5" className={classes.heading}>Programação</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>      
                       <Grid container direction="row">
                         <Grid item xs={12}>
-                          <Typography variant="h9" component="p"><strong className={classes.strongPosition}>Nome Programação:</strong>{programacoes.nome_programacao}</Typography>
+                          <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Nome Programação:</strong>{programacoes.nome_programacao}</Typography>
                         </Grid>
                         <Grid item xs={12}>
-                        <Typography variant="h9" component="p"><strong className={classes.strongPosition}>Quantidade Programada:</strong>{programacoes.qtde_programada}</Typography>
+                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Quantidade Programada:</strong>{programacoes.qtde_programada}</Typography>
                         </Grid>
                         <Grid item xs={12}>
-                        <Typography variant="h9" component="p"><strong className={classes.strongPosition}>Quantidade Entregue:</strong>{programacoes.qtde_entregue}</Typography>
+                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Quantidade Entregue:</strong>{programacoes.qtde_entregue}</Typography>
                         </Grid>
                         <Grid item xs={12}>
-                        <Typography variant="h9" component="p"><strong className={classes.strongPosition}>Data de Programação:</strong>{programacoes.data_prog}</Typography>
+                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Data de Programação:</strong>{programacoes.data_prog}</Typography>
                         </Grid>
                         <Grid item xs={12}>
-                        <Typography variant="h9" component="p"><strong className={classes.strongPosition}>Ultima Data de Agendamento:</strong>{programacoes.ultima_data_agendamento_entrega}</Typography>
+                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Ultima Data de Agendamento:</strong>{programacoes.ultima_data_agendamento_entrega}</Typography>
                         </Grid>
                         <Grid item xs={12}>
-                        <Typography variant="h9" component="p"><strong className={classes.strongPosition}>Entrega Ajustada:</strong>{programacoes.entrega_ajustada}</Typography>
+                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Entrega Ajustada:</strong>{programacoes.entrega_ajustada}</Typography>
                         </Grid>
                       </Grid>
                     </ExpansionPanelDetails>
@@ -369,48 +367,46 @@ class Produto extends React.Component {
             <Divider color="primary" className={classes.divider}></Divider>
             <Grid item xs={12}>
               {this.state.product ? (
-                
                 <ExpansionPanel>
                   <ExpansionPanelSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                   >
-                  <Typography className={classes.heading}>Vendas</Typography>
+                  <Typography color="textSecondary" variant="h5" className={classes.heading}>Vendas</Typography>
                   </ExpansionPanelSummary>
                   <ExpansionPanelDetails>      
                     <Grid container direction="row">
                       <Grid item xs={12}>
-                        <Typography variant="h9" component="p"><strong className={classes.strongPosition}>Preco Cheio:</strong>{formatPrice(preco_varejo_original)}</Typography>
-                      </Grid>
-                      {/* <Grid item xs={12}>
-                      <Typography variant="h9" component="p"><strong className={classes.strongPosition}>Preco Medio:</strong>{(qtd_venda/vl_pago)}</Typography>
-                      </Grid> */}
-                      {/* <Grid item xs={12}>
-                      <Typography variant="h9" component="p"><strong className={classes.strongPosition}>Desconto Medio:</strong>{(vl_desconto/qtd_venda)}</Typography>
-                      </Grid> */}
-                      {/* <Grid item xs={12}>
-                      <Typography variant="h9" component="p"><strong className={classes.strongPosition}>Markup:</strong>{markup}</Typography>
-                      </Grid> */}
-                      {/* <Grid item xs={12}>
-                      <Typography variant="h9" component="p"><strong>Qtd Vendida Preço Cheio:</strong>{qtd_vendida_preco_cheio}</Typography>
-                      </Grid> */}
-                      <Grid item xs={12}>
-                      <Typography variant="h9" component="p"><strong className={classes.strongPosition}>Data Primeira Venda:</strong>{data_primeira_venda}</Typography>
-                      </Grid>
-                      {/* <Grid item xs={12}>
-                      <Typography variant="h9" component="p"><strong className={classes.strongPosition}>Verba Programada:</strong>{verba_programada}</Typography>
+                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Preco Cheio:</strong>{formatPrice(preco_varejo_original)}</Typography>
                       </Grid>
                       <Grid item xs={12}>
-                      <Typography variant="h9" component="p"><strong className={classes.strongPosition}>Faturamento:</strong>{faturamento}</Typography>
+                      <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Preco Medio:</strong>{}</Typography>
                       </Grid>
                       <Grid item xs={12}>
-                      <Typography variant="h9" component="p"><strong className={classes.strongPosition}>Sobra Atacado:</strong>{sobra_atacado}</Typography>
-                      </Grid> */}
+                      <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Desconto Medio:</strong>{}</Typography>
+                      </Grid>
+                      <Grid item xs={12}>
+                      <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Markup:</strong>{}</Typography>
+                      </Grid>
+                      <Grid item xs={12}>
+                      <Typography variant="h9" color="textSecondary" component="p"><strong>Qtd Vendida Preço Cheio:</strong>{}</Typography>
+                      </Grid>
+                      <Grid item xs={12}>
+                      <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Data Primeira Venda:</strong>{data_primeira_venda}</Typography>
+                      </Grid>
+                      <Grid item xs={12}>
+                      <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Verba Programada:</strong>{}</Typography>
+                      </Grid>
+                      <Grid item xs={12}>
+                      <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Faturamento:</strong>{}</Typography>
+                      </Grid>
+                      <Grid item xs={12}>
+                      <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Sobra Atacado:</strong>{}</Typography>
+                      </Grid>
                     </Grid>
                   </ExpansionPanelDetails>
                 </ExpansionPanel>
-              
               ) : null}
             </Grid>
             <Divider color="primary" className={classes.divider}></Divider>
