@@ -139,12 +139,14 @@ class Insta extends React.Component {
     }
   };
   filterProducts(produtos) {
-    const { categoriaFilter, subcategoriaFilter, estampaFilter } = this.props;
+    const { categoriaFilter, subcategoriaFilter, estampaFilter, fornecedorFilter, estilistaFilter } = this.state;
     const produtosFiltrados = produtos.filter(produto => {
       return (
         categoriaFilter.includes(produto.categoria) &&
         subcategoriaFilter.includes(produto.subcategoria) &&
-        estampaFilter.includes(produto.estampa)
+        estampaFilter.includes(produto.estampa) &&
+        fornecedorFilter.includes(produto.fornecedor) &&
+        estilistaFilter.includes(produto.estilista)
       );
     });
     return produtosFiltrados.sort(this.compare);

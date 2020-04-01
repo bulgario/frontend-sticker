@@ -100,10 +100,12 @@ class Insta extends React.Component {
       categoriaFilter: [],
       subcategoriaFilter: [],
       estampaFilter: [],
+      fornecedorFilter: [],
+      estilistaFilter: [],
       orderBy: "desc_cor_produto",
       orderAsc: true,
       print: false,
-      filterSelected: { Categoria: true, Subcategoria: true, Estampa: true },
+      filterSelected: { Categoria: true, Subcategoria: true, Estampa: true, Fornecedor: true, Estilista:true },
       filtersLen: {},
       selectItens: false,
       selectedProducts: [],
@@ -165,6 +167,8 @@ class Insta extends React.Component {
     const categorias = [];
     const subcategorias = [];
     const estampas = [];
+    const fornecedores = []
+    const estilistas = [ ]
 
     programacoes.map(programacao => {
       return allProgramacoes[programacao].map(produto => {
@@ -178,6 +182,34 @@ class Insta extends React.Component {
             categorias.push({
               name: produto.categoria,
               checked: this.state.filterSelected["Categoria"]
+            });
+          }
+        }
+
+        if (filterParam === "Fornecedor") {
+          if (
+            !fornecedores.some(
+              fornecedor => fornecedor.name === produto.fornecedor
+            ) &&
+            produto.fornecedor
+          ) {
+            fornecedores.push({
+              name: produto.fornecedor,
+              checked: this.state.filterSelected["Fornecedor"]
+            });
+          }
+        }
+
+        if (filterParam === "Estilista") {
+          if (
+            !estilistas.some(
+              estilista => estilista.name === produto.estilista
+            ) &&
+            produto.estilista
+          ) {
+            estilistas.push({
+              name: produto.estilista,
+              checked: this.state.filterSelected["Estilista"]
             });
           }
         }
@@ -214,6 +246,8 @@ class Insta extends React.Component {
     categorias.push("");
     subcategorias.push("");
     estampas.push("");
+    estilistas.push("");
+    fornecedores.push("");
     const filters = {
       Categoria:
         filterParam === "Categoria"
@@ -224,7 +258,11 @@ class Insta extends React.Component {
           ? subcategorias
           : this.state.filters["Subcategoria"],
       Estampa:
-        filterParam === "Estampa" ? estampas : this.state.filters["Estampa"]
+        filterParam === "Estampa" ? estampas : this.state.filters["Estampa"],
+        Fornecedor:
+        filterParam === "Fornecedor" ? fornecedores : this.state.filters["Fornecedor"],
+        Estilista:
+        filterParam === "Estilista" ? estilistas : this.state.filters["Estilista"]
     };
     return this.refreshFilter(filters);
   };
@@ -234,9 +272,33 @@ class Insta extends React.Component {
     const categorias = [];
     const subcategorias = [];
     const estampas = [];
+    const estilistas = []
+    const fornecedores = [ ]
+    // const colecoes = [ ]
 
     programacoes.map(programacao => {
       return allProgramacoes[programacao].map(produto => {
+        if (
+          !estilistas.some(estilista => estilista.name === produto.estilista) &&
+          produto.estilista
+        ) {
+          estilistas.push({ name: produto.estilista, checked: true });
+        }
+
+        if (
+          !fornecedores.some(fornecedor => fornecedor.name === produto.fornecedor) &&
+          produto.fornecedor
+        ) {
+          fornecedores.push({ name: produto.fornecedor, checked: true });
+        }
+
+        // if (
+        //   !colecoes.some(colecao => colecao.name === produto.colecao.name) &&
+        //   produto.colecao
+        // ) {
+        //   colecoes.push({ name: produto.colecao.name, checked: true });
+        // }
+
         if (
           !categorias.some(categoria => categoria.name === produto.categoria) &&
           produto.categoria
@@ -264,9 +326,13 @@ class Insta extends React.Component {
     const filters = {
       Categoria: categorias,
       Subcategoria: subcategorias,
-      Estampa: estampas
+      Estampa: estampas,
+      Fornecedor: fornecedores,
+      Estilista: estilistas
     };
     this.setState({
+      fornecedorInitialLen: fornecedores.length,
+      estilistaInitialLen: estilistas.length,
       categoriaInitialLen: categorias.length,
       subcategoriaInitialLen: subcategorias.length,
       estampaInitialLen: estampas.length
@@ -361,12 +427,14 @@ class Insta extends React.Component {
 
 
   filterProducts(produtos) {
-    const { categoriaFilter, subcategoriaFilter, estampaFilter } = this.state;
+    const { categoriaFilter, subcategoriaFilter, estampaFilter, fornecedorFilter, estilistaFilter } = this.state;
     const produtosFiltrados = produtos.filter(produto => {
       return (
         categoriaFilter.includes(produto.categoria) &&
         subcategoriaFilter.includes(produto.subcategoria) &&
-        estampaFilter.includes(produto.estampa)
+        estampaFilter.includes(produto.estampa) &&
+        fornecedorFilter.includes(produto.fornecedor) &&
+        estilistaFilter.includes(produto.estilista)
       );
     });
     return produtosFiltrados.sort(this.compare);
@@ -464,6 +532,7 @@ class Insta extends React.Component {
             <CardProduct showBadges={true} key={`${produtos.id}${index}`}redirect={!this.state.selectItens} productToRender={produtos} cardOpacity={this.state.selectItens &&
               !this.state.selectedProducts.includes(produtos.id)}
               handleClickProduct={() => this.handleClickProduct(produtos.id)}
+              scrollHeightPosition={this.state.theposition}
              >
             </CardProduct>)
 
@@ -482,8 +551,20 @@ class Insta extends React.Component {
     const categorias = [];
     const subcategorias = [];
     const estampas = [];
+    const fornecedores = []
+    const estilistas = []
     filtros.map(filtro => {
       return filterObj[filtro].map(item => {
+        if (filtro === "Fornecedor") {
+          if (item.checked) {
+            fornecedores.push(item.name);
+          }
+        }
+        if (filtro === "Estilista") {
+          if (item.checked) {
+            estilistas.push(item.name);
+          }
+        }
         if (filtro === "Categoria") {
           if (item.checked) {
             categorias.push(item.name);
@@ -506,18 +587,25 @@ class Insta extends React.Component {
     categorias.push("");
     subcategorias.push("");
     estampas.push("");
+    fornecedores.push("");
+    estilistas.push("")
     this.setState({
       filterSelected: {
         Estampa: estampas.length - 1 === this.state.estampaInitialLen,
         Subcategoria:
           subcategorias.length - 1 === this.state.subcategoriaInitialLen,
-        Categoria: categorias.length - 1 === this.state.categoriaInitialLen
+        Categoria: categorias.length - 1 === this.state.categoriaInitialLen,
+        Fornecedor: fornecedores.length - 1 === this.state.fornecedorInitialLen,
+        Estilista: estilistas.length - 1 === this.state.estilistaInitialLen,
+
       }
     });
     this.setState({
       categoriaFilter: categorias,
       subcategoriaFilter: subcategorias,
-      estampaFilter: estampas
+      estampaFilter: estampas,
+      fornecedorFilter: fornecedores,
+      estilistaFilter: estilistas
     });
   };
 
@@ -725,7 +813,15 @@ class Insta extends React.Component {
           <div className={classes.margin}>
             <Grid container direction="column" >
               {this.state.print
-                ? <PrintPage showBadges={true} orderBy={this.state.orderBy} orderAsc={this.state.orderAsc} onFinishPrint={() => this.setState({print:false})} allProgramacoes={this.state.allProgramacoes} categoriaFilter={this.state.categoriaFilter} subcategoriaFilter={this.state.subcategoriaFilter} estampaFilter={this.state.estampaFilter}></PrintPage>
+                ? <PrintPage showBadges={true} orderBy={this.state.orderBy} 
+                orderAsc={this.state.orderAsc}
+                 onFinishPrint={() => this.setState({print:false})}
+                  allProgramacoes={this.state.allProgramacoes}
+                   categoriaFilter={this.state.categoriaFilter}
+                    subcategoriaFilter={this.state.subcategoriaFilter}
+                     estampaFilter={this.state.estampaFilter}
+                     estilistaFilter={this.state.estilistaFilter}
+                     fornecedorFilter={this.state.fornecedorFilter}></PrintPage>
                 : this.renderProgramacoes()}
             </Grid>
           </div>

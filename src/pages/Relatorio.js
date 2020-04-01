@@ -133,9 +133,11 @@ class Relatorio extends React.Component {
       categoriaFilter: [],
       subcategoriaFilter: [],
       estampaFilter: [],
+      fornecedorFilter: [],
+      estilistaFilter: [],
       orderBy: "desc_cor_produto",
       orderAsc: true,
-      filterSelected: { Categoria: true, Subcategoria: true, Estampa: true },
+      filterSelected: { Categoria: true, Subcategoria: true, Estampa: true, Fornecedor: true, Estilista:true },
       filtersLen: {},
       openTopDrawer: false,
       products: [],
@@ -145,7 +147,8 @@ class Relatorio extends React.Component {
       reportsIds:this.getParamFromUrl("addRelatorio")?[this.getParamFromUrl("addRelatorio")]:[],
       selectedProducts: [],
       remainingProducts: [],
-      checked: true
+      checked: true,
+      print:false
     };
   }
 
@@ -234,8 +237,10 @@ class Relatorio extends React.Component {
     const categorias = [];
     const subcategorias = [];
     const estampas = [];
+    const fornecedores = []
+    const estilistas = [ ]
 
-      products.map(produto => {
+   products.map(produto => {
         if (filterParam === "Categoria") {
           if (
             !categorias.some(
@@ -246,6 +251,34 @@ class Relatorio extends React.Component {
             categorias.push({
               name: produto.categoria,
               checked: this.state.filterSelected["Categoria"]
+            });
+          }
+        }
+
+        if (filterParam === "Fornecedor") {
+          if (
+            !fornecedores.some(
+              fornecedor => fornecedor.name === produto.fornecedor
+            ) &&
+            produto.fornecedor
+          ) {
+            fornecedores.push({
+              name: produto.fornecedor,
+              checked: this.state.filterSelected["Fornecedor"]
+            });
+          }
+        }
+
+        if (filterParam === "Estilista") {
+          if (
+            !estilistas.some(
+              estilista => estilista.name === produto.estilista
+            ) &&
+            produto.estilista
+          ) {
+            estilistas.push({
+              name: produto.estilista,
+              checked: this.state.filterSelected["Estilista"]
             });
           }
         }
@@ -281,6 +314,8 @@ class Relatorio extends React.Component {
     categorias.push("");
     subcategorias.push("");
     estampas.push("");
+    estilistas.push("");
+    fornecedores.push("");
     const filters = {
       Categoria:
         filterParam === "Categoria"
@@ -291,7 +326,11 @@ class Relatorio extends React.Component {
           ? subcategorias
           : this.state.filters["Subcategoria"],
       Estampa:
-        filterParam === "Estampa" ? estampas : this.state.filters["Estampa"]
+        filterParam === "Estampa" ? estampas : this.state.filters["Estampa"],
+        Fornecedor:
+        filterParam === "Fornecedor" ? fornecedores : this.state.filters["Fornecedor"],
+        Estilista:
+        filterParam === "Estilista" ? estilistas : this.state.filters["Estilista"]
     };
     return this.refreshFilter(filters);
   };
@@ -300,8 +339,32 @@ class Relatorio extends React.Component {
     const categorias = [];
     const subcategorias = [];
     const estampas = [];
+    const estilistas = []
+    const fornecedores = [ ]
+    // const colecoes = [ ]
 
- products.map(produto => {
+      products.map(produto => {
+        if (
+          !estilistas.some(estilista => estilista.name === produto.estilista) &&
+          produto.estilista
+        ) {
+          estilistas.push({ name: produto.estilista, checked: true });
+        }
+
+        if (
+          !fornecedores.some(fornecedor => fornecedor.name === produto.fornecedor) &&
+          produto.fornecedor
+        ) {
+          fornecedores.push({ name: produto.fornecedor, checked: true });
+        }
+
+        // if (
+        //   !colecoes.some(colecao => colecao.name === produto.colecao.name) &&
+        //   produto.colecao
+        // ) {
+        //   colecoes.push({ name: produto.colecao.name, checked: true });
+        // }
+
         if (
           !categorias.some(categoria => categoria.name === produto.categoria) &&
           produto.categoria
@@ -322,15 +385,19 @@ class Relatorio extends React.Component {
         ) {
           estampas.push({ name: produto.estampa, checked: true });
         }
-        return true;
+        return true
       });
 
     const filters = {
       Categoria: categorias,
       Subcategoria: subcategorias,
-      Estampa: estampas
+      Estampa: estampas,
+      Fornecedor: fornecedores,
+      Estilista: estilistas
     };
     this.setState({
+      fornecedorInitialLen: fornecedores.length,
+      estilistaInitialLen: estilistas.length,
       categoriaInitialLen: categorias.length,
       subcategoriaInitialLen: subcategorias.length,
       estampaInitialLen: estampas.length
@@ -345,12 +412,14 @@ class Relatorio extends React.Component {
   }
 
   filterProducts(produtos) {
-    const { categoriaFilter, subcategoriaFilter, estampaFilter } = this.state;
+    const { categoriaFilter, subcategoriaFilter, estampaFilter, fornecedorFilter, estilistaFilter } = this.state;
     const produtosFiltrados = produtos.filter(produto => {
       return (
         categoriaFilter.includes(produto.categoria) &&
         subcategoriaFilter.includes(produto.subcategoria) &&
-        estampaFilter.includes(produto.estampa)
+        estampaFilter.includes(produto.estampa) &&
+        fornecedorFilter.includes(produto.fornecedor) &&
+        estilistaFilter.includes(produto.estilista)
       );
     });
     return produtosFiltrados.sort(this.compare);
@@ -411,8 +480,20 @@ class Relatorio extends React.Component {
     const categorias = [];
     const subcategorias = [];
     const estampas = [];
+    const fornecedores = []
+    const estilistas = []
     filtros.map(filtro => {
       return filterObj[filtro].map(item => {
+        if (filtro === "Fornecedor") {
+          if (item.checked) {
+            fornecedores.push(item.name);
+          }
+        }
+        if (filtro === "Estilista") {
+          if (item.checked) {
+            estilistas.push(item.name);
+          }
+        }
         if (filtro === "Categoria") {
           if (item.checked) {
             categorias.push(item.name);
@@ -435,18 +516,25 @@ class Relatorio extends React.Component {
     categorias.push("");
     subcategorias.push("");
     estampas.push("");
+    fornecedores.push("");
+    estilistas.push("")
     this.setState({
       filterSelected: {
         Estampa: estampas.length - 1 === this.state.estampaInitialLen,
         Subcategoria:
           subcategorias.length - 1 === this.state.subcategoriaInitialLen,
-        Categoria: categorias.length - 1 === this.state.categoriaInitialLen
+        Categoria: categorias.length - 1 === this.state.categoriaInitialLen,
+        Fornecedor: fornecedores.length - 1 === this.state.fornecedorInitialLen,
+        Estilista: estilistas.length - 1 === this.state.estilistaInitialLen,
+
       }
     });
     this.setState({
       categoriaFilter: categorias,
       subcategoriaFilter: subcategorias,
-      estampaFilter: estampas
+      estampaFilter: estampas,
+      fornecedorFilter: fornecedores,
+      estilistaFilter: estilistas
     });
   };
 
