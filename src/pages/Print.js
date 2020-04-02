@@ -139,18 +139,28 @@ class Insta extends React.Component {
     }
   };
   filterProducts(produtos) {
-    const { categoriaFilter, subcategoriaFilter, estampaFilter, fornecedorFilter, estilistaFilter } = this.state;
-    const produtosFiltrados = produtos.filter(produto => {
-      return (
-        categoriaFilter.includes(produto.categoria) &&
-        subcategoriaFilter.includes(produto.subcategoria) &&
-        estampaFilter.includes(produto.estampa) &&
-        fornecedorFilter.includes(produto.fornecedor) &&
-        estilistaFilter.includes(produto.estilista)
-      );
-    });
-    return produtosFiltrados.sort(this.compare);
+    const { categoriaFilter, subcategoriaFilter, estampaFilter, fornecedorFilter, estilistaFilter, colecaoFilter } = this.props;
+    if(produtos) {  
+      const produtosFiltrados = produtos.filter(produto => {
+        let collection = []
+
+        if(produto && produto.colecoes){
+          produto.colecoes.map(val => collection = val.nome_colecao)
+        }
+
+        return (
+          categoriaFilter.includes(produto.categoria) &&
+          subcategoriaFilter.includes(produto.subcategoria) &&
+          estampaFilter.includes(produto.estampa) &&
+          fornecedorFilter.includes(produto.fornecedor) &&
+          estilistaFilter.includes(produto.estilista) &&
+          colecaoFilter.includes(collection)
+        );
+      });
+      return produtosFiltrados.sort(this.compare);
+    }
   }
+
   checkLastImg = async image => {
     const { allProgramacoes } = this.props;
     const programacoes = Object.keys(allProgramacoes);
