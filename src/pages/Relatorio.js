@@ -368,6 +368,7 @@ class Relatorio extends React.Component {
         if (
           produto.colecoes.map(collections => {
             filterCollection.push(collections.nome_colecao)
+            return true
           })
         )
 
@@ -443,24 +444,25 @@ class Relatorio extends React.Component {
 
   filterProducts(produtos) {
     const { categoriaFilter, subcategoriaFilter, estampaFilter, fornecedorFilter, estilistaFilter, colecaoFilter } = this.state;
+    if(produtos) {  
+      const produtosFiltrados = produtos.filter(produto => {
+        let collection = []
 
-    const produtosFiltrados = produtos.filter(produto => {
-      let collection = []
+        if(produto && produto.colecoes){
+          produto.colecoes.map(val => collection = val.nome_colecao)
+        }
 
-      if(produto && produto.colecoes){
-        produto.colecoes.map(val => collection = val.nome_colecao)
-      }
-
-      return (
-        categoriaFilter.includes(produto.categoria) &&
-        subcategoriaFilter.includes(produto.subcategoria) &&
-        estampaFilter.includes(produto.estampa) &&
-        fornecedorFilter.includes(produto.fornecedor) &&
-        estilistaFilter.includes(produto.estilista) &&
-        colecaoFilter.includes(collection)
-      );
-    });
-    return produtosFiltrados.sort(this.compare);
+        return (
+          categoriaFilter.includes(produto.categoria) &&
+          subcategoriaFilter.includes(produto.subcategoria) &&
+          estampaFilter.includes(produto.estampa) &&
+          fornecedorFilter.includes(produto.fornecedor) &&
+          estilistaFilter.includes(produto.estilista) &&
+          colecaoFilter.includes(collection)
+        );
+      });
+      return produtosFiltrados.sort(this.compare);
+    }
   }
 
   handleClickProduct(id) {
