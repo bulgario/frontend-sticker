@@ -421,10 +421,10 @@ class AllProducts extends React.Component {
     let filterCollection = []
 
       products.map(produto => {
-        console.log("vapo", produto)
         if (
           produto.colecoes.map(collections => {
             filterCollection.push(collections.nome_colecao)
+            return true
           })
         )
 
