@@ -129,8 +129,8 @@ const ProductCard = props => {
         redirect={props.redirect}
           photos={
             productToRender.nome_arquivo
-              ? [...productToRender.nome_arquivo]
-              : [productToRender.image]
+              ? [...productToRender.nome_arquivo.slice(0, 3)]
+              : [productToRender.image.slice(0, 3)]
           }
           stepper={window.innerWidth >= 555 ? true : false}
           id={productToRender.id}
