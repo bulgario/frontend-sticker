@@ -243,7 +243,7 @@ class Relatorio extends React.Component {
     const colecoes = []
 
    products.map(produto => {
-        if (filterParam === "Colecoes") {
+        if (filterParam === "Colecao") {
           if (
             !colecoes.some(
               colecoes => colecoes.name === produto.colecoes
@@ -792,6 +792,8 @@ class Relatorio extends React.Component {
                categoriaFilter={this.state.categoriaFilter}
                 subcategoriaFilter={this.state.subcategoriaFilter}
                  estampaFilter={this.state.estampaFilter}
+                 fornecedorFilter={this.state.fornecedorFilter}
+                 estilistaFilter={this.state.estilistaFilter}
                  colecaoFilter={this.state.colecaoFilter}
                  >  
                  </PrintPage>
