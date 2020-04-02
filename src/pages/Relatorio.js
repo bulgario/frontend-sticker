@@ -135,9 +135,10 @@ class Relatorio extends React.Component {
       estampaFilter: [],
       fornecedorFilter: [],
       estilistaFilter: [],
+      colecaoFilter: [],
       orderBy: "desc_cor_produto",
       orderAsc: true,
-      filterSelected: { Categoria: true, Subcategoria: true, Estampa: true, Fornecedor: true, Estilista:true },
+      filterSelected: { Categoria: true, Subcategoria: true, Estampa: true, Fornecedor: true, Estilista:true, Colecao: true },
       filtersLen: {},
       openTopDrawer: false,
       products: [],
@@ -238,9 +239,24 @@ class Relatorio extends React.Component {
     const subcategorias = [];
     const estampas = [];
     const fornecedores = []
-    const estilistas = [ ]
+    const estilistas = []
+    const colecoes = []
 
    products.map(produto => {
+        if (filterParam === "Colecoes") {
+          if (
+            !colecoes.some(
+              colecoes => colecoes.name === produto.colecoes
+            ) &&
+            produto.colecoes
+          ) {
+            colecoes.push({
+              name: produto.colecoes,
+              checked: this.state.filterSelected["Colecao"]
+            });
+          }
+        }
+
         if (filterParam === "Categoria") {
           if (
             !categorias.some(
@@ -316,6 +332,8 @@ class Relatorio extends React.Component {
     estampas.push("");
     estilistas.push("");
     fornecedores.push("");
+    colecoes.push("");
+
     const filters = {
       Categoria:
         filterParam === "Categoria"
@@ -330,7 +348,9 @@ class Relatorio extends React.Component {
         Fornecedor:
         filterParam === "Fornecedor" ? fornecedores : this.state.filters["Fornecedor"],
         Estilista:
-        filterParam === "Estilista" ? estilistas : this.state.filters["Estilista"]
+        filterParam === "Estilista" ? estilistas : this.state.filters["Estilista"],
+      Colecoes:
+        filterParam === "Colecao" ? colecoes : this.state.filters["Colecao"],
     };
     return this.refreshFilter(filters);
   };
@@ -340,10 +360,17 @@ class Relatorio extends React.Component {
     const subcategorias = [];
     const estampas = [];
     const estilistas = []
-    const fornecedores = [ ]
-    // const colecoes = [ ]
+    const fornecedores = []
+    const colecoes = []
+    let filterCollection = []
 
       products.map(produto => {
+        if (
+          produto.colecoes.map(collections => {
+            filterCollection.push(collections.nome_colecao)
+          })
+        )
+
         if (
           !estilistas.some(estilista => estilista.name === produto.estilista) &&
           produto.estilista
@@ -357,13 +384,6 @@ class Relatorio extends React.Component {
         ) {
           fornecedores.push({ name: produto.fornecedor, checked: true });
         }
-
-        // if (
-        //   !colecoes.some(colecao => colecao.name === produto.colecao.name) &&
-        //   produto.colecao
-        // ) {
-        //   colecoes.push({ name: produto.colecao.name, checked: true });
-        // }
 
         if (
           !categorias.some(categoria => categoria.name === produto.categoria) &&
@@ -388,19 +408,29 @@ class Relatorio extends React.Component {
         return true
       });
 
+      filterCollection = new Set(filterCollection) //Remove itens repetidos de uma colecao 
+      const backtoArr = [...filterCollection] //transforma novamente em um array para poder ser iteravel
+
+      backtoArr.forEach(data => {
+        colecoes.push({name: data, checked: true})
+      })
+
+
     const filters = {
       Categoria: categorias,
       Subcategoria: subcategorias,
       Estampa: estampas,
       Fornecedor: fornecedores,
-      Estilista: estilistas
+      Estilista: estilistas,
+      Colecao: colecoes
     };
     this.setState({
       fornecedorInitialLen: fornecedores.length,
       estilistaInitialLen: estilistas.length,
       categoriaInitialLen: categorias.length,
       subcategoriaInitialLen: subcategorias.length,
-      estampaInitialLen: estampas.length
+      estampaInitialLen: estampas.length,
+      colecaoInitialLen: colecoes.length
     });
 
     return this.refreshFilter(filters);
@@ -412,14 +442,22 @@ class Relatorio extends React.Component {
   }
 
   filterProducts(produtos) {
-    const { categoriaFilter, subcategoriaFilter, estampaFilter, fornecedorFilter, estilistaFilter } = this.state;
+    const { categoriaFilter, subcategoriaFilter, estampaFilter, fornecedorFilter, estilistaFilter, colecaoFilter } = this.state;
+
     const produtosFiltrados = produtos.filter(produto => {
+      let collection = []
+
+      if(produto && produto.colecoes){
+        produto.colecoes.map(val => collection = val.nome_colecao)
+      }
+
       return (
         categoriaFilter.includes(produto.categoria) &&
         subcategoriaFilter.includes(produto.subcategoria) &&
         estampaFilter.includes(produto.estampa) &&
         fornecedorFilter.includes(produto.fornecedor) &&
-        estilistaFilter.includes(produto.estilista)
+        estilistaFilter.includes(produto.estilista) &&
+        colecaoFilter.includes(collection)
       );
     });
     return produtosFiltrados.sort(this.compare);
@@ -482,8 +520,15 @@ class Relatorio extends React.Component {
     const estampas = [];
     const fornecedores = []
     const estilistas = []
+    const colecoes = []
+
     filtros.map(filtro => {
       return filterObj[filtro].map(item => {
+        if (filtro === "Colecao") {
+          if (item.checked) {
+            colecoes.push(item.name);
+          }
+        }
         if (filtro === "Fornecedor") {
           if (item.checked) {
             fornecedores.push(item.name);
@@ -518,6 +563,8 @@ class Relatorio extends React.Component {
     estampas.push("");
     fornecedores.push("");
     estilistas.push("")
+    colecoes.push("")
+
     this.setState({
       filterSelected: {
         Estampa: estampas.length - 1 === this.state.estampaInitialLen,
@@ -526,7 +573,7 @@ class Relatorio extends React.Component {
         Categoria: categorias.length - 1 === this.state.categoriaInitialLen,
         Fornecedor: fornecedores.length - 1 === this.state.fornecedorInitialLen,
         Estilista: estilistas.length - 1 === this.state.estilistaInitialLen,
-
+        Colecao: colecoes.length - 1 === this.state.colecaoInitialLen,
       }
     });
     this.setState({
@@ -534,7 +581,8 @@ class Relatorio extends React.Component {
       subcategoriaFilter: subcategorias,
       estampaFilter: estampas,
       fornecedorFilter: fornecedores,
-      estilistaFilter: estilistas
+      estilistaFilter: estilistas,
+      colecaoFilter: colecoes
     });
   };
 
@@ -741,7 +789,10 @@ class Relatorio extends React.Component {
               allProgramacoes={{"":this.state.products}}
                categoriaFilter={this.state.categoriaFilter}
                 subcategoriaFilter={this.state.subcategoriaFilter}
-                 estampaFilter={this.state.estampaFilter}></PrintPage>
+                 estampaFilter={this.state.estampaFilter}
+                 colecaoFilter={this.state.colecaoFilter}
+                 >  
+                 </PrintPage>
             :this.renderProductsCardsView(this.filterProducts(this.state.products))
             
             }
