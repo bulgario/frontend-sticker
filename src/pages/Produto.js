@@ -241,7 +241,7 @@ class Produto extends React.Component {
       // qtd_vendida_preco_cheio,
       // verba_programada,
       base,
-      vitrine_uniforme
+      // vitrine_uniforme
     } = this.state.product;
     console.log(this.state.product)
     return (
@@ -276,7 +276,7 @@ class Produto extends React.Component {
               arrowLeft={<ArrowBackIosIcon color="primary" className={classes.arrow} name="angle-double-left" />}
               addArrowClickHandler
               dots
-              slidesPerPage={this.state.hideNav ? 1 : 2}
+              slidesPerPage={this.state.hideNav ? 1 : 1}
               className={classes.carousel}
             >
               {photoProduct.map(image => {
