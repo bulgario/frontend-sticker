@@ -140,6 +140,9 @@ const styles = theme => ({
     'display': 'flex',
     'width': theme.spacing(50),
     'marginBottom': theme.spacing(2)
+  },
+  padding: {
+    padding: theme.spacing(4)
   }
 });
 
@@ -169,7 +172,7 @@ class Produto extends React.Component {
       const previewImage = UTILS.handleImage(product.nome_arquivo, 400, 400)
       await this.setState({ newPhotos: previewImage });
       await this.setState({ photoProduct: previewImage });
-      
+
       const programation = this.getProgramacoes(product)
 
       await this.setState({ programations: programation })
@@ -183,7 +186,7 @@ class Produto extends React.Component {
   resize = () => {
     let currentHideNav = (window.innerWidth <= 760);
     if (currentHideNav !== this.state.hideNav) {
-        this.setState({hideNav: currentHideNav});
+      this.setState({ hideNav: currentHideNav });
     }
   }
 
@@ -236,8 +239,11 @@ class Produto extends React.Component {
       // vl_desconto,
       // markup,
       // qtd_vendida_preco_cheio,
-      // verba_programada
+      // verba_programada,
+      base,
+      vitrine_uniforme
     } = this.state.product;
+    console.log(this.state.product)
     return (
       <Fragment>
         <Header
@@ -255,29 +261,30 @@ class Produto extends React.Component {
           }
         />
 
-      <Grid
-        container
-        direction="row"
-        justify="flex-start"
-        alignItems="center"
-      >
+        <Grid
+          container
+          direction="row"
+          justify="flex-start"
+          alignItems="center"
+          className={classes.padding}
+        >
           <Grid item xs={12} sm={6} className={classes.carousel}>
             <Carousel
-            animationSpeed={1500}
-            infinite
-            arrowRight={<ArrowForwardIosIcon color="primary" className={classes.arrow} name="angle-double-right" />}
-            arrowLeft={<ArrowBackIosIcon color="primary" className={classes.arrow} name="angle-double-left" />}
-            addArrowClickHandler
-            dots
-            slidesPerPage={this.state.hideNav ? 1 : 2}
-            className={classes.carousel}
+              animationSpeed={1500}
+              infinite
+              arrowRight={<ArrowForwardIosIcon color="primary" className={classes.arrow} name="angle-double-right" />}
+              arrowLeft={<ArrowBackIosIcon color="primary" className={classes.arrow} name="angle-double-left" />}
+              addArrowClickHandler
+              dots
+              slidesPerPage={this.state.hideNav ? 1 : 2}
+              className={classes.carousel}
             >
               {photoProduct.map(image => {
                 return (
                   <Grid item justify="center">
-                  <div className={classes.border}>
-                    <img className={classes.imageStyle} src={image} alt="produto"/>
-                  </div>
+                    <div className={classes.border}>
+                      <img className={classes.imageStyle} src={image} alt="produto" />
+                    </div>
                   </Grid>
                 )
               })}
@@ -290,46 +297,49 @@ class Produto extends React.Component {
               <Typography variant="h9" color="textSecondary" component="p">{formatPrice(preco_varejo_original)}</Typography>
               {this.state.product.colecoes ? (
                 <Typography variant="h5" component="p">{this.state.product.colecoes[0].nome_colecao}</Typography>
-                ) : null}
+              ) : null}
             </Grid>
-            <Divider/>
+            <Divider />
             <Divider color="primary" className={classes.divider}></Divider>
             <Grid item xs={12}>
-                {this.state.product ? (
-                  <ExpansionPanel>
-                    <ExpansionPanelSummary
-                      expandIcon={<ExpandMoreIcon />}
-                      aria-controls="panel1a-content"
-                      id="panel1a-header"
-                    >
+              {this.state.product ? (
+                <ExpansionPanel>
+                  <ExpansionPanelSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                  >
                     <Typography color="textSecondary" variant="h5" className={classes.heading}>Detalhes do Produto</Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>      
-                      <Grid container direction="row">
-                        <Grid item xs={12}>
-                          <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Categoria:</strong>{categoria}</Typography>
-                        </Grid>
-                        <Grid item xs={12}>
-                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Sub-Categoria:</strong>{subcategoria}</Typography>
-                        </Grid>
-                        <Grid item xs={12}>
-                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Estilista:</strong>{estilista}</Typography>
-                        </Grid>
-                        <Grid item xs={12}>
-                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Fornecedor:</strong>{fornecedor}</Typography>
-                        </Grid>
-                        <Grid item xs={12}>
-                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Periodo PCP:</strong>{periodo_pcp}</Typography>
-                        </Grid>
+                  </ExpansionPanelSummary>
+                  <ExpansionPanelDetails>
+                    <Grid container direction="row">
+                      <Grid item xs={12}>
+                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Categoria:</strong>{categoria}</Typography>
                       </Grid>
-                    </ExpansionPanelDetails>
-                  </ExpansionPanel>
-                ) : null}
-            </Grid>  
+                      <Grid item xs={12}>
+                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Sub-Categoria:</strong>{subcategoria}</Typography>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Estilista:</strong>{estilista}</Typography>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Fornecedor:</strong>{fornecedor}</Typography>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Periodo PCP:</strong>{periodo_pcp}</Typography>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Base:</strong>{base}</Typography>
+                      </Grid>
+                    </Grid>
+                  </ExpansionPanelDetails>
+                </ExpansionPanel>
+              ) : null}
+            </Grid>
             <Divider color="primary" className={classes.divider}></Divider>
             <Grid item xs={12}>
               {programacoes ? programacoes.map(programacoes => {
-              return (
+                return (
                   <ExpansionPanel>
                     <ExpansionPanelSummary
                       expandIcon={<ExpandMoreIcon />}
@@ -338,30 +348,33 @@ class Produto extends React.Component {
                     >
                       <Typography color="textSecondary" variant="h5" className={classes.heading}>Programação</Typography>
                     </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>      
+                    <ExpansionPanelDetails>
                       <Grid container direction="row">
+                        <Grid item xs={12}>
+                          <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Data de Programação:</strong>{programacoes.data_prog}</Typography>
+                        </Grid>
                         <Grid item xs={12}>
                           <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Nome Programação:</strong>{programacoes.nome_programacao}</Typography>
                         </Grid>
                         <Grid item xs={12}>
-                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Quantidade Programada:</strong>{programacoes.qtde_programada}</Typography>
+                          <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Quantidade Programada:</strong>{programacoes.qtde_programada}</Typography>
                         </Grid>
                         <Grid item xs={12}>
-                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Quantidade Entregue:</strong>{programacoes.qtde_entregue}</Typography>
+                          <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Quantidade Entregue:</strong>{programacoes.qtde_entregue}</Typography>
                         </Grid>
                         <Grid item xs={12}>
-                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Data de Programação:</strong>{programacoes.data_prog}</Typography>
+                          <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Ultima Data de Agendamento:</strong>{programacoes.ultima_data_agendamento_entrega}</Typography>
                         </Grid>
                         <Grid item xs={12}>
-                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Ultima Data de Agendamento:</strong>{programacoes.ultima_data_agendamento_entrega}</Typography>
+                          <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Entrega Ajustada:</strong>{programacoes.entrega_ajustada}</Typography>
                         </Grid>
                         <Grid item xs={12}>
-                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Entrega Ajustada:</strong>{programacoes.entrega_ajustada}</Typography>
+                          <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Vitrine/Uniforme:</strong>{programacoes.vitrine_uniforme}</Typography>
                         </Grid>
                       </Grid>
                     </ExpansionPanelDetails>
                   </ExpansionPanel>
-              )
+                )
               }) : null}
             </Grid>
             <Divider color="primary" className={classes.divider}></Divider>
@@ -373,36 +386,36 @@ class Produto extends React.Component {
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                   >
-                  <Typography color="textSecondary" variant="h5" className={classes.heading}>Vendas</Typography>
+                    <Typography color="textSecondary" variant="h5" className={classes.heading}>Vendas</Typography>
                   </ExpansionPanelSummary>
-                  <ExpansionPanelDetails>      
+                  <ExpansionPanelDetails>
                     <Grid container direction="row">
                       <Grid item xs={12}>
                         <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Preco Cheio:</strong>{formatPrice(preco_varejo_original)}</Typography>
                       </Grid>
                       <Grid item xs={12}>
-                      <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Preco Medio:</strong>{}</Typography>
+                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Preco Medio:</strong>{}</Typography>
                       </Grid>
                       <Grid item xs={12}>
-                      <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Desconto Medio:</strong>{}</Typography>
+                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Desconto Medio:</strong>{}</Typography>
                       </Grid>
                       <Grid item xs={12}>
-                      <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Markup:</strong>{}</Typography>
+                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Markup:</strong>{}</Typography>
                       </Grid>
                       <Grid item xs={12}>
-                      <Typography variant="h9" color="textSecondary" component="p"><strong>Qtd Vendida Preço Cheio:</strong>{}</Typography>
+                        <Typography variant="h9" color="textSecondary" component="p"><strong>Qtd Vendida Preço Cheio:</strong>{}</Typography>
                       </Grid>
                       <Grid item xs={12}>
-                      <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Data Primeira Venda:</strong>{data_primeira_venda}</Typography>
+                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Data Primeira Venda:</strong>{data_primeira_venda}</Typography>
                       </Grid>
                       <Grid item xs={12}>
-                      <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Verba Programada:</strong>{}</Typography>
+                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Verba Programada:</strong>{}</Typography>
                       </Grid>
                       <Grid item xs={12}>
-                      <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Faturamento:</strong>{}</Typography>
+                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Faturamento:</strong>{}</Typography>
                       </Grid>
                       <Grid item xs={12}>
-                      <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Sobra Atacado:</strong>{}</Typography>
+                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Sobra Atacado:</strong>{}</Typography>
                       </Grid>
                     </Grid>
                   </ExpansionPanelDetails>
@@ -411,8 +424,8 @@ class Produto extends React.Component {
             </Grid>
             <Divider color="primary" className={classes.divider}></Divider>
           </Grid>
-    </Grid>
-  </Fragment>
+        </Grid>
+      </Fragment>
     );
   }
 }
