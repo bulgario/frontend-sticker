@@ -275,7 +275,7 @@ class Produto extends React.Component {
               arrowRight={<ArrowForwardIosIcon color="primary" className={classes.arrow} name="angle-double-right" />}
               arrowLeft={<ArrowBackIosIcon color="primary" className={classes.arrow} name="angle-double-left" />}
               addArrowClickHandler
-              dots
+              //dots
               slidesPerPage={this.state.hideNav ? 1 : 1}
               className={classes.carousel}
             >
