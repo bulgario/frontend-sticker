@@ -264,31 +264,39 @@ class Produto extends React.Component {
         <Grid
           container
           direction="row"
-          justify="flex-start"
+          justify="center"
           alignItems="center"
           className={classes.padding}
         >
           <Grid item xs={12} sm={6} className={classes.carousel}>
-            <Carousel
-              animationSpeed={1500}
-              infinite
-              arrowRight={<ArrowForwardIosIcon color="primary" className={classes.arrow} name="angle-double-right" />}
-              arrowLeft={<ArrowBackIosIcon color="primary" className={classes.arrow} name="angle-double-left" />}
-              addArrowClickHandler
-              //dots
-              slidesPerPage={this.state.hideNav ? 1 : 1}
-              className={classes.carousel}
+            <Grid
+              container
+              direction="row"
+              justify="center"
+              alignItems="center"
+              className={classes.padding}
             >
-              {photoProduct.map(image => {
-                return (
-                  <Grid item justify="center">
-                    <div className={classes.border}>
-                      <img className={classes.imageStyle} src={image} alt="produto" />
-                    </div>
-                  </Grid>
-                )
-              })}
-            </Carousel>
+              <Carousel
+                animationSpeed={1500}
+                infinite
+                arrowRight={<ArrowForwardIosIcon color="primary" className={classes.arrow} name="angle-double-right" />}
+                arrowLeft={<ArrowBackIosIcon color="primary" className={classes.arrow} name="angle-double-left" />}
+                addArrowClickHandler
+                dots
+                slidesPerPage={this.state.hideNav ? 1 : 1}
+                className={classes.carousel}
+              >
+                {photoProduct.map(image => {
+                  return (
+                    <Grid item justify="center">
+                      <div className={classes.border}>
+                        <img className={classes.imageStyle} src={image} alt="produto" />
+                      </div>
+                    </Grid>
+                  )
+                })}
+              </Carousel>
+            </Grid>
           </Grid>
           <Grid container xs={12} sm={6}>
             <Grid item xs={12}>
