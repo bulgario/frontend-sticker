@@ -232,18 +232,22 @@ class Produto extends React.Component {
       // estampa,
       // cor_produto,
       data_primeira_venda,
-      // faturamento,
-      // sobra_atacado
+      faturamento,
+      // sobra_atacado,
       // qtd_venda,
       // vl_pago,
-      // vl_desconto,
+      vl_desconto,
       // markup,
       // qtd_vendida_preco_cheio,
       // verba_programada,
       base,
-      // vitrine_uniforme
+      vitrine_uniforme
     } = this.state.product;
     console.log(this.state.product)
+
+    const preco_medio = this.state.product.vl_desconto / this.state.product.qtd_venda
+    const desconto_medio =  this.state.vl_desconto / this.state.qtd_venda
+
     return (
       <Fragment>
         <Header
@@ -377,7 +381,7 @@ class Produto extends React.Component {
                           <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Entrega Ajustada:</strong>{programacoes.entrega_ajustada}</Typography>
                         </Grid>
                         <Grid item xs={12}>
-                          <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Vitrine/Uniforme:</strong>{programacoes.vitrine_uniforme}</Typography>
+                          <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Vitrine/Uniforme:</strong>{vitrine_uniforme}</Typography>
                         </Grid>
                       </Grid>
                     </ExpansionPanelDetails>
@@ -387,7 +391,7 @@ class Produto extends React.Component {
             </Grid>
             <Divider color="primary" className={classes.divider}></Divider>
             <Grid item xs={12}>
-              {this.state.product ? (
+              {preco_medio && vl_desconto && faturamento !== "" ? (
                 <ExpansionPanel>
                   <ExpansionPanelSummary
                     expandIcon={<ExpandMoreIcon />}
@@ -402,13 +406,10 @@ class Produto extends React.Component {
                         <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Preco Cheio:</strong>{formatPrice(preco_varejo_original)}</Typography>
                       </Grid>
                       <Grid item xs={12}>
-                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Preco Medio:</strong>{}</Typography>
+                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Preco Medio:</strong>{preco_medio}</Typography>
                       </Grid>
                       <Grid item xs={12}>
-                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Desconto Medio:</strong>{}</Typography>
-                      </Grid>
-                      <Grid item xs={12}>
-                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Markup:</strong>{}</Typography>
+                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Desconto Medio:</strong>{desconto_medio}</Typography>
                       </Grid>
                       <Grid item xs={12}>
                         <Typography variant="h9" color="textSecondary" component="p"><strong>Qtd Vendida Preço Cheio:</strong>{}</Typography>
@@ -420,7 +421,7 @@ class Produto extends React.Component {
                         <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Verba Programada:</strong>{}</Typography>
                       </Grid>
                       <Grid item xs={12}>
-                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Faturamento:</strong>{}</Typography>
+                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Faturamento:</strong>{faturamento}</Typography>
                       </Grid>
                       <Grid item xs={12}>
                         <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Sobra Atacado:</strong>{}</Typography>
