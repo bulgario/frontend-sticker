@@ -236,17 +236,23 @@ class Produto extends React.Component {
       // sobra_atacado,
       // qtd_venda,
       // vl_pago,
-      vl_desconto,
+      // vl_desconto,
       // markup,
       // qtd_vendida_preco_cheio,
-      // verba_programada,
+      verba_programada,
       base,
       vitrine_uniforme
     } = this.state.product;
-    console.log(this.state.product)
 
-    const preco_medio = this.state.product.vl_desconto / this.state.product.qtd_venda
-    const desconto_medio =  this.state.vl_desconto / this.state.qtd_venda
+    let preco_medio = this.state.product.qtd_venda / this.state.product.vl_pago
+    if (isNaN(preco_medio)) {
+      preco_medio = ""
+    };
+
+    let desconto_medio = this.state.product.vl_desconto / this.state.product.qtd_venda
+    if (isNaN(desconto_medio)) {
+      desconto_medio = ""
+    };
 
     return (
       <Fragment>
@@ -391,7 +397,7 @@ class Produto extends React.Component {
             </Grid>
             <Divider color="primary" className={classes.divider}></Divider>
             <Grid item xs={12}>
-              {preco_medio && vl_desconto && faturamento !== "" ? (
+              {this.state.product && preco_medio !== "" && desconto_medio !== "" && faturamento !== "" ? (
                 <ExpansionPanel>
                   <ExpansionPanelSummary
                     expandIcon={<ExpandMoreIcon />}
@@ -406,10 +412,10 @@ class Produto extends React.Component {
                         <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Preco Cheio:</strong>{formatPrice(preco_varejo_original)}</Typography>
                       </Grid>
                       <Grid item xs={12}>
-                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Preco Medio:</strong>{preco_medio}</Typography>
+                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Preco Medio:</strong>{formatPrice(preco_medio)}</Typography>
                       </Grid>
                       <Grid item xs={12}>
-                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Desconto Medio:</strong>{desconto_medio}</Typography>
+                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Desconto Medio:</strong>{formatPrice(desconto_medio)}</Typography>
                       </Grid>
                       <Grid item xs={12}>
                         <Typography variant="h9" color="textSecondary" component="p"><strong>Qtd Vendida Preço Cheio:</strong>{}</Typography>
@@ -418,10 +424,10 @@ class Produto extends React.Component {
                         <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Data Primeira Venda:</strong>{data_primeira_venda}</Typography>
                       </Grid>
                       <Grid item xs={12}>
-                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Verba Programada:</strong>{}</Typography>
+                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Verba Programada:</strong>{formatPrice(verba_programada)}</Typography>
                       </Grid>
                       <Grid item xs={12}>
-                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Faturamento:</strong>{faturamento}</Typography>
+                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Faturamento:</strong>{formatPrice(faturamento)}</Typography>
                       </Grid>
                       <Grid item xs={12}>
                         <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Sobra Atacado:</strong>{}</Typography>
