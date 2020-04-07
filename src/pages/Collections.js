@@ -108,25 +108,28 @@ function Collections(props) {
         </Grid>
 
         <Grid container justify="center">
-          <FormControl variant="outlined" className={classes.formControl}>
-            <InputLabel id="demo-simple-select-outlined-label">Coleções</InputLabel>
-            <Select
-              className={classes.select}
-              labelId="demo-simple-select-outlined-label"
-              id="demo-simple-select-outlined"
-              value={choosedCollection}        
-              onChange={e => setChoosedCollection(e.target.value) }
-              label="Coleções"
-            >
-            {collections.map(collection => {
-              return (
-                <MenuItem key={collection} value={collection}>
-                  {collection}
-                </MenuItem>
-              );
-            })}
-            </Select>
-          </FormControl>
+          { collections.length > 1 ? (
+             <FormControl variant="outlined" className={classes.formControl}>
+             <InputLabel id="demo-simple-select-outlined-label">Coleções</InputLabel>
+                <Select
+                className={classes.select}
+                labelId="demo-simple-select-outlined-label"
+                id="demo-simple-select-outlined"
+                value={choosedCollection}        
+                onChange={e => setChoosedCollection(e.target.value) }
+                label="Coleções"
+              >
+              {collections.map(collection => {
+                return (
+                  <MenuItem key={collection} value={collection}>
+                    {collection}
+                  </MenuItem>
+                );
+              })}
+              </Select>
+           </FormControl>
+          ) : null }
+         
         </Grid>
         
         <Grid container item justify="center">
