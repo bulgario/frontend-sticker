@@ -105,6 +105,14 @@ import {
       if (this.matchRoute(route, ROUTES.PRODUTOS)) {
         return true;
       }
+
+      if (this.matchRoute(route, ROUTES.COLECOES)) {
+        return true;
+      }
+
+      if (this.matchRoute(route, ROUTES.COLECAO)) {
+        return true;
+      }
   
       return false;
     };

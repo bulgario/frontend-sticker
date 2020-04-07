@@ -9,6 +9,8 @@ import Produto from './pages/Produto'
 import MyReports from './pages/MyReports'
 import Relatorio from './pages/Relatorio'
 import Produtos from './pages/AllProducts'
+import Colecoes from './pages/Collections'
+import Colecao from './pages/choosedCollection'
 
 import User from "./services/User";
 
@@ -48,6 +50,8 @@ function PrivateRoutes(props) {
 			<Route path={ROUTES.MYREPORTS} component={MyReports} />
 			<Route path={ROUTES.RELATORIO} component={Relatorio} />
 			<Route path={ROUTES.PRODUTOS} component={Produtos} />
+			<Route path={ROUTES.COLECOES} component={Colecoes} />
+			<Route path={ROUTES.COLECAO} component={Colecao} />
 		  </Switch>
 		</>
 	  );
