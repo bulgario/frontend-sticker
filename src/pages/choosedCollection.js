@@ -84,7 +84,7 @@ function Colecao(props) {
         );
       }
     
-  }, [])
+  }, [props])
   
 
 
