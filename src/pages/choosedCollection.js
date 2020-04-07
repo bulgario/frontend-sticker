@@ -60,33 +60,29 @@ function Colecao(props) {
 
 
 
-  const getCollection = () => {
-    const user = new User();
-    const id_marca_estilo = user.user.id_marca_estilo;
-    const colecao = props.match.params.collection
-    try {
-      axios.get(`${BASE_URL}/collections/getSingleCollectionProducts`, {
-          params: {
-            id_marca_estilo,
-            colecao
-          }
-        })
-        .then(data => {
-          if(data.data.length > 1) {
-            setProducts(data.data)
-          }
-        });
-    } catch (err) {
-      console.log('Error getting data from'`${BASE_URL}/collections/getSingleCollectionProducts`, err)
-      return props.enqueueSnackbar(
-        "Não Encontramos produtos para esse Colecao.",
-        { variant: "error" }
-      );
-    }
-  }
-
   useEffect(() => {
-    getCollection()
+      const user = new User();
+      const id_marca_estilo = user.user.id_marca_estilo;
+      const colecao = props.match.params.collection
+      try {
+        axios.get(`${BASE_URL}/collections/getSingleCollectionProducts`, {
+            params: {
+              id_marca_estilo,
+              colecao
+            }
+          })
+          .then(data => {
+            if(data.data.length > 1) {
+              setProducts(data.data)
+            }
+          });
+      } catch (err) {
+        console.log('Error getting data from'`${BASE_URL}/collections/getSingleCollectionProducts`, err)
+        return props.enqueueSnackbar(
+          "Não Encontramos produtos para esse Colecao.",
+          { variant: "error" }
+        );
+      }
     
   }, [])
   
