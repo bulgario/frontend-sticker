@@ -63,12 +63,13 @@ function Colecao(props) {
   useEffect(() => {
       const user = new User();
       const id_marca_estilo = user.user.id_marca_estilo;
-      const colecao = props.match.params.collection
+      const collection = props.match.params.collection
+
       try {
         axios.get(`${BASE_URL}/collections/getSingleCollectionProducts`, {
             params: {
               id_marca_estilo,
-              colecao
+              collection
             }
           })
           .then(data => {

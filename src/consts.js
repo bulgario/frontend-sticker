@@ -6,7 +6,9 @@ export const ROUTES = {
   SELECTEDPRODUCT: "/produto",
   MYREPORTS: "/meusprodutos",
   RELATORIO: "/relatorio",
-  PRODUTOS: "/produtos"
+  PRODUTOS: "/produtos",
+  COLECAO: "/colecao/:collection",
+  COLECOES: "/colecoes"
 };
 
 export const OMNI_URL =
