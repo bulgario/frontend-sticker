@@ -15,6 +15,7 @@ import User from "../services/User";
 
 import CardProduct from "../components/recursableComponents/CardProduct";
 
+import Filters from "../components/recursableComponents/Drawers"
 
 
 const styles = theme => ({
@@ -57,18 +58,18 @@ const styles = theme => ({
 function Colecao(props) {
   const { classes } = props;
   const [products, setProducts] = useState([])
-
+  const { collection } = props.match.params
 
 
   useEffect(() => {
       const user = new User();
       const id_marca_estilo = user.user.id_marca_estilo;
-      const colecao = props.match.params.collection
+
       try {
         axios.get(`${BASE_URL}/collections/getSingleCollectionProducts`, {
             params: {
               id_marca_estilo,
-              colecao
+              collection
             }
           })
           .then(data => {
@@ -96,6 +97,30 @@ function Colecao(props) {
   };
 
 
+  const getFilterData = (data) => {
+    const filterOptions = {
+      categoria: [],
+      subcategoria: [],
+      estampa: [],
+      fornecedor: [],
+      estilista: [],
+      colecao: [],
+    }
+    if(data) {
+      data.map(values => {
+        filterOptions.categoria.push(values.data.categoria)
+        filterOptions.subcategoria.push(values.data.subcategoria)
+        filterOptions.estampa.push(values.data.estampa)
+        filterOptions.fornecedor.push(values.data.fornecedor)
+        filterOptions.estilista.push(values.data.estilista)
+        filterOptions.colecao.push(values.data.colecao)
+      })
+
+    } else {
+      console.log("You dont have products", data)
+    }
+  }
+
   return (
     <Fragment>
       <Header
@@ -111,7 +136,15 @@ function Colecao(props) {
           </IconButton>
         }
       />
-       <Grid
+      <Grid
+        container
+        xs={12}
+      >
+        {getFilterData(products)}
+        <Filters
+        />
+      </Grid>
+       {/* <Grid
         container
         direction="row"
         justify="center"
@@ -125,10 +158,9 @@ function Colecao(props) {
               key={`${produtos.id}${index}`} 
               productToRender={produtos.data} 
               handleClickProduct={() => handleClickProduct(produtos.id)}
-              
               />)
         }) }
-      </Grid>
+      </Grid> */}
     </Fragment>
   )
 }
