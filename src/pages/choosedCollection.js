@@ -1,4 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react';
+import { connect } from 'react-redux';
 import { withRouter } from "react-router-dom";
 
 import { withStyles } from "@material-ui/core/styles";
@@ -16,6 +17,10 @@ import User from "../services/User";
 import CardProduct from "../components/recursableComponents/CardProduct";
 
 import Filters from "../components/recursableComponents/Drawers"
+import FilterList from "@material-ui/icons/FilterList";
+import Typography from "@material-ui/core/Typography";
+
+
 
 
 const styles = theme => ({
@@ -58,8 +63,13 @@ const styles = theme => ({
 function Colecao(props) {
   const { classes } = props;
   const [products, setProducts] = useState([])
-  const { collection } = props.match.params
+  const [filterOpt, setFilterOpt] = useState([])
+  const [fields, setFields] = useState([])
+  const [productsFitered, setProductsFiltered] = useState([])
+  const [checkFilter, setCheckFilter] = useState(false)
+  const [open, setOpenFilter] = useState(false)
 
+  const { collection } = props.match.params
 
   useEffect(() => {
       const user = new User();
@@ -74,7 +84,9 @@ function Colecao(props) {
           })
           .then(data => {
             if(data.data.length > 1) {
+              const filterOpt = getFilterData(data.data)
               setProducts(data.data)
+              setFilterOpt(filterOpt)  
             }
           });
       } catch (err) {
@@ -84,17 +96,20 @@ function Colecao(props) {
           { variant: "error" }
         );
       }
-    
-  }, [props])
-  
+  }, [])
 
+  useEffect(() => {
+    handleFilterProduct()
+  }, [filterOpt])
 
-  const handleClickProduct = (id) => {
-    id ? props.history.push(`/produto?produto=${id}`) : props.enqueueSnackbar(
-      "Não Encontramos esse produto, tente recarregar a pagina",
-      { variant: "error" }
-    );
-  };
+  useEffect(() => {
+    if(props.produtos.length > 0) {
+      setProductsFiltered(props.produtos)
+      setCheckFilter(true)
+    } else {
+      setCheckFilter(false)
+    }
+  }, [props.produtos])
 
 
   const getFilterData = (data) => {
@@ -116,12 +131,70 @@ function Colecao(props) {
         filterOptions.colecao.push(values.data.colecao)
       })
 
+    //GET ALL THE FIELDS NAMES TO BE PASSED TO THE CHILD
+    Object.keys(filterOptions).map(filterItem => {
+      setFields([...fields, filterItem])
+    })
+
+      return filterOptions
+
     } else {
       console.log("You dont have products", data)
     }
   }
 
+  const handleClickProduct = (id) => {
+    id ? props.history.push(`/produto?produto=${id}`) : props.enqueueSnackbar(
+      "Não Encontramos esse produto, tente recarregar a pagina",
+      { variant: "error" }
+    );
+  };
+
+  const handleFilterProduct = () => {
+    const { dispatch } = props
+    dispatch({
+      type: 'UPDATE_FILTER',
+      filterOpt,
+    })
+  }
+
+  const openFilter = () => {
+    setOpenFilter(!open);
+  };
+
+
+  const filteredList = (
+    productsFitered ? productsFitered.map(produto => {
+      return produto.map((product) => {
+        return product.map((produto, index) => {
+          return (
+            <CardProduct
+              showBadges={true} 
+              key={`${produto.id}${index}`} 
+              productToRender={produto.data} 
+              handleClickProduct={() => handleClickProduct(produto.id)}
+            />
+          )
+        })
+      })
+    }) : null
+  )
+
+  const noFilteredList = (
+    <h1>for now...</h1>
+  //   products.map((produtos, index) => {
+  //     return (
+  //      <CardProduct
+  //        showBadges={true} 
+  //        key={`${produtos.id}${index}`} 
+  //        productToRender={produtos.data} 
+  //        handleClickProduct={() => handleClickProduct(produtos.id)}
+  //        />)
+  //  })
+  )
+
   return (
+
     <Fragment>
       <Header
         title="Coleção"
@@ -137,30 +210,42 @@ function Colecao(props) {
         }
       />
       <Grid
-        container
-        xs={12}
+         id="some"
+         item
+         container
+         direction="row"
+         justify="space-between"
+         alignItems="flex-start"
+         sm={12}
+         xs={12}
+        // onClick={() => handleFilterProduct(products)}
       >
-        {getFilterData(products)}
+        <Grid
+            container
+            xs={1}
+            item
+            sm={2}
+            alignItems="center"
+            justify="flex-start"
+          >
+            </Grid>
+
         <Filters
+          // fields={fields}
+          products={products}
         />
       </Grid>
-       {/* <Grid
+       <Grid
         container
         direction="row"
         justify="center"
         alignItems="center"
         spacing={0}
       >
-        { products.map((produtos, index) => {
-           return (
-            <CardProduct
-              showBadges={true} 
-              key={`${produtos.id}${index}`} 
-              productToRender={produtos.data} 
-              handleClickProduct={() => handleClickProduct(produtos.id)}
-              />)
-        }) }
-      </Grid> */}
+        { checkFilter ? 
+          filteredList
+         : noFilteredList }
+      </Grid>
     </Fragment>
   )
 }
@@ -168,4 +253,12 @@ function Colecao(props) {
 const wrapperComponent = withStyles(styles)(
   withSnackbar(withRouter(Colecao))
 );
-export default wrapperComponent;
+
+function mapStateToProps(state) {
+  return {
+    filters: state.filter,
+    produtos: state.products,
+  }
+}
+
+export default connect(mapStateToProps)(wrapperComponent);
