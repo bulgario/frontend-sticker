@@ -164,58 +164,73 @@ class Filters extends React.Component {
 
 
     const sideListOrder = (
-      <div>SOU O PAINEL DA DIREITA</div>
+      <List dense className={classes.root}>
+      {["Cor", "Preco", "Entrega Ajustada"].map(value => (
+        <ListItem 
+          key={value} 
+          button
+        >
+        <ListItemText
+          // id={labelId}
+          secondary={value}
+          className={classes.itemLabel}
+            />
+            <Checkbox
+              edge="start"
+              // onClick={() => this.handleCheckItem(field, item)}
+              // inputProps={{ "aria-labelledby": labelId }}
+              // checked={item.checked}
+              color="primary"
+            />
+        </ListItem>
+      ))}
+       <Grid container item justify="center">
+          <Button
+            className={classes.button}
+            variant="contained"
+            color="primary"
+            // onClick={ () => this.handleDispatch(filterOptions) }
+          >
+            Ordenar
+          </Button>
+        </Grid>
+    </List>
     );
 
 
     return (
-      <div>
-        <Grid container xs={12}>
-          <Button 
-            onClick={this.toggleDrawer('left', true)}
-          >
+      <Grid 
+        container
+        direction="row"
+        justify="space-between"
+        alignItems="center"
+        xs={12}
+      >
+        <Grid 
+          item 
+          md={6}
+          justify="flex-start"
+        >
+          <Button onClick={this.toggleDrawer('left', true)}>
             <FormatListBulletedIcon/>
             Filtrar
           </Button>
-  
-          <Button 
-            onClick={this.toggleDrawer('right', true)}
-          >
-            <FormatListBulletedIcon/>
-            Ordenar
-          </Button>
         </Grid>
-
-
         <Drawer 
         //AJUSTAR ABRE E FECHA DO TOGGLE
           open={this.state.left}  
           onClose={this.toggleDrawer('left', false)}
         >
-          <div
-            tabIndex={0}
-            role="button"
-            // onClick={this.toggleDrawer('left', false)}
-            // onKeyDown={this.toggleDrawer('left', false)}
-          >
-            {sideListFilter}
-          </div>
+        <div
+          tabIndex={0}
+          role="button"
+          // onClick={this.toggleDrawer('left', false)}
+          // onKeyDown={this.toggleDrawer('left', false)}
+        >
+          {sideListFilter}
+        </div>
         </Drawer>
-
-
-
-
-        <Drawer anchor="right" open={this.state.right} onClose={this.toggleDrawer('right', false)}>
-          <div
-            tabIndex={0}
-            role="button"
-            onClick={this.toggleDrawer('right', false)}
-            onKeyDown={this.toggleDrawer('right', false)}
-          >
-            {sideListOrder}
-          </div>
-        </Drawer>
-      </div>
+      </Grid>
     );
   }
 }

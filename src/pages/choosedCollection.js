@@ -181,16 +181,15 @@ function Colecao(props) {
   )
 
   const noFilteredList = (
-    <h1>for now...</h1>
-  //   products.map((produtos, index) => {
-  //     return (
-  //      <CardProduct
-  //        showBadges={true} 
-  //        key={`${produtos.id}${index}`} 
-  //        productToRender={produtos.data} 
-  //        handleClickProduct={() => handleClickProduct(produtos.id)}
-  //        />)
-  //  })
+    products.map((produtos, index) => {
+      return (
+       <CardProduct
+         showBadges={true} 
+         key={`${produtos.id}${index}`} 
+         productToRender={produtos.data} 
+         handleClickProduct={() => handleClickProduct(produtos.id)}
+         />)
+    })
   )
 
   return (
