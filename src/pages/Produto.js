@@ -232,18 +232,28 @@ class Produto extends React.Component {
       // estampa,
       // cor_produto,
       data_primeira_venda,
-      // faturamento,
-      // sobra_atacado
+      faturamento,
+      // sobra_atacado,
       // qtd_venda,
       // vl_pago,
       // vl_desconto,
       // markup,
       // qtd_vendida_preco_cheio,
-      // verba_programada,
+      verba_programada,
       base,
-      // vitrine_uniforme
+      vitrine_uniforme
     } = this.state.product;
-    console.log(this.state.product)
+
+    let preco_medio = this.state.product.qtd_venda / this.state.product.vl_pago
+    if (isNaN(preco_medio)) {
+      preco_medio = ""
+    };
+
+    let desconto_medio = this.state.product.vl_desconto / this.state.product.qtd_venda
+    if (isNaN(desconto_medio)) {
+      desconto_medio = ""
+    };
+
     return (
       <Fragment>
         <Header
@@ -264,31 +274,39 @@ class Produto extends React.Component {
         <Grid
           container
           direction="row"
-          justify="flex-start"
+          justify="center"
           alignItems="center"
           className={classes.padding}
         >
           <Grid item xs={12} sm={6} className={classes.carousel}>
-            <Carousel
-              animationSpeed={1500}
-              infinite
-              arrowRight={<ArrowForwardIosIcon color="primary" className={classes.arrow} name="angle-double-right" />}
-              arrowLeft={<ArrowBackIosIcon color="primary" className={classes.arrow} name="angle-double-left" />}
-              addArrowClickHandler
-              //dots
-              slidesPerPage={this.state.hideNav ? 1 : 1}
-              className={classes.carousel}
+            <Grid
+              container
+              direction="row"
+              justify="center"
+              alignItems="center"
+              className={classes.padding}
             >
-              {photoProduct.map(image => {
-                return (
-                  <Grid item justify="center">
-                    <div className={classes.border}>
-                      <img className={classes.imageStyle} src={image} alt="produto" />
-                    </div>
-                  </Grid>
-                )
-              })}
-            </Carousel>
+              <Carousel
+                animationSpeed={1500}
+                infinite
+                arrowRight={<ArrowForwardIosIcon color="primary" className={classes.arrow} name="angle-double-right" />}
+                arrowLeft={<ArrowBackIosIcon color="primary" className={classes.arrow} name="angle-double-left" />}
+                addArrowClickHandler
+                dots
+                slidesPerPage={this.state.hideNav ? 1 : 1}
+                className={classes.carousel}
+              >
+                {photoProduct.map(image => {
+                  return (
+                    <Grid item justify="center">
+                      <div className={classes.border}>
+                        <img className={classes.imageStyle} src={image} alt="produto" />
+                      </div>
+                    </Grid>
+                  )
+                })}
+              </Carousel>
+            </Grid>
           </Grid>
           <Grid container xs={12} sm={6}>
             <Grid item xs={12}>
@@ -369,7 +387,7 @@ class Produto extends React.Component {
                           <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Entrega Ajustada:</strong>{programacoes.entrega_ajustada}</Typography>
                         </Grid>
                         <Grid item xs={12}>
-                          <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Vitrine/Uniforme:</strong>{programacoes.vitrine_uniforme}</Typography>
+                          <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Vitrine/Uniforme:</strong>{vitrine_uniforme}</Typography>
                         </Grid>
                       </Grid>
                     </ExpansionPanelDetails>
@@ -379,7 +397,7 @@ class Produto extends React.Component {
             </Grid>
             <Divider color="primary" className={classes.divider}></Divider>
             <Grid item xs={12}>
-              {this.state.product ? (
+              {this.state.product && preco_medio !== "" && desconto_medio !== "" && faturamento !== "" ? (
                 <ExpansionPanel>
                   <ExpansionPanelSummary
                     expandIcon={<ExpandMoreIcon />}
@@ -394,13 +412,10 @@ class Produto extends React.Component {
                         <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Preco Cheio:</strong>{formatPrice(preco_varejo_original)}</Typography>
                       </Grid>
                       <Grid item xs={12}>
-                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Preco Medio:</strong>{}</Typography>
+                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Preco Medio:</strong>{formatPrice(preco_medio)}</Typography>
                       </Grid>
                       <Grid item xs={12}>
-                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Desconto Medio:</strong>{}</Typography>
-                      </Grid>
-                      <Grid item xs={12}>
-                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Markup:</strong>{}</Typography>
+                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Desconto Medio:</strong>{formatPrice(desconto_medio)}</Typography>
                       </Grid>
                       <Grid item xs={12}>
                         <Typography variant="h9" color="textSecondary" component="p"><strong>Qtd Vendida Preço Cheio:</strong>{}</Typography>
@@ -409,10 +424,10 @@ class Produto extends React.Component {
                         <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Data Primeira Venda:</strong>{data_primeira_venda}</Typography>
                       </Grid>
                       <Grid item xs={12}>
-                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Verba Programada:</strong>{}</Typography>
+                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Verba Programada:</strong>{formatPrice(verba_programada)}</Typography>
                       </Grid>
                       <Grid item xs={12}>
-                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Faturamento:</strong>{}</Typography>
+                        <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Faturamento:</strong>{formatPrice(faturamento)}</Typography>
                       </Grid>
                       <Grid item xs={12}>
                         <Typography variant="h9" color="textSecondary" component="p"><strong className={classes.strongPosition}>Sobra Atacado:</strong>{}</Typography>

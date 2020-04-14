@@ -148,7 +148,7 @@ class MyReporstsCards extends React.Component {
         }
         this.setState({ disabled: true });
       } catch (error) {
-        if(error.response.status === 409) {
+        if (error.response.status === 409) {
           this.props.enqueueSnackbar("Nome do Relatório já existe.", {
             variant: "error"
           });
@@ -156,7 +156,7 @@ class MyReporstsCards extends React.Component {
           this.props.enqueueSnackbar("Erro ao Salvar Seu Relatório.", {
             variant: "error"
           });
-        } 
+        }
       }
     };
 
@@ -219,7 +219,7 @@ class MyReporstsCards extends React.Component {
         }
       }
     };
-  
+
     return (
       <Fragment>
         <Grid item xs={12}>
@@ -231,35 +231,40 @@ class MyReporstsCards extends React.Component {
             <Container className={classes.root}>
               <Card className={classes.card} variant="outlined">
                 <CardContent>
-                  <Grid item xs={12} className={classes.gridItem}>
-                    <Input
-                      defaultValue={nameCardBox}
-                      onChange={handleNameChange}
-                      placeholder="Nome relatório"
-                      className={classes.input}
-                      disabled={this.state.disabled && !this.props.isNewRelatory}
-                      inputProps={{
-                        "aria-label": "Description"
-                      }}
-                      value={this.props.meusProdutos.nome_relatorio || "Nome relatório"}
-                    />
-                    {this.state.disabled  && !this.props.isNewRelatory?  (
-                      <CreateIcon
-                        onClick={handleInputDisable}
-                        className={classes.CreateIcon}
+                  <Grid container justify="space-around" direction="row" alignItems="center">
+                    <Grid item xs={6}>
+                      <Input
+                        fullWidth
+                        defaultValue={nameCardBox}
+                        onChange={handleNameChange}
+                        placeholder="Nome relatório"
+                        className={classes.input}
+                        disabled={this.state.disabled && !this.props.isNewRelatory}
+                        inputProps={{
+                          "aria-label": "Description"
+                        }}
+                        value={this.props.meusProdutos.nome_relatorio || "Nome relatório"}
                       />
-                    ) : (
-                      <CheckIcon
-                        color="primary"
-                        className={classes.checkSave}
-                        onClick={handleEditData}
+                    </Grid>
+                    <Grid item xs={6}>
+                      {this.state.disabled && !this.props.isNewRelatory ? (
+                        <CreateIcon
+                          onClick={handleInputDisable}
+                          className={classes.CreateIcon}
+                        />
+                      ) : (
+                          <CheckIcon
+                            color="primary"
+                            className={classes.checkSave}
+                            onClick={handleEditData}
+                          />
+                        )}
+                      <DeleteIcon
+                        // color="primary"
+                        className={classes.deleteIcon}
+                        onClick={handleClickOpen}
                       />
-                    )}
-                    <DeleteIcon
-                      // color="primary"
-                      className={classes.deleteIcon}
-                      onClick={handleClickOpen}
-                    />
+                    </Grid>
                   </Grid>
                   <Grid item xs={12} justify="flex-end">
                     <CardActions className={classes.controls}>
