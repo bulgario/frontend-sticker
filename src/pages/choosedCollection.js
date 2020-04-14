@@ -74,6 +74,10 @@ function Colecao(props) {
   useEffect(() => {
       const user = new User();
       const id_marca_estilo = user.user.id_marca_estilo;
+<<<<<<< .merge_file_a14832
+=======
+      const collection = props.match.params.collection
+>>>>>>> .merge_file_a20984
 
       try {
         axios.get(`${BASE_URL}/collections/getSingleCollectionProducts`, {

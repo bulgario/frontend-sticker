@@ -35,24 +35,27 @@ const styles = theme => ({
     paddingTop: "25px",
     paddingBottom: "18px",
   },
-    leftBarLabel: { 
+  leftBarLabel: {
     backgroundColor: "#FCB92C",
-    width:5,
+    width: 5,
     // height:'100%',
-    marginRight:theme.spacing(4),
+    marginRight: theme.spacing(4),
     position: 'absolute',
     height: '62px',
     left: '0px'
   },
-  labelWrapper: { 
+  labelWrapper: {
     marginLeft: theme.spacing(-8),
     marginBottom: theme.spacing(3)
   },
   button: {
     margin: theme.spacing(1),
     padding: theme.spacing(1.5),
-    color:'white'
+    color: 'white'
   },
+  spacing: {
+    padding: theme.spacing(3)
+  }
 });
 
 
@@ -67,10 +70,10 @@ function Collections(props) {
 
     try {
       axios.get(`${BASE_URL}/collections/getAllCollections`, {
-          params: {
-            id_marca_estilo
-          }
-        })
+        params: {
+          id_marca_estilo
+        }
+      })
         .then(collections => {
           setCollection(collections.data)
         });
@@ -78,11 +81,11 @@ function Collections(props) {
       console.log("Error getting collections:", err);
     }
   }
-  
+
   useEffect(() => {
     getCollections()
   }, [])
-  
+
   return (
     <Fragment>
       <Header
@@ -99,40 +102,38 @@ function Collections(props) {
           </IconButton>
         }
       />
-      <Grid container justify="center">   
-          <Grid item >
-            <div className={classes.leftBarLabel}></div>
-              <Typography variant="h4" component="h5">Limite de Recebimento</Typography>
-              <Grid item ></Grid>
-          </Grid>
+      <Grid container
+        direction="column"
+        justify="space-evenly"
+        alignItems="center">
+        <Grid item xs={12} className={classes.spacing}>
+          <div className={classes.leftBarLabel}></div>
+          <Typography variant="h4" component="h5">Limite de Recebimento</Typography>
         </Grid>
-
-        <Grid container justify="center">
-          { collections.length > 1 ? (
-             <FormControl variant="outlined" className={classes.formControl}>
-             <InputLabel id="demo-simple-select-outlined-label">Coleções</InputLabel>
-                <Select
+        <Grid item xs={12} className={classes.spacing}>
+          {collections.length > 1 ? (
+            <FormControl variant="outlined" className={classes.formControl}>
+              <InputLabel id="demo-simple-select-outlined-label">Coleções</InputLabel>
+              <Select
                 className={classes.select}
                 labelId="demo-simple-select-outlined-label"
                 id="demo-simple-select-outlined"
-                value={choosedCollection}        
-                onChange={e => setChoosedCollection(e.target.value) }
+                value={choosedCollection}
+                onChange={e => setChoosedCollection(e.target.value)}
                 label="Coleções"
               >
-              {collections.map(collection => {
-                return (
-                  <MenuItem key={collection} value={collection}>
-                    {collection}
-                  </MenuItem>
-                );
-              })}
+                {collections.map(collection => {
+                  return (
+                    <MenuItem key={collection} value={collection}>
+                      {collection}
+                    </MenuItem>
+                  );
+                })}
               </Select>
-           </FormControl>
-          ) : null }
-         
+            </FormControl>
+          ) : null}
         </Grid>
-        
-        <Grid container item justify="center">
+        <Grid item xs={12} className={classes.spacing}>
           <Button
             className={classes.button}
             variant="contained"
@@ -140,8 +141,8 @@ function Collections(props) {
             onClick={() => props.history.push(`colecao/${choosedCollection}`)}
           >
             Buscar
-          </Button>
-        </Grid>
+          </Button></Grid>
+      </Grid>
 
     </Fragment>
   )
