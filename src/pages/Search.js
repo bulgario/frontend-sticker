@@ -189,9 +189,6 @@ class Search extends React.Component {
           </Grid>
         </Grid>
       );
-    
-
-    return null;
   }
   render(props) {
     const { classes } = this.props
