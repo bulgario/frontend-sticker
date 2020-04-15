@@ -13,6 +13,7 @@ import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 
 import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
+import FilterListIcon from '@material-ui/icons/FilterList';
 import Grid from "@material-ui/core/Grid";
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -64,10 +65,8 @@ class Filters extends React.Component {
       label: item.label,
       checked: item.checked 
     }
+
     await this.setState({ filterOptions: [...filterOptions, filters]  })
-
-    //FALTA REMOVER ITENS QUE SAO CHECKED DEPOIS NAO ESTAO MAIS CHECKED
-
   }
 
 
@@ -87,7 +86,7 @@ class Filters extends React.Component {
 
     this.props.dispatch({ type: 'UPDATE_PRODUCTS', 
       products: this.props.products,
-      filterOptions: filterOptions,
+      // filterOptions: filterOptions,
       selectedFilters: this.state.selectedOptFilter 
     })
 
@@ -98,8 +97,12 @@ class Filters extends React.Component {
     const { classes, filters } = this.props;
     const { filterOptions } = this.state;
 
+
     const sideListFilter = (
       <div className={classes.list}>
+        <Typography variant="h6" component="h4">
+          Filtrar por:
+        </Typography>
         { filters && Object.entries(filters).map(([field, values]) => {
           return (
             <List>
@@ -212,7 +215,7 @@ class Filters extends React.Component {
           justify="flex-start"
         >
           <Button onClick={this.toggleDrawer('left', true)}>
-            <FormatListBulletedIcon/>
+            <FilterListIcon/>
             Filtrar
           </Button>
         </Grid>

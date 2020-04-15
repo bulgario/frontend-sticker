@@ -20,9 +20,6 @@ import Filters from "../components/recursableComponents/Drawers"
 import FilterList from "@material-ui/icons/FilterList";
 import Typography from "@material-ui/core/Typography";
 
-
-
-
 const styles = theme => ({
   whiteButton: {
     color: "white",
@@ -165,19 +162,15 @@ function Colecao(props) {
 
 
   const filteredList = (
-    productsFitered ? productsFitered.map(produto => {
-      return produto.map((product) => {
-        return product.map((produto, index) => {
-          return (
-            <CardProduct
-              showBadges={true} 
-              key={`${produto.id}${index}`} 
-              productToRender={produto.data} 
-              handleClickProduct={() => handleClickProduct(produto.id)}
-            />
-          )
-        })
-      })
+    productsFitered ? productsFitered.map((produto, index) => {
+      return (
+        <CardProduct
+          showBadges={true} 
+          key={`${produto.id}${index}`} 
+          productToRender={produto.data} 
+          handleClickProduct={() => handleClickProduct(produto.id)}
+        />
+      )
     }) : null
   )
 

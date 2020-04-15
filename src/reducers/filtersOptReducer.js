@@ -8,7 +8,7 @@ export default function filter(state = [], action) {
       Object.entries(action.filterOpt).forEach(([field, values]) => {
         action.filterOpt[field] = [...new Set(values)]
         const newFilter = action.filterOpt[field].map(value => {
-          return { label: value, checked: true }
+          return { label: value, checked: false }
         })
         action.filterOpt[field] = newFilter
       })
