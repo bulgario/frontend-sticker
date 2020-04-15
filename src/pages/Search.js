@@ -154,8 +154,6 @@ class Search extends React.Component {
   };
   renderInputs() {
     const { classes } = this.props;
-    const { data_inicio, data_ultimo, data_fim } = this.state;
-    if (data_fim && data_inicio && data_ultimo) {
       return (
         <Grid container justify="center">
        <FormControl variant="outlined" className={classes.formControl}>
@@ -191,7 +189,7 @@ class Search extends React.Component {
           </Grid>
         </Grid>
       );
-    }
+    
 
     return null;
   }
@@ -204,7 +202,8 @@ class Search extends React.Component {
           title="Programação"
           rightIcon={null}
           leftIcon={
-            <IconButton               aria-label="upload picture"
+            <IconButton               
+            aria-label="upload picture"
             component="span"
             className={classes.whiteButton}
             onClick={() => this.props.history.goBack()}>
