@@ -121,21 +121,24 @@ function Colecao(props) {
     }
     if(data) {
       data.map(values => {
-        filterOptions.categoria.push(values.data.categoria)
-        filterOptions.subcategoria.push(values.data.subcategoria)
-        filterOptions.estampa.push(values.data.estampa)
-        filterOptions.fornecedor.push(values.data.fornecedor)
-        filterOptions.estilista.push(values.data.estilista)
-        filterOptions.colecao.push(values.data.colecao)
+        values.data.categoria && (filterOptions.categoria.push(values.data.categoria))
+        values.data.subcategoria && (filterOptions.subcategoria.push(values.data.subcategoria))
+        values.data.estampa && (filterOptions.estampa.push(values.data.estampa))
+        values.data.fornecedor && (filterOptions.fornecedor.push(values.data.fornecedor))
+        values.data.estilista && (filterOptions.estilista.push(values.data.estilista))
+        values.data.colecao && (filterOptions.colecao.push(values.data.colecao))
       })
-
-    //GET ALL THE FIELDS NAMES TO BE PASSED TO THE CHILD
+    // REMOVE EMPTY VALUES
+    for(let value in filterOptions) {
+      if(filterOptions[value].length === 0) {
+        delete filterOptions[value]
+      }
+    }
+    // GET ALL THE FIELDS NAMES TO BE PASSED TO THE CHILD
     Object.keys(filterOptions).map(filterItem => {
       setFields([...fields, filterItem])
     })
-
       return filterOptions
-
     } else {
       console.log("You dont have products", data)
     }
@@ -187,7 +190,6 @@ function Colecao(props) {
   )
 
   return (
-
     <Fragment>
       <Header
         title="Coleção"

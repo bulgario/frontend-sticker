@@ -7,35 +7,43 @@ export default function filter(state = [], action) {
     case UPDATE_PRODUCTS:
       const filtrosSelecionados = action.selectedFilters
       const produtos = action.products
-
       const allProductsFiltered = []
-// impar MARCADO
-// par DESMARCADO
-      const filtros = []
 
-      Object.entries(filtrosSelecionados).forEach(([key, val]) => {
-        val.forEach(data => {
-         filtros.push( data.label)
+        let trueFiltro = {}
+        Object.keys(filtrosSelecionados).forEach(key => {
+          const foo = filtrosSelecionados[key].map(filtro => filtro.label)
+          let arr = []
+          // impar MARCADO
+          // par DESMARCADO
+          foo.forEach(filtro => {
+            let counter = 0
+            for(let i = 0; i < foo.length; i++) {
+              if(filtro === foo[i]) {
+                counter++
+              }
+            }
+            if(counter % 2 === 1) {
+              arr.push(filtro)
+            }
+          })
+          arr = [...new Set(arr)]
+  
+          if(arr.length > 0) {
+            trueFiltro[key] = arr
+          }
         })
-      })
-
-
-      for(let i = 0; i < filtros.length; i++) {
-        console.log(filtros[i])
-      }   
 
       produtos.forEach(produto => { //para cada produto...
-        let vapo = true
+        let validProduct = true
         Object.entries(produto.data).forEach(([key, value]) => { //para cada campo do produto...
-          if(filtrosSelecionados[key]) { //se nome do campo for true
-            const fieldLabel = filtrosSelecionados[key].map( foo => foo.label) // = nome do campo
-            if(fieldLabel.includes(value) === false) { // se alguma parte do filtro nao estiver relacionado a este campo verificado
-              vapo = false
+          if(trueFiltro[key]) { //se nome do campo for true
+            if(trueFiltro[key].includes(value) === false) { // se alguma parte do filtro nao estiver relacionado a este campo verificado
+              validProduct = false
             }
           } 
         })
 
-        if(vapo) {
+        if(validProduct) {
           allProductsFiltered.push(produto) //joga os produtos validos no array
         }
       })

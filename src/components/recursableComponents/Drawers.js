@@ -17,7 +17,7 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import Grid from "@material-ui/core/Grid";
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 import Checkbox from "@material-ui/core/Checkbox";
-
+import TextField from '@material-ui/core/TextField';
 
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
@@ -57,8 +57,15 @@ class Filters extends React.Component {
   };
 
 
-  handleCheckItem = async (field, item) => {
+  handleSelectedItem = async (field, item) => {
     const { filterOptions } = this.state
+
+    // HANDLE CHECKED ITENS, IS USED ONLY TO MARK NOT FOR LOGIC OF ITENS
+    if(item.checked === false) {
+      item.checked = true
+    } else {
+      item.checked = false
+    }
 
     const filters = { 
       field: field,
@@ -69,6 +76,15 @@ class Filters extends React.Component {
     await this.setState({ filterOptions: [...filterOptions, filters]  })
   }
 
+  handleSelectAll = (fieldName, items) => {
+    items.map(fieldItem => {
+      if(fieldItem.checked === false) {
+        fieldItem.checked = true
+      } else {
+        fieldItem.checked = false
+      }
+    })
+  }
 
   handleDispatch = async (filterOptions) => {
     let obj = {}
@@ -97,58 +113,89 @@ class Filters extends React.Component {
     const { classes, filters } = this.props;
     const { filterOptions } = this.state;
 
-
     const sideListFilter = (
-      <div className={classes.list}>
-        <Typography variant="h6" component="h4">
-          Filtrar por:
-        </Typography>
-        { filters && Object.entries(filters).map(([field, values]) => {
+      <Grid
+        container
+        className={classes.list}
+        xs={12}
+      >
+        <Grid
+          item
+          xs={12}
+          direction="row"
+          justify="space-between" 
+        >
+          <form className={classes.root} noValidate autoComplete="off">
+            <TextField id="search-filter" label="Filtrar por" />
+            <Button variant="contained" className={classes.button} color="primary">
+              Buscar
+            </Button>
+          </form>
+        </Grid>
+        { filters && Object.entries(filters).map(([fieldName, items]) => {
           return (
-            <List>
-            <ExpansionPanel>
-            <ExpansionPanelSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
+            <Grid
+              item
+              xs={12}
+              direction="row"
+              justify="space-between" 
+              alignItems="flex-start" 
             >
-              <Typography className={classes.heading}>{field}</Typography>
-              </ExpansionPanelSummary>
-              <ExpansionPanelDetails>
-              <Grid
-                container
-                item
-                direction="row"
-                justify="space-between"
+              <List>
+              <ExpansionPanel>
+              <ExpansionPanelSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
               >
-              {values && values.map((item, index) => {
-                const labelId = `checkbox-list-secondary-label-${item}`;
-                return (
-                <ListItem
-                key={index}
-                button
+                <Typography className={classes.heading}>{fieldName}</Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+                <Grid
+                  container
+                  item
+                  direction="row"
+                  justify="space-between"
                 >
-                <ListItemText
-                  id={labelId}
-                  secondary={item.label}
-                  className={classes.itemLabel}
-                />
                 <ListItem>
+                  <Typography className={classes.heading}>Selecionar Todos</Typography>
                   <Checkbox
-                    edge="start"
-                    onClick={() => this.handleCheckItem(field, item)}
-                    inputProps={{ "aria-labelledby": labelId }}
-                    // checked={item.checked}
-                    color="primary"
-                  />
+                      edge="end"
+                      onClick={() => this.handleSelectAll(fieldName, items)}
+                      // inputProps={{ "aria-labelledby": labelId }}
+                      checked={() => this.showItemsSelected()}
+                      color="primary"
+                    />
                 </ListItem>
-              </ListItem>     
-              )
-              }) }
-              </Grid>    
-              </ExpansionPanelDetails>
-              </ExpansionPanel>
-            </List>
+                {items && items.map((item, index) => {
+                  const labelId = `checkbox-list-secondary-label-${item}`;
+                  return (
+                  <ListItem
+                  key={index}
+                  button
+                  >
+                  <ListItemText
+                    id={labelId}
+                    secondary={item.label}
+                    className={classes.itemLabel}
+                  />
+                  <ListItem>
+                    <Checkbox
+                      edge="end"
+                      onClick={() => this.handleSelectedItem(fieldName, item)}
+                      inputProps={{ "aria-labelledby": labelId }}
+                      checked={item.checked}
+                      color="primary"
+                    />
+                  </ListItem>
+                </ListItem>     
+                )
+                }) }
+                </Grid>    
+                </ExpansionPanelDetails>
+                </ExpansionPanel>
+              </List>
+            </Grid>
           )
         }) }
 
@@ -162,7 +209,7 @@ class Filters extends React.Component {
             Filtrar
           </Button>
         </Grid>
-      </div>
+      </Grid>
     );
 
 
