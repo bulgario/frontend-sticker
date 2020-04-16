@@ -38,6 +38,11 @@ const styles = theme => ({
     padding: theme.spacing(1.5),
     color:'white'
   },
+  selectAll: {
+    [theme.breakpoints.down("xs")]: {
+      fontSize: "0.9"
+    }
+  }
 });
 
 class Filters extends React.Component {
@@ -47,7 +52,7 @@ class Filters extends React.Component {
     selectedOptFilter: [],
     fields: [],
     filterOptions: [],
-
+    allFiltersSelected: false
   };
 
   toggleDrawer = (side, open) => () => {
@@ -58,10 +63,10 @@ class Filters extends React.Component {
 
 
   handleSelectedItem = async (field, item) => {
-    const { filterOptions } = this.state
+    const { filterOptions, allFiltersSelected } = this.state
 
     // HANDLE CHECKED ITENS, IS USED ONLY TO MARK NOT FOR LOGIC OF ITENS
-    if(item.checked === false) {
+    if(item.checked === false && allFiltersSelected !== true) {
       item.checked = true
     } else {
       item.checked = false
@@ -76,7 +81,7 @@ class Filters extends React.Component {
     await this.setState({ filterOptions: [...filterOptions, filters]  })
   }
 
-  handleSelectAll = (fieldName, items) => {
+  handleSelectAll = async (fieldName, items) => {
     items.map(fieldItem => {
       if(fieldItem.checked === false) {
         fieldItem.checked = true
@@ -84,6 +89,10 @@ class Filters extends React.Component {
         fieldItem.checked = false
       }
     })
+    const allItensFromField = { [fieldName]: items }
+
+    await this.setState({ selectedOptFilter: {...this.state.selectedOptFilter, ...allItensFromField } })
+    await this.setState({ allFiltersSelected: !this.state.allFiltersSelected })
   }
 
   handleDispatch = async (filterOptions) => {
@@ -98,15 +107,15 @@ class Filters extends React.Component {
       obj[val.field].push(item)
     })
 
-    await this.setState({ selectedOptFilter: obj })
+    await this.setState({ selectedOptFilter: { ...this.state.selectedOptFilter, ...obj } })
 
-    this.props.dispatch({ type: 'UPDATE_PRODUCTS', 
+    this.props.dispatch({ type: 'UPDATE_PRODUCTS',
       products: this.props.products,
       // filterOptions: filterOptions,
-      selectedFilters: this.state.selectedOptFilter 
+      selectedFilters: this.state.selectedOptFilter
     })
 
-    // this.props.dispatch({ type: 'UPDATE_SELECTED_FILTERS', filterOptions: filterOptions })
+    this.props.dispatch({ type: 'UPDATE_SELECTED_FILTERS', filterOptions: filterOptions })
   }
 
   render() {
@@ -125,12 +134,12 @@ class Filters extends React.Component {
           direction="row"
           justify="space-between" 
         >
-          <form className={classes.root} noValidate autoComplete="off">
+          {/* <form className={classes.root} noValidate autoComplete="off">
             <TextField id="search-filter" label="Filtrar por" />
             <Button variant="contained" className={classes.button} color="primary">
               Buscar
             </Button>
-          </form>
+          </form> */}
         </Grid>
         { filters && Object.entries(filters).map(([fieldName, items]) => {
           return (
@@ -158,12 +167,12 @@ class Filters extends React.Component {
                   justify="space-between"
                 >
                 <ListItem>
-                  <Typography className={classes.heading}>Selecionar Todos</Typography>
+                  <Typography className={classes.selectAll}>Selecionar Todos</Typography>
                   <Checkbox
                       edge="end"
                       onClick={() => this.handleSelectAll(fieldName, items)}
                       // inputProps={{ "aria-labelledby": labelId }}
-                      checked={() => this.showItemsSelected()}
+                      checked={this.state.allFiltersSelected}
                       color="primary"
                     />
                 </ListItem>
@@ -210,41 +219,6 @@ class Filters extends React.Component {
           </Button>
         </Grid>
       </Grid>
-    );
-
-
-    const sideListOrder = (
-      <List dense className={classes.root}>
-      {["Cor", "Preco", "Entrega Ajustada"].map(value => (
-        <ListItem 
-          key={value} 
-          button
-        >
-        <ListItemText
-          // id={labelId}
-          secondary={value}
-          className={classes.itemLabel}
-            />
-            <Checkbox
-              edge="start"
-              // onClick={() => this.handleCheckItem(field, item)}
-              // inputProps={{ "aria-labelledby": labelId }}
-              // checked={item.checked}
-              color="primary"
-            />
-        </ListItem>
-      ))}
-       <Grid container item justify="center">
-          <Button
-            className={classes.button}
-            variant="contained"
-            color="primary"
-            // onClick={ () => this.handleDispatch(filterOptions) }
-          >
-            Ordenar
-          </Button>
-        </Grid>
-    </List>
     );
 
 
