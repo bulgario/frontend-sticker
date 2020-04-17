@@ -2,18 +2,22 @@ import React from "react";
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 import { withRouter } from "react-router-dom";
 
-// import AutoComplete from "./SearchAutoComplete"
+import AutoComplete from "./AutoComplete"
 import { makeStyles } from "@material-ui/core/styles";
-
 
 const useStyles = makeStyles(theme => ({
   root: {
-    height: 'auto'
+    height: 'auto',
+    
   },
   close: {
     flexGrow: 1,
     height: 0
   },
+  padding: {
+    padding: theme.spacing(2),
+  backgroundColor:'#fcb92c'
+},
 
 }));
 
@@ -41,19 +45,20 @@ function TopDrawer(props) {
   };
 
   return (
-    <div className={classes.root}>
 
       <SwipeableDrawer
       disableBackdropTransition={!iOS} disableDiscovery={iOS}
         open={props.open}
         onClose={toggleDrawer("top", false)}
         onOpen={toggleDrawer("top", true)}
-        anchor="top"
-        
-      >
-        {/* <AutoComplete ></AutoComplete> */}
+        anchor="top">
+        <div
+         className={classes.padding}
+
+        >
+        <AutoComplete relatorioPage={props.relatorioPage} activeReport={props.activeReport}/>
+        </div>
       </SwipeableDrawer>
-     </div>
   );
 }
 export default withRouter(TopDrawer);

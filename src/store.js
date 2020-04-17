@@ -4,7 +4,7 @@ import thunk from 'redux-thunk';
 import createHistory from 'history/createBrowserHistory';
 import createRootReducer from './reducers';
 
-export const history = createHistory();
+export const history = createHistory({forceRefresh:true});
 
 const initialState = {};
 const enhancers = [];

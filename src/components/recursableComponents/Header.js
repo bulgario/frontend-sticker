@@ -32,6 +32,7 @@ const useStyles = makeStyles(theme => ({
     fontSize: '1.5rem',
     [theme.breakpoints.down('xs')]: {
       fontSize: '1.18rem',
+      maxWidth:190,
     },
     [theme.breakpoints.up('md')]: {
       fontSize: '2rem',
@@ -43,7 +44,7 @@ const Header = props => {
   const classes = useStyles();
     
   return (
-    <div className={classes.header}>
+    <div className={classes.header} id="some">
       <Grid
         container
         direction="row"
@@ -52,11 +53,11 @@ const Header = props => {
       >
         <Grid item>{props.leftIcon}</Grid>
         <Grid item>
-          <Typography variant="h5" component="p" className={classes.title}>{props.title}</Typography>
+          <Typography align="center" variant="h5" component="p" className={classes.title}>{props.title}</Typography>
         </Grid>
 
         <Grid item>{props.rightIcon}</Grid>
-
+        {props.rightIconAfter ? <Grid item>{props.rightIconAfter}</Grid> : ""}
       </Grid>
     </div>
   );

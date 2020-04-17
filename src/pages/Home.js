@@ -13,7 +13,7 @@ import TopDrawer from "../components/recursableComponents/TopDrawer"
 
 import IconButton from "@material-ui/core/IconButton";
 import Menu from "@material-ui/icons/Menu";
-// import Search from "@material-ui/icons/Search";
+import Search from "@material-ui/icons/Search";
 
 const styles = theme => ({
   container: {},
@@ -101,16 +101,16 @@ class Home extends React.Component {
 
         <Header
           title="+Produtos"
-          // rightIcon={
-          //   <IconButton
-          //     aria-label="upload picture"
-          //     component="span"
-          //     className={classes.whiteButton}
-          //     onClick={this.openMenu2}
-          //   >
-          //     <Search  />
-          //   </IconButton>
-          // }
+          rightIcon={
+            <IconButton
+              aria-label="upload picture"
+              component="span"
+              className={classes.whiteButton}
+              onClick={this.openMenu2}
+            >
+              <Search  />
+            </IconButton>
+          }
           leftIcon={
             <IconButton
               onClick={this.openMenu}
@@ -130,6 +130,13 @@ class Home extends React.Component {
             alignItems="center"
             spacing={4}
           >
+             <Grid item className={classes.gridItem}>
+              <MenuCard
+                title="Meus Produtos"
+                body="Crie e compartilhe combinações de produtos"
+                redirectTo="/meusprodutos"
+              ></MenuCard>
+            </Grid>
             <Grid item className={classes.gridItem}>
               <MenuCard
                 title="Recebimento"
@@ -137,6 +144,13 @@ class Home extends React.Component {
                 redirectTo="/search"
               ></MenuCard>
             </Grid>
+            {/* <Grid item className={classes.gridItem}>
+              <MenuCard
+                title="Acomp. Coleção"
+                body="Veja os Produtos e acompanhe os principais indicadores"
+                redirectTo="/colecoes"
+              ></MenuCard>
+            </Grid> */}
             {/* <Grid item className={classes.gridItem}>
               <MenuCard
                 title="Venda"

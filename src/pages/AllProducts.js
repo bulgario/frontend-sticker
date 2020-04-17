@@ -3,15 +3,22 @@ import { connect } from "react-redux";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Grid from "@material-ui/core/Grid";
 import { withRouter } from "react-router-dom";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+
+import SearchIcon from "@material-ui/icons/Search";
+
 import Header from "../components/recursableComponents/Header";
 import Footer from "../components/recursableComponents/Footer";
+
+import LoadingDialog from "../components/recursableComponents/LoadingDialog";
+
+import ChooseReportList from "../components/recursableComponents/ChooseReportList";
+import User from "../services/User";
+
+import ChipsList from "../components/recursableComponents/ChipsList";
+
+
 import CardProduct from "../components/recursableComponents/CardProduct";
-import PrintPage from './Print'
-
-
 import Typography from "@material-ui/core/Typography";
-
 
 import { signIn } from "../actions";
 import FilterList from "@material-ui/icons/FilterList";
@@ -20,58 +27,82 @@ import Divider from "@material-ui/core/Divider";
 
 import { withSnackbar } from "notistack";
 import { BASE_URL } from "../consts";
-import User from "../services/User";
 
 import ArrowBack from "@material-ui/icons/ArrowBack";
-import Print from "@material-ui/icons/Print";
-import ShareIcon from "@material-ui/icons/Share";
 
 import Toc from "@material-ui/icons/Toc";
-
-import { IconButton } from "@material-ui/core";
 import CheckIcon from "@material-ui/icons/Check";
 import DoneAllIcon from "@material-ui/icons/DoneAll";
 
-import ExpansionPanel from "@material-ui/core/ExpansionPanel";
-import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
-import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import IconButton from "@material-ui/core/IconButton";
+
 import FilterDrawer from "../components/recursableComponents/FilterDrawer";
 import OrderDrawer from "../components/recursableComponents/OrderDrawer";
-import ChipsList from "../components/recursableComponents/ChipsList";
-
-import ChooseReportList from "../components/recursableComponents/ChooseReportList";
-
+import TopDrawer from "../components/recursableComponents/TopDrawer";
 
 const axios = require("axios");
-const _ = require("lodash");
-
 const styles = theme => ({
-  root: {
-    transition: 'background-color 1.6s ',
-    backgroundColor:'white'
-  },
-  expanded: {
-    transition: 'background-color 1.6s ',
-    backgroundColor:'#fafafa'
-
-  },
   margin: {
-    margin: theme.spacing(0.5)
+    margin: theme.spacing(1)
+  },
+
+  mediaCard: {
+    height: 310,
+    width: 220,
+    boxSizing: "border-box",
+    objectFit: "scale-down",
+    // border: "2px groove",
+    // borderRadius: "3px",
+    // borderColor: "#8080801a",
+
+    [theme.breakpoints.down("sm")]: {
+      height: 220,
+      width: 140
+    }
+  },
+  mainImage: {
+    marginTop: theme.spacing(1),
+    width: 300,
+    height: 300,
+    border: "solid transparent",
+    borderRadius: "12px"
+  },
+
+  productInfo: {
+    width: 250,
+    borderWidth: 1.5,
+    borderColor: "black"
+  },
+
+  dateText: {
+    textAlign: "center",
+    fontWeight: "bold"
+  },
+  horizontalScroll: {
+    display: "flex",
+    justifyContent: "center",
+    flexWrap: "wrap"
   },
   whiteButton: {
     color: "white",
     sizeSmall: "100px"
   },
-  paddingRightSmall: {
-     paddingRight: theme.spacing(1.5),
-
+  desc_produto: {
     [theme.breakpoints.down("xs")]: {
-       paddingRight: theme.spacing(1.5),
-       paddingLeft: theme.spacing(0)
+      fontSize: "0.9"
+    }
+  },
+  containerSmall: {
+    marginBottom: theme.spacing(10),
+    [theme.breakpoints.down("xs")]: {
+      paddingRight: theme.spacing(0),
+      paddingLeft: theme.spacing(0),
+      marginBottom: theme.spacing(2)
     },
     [theme.breakpoints.down("sm")]: {
-       paddingRight: theme.spacing(1.5),
-       paddingLeft: theme.spacing(0)
+      paddingRight: theme.spacing(0),
+      paddingLeft: theme.spacing(0),
+      marginBottom: theme.spacing(2)
     }
   },
   hideXsLabel: {
@@ -79,22 +110,33 @@ const styles = theme => ({
       display: "none"
     }
   },
+  paddingRightSmall: {
+    paddingRight: theme.spacing(1.5),
+
+    [theme.breakpoints.down("xs")]: {
+      paddingRight: theme.spacing(1.5),
+      paddingLeft: theme.spacing(0)
+    },
+    [theme.breakpoints.down("sm")]: {
+      paddingRight: theme.spacing(1.5),
+      paddingLeft: theme.spacing(0)
+    }
+  },
+  emoji: {
+    fontSize: "100px",
+    margin: "0 auto"
+  },
+  emojiPosition: {
+    margin: "0 auto",
+    textAlign: "center"
+  }
 });
 
-class Insta extends React.Component {
+class AllProducts extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       produto: [],
-      username: "",
-      password: "",
-      showPassword: false,
-      usernameError: false,
-      passwordError: false,
-      recoveryError: false,
-      recoverySubmitted: false,
-      recoveryShow: false,
-      allProgramacoes: [],
       expanded: true,
       filters: {},
       categoriaFilter: [],
@@ -105,66 +147,153 @@ class Insta extends React.Component {
       colecaoFilter: [],
       orderBy: "desc_cor_produto",
       orderAsc: true,
-      print: false,
       filterSelected: { Categoria: true, Subcategoria: true, Estampa: true, Fornecedor: true, Estilista:true, Colecao: true },
       filtersLen: {},
-      selectItens: false,
-      selectedProducts: [],
+      openTopDrawer: false,
+      products: [],
+      noProducts: false,
+      relatoryPage: true,
+      handleApplied: false,
+      handleTodos: false,
       showReportsList: false,
-      reportsIds: this.getParamFromUrl("addRelatorio")?[this.getParamFromUrl("addRelatorio")]:[],
       reports: [],
-      products: []
+      reportsNames: [],
+      reportsIds:this.getParamFromUrl("addRelatorio")?[this.getParamFromUrl("addRelatorio")]:[],
+      selectedProducts: []
     };
   }
 
   componentDidMount() {
-    this.getProducts();
-    this.getRelatories();
+    this.getProductsBySearch();
+    this.getReports();
   }
-  async getProducts() {
-    try {
-      const response = await axios.get(
-        `${BASE_URL}/products/selectedProducts`,
-        {
-          params: this.getAllParamsFromUrl()
-        }
-      );
-      let products = response.data;
 
-      if (products.length < 1 || _.isEmpty(products)) {
+  async getReports() {
+    const user = new User();
+    const id_user = user.getUser().id_usuario;
+
+    try {
+      await axios
+        .get(`${BASE_URL}/myProducts/getReports`, {
+          params: { id_user }
+        })
+        .then(data => {
+          this.setState({ reports: data.data });
+        });
+    } catch (err) {
+      console.log("Error getting reports:", err);
+    }
+  }
+
+  mountDataToSaveReports() {
+    try {
+      const {selectedProducts, reportsIds} = this.state
+      const arr = []
+      selectedProducts.forEach(reportId => {
+        let obj = {}
+        obj["id_produto_cor"] = reportId
+        obj.tags = []
+        arr.push(obj)
+      })
+      
+      const allProducts = reportsIds.map(reportId => {
+        // console.log("aaaa", arr)
+        // const obj = { ...arr }
+        const arrayToSave = { produto_tags: arr,  id_relatorio: reportId}
+        return arrayToSave
+      })
+
+      
+      return allProducts
+
+    } catch(err) {
+      console.log(err)
+    }
+
+    return true
+  }
+  async saveProductsToReports() {
+
+    try{
+      const {selectedProducts, reportsIds} = this.state
+      if (selectedProducts.length <1) {
         return this.props.enqueueSnackbar(
-          "Não há produtos programados para essas datas ",
+          "Nenhum produto foi selecionado.",
           { variant: "warning" }
         );
+
       }
-      this.setState({ allProgramacoes: products });
-    } catch (err) {
-      console.log(err);
-      return this.props.enqueueSnackbar("Problemas no backend", {
-        variant: "error"
-      });
+
+      if (reportsIds.length <1) {
+        return this.props.enqueueSnackbar(
+          "Nenhum relatório foi selecionado.",
+          { variant: "warning" }
+        );
+
+      }
+
+      const data = this.mountDataToSaveReports()
+      await Promise.all(data.map(data => axios.post(`${BASE_URL}/myProducts/editRelatory`,data)))
+        
+      this.props.enqueueSnackbar(
+        "Produtos salvos com sucesso.",
+        { variant: "success" }
+      );
+      if(this.getParamFromUrl("addRelatorio")) {
+
+        return this.props.history.replace({
+          pathname: `/relatorio`,
+          search: `?id_relatorio=${this.getParamFromUrl("addRelatorio")}`,
+          state: { lastPage: `${this.props.location.pathname}${this.props.location.search}` }
+        })
+      }
+      return 
+    } catch(err) {
+
+      return this.props.enqueueSnackbar(
+        "Não foi possível salvar os produtos.",
+        { variant: "error" }
+      );
+
     }
-    this.mountFiltersOptions();
+  }
+  async getProductsBySearch() {
+    const response = await axios.get(
+      `${BASE_URL}/products/listProductsWithSearchQuery`,
+      {
+        params: this.getAllParamsFromUrl(),
+      }
+    );
+    if (response) {
+      let surveyedProducts = response.data;
+
+      const allProductsSelectedIds = surveyedProducts.map(produto => produto.id);
+
+      this.setState({ products: surveyedProducts, allProductsSelectedIds });
+      this.setState({ produto: surveyedProducts });
+    }
+    this.mountFiltersOptions()
   }
 
-  async getRelatories() {
-    const user = new User();
-    const id_usuario = user.user.id_usuario;
-    await axios
-      .get(`${BASE_URL}/myProducts/getReports`, {
-        params: {
-          id_user: id_usuario
-        }
-      })
-      .then(data => {
-        this.setState({ reports: data.data });
-        // this.setState({ reportsIds: data.data.map(ids => ids.id) });
-      });
+  getAllParamsFromUrl() {
+    const desc_produto = this.getParamFromUrl("desc_produto");
+    const id_marca_estilo = this.getParamFromUrl("id_marca_estilo");
+    const referencia = this.getParamFromUrl("referencia");
+
+    return {
+      desc_produto,
+      id_marca_estilo,
+      referencia
+    };
+  }
+
+  getParamFromUrl(param) {
+    const urlSearch = new URLSearchParams(this.props.location.search);
+    return urlSearch.get(param);
   }
 
   unmarkAllFilters = filterParam => {
-    const { allProgramacoes } = this.state;
-    const programacoes = Object.keys(allProgramacoes);
+    const { products } = this.state;
     const categorias = [];
     const subcategorias = [];
     const estampas = [];
@@ -172,8 +301,7 @@ class Insta extends React.Component {
     const estilistas = []
     const colecoes = []
 
-    programacoes.map(programacao => {
-      return allProgramacoes[programacao].map(produto => {
+   products.map(produto => {
         if (filterParam === "Colecoes") {
           if (
             !colecoes.some(
@@ -187,7 +315,6 @@ class Insta extends React.Component {
             });
           }
         }
-
         if (filterParam === "Categoria") {
           if (
             !categorias.some(
@@ -258,14 +385,11 @@ class Insta extends React.Component {
 
         return true;
       });
-    });
     categorias.push("");
     subcategorias.push("");
     estampas.push("");
     estilistas.push("");
     fornecedores.push("");
-    colecoes.push("");
-
     const filters = {
       Categoria:
         filterParam === "Categoria"
@@ -281,24 +405,22 @@ class Insta extends React.Component {
         filterParam === "Fornecedor" ? fornecedores : this.state.filters["Fornecedor"],
         Estilista:
         filterParam === "Estilista" ? estilistas : this.state.filters["Estilista"],
-        Colecoes:
+      Colecoes:
         filterParam === "Colecao" ? colecoes : this.state.filters["Colecao"],
     };
     return this.refreshFilter(filters);
   };
   mountFiltersOptions = () => {
-    const { allProgramacoes } = this.state;
-    const programacoes = Object.keys(allProgramacoes);
+    const { products } = this.state;
     const categorias = [];
     const subcategorias = [];
     const estampas = [];
     const estilistas = []
-    const fornecedores = [ ]
+    const fornecedores = []
     const colecoes = []
     let filterCollection = []
 
-    programacoes.map(programacao => {
-      return allProgramacoes[programacao].map(produto => {
+      products.map(produto => {
         if (
           produto.colecoes.map(collections => {
             filterCollection.push(collections.nome_colecao)
@@ -342,15 +464,13 @@ class Insta extends React.Component {
         }
         return true;
       });
-    });
 
-    filterCollection = new Set(filterCollection) //Remove itens repetidos de uma colecao 
-    const backtoArr = [...filterCollection] //transforma novamente em um array para poder ser iteravel
+      filterCollection = new Set(filterCollection) //Remove itens repetidos de uma colecao 
+      const backtoArr = [...filterCollection] //transforma novamente em um array para poder ser iteravel
 
-    backtoArr.forEach(data => {
-      colecoes.push({name: data, checked: true})
-    })
-
+      backtoArr.forEach(data => {
+        colecoes.push({name: data, checked: true})
+      })
 
     const filters = {
       Categoria: categorias,
@@ -371,194 +491,44 @@ class Insta extends React.Component {
 
     return this.refreshFilter(filters);
   };
-
-  getAllParamsFromUrl() {
-    const user = new User();
-    const dataInicio = this.getParamFromUrl("dataInicio");
-    const dataFim = this.getParamFromUrl("dataFim");
-    const entregaAjustada = this.getParamFromUrl("entregaAjustada");
-    const category = this.getParamFromUrl("categoria");
-    const subcategory = this.getParamFromUrl("subcategoria");
-    const collection_name = this.getParamFromUrl("colecao");
-    const id_marca_estilo = user.getIdMarcaEstilo();
-
-    return {
-      dataInicio,
-      dataFim,
-      entregaAjustada,
-      category,
-      subcategory,
-      collection_name,
-      id_marca_estilo
-    };
-  }
-
-  getJsonFromUrl(param) {
-    return JSON.parse(this.getParamFromUrl(param));
-  }
-
-  getParamFromUrl(param) {
-    const urlSearch = new URLSearchParams(this.props.location.search);
-    return urlSearch.get(param);
-  }
-
-
-  renderProgramacoes() {
-    const { allProgramacoes } = this.state;
-    const { classes } = this.props;
-    const programacoes = Object.keys(allProgramacoes);
-    return programacoes.map(programacao => {
-      // let numRows,maxHeight
-      // if(window.innerWidth >= 555) {
-      //    numRows = allProgramacoes[programacao].length/3 < 1? 1: allProgramacoes[programacao].length/3
-      //   maxHeight = Math.ceil(numRows) * 580 
-      // } else{
-      //   numRows = allProgramacoes[programacao].length/2 < 1? 1: allProgramacoes[programacao].length/2
-      //   maxHeight = Math.ceil(numRows) * 500
-      // }
-      return (
-        // <Grid item direction="row" justify="center" style={{width:'100%', marginTop: '0.5%',maxHeight}}>
-                <Grid item  style={{width:'100%', marginTop: '0.5%'}}>
-
-          <ExpansionPanel 
-          key={`${programacao}`}
-          classes={{
-                root: classes.root,
-                expanded: classes.expanded
-                }}
-                >
-                
-            <ExpansionPanelSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Grid
-                item
-                alignItems="center"
-                direction="row"
-                justify="flex-start"
-                container
-              >
-                <Typography variant="h5">
-                  {programacao}
-                </Typography>
-              </Grid>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails style={{padding:0}} >
-              { this.renderProductsCardsView(
-                    this.filterProducts(allProgramacoes[programacao])
-                  )}
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
-        </Grid>
-      );
-    });
-  }
-
-
   filterProducts(produtos) {
     const { categoriaFilter, subcategoriaFilter, estampaFilter, fornecedorFilter, estilistaFilter, colecaoFilter } = this.state;
-    if(produtos) {  
-      const produtosFiltrados = produtos.filter(produto => {
-        let collection = []
 
-        if(produto && produto.colecoes){
-          produto.colecoes.map(val => collection = val.nome_colecao)
-        }
+    const produtosFiltrados = produtos.filter(produto => {
+      let collection = []
 
-        return (
-          categoriaFilter.includes(produto.categoria) &&
-          subcategoriaFilter.includes(produto.subcategoria) &&
-          estampaFilter.includes(produto.estampa) &&
-          fornecedorFilter.includes(produto.fornecedor) &&
-          estilistaFilter.includes(produto.estilista) &&
-          colecaoFilter.includes(collection)
-        );
-      });
-      return produtosFiltrados.sort(this.compare);
-    }
+      if(produto && produto.colecoes){
+        produto.colecoes.map(val => collection = val.nome_colecao)
+      }
+
+      return (
+        categoriaFilter.includes(produto.categoria) &&
+        subcategoriaFilter.includes(produto.subcategoria) &&
+        estampaFilter.includes(produto.estampa) &&
+        fornecedorFilter.includes(produto.fornecedor) &&
+        estilistaFilter.includes(produto.estilista) &&
+        colecaoFilter.includes(collection)
+      );
+    });
+    return produtosFiltrados.sort(this.compare);
   }
 
   handleClickProduct(id) {
     const { selectedProducts } = this.state;
-    if (this.state.selectItens) {
-      if (!selectedProducts.includes(id)) {
-        selectedProducts.push(id);
-      } else {
-        const index = selectedProducts.indexOf(id);
-        selectedProducts.splice(index, 1);
-      }
-      this.setState({ selectedProducts });
+    // if(reportsIds.length <1) return this.props.history.push(`/produto?produto=${id}`);
+
+    if (!selectedProducts.includes(id)) {
+      selectedProducts.push(id);
     } else {
+      const index = selectedProducts.indexOf(id);
+      selectedProducts.splice(index, 1);
     }
-  };
-
-  mountDataToSaveReports() {
-    try {
-      const {selectedProducts, reportsIds} = this.state
-
-      const arr = []
-      selectedProducts.forEach(reportId => {
-        let obj = {}
-        obj["id_produto_cor"] = reportId
-        obj.tags = []
-        arr.push(obj)
-      })
-      
-      const allProducts = reportsIds.map(reportId => {
-        // console.log("aaaa", arr)
-        // const obj = { ...arr }
-        const arrayToSave = { produto_tags: arr,  id_relatorio: reportId}
-        return arrayToSave
-      })
-      console.log("eeee", allProducts)
-      return allProducts
-
-    } catch(err) {
-      console.log(err)
-    }
-
-    return true
-  }
-
-  async saveProductsToReports() {
-    try {
-      const { selectedProducts, reportsIds } = this.state;
-      if (selectedProducts.length < 1) {
-        return this.props.enqueueSnackbar("Nenhum produto foi selecionado.", {
-          variant: "warning"
-        });
-      }
-      if (reportsIds.length < 1) {
-        return this.props.enqueueSnackbar("Nenhum relatório foi selecionado.", {
-          variant: "warning"
-        });
-      }
-      const data = this.mountDataToSaveReports();
-      await Promise.all(
-        data.map(data =>
-          axios.post(`${BASE_URL}/myProducts/editRelatory`, data)
-        )
-      );
-      this.props.enqueueSnackbar("Produtos salvos com sucesso.", {
-        variant: "success"
-      });
-      if (this.getParamFromUrl("addRelatorio")) {
-        return this.props.history.push(
-          `/relatorio?id_relatorio=${this.getParamFromUrl("addRelatorio")}`
-        );
-      }
-      return;
-    } catch (err) {
-      return this.props.enqueueSnackbar(
-        "Não foi possível salvar os produtos.",
-        { variant: "error" }
-      );
-    }
+    this.setState({ selectedProducts });
   }
 
   renderProductsCardsView(data) {
+    // const { classes } = this.props;
+
     return (
       <Grid
         container
@@ -567,17 +537,15 @@ class Insta extends React.Component {
         alignItems="center"
         spacing={0}
       >
-        {data.map((produtos, index) => {
+                  {data.map((produtos, index) => {
 
-          return (
-            <CardProduct showBadges={true} key={`${produtos.id}${index}`}redirect={!this.state.selectItens} productToRender={produtos} cardOpacity={this.state.selectItens &&
-              !this.state.selectedProducts.includes(produtos.id)}
-              handleClickProduct={() => this.handleClickProduct(produtos.id)}
-              scrollHeightPosition={this.state.theposition}
-             >
-            </CardProduct>)
+return (
+  <CardProduct redirect={this.state.reportsIds.length <1} productToRender={produtos} cardOpacity={!this.state.selectedProducts.includes(produtos.id) && this.state.reportsIds.length >=1}
+    handleClickProduct={() => this.handleClickProduct(produtos.id)}
+   >
+  </CardProduct>)
 
-        })}
+})}
       </Grid>
     );
   }
@@ -659,10 +627,22 @@ class Insta extends React.Component {
       estilistaFilter: estilistas,
       colecaoFilter: colecoes
     });
+
+      const produtosFiltrados = this.state.products.filter(produto => {
+        return (
+          categorias.includes(produto.categoria) &&
+          subcategorias.includes(produto.subcategoria) &&
+          estampas.includes(produto.estampa)
+        );
+      });
+      this.setState({allProductsSelectedIds: produtosFiltrados.map(produto => produto.id)})
   };
 
   openOrder = () => {
     this.setState({ openOrderDrawer: !this.state.openOrderDrawer });
+  };
+  openTopDrawer = () => {
+    this.setState({ openTopDrawer: !this.state.openTopDrawer });
   };
 
   compare = (a, b) => {
@@ -695,32 +675,9 @@ class Insta extends React.Component {
       });
   };
 
-  handleItensSelect = () => {
-    const { selectItens } = this.state;
-    this.setState({ selectItens: !selectItens });
-  };
+  handleToogleChips = (nome_relatorio,id) => {
+    const { reportsIds } = this.state
 
-  handleSelectAllItens = async () => {
-    let allProducts = [];
-    const programacoes = Object.keys(this.state.allProgramacoes);
-   programacoes.map(programacao => {
-      return this.filterProducts(this.state.allProgramacoes[programacao]).map(produto=> allProducts.push(produto))
-    });
-
-    if (this.state.selectedProducts.length === allProducts.length) {
-      await this.setState({ selectedProducts: [] });
-    } else {
-      //selecionando todos os produtos
-      await this.setState({
-        selectedProducts: this.filterProducts(allProducts).map(
-          produto => produto.id
-        )
-      });
-    }
-  };
-
-  handleToogleChips = (nome_relatorio, id) => {
-    const { reportsIds } = this.state;
 
     if (!reportsIds.includes(id)) {
       reportsIds.push(id);
@@ -730,45 +687,37 @@ class Insta extends React.Component {
     }
     this.setState({ reportsIds });
   };
+  removeChips = ({nome_relatorio,id}) => () => {
+    const {  reportsIds } = this.state;
 
-  removeChips = ({ nome_relatorio, id }) => () => {
-    const { reportsIds } = this.state;
 
-    const indexId = reportsIds.indexOf(id);
+    const indexId = reportsIds.indexOf(id)
     reportsIds.splice(indexId, 1);
 
     this.setState({ reportsIds });
   };
-
   render() {
     const { classes } = this.props;
+    const { relatory } = this.state;
 
     return (
       <Fragment>
+        <LoadingDialog
+          open={this.state.loadingPrint}
+          message={"Criando relatório"}
+        />
 
         <Header
-          title="Resultados da programação"
+          title={relatory ? relatory.nome_relatorio : ""}
           rightIcon={
-            <Grid container direction="row">
-              <IconButton
-                aria-label="upload picture"
-                component="span"
-                className={classes.whiteButton}
-                onClick={this.handleItensSelect}
-              >
-                <ShareIcon></ShareIcon>
-              </IconButton>
-              <IconButton
-                aria-label="upload picture"
-                component="span"
-                className={classes.whiteButton}
-                onClick={() => {
-                  this.setState({ print: true, loadingPrint: true });
-                }}
-              >
-                <Print></Print>	
-              </IconButton>
-            </Grid>
+            <IconButton
+              aria-label="upload picture"
+              component="span"
+              className={classes.whiteButton}
+              onClick={this.openTopDrawer}
+            >
+              <SearchIcon></SearchIcon>
+            </IconButton>
           }
           leftIcon={
             <IconButton
@@ -780,8 +729,12 @@ class Insta extends React.Component {
               <ArrowBack></ArrowBack>
             </IconButton>
           }
-
         />
+        <TopDrawer
+          relatorioPage={true}
+          openMenu={this.openTopDrawer}
+          open={this.state.openTopDrawer}
+        ></TopDrawer>
         <FilterDrawer
           openMenu={this.openFilter}
           open={this.state.open}
@@ -800,8 +753,7 @@ class Insta extends React.Component {
           orderBy={this.state.orderBy}
           orderAsc={this.state.orderAsc}
         ></OrderDrawer>
-
-        <div>
+        {/* <Container className={classes.containerSmall}> */}
           <Grid
             id="some"
             item
@@ -823,28 +775,36 @@ class Insta extends React.Component {
               <IconButton onClick={this.openFilter}>
                 <FilterList></FilterList>
               </IconButton>
-              <Typography className={classes.hideXsLabel}>Filtrar</Typography>
+              <Typography className={classes.hideXsLabel} component="p">
+                Filtrar
+              </Typography>
             </Grid>
+
             <Grid
-            container
-            xs={10}
-            item
-            sm={8}
-            alignItems="center"
-            justify="center"
-            direction="row"
-          >
-            {this.state.selectItens ? (
+              container
+              xs={10}
+              item
+              sm={8}
+              alignItems="center"
+              justify="center"
+              direction="row"
+            >
               <ChipsList
                 reportsIds={this.state.reportsIds}
-                showModalReports={() =>
-                  this.setState({ showReportsList: true })
-                }
+                showModalReports={() => this.setState({ showReportsList: true })}
+
                 reports={this.state.reports}
                 removeChips={this.removeChips}
-              />
-            ) : null}
-          </Grid>
+              ></ChipsList>
+
+              {/* <IconButton
+                aria-label="add"
+                onClick={() => this.setState({ showReportsList: true })}
+              >
+                <AddIcon  />
+              </IconButton>
+              <Typography className={classes.hideXsLabel}>Relatório</Typography> */}
+            </Grid>
             <Grid
               container
               xs={1}
@@ -857,76 +817,88 @@ class Insta extends React.Component {
               <IconButton onClick={this.openOrder}>
                 <Toc></Toc>
               </IconButton>
-              <Typography className={classes.hideXsLabel}>Ordenar</Typography>
+              <Typography className={classes.hideXsLabel} component="p">
+                Ordenar
+              </Typography>
             </Grid>
           </Grid>
+
           <Divider id="some"></Divider>
 
           <div className={classes.margin}>
-            <Grid container direction="column" >
-              {console.log(this.state.estilistaFilter)}
-              {this.state.print
-                ? <PrintPage showBadges={true} orderBy={this.state.orderBy} 
-                orderAsc={this.state.orderAsc}
-                 onFinishPrint={() => this.setState({print:false})}
-                  allProgramacoes={this.state.allProgramacoes}
-                   categoriaFilter={this.state.categoriaFilter}
-                    subcategoriaFilter={this.state.subcategoriaFilter}
-                     estampaFilter={this.state.estampaFilter}
-                     estilistaFilter={this.state.estilistaFilter}
-                     fornecedorFilter={this.state.fornecedorFilter}
-                      colecaoFilter={this.state.colecaoFilter}
-                      >
-                     </PrintPage>
-                : this.renderProgramacoes()}
+            <Grid container direction="column" spacing={2}>
+              <Grid item direction="row" justify="center">
+                {this.state.noProducts ? (
+                  <div className={classes.emojiPosition}>
+                    <Typography variant="h6" component="p">
+                      Sem Produtos no seu Relatório
+                    </Typography>
+                    <span
+                      role="img"
+                      className={classes.emoji}
+                      aria-label="Shrug"
+                    >
+                      🤷
+                    </span>
+                  </div>
+                ) : (
+                  this.renderProductsCardsView(this.filterProducts(this.state.products))
+                )}
+              </Grid>
             </Grid>
           </div>
-        </div>
+        {/* </Container> */}
+        {/* </DragDropContext> */}
 
-        <Grid container justify="center">
-        </Grid>
-        {this.state.selectItens ? (
-          <Footer
-            hideButton={true}
-            relatoryPage={this.state.relatoryPage}
-            leftIconTodos={
-              <Grid
-                container
-                direction="row"
-                justify="flex-start"
-                alignItems="center"
-                onClick={() => this.saveProductsToReports()}
-              >
-                <IconButton>
-                  <CheckIcon
-                    onClick={() => {
-                      this.setState({
-                        selectingProducts: !this.state.selectingProducts
-                      });
-                    }}
-                  ></CheckIcon>
-                </IconButton>
-                <Typography className={classes.hideXsLabel}>Salvar </Typography>
-              </Grid>
-            }
-            rightIconTodos={
-              <Grid
-                container
-                direction="row"
-                alignItems="center"
-                justify="flex-end"
-                onClick={() => this.handleSelectAllItens()}
-              >
-                <IconButton>
-                  <DoneAllIcon></DoneAllIcon>
-                </IconButton>
-                <Typography className={classes.hideXsLabel}>
-                  Selecionar todos
-                </Typography>
-              </Grid>
-            }
-          ></Footer>
-        ) : null}
+        <Footer
+          hideButton={true}
+          relatoryPage={this.state.relatoryPage}
+          leftIconTodos={
+            <Grid
+              container
+              direction="row"
+              justify="flex-start"
+              alignItems="center"
+              onClick={() => this.saveProductsToReports()}
+            >
+              <IconButton>
+                <CheckIcon
+                  onClick={() => {
+                    this.setState({
+                      selectingProducts: !this.state.selectingProducts
+                    });
+                  }}
+                ></CheckIcon>
+              </IconButton>
+              <Typography  className={classes.hideXsLabel} >Salvar </Typography>
+            </Grid>
+          }
+          rightIconTodos={
+            <Grid
+              container
+              direction="row"
+              alignItems="center"
+              justify="flex-end"
+              onClick={() => {
+                if(this.state.reportsIds.length <1) {
+                  return 
+                }
+                const allProducts = this.state.allProductsSelectedIds;
+                if (this.state.selectedProducts.length === allProducts.length) {
+                  this.setState({ selectedProducts: [] });
+                } else {
+                  //selecionando todos os produtos
+                  this.setState({ selectedProducts: this.filterProducts(this.state.products).map(produto =>produto.id) });
+                }
+              }}
+            >
+              <IconButton>
+                <DoneAllIcon></DoneAllIcon>
+              </IconButton>
+              <Typography className={classes.hideXsLabel}>Selecionar todos</Typography>
+            </Grid>
+          }
+        ></Footer>
         <ChooseReportList
           onClose={() => this.setState({ showReportsList: false })}
           reports={this.state.reports}
@@ -939,7 +911,9 @@ class Insta extends React.Component {
   }
 }
 
-const wrapperComponent = withStyles(styles)(withSnackbar(withRouter(Insta)));
+const wrapperComponent = withStyles(styles)(
+  withSnackbar(withRouter(AllProducts))
+);
 
 const mapStateToProps = state => ({
   loading: state.auth.loading,

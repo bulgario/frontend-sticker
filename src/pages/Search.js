@@ -6,6 +6,7 @@ import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
+import FormControl from "@material-ui/core/FormControl";
 import { withRouter } from "react-router-dom";
 
 import InputLabel from "@material-ui/core/InputLabel";
@@ -31,13 +32,15 @@ const styles = theme => ({
   },
   select: {
     width: 160,
-    marginLeft: theme.spacing(0.6),
-    marginRight: theme.spacing(0.6)
   },
   whiteButton: {
     color: "white",
     sizeSmall: "100px"
-  }
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
 });
 class Search extends React.Component {
   constructor(props) {
@@ -53,7 +56,8 @@ class Search extends React.Component {
       anchorEl: null,
       choosedNameCollection: "",
       id_marca_user: "",
-      marca_user: ""
+      marca_user: "",
+      checked: true
     };
   }
 
@@ -97,22 +101,14 @@ class Search extends React.Component {
 
   validateRequest = () => {
     const { data_inicio, data_fim, data_ultimo } = this.state;
+
     if (!data_inicio) {
-      //   this.props.enqueueSnackbar("Selecione uma data início", {
-      //     variant: "error"
-      //   });
       return false;
     }
     if (!data_fim) {
-      //   this.props.enqueueSnackbar("Selecione uma data fim", {
-      //     variant: "error"
-      //   });
       return false;
     }
     if (!data_ultimo) {
-      //   this.props.enqueueSnackbar("Selecione a data do último agendamento", {
-      //     variant: "error"
-      //   });
       return false;
     }
 
@@ -127,9 +123,9 @@ class Search extends React.Component {
           this.state.data_inicio
         ).toISOString()}&dataFim=${new Date(
           this.state.data_fim
-        ).toISOString()}&entregaAjustada=${new Date(
+        ).toISOString()}&entregaAjustada=${
           this.state.data_ultimo
-        ).toISOString()}&categoria=${this.state.choosedCategory}&subcategoria=${
+        }&categoria=${this.state.choosedCategory}&subcategoria=${
           this.state.choosedSubCategory
         }&colecao=${this.state.choosedNameCollection}`
       );
@@ -150,24 +146,20 @@ class Search extends React.Component {
   };
   renderInputs() {
     const { classes } = this.props;
-    const { data_inicio, data_ultimo, data_fim } = this.state;
-    if (data_fim && data_inicio && data_ultimo) {
       return (
         <Grid container justify="center">
-          <div>
-            <InputLabel id="label-subcategory">Colecao</InputLabel>
-            <Select
-              labelId="label-subcategory"
-              id="demo-simple-select-outlined"
-              value={this.state.choosedNameCollection}
-              onChange={e => {
-                this.setState({ choosedNameCollection: e.target.value });
-              }}
-              labelWidth={100}
-              label="choosedNameCollection"
-              variant="outlined"
-              className={this.props.classes.select}
-            >
+       <FormControl variant="outlined" className={classes.formControl}>
+        <InputLabel id="demo-simple-select-outlined-label">Coleção</InputLabel>
+        <Select
+         className={classes.select}
+          labelId="demo-simple-select-outlined-label"
+          id="demo-simple-select-outlined"
+          value={this.state.choosedNameCollection}        
+          onChange={e => {
+            this.setState({ choosedNameCollection: e.target.value });
+          }}
+          label="Coleção"
+        >
               {this.state.nome_collection.map(collection => {
                 return (
                   <MenuItem key={collection} value={collection}>
@@ -175,10 +167,9 @@ class Search extends React.Component {
                   </MenuItem>
                 );
               })}
-            </Select>
-            {/* </Menu> */}
-          </div>
-          <Grid container justify="center">
+        </Select>
+      </FormControl>
+          <Grid container item justify="center">
             <Button
               className={classes.button}
               variant="contained"
@@ -190,9 +181,6 @@ class Search extends React.Component {
           </Grid>
         </Grid>
       );
-    }
-
-    return null;
   }
   render(props) {
     const { classes } = this.props
@@ -203,7 +191,8 @@ class Search extends React.Component {
           title="Programação"
           rightIcon={null}
           leftIcon={
-            <IconButton               aria-label="upload picture"
+            <IconButton               
+            aria-label="upload picture"
             component="span"
             className={classes.whiteButton}
             onClick={() => this.props.history.goBack()}>
@@ -218,7 +207,8 @@ class Search extends React.Component {
             choosedCollection={this.getCollections}
           />
         </Grid>
-        {this.renderInputs()}
+        <br></br>
+          {this.renderInputs()}
       </Fragment>
     );
   }

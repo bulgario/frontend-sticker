@@ -13,7 +13,7 @@ import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import Button from "@material-ui/core/Button";
+// import Button from "@material-ui/core/Button";
 
 import ListItemText from "@material-ui/core/ListItemText";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -113,7 +113,7 @@ function ResponsiveNavbar(props) {
             <Grid container direction="column">
               <Grid container item direction="row" alignItems="center">
                 <Typography    align="justify"
-              variant="p"
+              
               component="h5" className={classes.selectAll} >Selecionar Todos</Typography>
                 <Checkbox
                   edge="start"
@@ -187,14 +187,14 @@ function ResponsiveNavbar(props) {
 
         {renderFilterLists()}
 
-        <Button
+        {/* <Button
           variant="contained"
           color="primary"
           className={classes.button}
           // onClick={props.openMenu}
         >
           Filtrar
-        </Button>
+        </Button> */}
       </Grid>
     );
   };

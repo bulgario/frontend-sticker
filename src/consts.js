@@ -3,7 +3,12 @@ export const ROUTES = {
   SEARCH: "/search",
   INSTA: "/insta",
   HOME: "/home",
-  SELECTEDPRODUCT: "/produto"
+  SELECTEDPRODUCT: "/produto",
+  MYREPORTS: "/meusprodutos",
+  RELATORIO: "/relatorio",
+  PRODUTOS: "/produtos",
+  COLECAO: "/colecao/:collection",
+  COLECOES: "/colecoes"
 };
 
 export const OMNI_URL =
@@ -12,3 +17,5 @@ export const PLM_API_URL = "http://default.somalabs.com.br/api";
 
 // export const BASE_URL = "http://localhost:8000";
 export const BASE_URL = "https://sticker-album-backend-dot-apt-bonbon-179602.appspot.com";
+
+// export const BASE_URL = "https://sticker-album-backend-homolog-dot-apt-bonbon-179602.appspot.com"
