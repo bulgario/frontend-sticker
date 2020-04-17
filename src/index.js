@@ -1,6 +1,6 @@
+import '../src/config/ReactotronConfig'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import '../src/config/ReactotronConfig'
 import './index.css'
 import App from './App'
 import * as serviceWorker from './serviceWorker'

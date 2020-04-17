@@ -1,4 +1,5 @@
 import { createStore, applyMiddleware, compose } from 'redux';
+import Reactotron from '../../src/config/ReactotronConfig'
 import { routerMiddleware } from 'connected-react-router';
 import thunk from 'redux-thunk';
 import createHistory from 'history/createBrowserHistory';
@@ -26,6 +27,7 @@ if (process.env.NODE_ENV === 'development') {
   
   const composedEnhancers = compose(
     applyMiddleware(...middleware),
+    Reactotron.createEnhancer(),
     ...enhancers
   );
   

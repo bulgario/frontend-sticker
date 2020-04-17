@@ -1,8 +1,8 @@
 import { PRODUCTS } from './actionTypes'
 
-const generateProducts = (value) => ({
+const orderProducts = (value) => ({
     type: PRODUCTS,
     newValue: value,
 })
 
-export default generateProducts
+export default orderProducts

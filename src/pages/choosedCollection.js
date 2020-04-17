@@ -17,6 +17,7 @@ import User from "../services/User";
 import CardProduct from "../components/recursableComponents/CardProduct";
 
 import Filters from "../components/recursableComponents/Drawers"
+import OrderItems from "../components/recursableComponents/OrderItems"
 import FilterList from "@material-ui/icons/FilterList";
 import Typography from "@material-ui/core/Typography";
 
@@ -223,12 +224,22 @@ function Colecao(props) {
             alignItems="center"
             justify="flex-start"
           >
-            </Grid>
-
-        <Filters
-          // fields={fields}
-          products={products}
-        />
+            <Filters
+              products={products}
+            />
+          </Grid>
+          <Grid
+            container
+            xs={1}
+            item
+            sm={2}
+            alignItems="center"
+            justify="flex-end"
+          >
+            <OrderItems 
+              products={products}
+            />
+          </Grid>  
       </Grid>
        <Grid
         container

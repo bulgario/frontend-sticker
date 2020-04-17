@@ -1,7 +1,7 @@
 import Reactotron from 'reactotron-react-js'
 import { reactotronRedux } from 'reactotron-redux'
 
-if(process.env.NODE_ENV === 'development') {
+// if(process.env.NODE_ENV === 'development') {
   const tron = Reactotron.configure()
   .use(reactotronRedux())
   .connect()
@@ -9,4 +9,6 @@ if(process.env.NODE_ENV === 'development') {
   tron.clear()
 
   console.tron = tron
-}
+// }
+
+export default tron
