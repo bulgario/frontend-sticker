@@ -63,6 +63,7 @@ const MaterialUIPickers = props =>  {
   }
 
   const handleDateUltimoAgendamento = (date) => {
+    console.log( date.target.value)
     setSelectedDateUltimo(date.target.value)
     props.choosedData(selectedDateInicio, selectedDateFim, date.target.value)
     getCollection(selectedDateInicio, selectedDateFim, date.target.value)

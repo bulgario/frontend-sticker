@@ -238,6 +238,8 @@ function Colecao(props) {
           >
             <OrderItems 
               products={products}
+              // campos que eu quero que existam no filtro
+              orderFields={[ "estilista", "fornecedor" ]}
             />
           </Grid>  
       </Grid>

@@ -1,4 +1,4 @@
-import { UPDATE_FILTER, UPDATE_SELECTED_FILTERS } from '../actions/actionTypes'
+import { UPDATE_FILTER } from '../actions/actionTypes'
 
 import produce from 'immer'
 

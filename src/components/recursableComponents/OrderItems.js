@@ -12,6 +12,12 @@ import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import Typography from '@material-ui/core/Typography';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
 
 import FormatListNumberedIcon from '@material-ui/icons/FormatListNumbered';
 import Grid from "@material-ui/core/Grid";
@@ -29,7 +35,6 @@ const styles = {
 class OrderItems extends React.Component {
   state = {
     right: false,
-    
   };
 
   toggleDrawer = (side, open) => () => {
@@ -39,37 +44,60 @@ class OrderItems extends React.Component {
   };
 
 
-  componentWillReceiveProps() {
-    const { products } = this.props
-
-    // if(products && products.length > 0) {
-    //   products.filter(product => console.log(product))
-    // }
+  componentDidUpdate(prevProps) {
+    const { dispatch, products, orderFields } = this.props
+    
+    if(prevProps.products !== this.props.products) {
+      // MONTA O FILTRO DE ORDENACAO COM OS ITEMS
+      dispatch({
+        type: 'ORDER_ITEMS_ORDER_FILTER',
+        products,
+        orderFields
+      })
+    }   
+    if(prevProps.orderItems !== this.props.orderItems) {
+      this.setState({ items: this.props.orderItems })
+    }
   }
 
   render() {
     const { classes } = this.props;
+    console.log(this.state.items)
 
     const sideList = (
-      <div className={classes.list}>
-        <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
-      </div>
+      <Grid
+        container
+        className={classes.list}
+        xs={12}
+      >
+       { this.state.items && (
+         Object.entries(this.state.items).map(([key, value]) => {
+           return (
+            <Grid
+              item
+              xs={12}
+              direction="row"
+              justify="space-between" 
+              alignItems="flex-start" 
+            >
+              <List>
+              <ExpansionPanel>
+              <ExpansionPanelSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+              >
+              <Typography className={classes.heading}>{key}</Typography>
+              </ExpansionPanelSummary>
+              </ExpansionPanel>
+              </List>
+
+            </Grid>
+           )
+         })
+       ) }
+
+      </Grid>
     );
 
     return (
@@ -91,12 +119,16 @@ class OrderItems extends React.Component {
           </Button>
         </Grid>
 
-        <Drawer anchor="right" open={this.state.right} onClose={this.toggleDrawer('right', false)}>
+        <Drawer 
+          anchor="right" 
+          open={this.state.right} 
+          onClose={this.toggleDrawer('right', false)}
+        >
           <div
             tabIndex={0}
             role="button"
-            onClick={this.toggleDrawer('right', false)}
-            onKeyDown={this.toggleDrawer('right', false)}
+            // onClick={this.toggleDrawer('right', false)}
+            // onKeyDown={this.toggleDrawer('right', false)}
           >
             {sideList}
           </div>
@@ -110,4 +142,12 @@ OrderItems.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(OrderItems);
+
+function mapStateToProps(state) {
+  return {
+    produtos: state.products,
+    orderItems: state.orderItems
+  }
+}
+
+export default connect(mapStateToProps)(withStyles(styles)(OrderItems));
