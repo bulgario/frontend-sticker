@@ -4,20 +4,16 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import Button from '@material-ui/core/Button';
+
+
 import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
+
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
-
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import Typography from '@material-ui/core/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-
+import Checkbox from '@material-ui/core/Checkbox';
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import ExpandLessIcon from "@material-ui/icons/ExpandLess";
+import { IconButton } from "@material-ui/core";
 
 import FormatListNumberedIcon from '@material-ui/icons/FormatListNumbered';
 import Grid from "@material-ui/core/Grid";
@@ -30,11 +26,15 @@ const styles = {
   fullList: {
     width: 'auto',
   },
+  itemLabel: {
+    width:300
+  },
 };
 
 class OrderItems extends React.Component {
   state = {
     right: false,
+    checkedOrder: false
   };
 
   toggleDrawer = (side, open) => () => {
@@ -60,9 +60,21 @@ class OrderItems extends React.Component {
     }
   }
 
+  handleOrderItemDispatch = async (key, value) => {
+    //falta arrumar esse setState
+    // await this.setState({ [option]: !this.state.checkedOrder })
+
+    this.props.dispatch({
+      type: 'ORDER_ITEMS',
+      products: this.props.produtos.length > 0 ? this.props.produtos : this.props.products,
+      fieldName: key
+    })
+  }
+
   render() {
     const { classes } = this.props;
-    console.log(this.state.items)
+    const { checkedOrder } = this.state
+    console.log(this.props)
 
     const sideList = (
       <Grid
@@ -72,6 +84,7 @@ class OrderItems extends React.Component {
       >
        { this.state.items && (
          Object.entries(this.state.items).map(([key, value]) => {
+          const labelId = `checkbox-list-secondary-label-${key}`;
            return (
             <Grid
               item
@@ -80,18 +93,24 @@ class OrderItems extends React.Component {
               justify="space-between" 
               alignItems="flex-start" 
             >
-              <List>
-              <ExpansionPanel>
-              <ExpansionPanelSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1a-content"
-                id="panel1a-header"
-              >
-              <Typography className={classes.heading}>{key}</Typography>
-              </ExpansionPanelSummary>
-              </ExpansionPanel>
-              </List>
 
+          <ListItem 
+            key={key} 
+            button
+            onClick={() => this.handleOrderItemDispatch(key, value)}
+          >
+            <ListItemText id={key} secondary={key} className={classes.itemLabel} />
+            <ListItem >
+              <Checkbox
+                edge="start"
+                // onChange={this.handleOrderItem(value)}
+                checked={checkedOrder}
+                inputProps={{ 'aria-labelledby': labelId }}
+                color="primary"
+              />
+            </ListItem>
+            {/* </Grid> */}
+          </ListItem>
             </Grid>
            )
          })

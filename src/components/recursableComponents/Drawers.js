@@ -101,7 +101,8 @@ class Filters extends React.Component {
 
     await this.setState({ selectedOptFilter: { ...this.state.selectedOptFilter, ...obj } })
 
-    this.props.dispatch({ type: 'UPDATE_PRODUCTS',
+    this.props.dispatch({ 
+      type: 'UPDATE_PRODUCTS',
       products: this.props.products,
       // filterOptions: filterOptions,
       selectedFilters: this.state.selectedOptFilter
