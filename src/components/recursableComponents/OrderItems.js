@@ -4,17 +4,10 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import Button from '@material-ui/core/Button';
-
-
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import ExpandLessIcon from "@material-ui/icons/ExpandLess";
-import { IconButton } from "@material-ui/core";
-
 import FormatListNumberedIcon from '@material-ui/icons/FormatListNumbered';
 import Grid from "@material-ui/core/Grid";
 
@@ -23,7 +16,7 @@ const styles = {
   list: {
     width: 250,
   },
-  fullList: {
+fullList: {
     width: 'auto',
   },
   itemLabel: {
@@ -74,7 +67,6 @@ class OrderItems extends React.Component {
   render() {
     const { classes } = this.props;
     const { checkedOrder } = this.state
-    console.log(this.props)
 
     const sideList = (
       <Grid

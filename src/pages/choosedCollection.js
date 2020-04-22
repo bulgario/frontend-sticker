@@ -109,6 +109,15 @@ function Colecao(props) {
       setCheckFilter(false)
     }
   }, [props.produtos])
+  
+  useEffect(() => {
+    if(props.orderedItems.length > 0) {
+      setProductsFiltered(props.orderedItems)
+      setCheckFilter(true)
+    } else {
+      setCheckFilter(false)
+    }
+  }, [props.orderedItems])
 
 
   const getFilterData = (data) => {
@@ -239,7 +248,7 @@ function Colecao(props) {
             <OrderItems 
               products={products}
               // campos que eu quero que existam no filtro
-              orderFields={[ "estilista", "fornecedor" ]}
+              orderFields={[ "estilista", "fornecedor", "marca" ]}
             />
           </Grid>  
       </Grid>
@@ -266,6 +275,7 @@ function mapStateToProps(state) {
   return {
     filters: state.filter,
     produtos: state.products,
+    orderedItems: state.orderedItems
   }
 }
 

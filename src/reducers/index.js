@@ -6,7 +6,8 @@ import auth from './authReducer';
 import date from './dateReducer';
 import filter from './filtersOptReducer';
 import products from './productsReducer';
-import orderItems from './orderItemsReducer'
+import orderItems from './orderItemsReducer';
+import orderedItems from './sortOrderItemsReducer';
 
 export default (history) => combineReducers({
   router: connectRouter(history),
@@ -15,5 +16,6 @@ export default (history) => combineReducers({
   date,
   filter,
   products,
-  orderItems
+  orderItems,
+  orderedItems
 });

@@ -66,7 +66,6 @@ function ResponsiveNavbar(props) {
     props.unmarkAllFilters(filterParam);
   };
   const handleToggle = (value, index, filterParam) => () => {
-    console.log(props.filters, filterParam)
     const newChecked = [...props.filters[filterParam]];
     value.checked = !value.checked;
     newChecked.splice(index, value);

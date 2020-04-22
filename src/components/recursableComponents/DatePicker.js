@@ -63,7 +63,6 @@ const MaterialUIPickers = props =>  {
   }
 
   const handleDateUltimoAgendamento = (date) => {
-    console.log( date.target.value)
     setSelectedDateUltimo(date.target.value)
     props.choosedData(selectedDateInicio, selectedDateFim, date.target.value)
     getCollection(selectedDateInicio, selectedDateFim, date.target.value)
@@ -82,7 +81,7 @@ const MaterialUIPickers = props =>  {
             { variant: "warning" }
           );
         }
-        console.log(collection)
+        
         props.choosedCollection(collection)
 
       } catch (error) {
