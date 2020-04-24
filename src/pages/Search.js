@@ -101,22 +101,14 @@ class Search extends React.Component {
 
   validateRequest = () => {
     const { data_inicio, data_fim, data_ultimo } = this.state;
+
     if (!data_inicio) {
-      //   this.props.enqueueSnackbar("Selecione uma data início", {
-      //     variant: "error"
-      //   });
       return false;
     }
     if (!data_fim) {
-      //   this.props.enqueueSnackbar("Selecione uma data fim", {
-      //     variant: "error"
-      //   });
       return false;
     }
     if (!data_ultimo) {
-      //   this.props.enqueueSnackbar("Selecione a data do último agendamento", {
-      //     variant: "error"
-      //   });
       return false;
     }
 
@@ -154,8 +146,6 @@ class Search extends React.Component {
   };
   renderInputs() {
     const { classes } = this.props;
-    const { data_inicio, data_ultimo, data_fim } = this.state;
-    if (data_fim && data_inicio && data_ultimo) {
       return (
         <Grid container justify="center">
        <FormControl variant="outlined" className={classes.formControl}>
@@ -191,9 +181,6 @@ class Search extends React.Component {
           </Grid>
         </Grid>
       );
-    }
-
-    return null;
   }
   render(props) {
     const { classes } = this.props
@@ -204,7 +191,8 @@ class Search extends React.Component {
           title="Programação"
           rightIcon={null}
           leftIcon={
-            <IconButton               aria-label="upload picture"
+            <IconButton               
+            aria-label="upload picture"
             component="span"
             className={classes.whiteButton}
             onClick={() => this.props.history.goBack()}>
