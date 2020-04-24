@@ -174,6 +174,7 @@ function Colecao(props) {
     productsFitered ? productsFitered.map((produto, index) => {
       return (
         <CardProduct
+          gridSize={gridSize}
           showBadges={true} 
           key={`${produto.id}${index}`} 
           productToRender={produto.data} 
@@ -187,11 +188,12 @@ function Colecao(props) {
     products.map((produtos, index) => {
       return (
        <CardProduct
-         showBadges={true} 
-         key={`${produtos.id}${index}`} 
-         productToRender={produtos.data} 
-         handleClickProduct={() => handleClickProduct(produtos.id)}
-         />)
+          gridSize={gridSize}
+          showBadges={true} 
+          key={`${produtos.id}${index}`} 
+          productToRender={produtos.data} 
+          handleClickProduct={() => handleClickProduct(produtos.id)}
+        />)
     })
   )
 
@@ -247,14 +249,13 @@ function Colecao(props) {
             />
           </Grid>
       </Grid>
-       <Grid
-        container
-        direction="row"
-        justify="center"
-        alignItems="center"
-        spacing={0}
-        xs={gridSize != null ? gridSize : 0}
-      >      
+        <Grid
+          container
+          direction="row"
+          justify="center"
+          alignItems="center"
+          spacing={0}
+        > 
         { checkFilter ? 
           filteredList
          : noFilteredList }

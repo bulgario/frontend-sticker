@@ -114,8 +114,12 @@ const ProductCard = props => {
     productToRender.cor_produto
   );
   productToRender.image = image;
-  return (
-    <Grid item className="">
+  return (  
+    <Grid 
+      item
+      className=""
+      xs={props.gridSize && props.gridSize != null ? props.gridSize : 0}
+    >
       <Card
         // {...props}
         className={props.cardOpacity ? classes.cardOpacity : classes.card}
