@@ -1,7 +1,5 @@
 import { UPDATE_PRODUCTS } from '../actions/actionTypes'
 
-import produce from 'immer'
-
 export default function filter(state = [], action) {
   switch(action.type) {
     case UPDATE_PRODUCTS:

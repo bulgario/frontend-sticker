@@ -1,7 +1,5 @@
 import { UPDATE_FILTER } from '../actions/actionTypes'
 
-import produce from 'immer'
-
 export default function filter(state = [], action) {
   switch(action.type) {
     case UPDATE_FILTER:

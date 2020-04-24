@@ -6,7 +6,6 @@ import { withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Tooltip from '@material-ui/core/Tooltip';
 import AppsIcon from '@material-ui/icons/Apps';
-import Divider from '@material-ui/core/Divider';
 
 const styles = theme => ({
   icon: {
@@ -28,7 +27,7 @@ function GridSize(props) {
       type: 'GRID_ITEMS_SIZE',
       gridValue,
     })
-  }, [gridValue])
+  }, [gridValue]) //eslint-disable-line
 
   return (
     <Fragment>

@@ -1,8 +1,6 @@
 import "date-fns";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { connect } from 'react-redux';
-import { withRouter } from "react-router-dom";
-
 import { Typography } from "@material-ui/core";
 import { withSnackbar } from "notistack";
 import { withStyles } from "@material-ui/core/styles";

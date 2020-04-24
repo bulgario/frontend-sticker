@@ -9,10 +9,10 @@ export default function orderItems(state = [], action) {
       let orderCategories = {}
 
       products.map(product => { //eslint-disable-line
-        return Object.keys(product.data).map(keys => {
-          return orderFields.map(valor => {
-            if(keys === valor) {
-              fieldsForOrder.push(keys)
+        return Object.keys(product.data).map(keys => { //eslint-disable-line
+          return orderFields.map(valor => { //eslint-disable-line
+            if(keys === valor) { //eslint-disable-line
+              fieldsForOrder.push(keys) //eslint-disable-line
             }
           }) 
         })
@@ -31,10 +31,10 @@ export default function orderItems(state = [], action) {
     
 
       fieldsForOrder.map(field => { //eslint-disable-line
-        return products.map(produtos => {
-          Object.entries(produtos.data).forEach(([key, value]) => {
-            if(field === key) {
-              orderFieldsObj[key].push(produtos.data[field])
+        return products.map(produtos => { //eslint-disable-line
+          Object.entries(produtos.data).forEach(([key, value]) => { //eslint-disable-line
+            if(field === key) { //eslint-disable-line
+              orderFieldsObj[key].push(produtos.data[field]) //eslint-disable-line
             }
           })
         })

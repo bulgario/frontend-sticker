@@ -76,11 +76,10 @@ class Filters extends React.Component {
   handleSelectAll = async (fieldName, items) => {
     items.map(fieldItem => {
       if(fieldItem.checked === false) {
-        fieldItem.checked = true
+        return fieldItem.checked = true
       } else {
-        fieldItem.checked = false
+        return fieldItem.checked = false
       }
-      return
     })
     const allItensFromField = { [fieldName]: items }
 

@@ -138,7 +138,7 @@ function Colecao(props) {
         values.data.fornecedor && (filterOptions.fornecedor.push(values.data.fornecedor))
         values.data.estilista && (filterOptions.estilista.push(values.data.estilista))
         values.data.colecao && (filterOptions.colecao.push(values.data.colecao))
-      })
+      }) //eslint-disable-line
     // REMOVE EMPTY VALUES
     for(let value in filterOptions) {
       if(filterOptions[value].length === 0) {
@@ -147,7 +147,7 @@ function Colecao(props) {
     }
     // GET ALL THE FIELDS NAMES TO BE PASSED TO THE CHILD
     Object.keys(filterOptions).map(filterItem => {
-      setFields([...fields, filterItem])
+      return setFields([...fields, filterItem])
     })
       return filterOptions
     } else {
@@ -170,9 +170,6 @@ function Colecao(props) {
     })
   }
 
-  const openFilter = () => {
-    setOpenFilter(!open);
-  };
 
   const filteredList = (
     productsFitered ? productsFitered.map((produto, index) => {
@@ -231,7 +228,7 @@ function Colecao(props) {
             item
             sm={2}
             alignItems="center"
-            justify="flex-start"
+            justify="flex-start" //eslint-disable-line
           >
             <Filters
               products={products}
@@ -244,7 +241,7 @@ function Colecao(props) {
             item
             sm={2}
             alignItems="center"
-            justify="flex-end"
+            justify="flex-end" //eslint-disable-line
           >
             <OrderItems 
               products={products}
