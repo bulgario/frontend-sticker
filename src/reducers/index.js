@@ -8,6 +8,7 @@ import filter from './filtersOptReducer';
 import products from './productsReducer';
 import orderItems from './orderItemsReducer';
 import orderedItems from './sortOrderItemsReducer';
+import gridItemsSize from './gridItemsSizeReducer';
 
 export default (history) => combineReducers({
   router: connectRouter(history),
@@ -17,5 +18,6 @@ export default (history) => combineReducers({
   filter,
   products,
   orderItems,
-  orderedItems
+  orderedItems,
+  gridItemsSize
 });

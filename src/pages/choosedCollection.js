@@ -15,11 +15,13 @@ import { BASE_URL } from "../consts";
 import User from "../services/User";
 
 import CardProduct from "../components/recursableComponents/CardProduct";
+import GridSize from "../components/recursableComponents/GridSize"
 
 import Filters from "../components/recursableComponents/Drawers"
 import OrderItems from "../components/recursableComponents/OrderItems"
 import FilterList from "@material-ui/icons/FilterList";
 import Typography from "@material-ui/core/Typography";
+import AppsIcon from '@material-ui/icons/Apps';
 
 const styles = theme => ({
   whiteButton: {
@@ -66,6 +68,7 @@ function Colecao(props) {
   const [productsFitered, setProductsFiltered] = useState([])
   const [checkFilter, setCheckFilter] = useState(false)
   const [open, setOpenFilter] = useState(false)
+  const [ gridSize, setGridSize ] = useState(0)
 
   const { collection } = props.match.params
 
@@ -119,6 +122,9 @@ function Colecao(props) {
     }
   }, [props.orderedItems])
 
+  useEffect(() => {
+    setGridSize(props.gridSize)
+  }, [props.gridSize])
 
   const getFilterData = (data) => {
     const filterOptions = {
@@ -173,7 +179,6 @@ function Colecao(props) {
     setOpenFilter(!open);
   };
 
-
   const filteredList = (
     productsFitered ? productsFitered.map((produto, index) => {
       return (
@@ -226,7 +231,7 @@ function Colecao(props) {
         // onClick={() => handleFilterProduct(products)}
       >
         <Grid
-            container
+            item
             xs={1}
             item
             sm={2}
@@ -237,8 +242,9 @@ function Colecao(props) {
               products={products}
             />
           </Grid>
+          <GridSize />
           <Grid
-            container
+            item
             xs={1}
             item
             sm={2}
@@ -250,7 +256,7 @@ function Colecao(props) {
               // campos que eu quero que existam no filtro
               orderFields={[ "estilista", "fornecedor", "marca" ]}
             />
-          </Grid>  
+          </Grid>
       </Grid>
        <Grid
         container
@@ -258,7 +264,8 @@ function Colecao(props) {
         justify="center"
         alignItems="center"
         spacing={0}
-      >
+        xs={gridSize != null ? gridSize : 0}
+      >      
         { checkFilter ? 
           filteredList
          : noFilteredList }
@@ -275,7 +282,8 @@ function mapStateToProps(state) {
   return {
     filters: state.filter,
     produtos: state.products,
-    orderedItems: state.orderedItems
+    orderedItems: state.orderedItems,
+    gridSize: state.gridItemsSize
   }
 }
 

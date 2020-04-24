@@ -1,11 +1,12 @@
 import "date-fns";
-import React from "react";
-import Grid from "@material-ui/core/Grid";
+import React, { useState, useEffect } from "react";
+import { connect } from 'react-redux';
+import { withRouter } from "react-router-dom";
 
 import { Typography } from "@material-ui/core";
 import { withSnackbar } from "notistack";
 import { withStyles } from "@material-ui/core/styles";
-
+import Grid from "@material-ui/core/Grid";
 import Badge from "@material-ui/core/Badge";
 import Card from "@material-ui/core/Card";
 import SwipeableCarrousel from "./SwipeableViews";
@@ -79,6 +80,7 @@ const styles = theme => ({
 
 const ProductCard = props => {
   const { classes, productToRender } = props;
+
   const chooseBalls = ({ distribuicao, validBasedinSchedule }) => {
     const { classes } = props;
 
@@ -174,5 +176,14 @@ const ProductCard = props => {
   );
 };
 
+
+
+function mapStateToProps(state) {
+  return {
+    gridSize: state.gridItemsSize
+  }
+}
+
 const wrapperComponent = withStyles(styles)(withSnackbar(ProductCard));
-export default wrapperComponent;
+
+export default connect(mapStateToProps)(wrapperComponent);
