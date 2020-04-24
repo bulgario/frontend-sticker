@@ -1,4 +1,4 @@
-import { ORDER_ITEMS_ORDER_FILTER, ORDER_ITEMS } from '../actions/actionTypes'
+import { ORDER_ITEMS_ORDER_FILTER } from '../actions/actionTypes'
 
 export default function orderItems(state = [], action) {
 	switch(action.type) {
@@ -8,9 +8,9 @@ export default function orderItems(state = [], action) {
       let fieldsForOrder = []
       let orderCategories = {}
 
-      products.map(product => {
-        Object.keys(product.data).map(keys => {
-          orderFields.map(valor => {
+      products.map(product => { //eslint-disable-line
+        return Object.keys(product.data).map(keys => {
+          return orderFields.map(valor => {
             if(keys === valor) {
               fieldsForOrder.push(keys)
             }
@@ -30,8 +30,8 @@ export default function orderItems(state = [], action) {
       })
     
 
-      fieldsForOrder.map(field => {
-        products.map(produtos => {
+      fieldsForOrder.map(field => { //eslint-disable-line
+        return products.map(produtos => {
           Object.entries(produtos.data).forEach(([key, value]) => {
             if(field === key) {
               orderFieldsObj[key].push(produtos.data[field])

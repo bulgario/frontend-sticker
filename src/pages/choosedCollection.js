@@ -19,9 +19,6 @@ import GridSize from "../components/recursableComponents/GridSize"
 
 import Filters from "../components/recursableComponents/Drawers"
 import OrderItems from "../components/recursableComponents/OrderItems"
-import FilterList from "@material-ui/icons/FilterList";
-import Typography from "@material-ui/core/Typography";
-import AppsIcon from '@material-ui/icons/Apps';
 
 const styles = theme => ({
   whiteButton: {
@@ -70,8 +67,6 @@ function Colecao(props) {
   const [open, setOpenFilter] = useState(false)
   const [ gridSize, setGridSize ] = useState(0)
 
-  const { collection } = props.match.params
-
   useEffect(() => {
       const user = new User();
       const id_marca_estilo = user.user.id_marca_estilo;
@@ -101,11 +96,11 @@ function Colecao(props) {
   }, [])
 
   useEffect(() => {
-    handleFilterProduct()
+    handleFilterProduct() //eslint-disable-line
   }, [filterOpt])
 
   useEffect(() => {
-    if(props.produtos.length > 0) {
+    if(props.produtos.length > 0) { //eslint-disable-line
       setProductsFiltered(props.produtos)
       setCheckFilter(true)
     } else {
