@@ -64,7 +64,6 @@ function Colecao(props) {
   const [fields, setFields] = useState([])
   const [productsFitered, setProductsFiltered] = useState([])
   const [checkFilter, setCheckFilter] = useState(false)
-  const [open, setOpenFilter] = useState(false)
   const [ gridSize, setGridSize ] = useState(0)
 
   useEffect(() => {
@@ -93,11 +92,11 @@ function Colecao(props) {
           { variant: "error" }
         );
       }
-  }, [])
+  }, []) //eslint-disable-line
 
   useEffect(() => {
     handleFilterProduct() //eslint-disable-line
-  }, [filterOpt])
+  }, [filterOpt]) //eslint-disable-line
 
   useEffect(() => {
     if(props.produtos.length > 0) { //eslint-disable-line
@@ -106,7 +105,7 @@ function Colecao(props) {
     } else {
       setCheckFilter(false)
     }
-  }, [props.produtos])
+  }, [props.produtos]) //eslint-disable-line
   
   useEffect(() => {
     if(props.orderedItems.length > 0) {
@@ -131,7 +130,7 @@ function Colecao(props) {
       colecao: [],
     }
     if(data) {
-      data.map(values => {
+      data.map(values => { //eslint-disable-line
         values.data.categoria && (filterOptions.categoria.push(values.data.categoria))
         values.data.subcategoria && (filterOptions.subcategoria.push(values.data.subcategoria))
         values.data.estampa && (filterOptions.estampa.push(values.data.estampa))
@@ -226,7 +225,7 @@ function Colecao(props) {
             item
             xs={1}
             item
-            sm={2}
+            sm={2} //eslint-disable-line
             alignItems="center"
             justify="flex-start" //eslint-disable-line
           >
@@ -239,7 +238,7 @@ function Colecao(props) {
             item
             xs={1}
             item
-            sm={2}
+            sm={2} //eslint-disable-line
             alignItems="center"
             justify="flex-end" //eslint-disable-line
           >
