@@ -81,7 +81,7 @@ const MaterialUIPickers = props =>  {
             { variant: "warning" }
           );
         }
-        console.log(collection)
+        
         props.choosedCollection(collection)
 
       } catch (error) {

@@ -7,8 +7,8 @@ export const ROUTES = {
   MYREPORTS: "/meusprodutos",
   RELATORIO: "/relatorio",
   PRODUTOS: "/produtos",
+  COLECOES: "/colecoes",
   COLECAO: "/colecao/:collection",
-  COLECOES: "/colecoes"
 };
 
 export const OMNI_URL =
