@@ -224,7 +224,6 @@ function Colecao(props) {
         <Grid
             item
             xs={1}
-            item
             sm={2} //eslint-disable-line
             alignItems="center"
             justify="flex-start" //eslint-disable-line
@@ -237,7 +236,6 @@ function Colecao(props) {
           <Grid
             item
             xs={1}
-            item
             sm={2} //eslint-disable-line
             alignItems="center"
             justify="flex-end" //eslint-disable-line
