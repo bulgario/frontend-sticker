@@ -23,10 +23,10 @@ if (process.env.NODE_ENV === 'development') {
     }
   }
   
-  const composedEnhancers = process.env.NODE_ENV === 'development ' ?
+  let composedEnhancers = process.env.NODE_ENV === 'development' ?
   compose(
     applyMiddleware(...middleware),
-    Reactotron && Reactotron.createEnhancer() ? Reactotron.createEnhancer() : null,
+    Reactotron ? Reactotron.createEnhancer() : null,
     ...enhancers
   ) :
   compose(
