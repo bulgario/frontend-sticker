@@ -189,7 +189,7 @@ function Colecao(props) {
       return (
        <CardProduct
           gridSize={gridSize}
-          showBadges={true} 
+          showBadges={false} 
           key={`${produtos.id}${index}`} 
           productToRender={produtos.data} 
           handleClickProduct={() => handleClickProduct(produtos.id)}
