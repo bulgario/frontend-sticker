@@ -69,19 +69,22 @@ function Colecao(props) {
   useEffect(() => {
       const user = new User();
       const id_marca_estilo = user.user.id_marca_estilo;
-      const collection = props.match.params.collection
+      const collection = props.match.params.collection;
+      const next_page = true;
 
       try {
         axios.get(`${BASE_URL}/collections/getSingleCollectionProducts`, {
             params: {
               id_marca_estilo,
-              collection
+              collection,
+              // next_page
             }
           })
-          .then(data => {
-            if(data.data.length > 1) {
-              const filterOpt = getFilterData(data.data)
-              setProducts(data.data)
+          .then(resp => {
+            if(resp.data.data.length > 1) {
+              console.log(resp.data)
+              const filterOpt = getFilterData(resp.data.data)
+              setProducts(resp.data.data)
               setFilterOpt(filterOpt)  
             }
           });
@@ -168,6 +171,9 @@ function Colecao(props) {
       filterOpt,
     })
   }
+
+  const foo = document.documentElement.scrollTop
+  console.log(foo)
 
 
   const filteredList = (
