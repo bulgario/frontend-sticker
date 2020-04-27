@@ -23,11 +23,16 @@ if (process.env.NODE_ENV === 'development') {
     }
   }
   
-  const composedEnhancers = compose(
+  const composedEnhancers = process.env.NODE_ENV === 'development ' ?
+  compose(
     applyMiddleware(...middleware),
     Reactotron.createEnhancer(),
     ...enhancers
-  );
+  ) :
+  compose(
+    applyMiddleware(...middleware),
+    ...enhancers
+  )
   
   const store = createStore(
     createRootReducer(history),
