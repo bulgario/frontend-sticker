@@ -1,5 +1,5 @@
 import { createStore, applyMiddleware, compose } from 'redux';
-import Reactotron from '../../src/config/ReactotronConfig'
+import Reactotron from '../config/ReactotronConfig'
 import { routerMiddleware } from 'connected-react-router';
 import thunk from 'redux-thunk';
 import createHistory from 'history/createBrowserHistory';
@@ -24,23 +24,15 @@ if (process.env.NODE_ENV === 'development') {
   }
   
   const composedEnhancers = process.env.NODE_ENV === 'development ' ?
-  Reactotron.createEnhancer() ?  
   compose(
     applyMiddleware(...middleware),
     Reactotron.createEnhancer(),
-    ...enhancers
-  ) : 
-  compose(
-    applyMiddleware(...middleware),
     ...enhancers
   ) :
   compose(
     applyMiddleware(...middleware),
     ...enhancers
   )
-  
-  
- 
   
   const store = createStore(
     createRootReducer(history),
