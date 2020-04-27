@@ -26,7 +26,7 @@ if (process.env.NODE_ENV === 'development') {
   const composedEnhancers = process.env.NODE_ENV === 'development ' ?
   compose(
     applyMiddleware(...middleware),
-    Reactotron.createEnhancer(),
+    Reactotron && Reactotron.createEnhancer() ? Reactotron.createEnhancer() : null,
     ...enhancers
   ) :
   compose(
