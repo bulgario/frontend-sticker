@@ -102,21 +102,12 @@ class Search extends React.Component {
   validateRequest = () => {
     const { data_inicio, data_fim, data_ultimo, choosedNameCollection } = this.state;
     if (!data_inicio) {
-      //   this.props.enqueueSnackbar("Selecione uma data início", {
-      //     variant: "error"
-      //   });
       return false;
     }
     if (!data_fim) {
-      //   this.props.enqueueSnackbar("Selecione uma data fim", {
-      //     variant: "error"
-      //   });
       return false;
     }
     if (!data_ultimo) {
-      //   this.props.enqueueSnackbar("Selecione a data do último agendamento", {
-      //     variant: "error"
-      //   });
       return false;
     }
     if (!choosedNameCollection) {

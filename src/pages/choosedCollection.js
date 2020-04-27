@@ -1,4 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react';
+import { connect } from 'react-redux';
 import { withRouter } from "react-router-dom";
 
 import { withStyles } from "@material-ui/core/styles";
@@ -14,8 +15,10 @@ import { BASE_URL } from "../consts";
 import User from "../services/User";
 
 import CardProduct from "../components/recursableComponents/CardProduct";
+import GridSize from "../components/recursableComponents/GridSize"
 
-
+import Filters from "../components/recursableComponents/Drawers"
+import OrderItems from "../components/recursableComponents/OrderItems"
 
 const styles = theme => ({
   whiteButton: {
@@ -57,8 +60,11 @@ const styles = theme => ({
 function Colecao(props) {
   const { classes } = props;
   const [products, setProducts] = useState([])
-
-
+  const [filterOpt, setFilterOpt] = useState([])
+  const [fields, setFields] = useState([])
+  const [productsFitered, setProductsFiltered] = useState([])
+  const [checkFilter, setCheckFilter] = useState(false)
+  const [ gridSize, setGridSize ] = useState(0)
 
   useEffect(() => {
       const user = new User();
@@ -74,7 +80,9 @@ function Colecao(props) {
           })
           .then(data => {
             if(data.data.length > 1) {
+              const filterOpt = getFilterData(data.data)
               setProducts(data.data)
+              setFilterOpt(filterOpt)  
             }
           });
       } catch (err) {
@@ -84,10 +92,67 @@ function Colecao(props) {
           { variant: "error" }
         );
       }
-    
-  }, [props])
-  
+  }, []) //eslint-disable-line
 
+  useEffect(() => {
+    handleFilterProduct() //eslint-disable-line
+  }, [filterOpt]) //eslint-disable-line
+
+  useEffect(() => {
+    if(props.produtos.length > 0) { //eslint-disable-line
+      setProductsFiltered(props.produtos)
+      setCheckFilter(true)
+    } else {
+      setCheckFilter(false)
+    }
+  }, [props.produtos]) //eslint-disable-line
+  
+  useEffect(() => {
+    if(props.orderedItems.length > 0) {
+      setProductsFiltered(props.orderedItems)
+      setCheckFilter(true)
+    } else {
+      setCheckFilter(false)
+    }
+  }, [props.orderedItems])
+
+  useEffect(() => {
+    setGridSize(props.gridSize)
+  }, [props.gridSize])
+
+  const getFilterData = (data) => {
+    const filterOptions = {
+      categoria: [],
+      subcategoria: [],
+      estampa: [],
+      fornecedor: [],
+      estilista: [],
+      colecao: [],
+    }
+    if(data) {
+      data.map(values => { //eslint-disable-line
+        values.data.categoria && (filterOptions.categoria.push(values.data.categoria))
+        values.data.subcategoria && (filterOptions.subcategoria.push(values.data.subcategoria))
+        values.data.estampa && (filterOptions.estampa.push(values.data.estampa))
+        values.data.fornecedor && (filterOptions.fornecedor.push(values.data.fornecedor))
+        values.data.estilista && (filterOptions.estilista.push(values.data.estilista))
+        values.data.colecao && (filterOptions.colecao.push(values.data.colecao))
+      }) //eslint-disable-line
+    // REMOVE EMPTY VALUES
+    for(let value in filterOptions) {
+      if(filterOptions[value].length === 0) {
+        delete filterOptions[value]
+      }
+    }
+    // GET ALL THE FIELDS NAMES TO BE PASSED TO THE CHILD
+    Object.keys(filterOptions).map(filterItem => {
+      return setFields([...fields, filterItem])
+    })
+      return filterOptions
+    } else {
+      console.log("You dont have products", data)
+    }
+  }
 
   const handleClickProduct = (id) => {
     id ? props.history.push(`/produto?produto=${id}`) : props.enqueueSnackbar(
@@ -96,6 +161,41 @@ function Colecao(props) {
     );
   };
 
+  const handleFilterProduct = () => {
+    const { dispatch } = props
+    dispatch({
+      type: 'UPDATE_FILTER',
+      filterOpt,
+    })
+  }
+
+
+  const filteredList = (
+    productsFitered ? productsFitered.map((produto, index) => {
+      return (
+        <CardProduct
+          gridSize={gridSize}
+          showBadges={true} 
+          key={`${produto.id}${index}`} 
+          productToRender={produto.data} 
+          handleClickProduct={() => handleClickProduct(produto.id)}
+        />
+      )
+    }) : null
+  )
+
+  const noFilteredList = (
+    products.map((produtos, index) => {
+      return (
+       <CardProduct
+          gridSize={gridSize}
+          showBadges={true} 
+          key={`${produtos.id}${index}`} 
+          productToRender={produtos.data} 
+          handleClickProduct={() => handleClickProduct(produtos.id)}
+        />)
+    })
+  )
 
   return (
     <Fragment>
@@ -112,23 +212,53 @@ function Colecao(props) {
           </IconButton>
         }
       />
-       <Grid
-        container
-        direction="row"
-        justify="center"
-        alignItems="center"
-        spacing={0}
+      <Grid
+         id="some"
+         item
+         container
+         direction="row"
+         justify="space-between"
+         alignItems="flex-start"
+         sm={12}
+         xs={12}
+        // onClick={() => handleFilterProduct(products)}
       >
-        { products.map((produtos, index) => {
-           return (
-            <CardProduct
-              showBadges={true} 
-              key={`${produtos.id}${index}`} 
-              productToRender={produtos.data} 
-              handleClickProduct={() => handleClickProduct(produtos.id)}
-              
-              />)
-        }) }
+        <Grid
+            item
+            xs={1}
+            sm={2} //eslint-disable-line
+            alignItems="center"
+            justify="flex-start" //eslint-disable-line
+          >
+            <Filters
+              products={products}
+            />
+          </Grid>
+          <GridSize />
+          <Grid
+            item
+            xs={1}
+            sm={2} //eslint-disable-line
+            alignItems="center"
+            justify="flex-end" //eslint-disable-line
+          >
+            <OrderItems 
+              products={products}
+              // campos que eu quero que existam no filtro
+              orderFields={[ "estilista", "fornecedor", "marca" ]}
+            />
+          </Grid>
+      </Grid>
+        <Grid
+          container
+          direction="row"
+          justify="center"
+          alignItems="center"
+          spacing={0}
+        > 
+        { checkFilter ? 
+          filteredList
+         : noFilteredList }
       </Grid>
     </Fragment>
   )
@@ -137,4 +267,14 @@ function Colecao(props) {
 const wrapperComponent = withStyles(styles)(
   withSnackbar(withRouter(Colecao))
 );
-export default wrapperComponent;
+
+function mapStateToProps(state) {
+  return {
+    filters: state.filter,
+    produtos: state.products,
+    orderedItems: state.orderedItems,
+    gridSize: state.gridItemsSize
+  }
+}
+
+export default connect(mapStateToProps)(wrapperComponent);

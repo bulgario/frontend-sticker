@@ -46,7 +46,7 @@ const MaterialUIPickers = props =>  {
   const eightDaysFromToday = new Date(current.getTime() + 86400000 * 8 );
   const [selectedDateInicio, setSelectedDateInicio] = React.useState(tomorrowDay);
   const [selectedDateFim, setSelectedDateFim] = React.useState(eightDaysFromToday);
-  const [selectedDateUltimo, setSelectedDateUltimo] = React.useState(7);
+  const [selectedDateUltimo, setSelectedDateUltimo] = React.useState();
   const user = new User();
   const id_marca = user.user.id_marca_estilo
 
@@ -81,7 +81,7 @@ const MaterialUIPickers = props =>  {
             { variant: "warning" }
           );
         }
-        console.log(collection)
+        
         props.choosedCollection(collection)
 
       } catch (error) {

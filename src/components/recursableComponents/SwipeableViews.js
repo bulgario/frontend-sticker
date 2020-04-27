@@ -12,6 +12,8 @@ import CardMedia from "@material-ui/core/CardMedia";
 import IconButton from "@material-ui/core/IconButton";
 import { withRouter } from "react-router-dom";
 
+import useIntersectionObserver  from "../../use-intersection-observer"
+
 
 
 const useStyles = makeStyles(theme => ({
@@ -63,8 +65,19 @@ const useStyles = makeStyles(theme => ({
 
 function SwipeableCarrousel(props) {
   const [activeStep, setActiveStep] = React.useState(0);
-
+  const [isVisible, setIsVisible] = React.useState(false);
+  const ref = React.useRef();
   const classes = useStyles();
+
+  useIntersectionObserver({
+    target: ref,
+    onIntersect: ([{ isIntersecting }], observerElement) => {
+      if (isIntersecting) {
+        setIsVisible(true);
+        observerElement.unobserve(ref.current);
+      }
+    }
+  });
 
 
   const handleClickProduct = id => {
@@ -73,15 +86,16 @@ function SwipeableCarrousel(props) {
         }
   };
   const renderImg = img => {
-    return (                 
-           <CardMedia
-           key={`${img}`}
-           onClick={() => handleClickProduct(props.id)}
+    return (    
+        <CardMedia
+          key={`${img}`}
+          ref={ref}
+          onClick={() => handleClickProduct(props.id)}
           className={classes.mediaCard}
-          image={img}
+          image={isVisible && (img)}
           title="Produto"
-        />)
-
+        />     
+    )
   };
 
   const renderStepper = () => {
