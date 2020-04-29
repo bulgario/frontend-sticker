@@ -100,8 +100,7 @@ class Search extends React.Component {
   }
 
   validateRequest = () => {
-    const { data_inicio, data_fim, data_ultimo } = this.state;
-
+    const { data_inicio, data_fim, data_ultimo, choosedNameCollection } = this.state;
     if (!data_inicio) {
       return false;
     }
@@ -109,6 +108,9 @@ class Search extends React.Component {
       return false;
     }
     if (!data_ultimo) {
+      return false;
+    }
+    if (!choosedNameCollection) {
       return false;
     }
 
@@ -124,9 +126,9 @@ class Search extends React.Component {
         ).toISOString()}&dataFim=${new Date(
           this.state.data_fim
         ).toISOString()}&entregaAjustada=${
-          this.state.data_ultimo
+        this.state.data_ultimo
         }&categoria=${this.state.choosedCategory}&subcategoria=${
-          this.state.choosedSubCategory
+        this.state.choosedSubCategory
         }&colecao=${this.state.choosedNameCollection}`
       );
     } else {
@@ -146,69 +148,69 @@ class Search extends React.Component {
   };
   renderInputs() {
     const { classes } = this.props;
-      return (
-        <Grid container justify="center">
-       <FormControl variant="outlined" className={classes.formControl}>
-        <InputLabel id="demo-simple-select-outlined-label">Coleção</InputLabel>
-        <Select
-         className={classes.select}
-          labelId="demo-simple-select-outlined-label"
-          id="demo-simple-select-outlined"
-          value={this.state.choosedNameCollection}        
-          onChange={e => {
-            this.setState({ choosedNameCollection: e.target.value });
-          }}
-          label="Coleção"
-        >
-              {this.state.nome_collection.map(collection => {
-                return (
-                  <MenuItem key={collection} value={collection}>
-                    {collection}
-                  </MenuItem>
-                );
-              })}
-        </Select>
-      </FormControl>
-          <Grid container item justify="center">
-            <Button
-              className={classes.button}
-              variant="contained"
-              color="primary"
-              onClick={this.handleData}
-            >
-              Buscar
+    return (
+      <Grid container justify="center">
+        <FormControl variant="outlined" className={classes.formControl}>
+          <InputLabel id="demo-simple-select-outlined-label">Coleção</InputLabel>
+          <Select
+            className={classes.select}
+            labelId="demo-simple-select-outlined-label"
+            id="demo-simple-select-outlined"
+            value={this.state.choosedNameCollection}
+            onChange={e => {
+              this.setState({ choosedNameCollection: e.target.value });
+            }}
+            label="Coleção"
+          >
+            {this.state.nome_collection.map(collection => {
+              return (
+                <MenuItem key={collection} value={collection}>
+                  {collection}
+                </MenuItem>
+              );
+            })}
+          </Select>
+        </FormControl>
+        <Grid container item justify="center">
+          <Button
+            className={classes.button}
+            variant="contained"
+            color="primary"
+            onClick={this.handleData}
+          >
+            Buscar
             </Button>
-          </Grid>
         </Grid>
-      );
+      </Grid>
+    );
   }
   render(props) {
     const { classes } = this.props
     return (
       <Fragment>
         <Grid>
-        <Header
-          title="Programação"
-          rightIcon={null}
-          leftIcon={
-            <IconButton               
-            aria-label="upload picture"
-            component="span"
-            className={classes.whiteButton}
-            onClick={() => this.props.history.goBack()}>
-              <ArrowBack></ArrowBack>
-            </IconButton>
-          }
-        />
+          <Header
+            title="Programação"
+            rightIcon={null}
+            leftIcon={
+              <IconButton
+                aria-label="upload picture"
+                component="span"
+                className={classes.whiteButton}
+                onClick={() => this.props.history.goBack()}>
+                <ArrowBack></ArrowBack>
+              </IconButton>
+            }
+          />
         </Grid>
         <Grid container justify="center">
-          <DatePicker 
+          <DatePicker
             choosedData={this.getData}
             choosedCollection={this.getCollections}
           />
         </Grid>
         <br></br>
-          {this.renderInputs()}
+        {this.renderInputs()}
       </Fragment>
     );
   }
