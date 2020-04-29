@@ -54,7 +54,7 @@ const styles = theme => ({
     color: 'white'
   },
   spacing: {
-    padding: theme.spacing(3)
+    paddingTop: theme.spacing(6)
   }
 });
 
@@ -106,10 +106,6 @@ function Collections(props) {
         direction="column"
         justify="space-evenly"
         alignItems="center">
-        <Grid item xs={12} className={classes.spacing}>
-          <div className={classes.leftBarLabel}></div>
-          <Typography variant="h4" component="h5">Limite de Recebimento</Typography>
-        </Grid>
         <Grid item xs={12} className={classes.spacing}>
           {collections.length > 1 ? (
             <FormControl variant="outlined" className={classes.formControl}>
