@@ -16,6 +16,10 @@ import User from "../services/User";
 
 import CardProduct from "../components/recursableComponents/CardProduct";
 import GridSize from "../components/recursableComponents/GridSize"
+import CircularProgress from '@material-ui/core/CircularProgress';
+
+import debounce from "lodash.debounce";
+
 
 import Filters from "../components/recursableComponents/Drawers"
 import OrderItems from "../components/recursableComponents/OrderItems"
@@ -65,23 +69,27 @@ function Colecao(props) {
   const [productsFitered, setProductsFiltered] = useState([])
   const [checkFilter, setCheckFilter] = useState(false)
   const [ gridSize, setGridSize ] = useState(0)
-
+  const [ nextPage, setNextPage ] = useState(false)
+  const [ isLoading, setLoading ] = useState(false)
+  
   useEffect(() => {
       const user = new User();
       const id_marca_estilo = user.user.id_marca_estilo;
-      const collection = props.match.params.collection
+      const collection = props.match.params.collection;
 
       try {
         axios.get(`${BASE_URL}/collections/getSingleCollectionProducts`, {
             params: {
               id_marca_estilo,
-              collection
+              collection,
+              // next_page
             }
           })
-          .then(data => {
-            if(data.data.length > 1) {
-              const filterOpt = getFilterData(data.data)
-              setProducts(data.data)
+          .then(resp => {
+            if(resp.data.data.length > 1) {
+              const filterOpt = getFilterData(resp.data.data)
+              setNextPage(resp.data.next_page)
+              setProducts(resp.data.data)
               setFilterOpt(filterOpt)  
             }
           });
@@ -119,7 +127,7 @@ function Colecao(props) {
   useEffect(() => {
     setGridSize(props.gridSize)
   }, [props.gridSize])
-
+  
   const getFilterData = (data) => {
     const filterOptions = {
       categoria: [],
@@ -154,6 +162,37 @@ function Colecao(props) {
     }
   }
 
+  const loadProducts = () => {
+      try {
+        setLoading(true)
+        axios.get(`${BASE_URL}/collections/getNextCollectionPage`, {
+          params: {
+            nextPage
+          }
+        })
+        .then(resp => {
+          setLoading(false)
+          setNextPage(resp.data.next_page)
+          setProducts([...products, ...resp.data.data])
+        })
+      }  
+      catch (error) {
+        setLoading(false)
+        console.log("error getting next page", error)
+        return error
+      }
+  }
+  
+
+  window.onscroll = debounce(() => {
+    if (
+      window.innerHeight + document.documentElement.scrollTop
+      === document.documentElement.offsetHeight
+    ) {
+      loadProducts()
+    }
+  }, 100);
+
   const handleClickProduct = (id) => {
     id ? props.history.push(`/produto?produto=${id}`) : props.enqueueSnackbar(
       "Não Encontramos esse produto, tente recarregar a pagina",
@@ -168,7 +207,6 @@ function Colecao(props) {
       filterOpt,
     })
   }
-
 
   const filteredList = (
     productsFitered ? productsFitered.map((produto, index) => {
@@ -255,7 +293,7 @@ function Colecao(props) {
           justify="center"
           alignItems="center"
           spacing={0}
-        > 
+        >
         { checkFilter ? 
           filteredList
          : noFilteredList }
