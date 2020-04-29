@@ -16,7 +16,6 @@ import User from "../services/User";
 
 import CardProduct from "../components/recursableComponents/CardProduct";
 import GridSize from "../components/recursableComponents/GridSize"
-import CircularProgress from '@material-ui/core/CircularProgress';
 
 import debounce from "lodash.debounce";
 
@@ -70,7 +69,6 @@ function Colecao(props) {
   const [checkFilter, setCheckFilter] = useState(false)
   const [ gridSize, setGridSize ] = useState(0)
   const [ nextPage, setNextPage ] = useState(false)
-  const [ isLoading, setLoading ] = useState(false)
   
   useEffect(() => {
       const user = new User();
