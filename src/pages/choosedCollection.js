@@ -69,6 +69,7 @@ function Colecao(props) {
   const [checkFilter, setCheckFilter] = useState(false)
   const [ gridSize, setGridSize ] = useState(0)
   const [ nextPage, setNextPage ] = useState(false)
+  // const [ isLoading, setLoading ] = useState(false) 
   
   useEffect(() => {
       const user = new User();
@@ -162,20 +163,20 @@ function Colecao(props) {
 
   const loadProducts = () => {
       try {
-        setLoading(true)
+        // setLoading(true)
         axios.get(`${BASE_URL}/collections/getNextCollectionPage`, {
           params: {
             nextPage
           }
         })
         .then(resp => {
-          setLoading(false)
+          // setLoading(false)
           setNextPage(resp.data.next_page)
           setProducts([...products, ...resp.data.data])
         })
       }  
       catch (error) {
-        setLoading(false)
+        // setLoading(false)
         console.log("error getting next page", error)
         return error
       }
