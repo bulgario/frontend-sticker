@@ -94,6 +94,7 @@ const MaterialUIPickers = props =>  {
     }
   }
   React.useEffect( () => {
+    props.choosedData(selectedDateInicio, selectedDateFim, selectedDateUltimo)
     async function getInitialCollection() {
       try {
         const response = await axios.get(`${BASE_URL}/collections/getCollectionBasedInData`, {
