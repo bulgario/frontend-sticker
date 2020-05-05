@@ -16,6 +16,7 @@ import User from "../services/User";
 
 import CardProduct from "../components/recursableComponents/CardProduct";
 import GridSize from "../components/recursableComponents/GridSize"
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import debounce from "lodash.debounce";
 
@@ -39,23 +40,23 @@ const styles = theme => ({
     paddingTop: "25px",
     paddingBottom: "18px",
   },
-    leftBarLabel: { 
+  leftBarLabel: {
     backgroundColor: "#FCB92C",
-    width:5,
+    width: 5,
     // height:'100%',
-    marginRight:theme.spacing(4),
+    marginRight: theme.spacing(4),
     position: 'absolute',
     height: '62px',
     left: '0px'
   },
-  labelWrapper: { 
+  labelWrapper: {
     marginLeft: theme.spacing(-8),
     marginBottom: theme.spacing(3)
   },
   button: {
     margin: theme.spacing(1),
     padding: theme.spacing(1.5),
-    color:'white'
+    color: 'white'
   },
 });
 
@@ -67,38 +68,38 @@ function Colecao(props) {
   const [fields, setFields] = useState([])
   const [productsFitered, setProductsFiltered] = useState([])
   const [checkFilter, setCheckFilter] = useState(false)
-  const [ gridSize, setGridSize ] = useState(0)
-  const [ nextPage, setNextPage ] = useState(false)
-  // const [ isLoading, setLoading ] = useState(false) 
-  
-  useEffect(() => {
-      const user = new User();
-      const id_marca_estilo = user.user.id_marca_estilo;
-      const collection = props.match.params.collection;
+  const [gridSize, setGridSize] = useState(0)
+  const [nextPage, setNextPage] = useState(false)
+  const [isLoading, setLoading] = useState(false)
 
-      try {
-        axios.get(`${BASE_URL}/collections/getSingleCollectionProducts`, {
-            params: {
-              id_marca_estilo,
-              collection,
-              // next_page
-            }
-          })
-          .then(resp => {
-            if(resp.data.data.length > 1) {
-              const filterOpt = getFilterData(resp.data.data)
-              setNextPage(resp.data.next_page)
-              setProducts(resp.data.data)
-              setFilterOpt(filterOpt)  
-            }
-          });
-      } catch (err) {
-        console.log('Error getting data from'`${BASE_URL}/collections/getSingleCollectionProducts`, err)
-        return props.enqueueSnackbar(
-          "Não Encontramos produtos para esse Colecao.",
-          { variant: "error" }
-        );
-      }
+  useEffect(() => {
+    const user = new User();
+    const id_marca_estilo = user.user.id_marca_estilo;
+    const collection = props.match.params.collection;
+
+    try {
+      axios.get(`${BASE_URL}/collections/getSingleCollectionProducts`, {
+        params: {
+          id_marca_estilo,
+          collection,
+          // next_page
+        }
+      })
+        .then(resp => {
+          if (resp.data.data.length > 1) {
+            const filterOpt = getFilterData(resp.data.data)
+            setNextPage(resp.data.next_page)
+            setProducts(resp.data.data)
+            setFilterOpt(filterOpt)
+          }
+        });
+    } catch (err) {
+      console.log('Error getting data from'`${BASE_URL}/collections/getSingleCollectionProducts`, err)
+      return props.enqueueSnackbar(
+        "Não Encontramos produtos para esse Colecao.",
+        { variant: "error" }
+      );
+    }
   }, []) //eslint-disable-line
 
   useEffect(() => {
@@ -106,16 +107,16 @@ function Colecao(props) {
   }, [filterOpt]) //eslint-disable-line
 
   useEffect(() => {
-    if(props.produtos.length > 0) { //eslint-disable-line
+    if (props.produtos.length > 0) { //eslint-disable-line
       setProductsFiltered(props.produtos)
       setCheckFilter(true)
     } else {
       setCheckFilter(false)
     }
   }, [props.produtos]) //eslint-disable-line
-  
+
   useEffect(() => {
-    if(props.orderedItems.length > 0) {
+    if (props.orderedItems.length > 0) {
       setProductsFiltered(props.orderedItems)
       setCheckFilter(true)
     } else {
@@ -126,7 +127,7 @@ function Colecao(props) {
   useEffect(() => {
     setGridSize(props.gridSize)
   }, [props.gridSize])
-  
+
   const getFilterData = (data) => {
     const filterOptions = {
       categoria: [],
@@ -136,7 +137,7 @@ function Colecao(props) {
       estilista: [],
       colecao: [],
     }
-    if(data) {
+    if (data) {
       data.map(values => { //eslint-disable-line
         values.data.categoria && (filterOptions.categoria.push(values.data.categoria))
         values.data.subcategoria && (filterOptions.subcategoria.push(values.data.subcategoria))
@@ -145,16 +146,16 @@ function Colecao(props) {
         values.data.estilista && (filterOptions.estilista.push(values.data.estilista))
         values.data.colecao && (filterOptions.colecao.push(values.data.colecao))
       }) //eslint-disable-line
-    // REMOVE EMPTY VALUES
-    for(let value in filterOptions) {
-      if(filterOptions[value].length === 0) {
-        delete filterOptions[value]
+      // REMOVE EMPTY VALUES
+      for (let value in filterOptions) {
+        if (filterOptions[value].length === 0) {
+          delete filterOptions[value]
+        }
       }
-    }
-    // GET ALL THE FIELDS NAMES TO BE PASSED TO THE CHILD
-    Object.keys(filterOptions).map(filterItem => {
-      return setFields([...fields, filterItem])
-    })
+      // GET ALL THE FIELDS NAMES TO BE PASSED TO THE CHILD
+      Object.keys(filterOptions).map(filterItem => {
+        return setFields([...fields, filterItem])
+      })
       return filterOptions
     } else {
       console.log("You dont have products", data)
@@ -162,26 +163,26 @@ function Colecao(props) {
   }
 
   const loadProducts = () => {
-      try {
-        // setLoading(true)
-        axios.get(`${BASE_URL}/collections/getNextCollectionPage`, {
-          params: {
-            nextPage
-          }
-        })
+    try {
+      setLoading(true)
+      axios.get(`${BASE_URL}/collections/getNextCollectionPage`, {
+        params: {
+          nextPage
+        }
+      })
         .then(resp => {
-          // setLoading(false)
+          setLoading(false)
           setNextPage(resp.data.next_page)
           setProducts([...products, ...resp.data.data])
         })
-      }  
-      catch (error) {
-        // setLoading(false)
-        console.log("error getting next page", error)
-        return error
-      }
+    }
+    catch (error) {
+      setLoading(false)
+      console.log("error getting next page", error)
+      return error
+    }
   }
-  
+
 
   window.onscroll = debounce(() => {
     if (
@@ -212,9 +213,9 @@ function Colecao(props) {
       return (
         <CardProduct
           gridSize={gridSize}
-          showBadges={false} 
-          key={`${produto.id}${index}`} 
-          productToRender={produto.data} 
+          showBadges={false}
+          key={`${produto.id}${index}`}
+          productToRender={produto.data}
           handleClickProduct={() => handleClickProduct(produto.id)}
         />
       )
@@ -224,11 +225,11 @@ function Colecao(props) {
   const noFilteredList = (
     products.map((produtos, index) => {
       return (
-       <CardProduct
+        <CardProduct
           gridSize={gridSize}
-          showBadges={false} 
-          key={`${produtos.id}${index}`} 
-          productToRender={produtos.data} 
+          showBadges={false}
+          key={`${produtos.id}${index}`}
+          productToRender={produtos.data}
           handleClickProduct={() => handleClickProduct(produtos.id)}
         />)
     })
@@ -250,53 +251,38 @@ function Colecao(props) {
         }
       />
       <Grid
-         id="some"
-         item
-         container
-         direction="row"
-         justify="space-between"
-         alignItems="flex-start"
-         sm={12}
-         xs={12}
-        // onClick={() => handleFilterProduct(products)}
+        container
+        direction="row"
+        justify="space-between"
+        alignItems="center"
       >
-        <Grid
-            item
-            xs={1}
-            sm={2} //eslint-disable-line
-            alignItems="center"
-            justify="flex-start" //eslint-disable-line
-          >
-            <Filters
-              products={products}
-            />
-          </Grid>
-          <GridSize />
-          <Grid
-            item
-            xs={1}
-            sm={2} //eslint-disable-line
-            alignItems="center"
-            justify="flex-end" //eslint-disable-line
-          >
-            <OrderItems 
-              products={products}
-              // campos que eu quero que existam no filtro
-              orderFields={[ "estilista", "fornecedor", "marca" ]}
-            />
-          </Grid>
+        <Grid item>
+          <Filters
+            products={products}
+          />
+        </Grid>
+        <GridSize />
+        <Grid item>
+          <OrderItems
+            products={products}
+            // campos que eu quero que existam no filtro
+            orderFields={["estilista", "fornecedor", "marca"]}
+          />
+        </Grid>
+
       </Grid>
-        <Grid
-          container
-          direction="row"
-          justify="center"
-          alignItems="center"
-          spacing={0}
-        >
-        { checkFilter ? 
+      <Grid
+        container
+        direction="row"
+        justify="center"
+        alignItems="center"
+        spacing={0}
+      >
+        {checkFilter ?
           filteredList
-         : noFilteredList }
+          : noFilteredList}
       </Grid>
+
     </Fragment>
   )
 }

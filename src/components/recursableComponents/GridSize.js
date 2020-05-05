@@ -1,4 +1,4 @@
-import React, { Fragment,  useState, useEffect } from 'react'
+import React, { Fragment, useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import { withRouter } from "react-router-dom";
 import { withSnackbar } from "notistack";
@@ -32,28 +32,33 @@ function GridSize(props) {
   return (
     <Fragment>
       <Grid
-      item
-      xs={1}
-      sm={2}
-      className={classes.position}
-      justify="flex-end"
-    >
-      <Tooltip title="4 items" placement="top">
-        <AppsIcon
-          className={classes.icon}
-          id={1}
-          onClick={() => setGridValue(15)}
-        />
-      </Tooltip>
-      <Tooltip title="2 items" placement="top">
-      <AppsIcon
-        className={classes.icon}
-        id={2}
-        onClick={() => setGridValue(6)}
-      />
-      </Tooltip>
-    </Grid>
-  </Fragment>
+        container
+        direction="row"
+        justify="center"
+        alignItems="center"
+        xs={4}
+      >
+        <Grid item>
+          <Tooltip title="4 items" placement="top">
+            <AppsIcon
+              className={classes.icon}
+              id={1}
+              onClick={() => setGridValue(15)}
+            />
+          </Tooltip>
+        </Grid>
+        <Grid item>
+          <Tooltip title="2 items" placement="top">
+            <AppsIcon
+              className={classes.icon}
+              id={2}
+              onClick={() => setGridValue(6)}
+            />
+          </Tooltip>
+        </Grid>
+
+      </Grid>
+    </Fragment>
   )
 }
 

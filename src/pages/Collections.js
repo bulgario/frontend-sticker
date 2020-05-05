@@ -103,9 +103,10 @@ function Collections(props) {
       />
       <Grid container
         direction="column"
-        justify="space-evenly"
-        alignItems="center">
-        <Grid item xs={12} className={classes.spacing}>
+        justify="center"
+        alignItems="center" style={{ minHeight: '75vh' }}
+        >
+        <Grid item xs={12}>
           {collections.length > 1 ? (
             <FormControl variant="outlined" className={classes.formControl}>
               <InputLabel id="demo-simple-select-outlined-label">Coleções</InputLabel>
@@ -128,7 +129,7 @@ function Collections(props) {
             </FormControl>
           ) : null}
         </Grid>
-        <Grid item xs={12} className={classes.spacing}>
+        <Grid item xs={12}>
           <Button
             className={classes.button}
             variant="contained"
@@ -147,3 +148,5 @@ const wrapperComponent = withStyles(styles)(
   withSnackbar(withRouter(Collections))
 );
 export default wrapperComponent;
+
+//style={{ minHeight: '100vh' }}
